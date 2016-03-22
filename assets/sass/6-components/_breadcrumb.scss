@@ -1,0 +1,23 @@
+.breadcrumb{
+	position: absolute;
+	background-color: rgba(0,0,0,.15);
+	width: 100%;
+	padding: rem($base-spacing-unit / 2) rem($base-spacing-unit);
+	z-index: 4;
+}
+	.breadcrumb__item{
+		font-size: rem(11px);
+		text-transform: uppercase;
+		color: #fff;
+		margin-right: rem($base-spacing-unit / 2);
+
+		&:after{
+			color: nth($palette--primary, 1);
+			margin-left: rem($base-spacing-unit / 2);
+		}
+	}
+
+	.breadcrumb__link{
+		color: #fff;
+		text-decoration: underline;
+	}

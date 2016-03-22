@@ -1,0 +1,12 @@
+// convert px to em
+@function em($px, $base: $base-font-size) {
+	@return ($px / $base) * 1em;
+}
+// convert px to rem
+@function rem($px, $base: $base-font-size) {
+	@return ($px / $base) * 1rem;
+}
+
+@function strip-unit($num) {
+  @return $num / ($num * 0 + 1);
+}

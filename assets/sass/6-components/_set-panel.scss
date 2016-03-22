@@ -1,0 +1,19 @@
+.set {
+
+}
+	.set__input	{
+
+	}
+
+	.set__input--weight	{
+		padding-right: rem(52px);
+	}
+
+	.set__input--reps {
+		padding-right: rem(66px);
+	}
+
+	.set__placeholder {
+		position: absolute;
+		right: rem($base-spacing-unit);
+	}

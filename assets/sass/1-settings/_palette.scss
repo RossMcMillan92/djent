@@ -1,0 +1,54 @@
+$palette--black 				:#373737;
+
+$palette--grey-light 			:#fbfbfb;
+$palette--grey-med 				:#DEDEDE;
+$palette--grey-dark 			:#C2C2C2;
+
+$palette--base-ui 				:$palette--grey-med;
+$palette--base-ui-fg			:#fff;
+
+$palette--body-bg 				: #EDF0F1;
+$palette--body-text 			: #1F1F1F;
+
+/* names allow us to loop and create class names, e.g. .card--alpha, .ui--beta
+------------------------ */
+$palette--names 				:(
+									'alpha',
+									// 'beta',
+									// 'gamma',
+									// 'delta',
+
+									'black',
+									'grey-light',
+									'grey-med',
+									'grey-dark',
+
+									'white'
+								);
+
+$palette--primary 				:(
+									#41A7C7, // Blue 	- Alpha	- 1
+									#E73E2C, 				// Red 	- Beta 	- 1
+									// #be955a, 		// Beige 	- Gamma - 3
+									// #00bcde, 		//	Blue 	- Delta - 4
+
+									#373737, // black		- 5
+									#fbfbfb, // grey-light 	- 6
+									#f5f5f5, // grey-med 	- 7
+									#C2C2C2, //	grey-dark 	- 8
+
+									#fff 	 // white  		- 9
+								); 
+
+$palette--social 				:(
+									#3b5998, // Facebook 	- 1
+									#55acee, // Twitter 	- 2
+									#dd4b39, // Google+ 	- 3
+									#0976b4, // LinkedIn 	- 4
+									#e52d27, // Youtube 	- 5
+									#cc2127  // Pinterest 	- 5
+								);
+$palette--body-emphasised 		:nth($palette--primary, 1);
+
+// misc
+$palette--beta-text 			: #b9c9db;

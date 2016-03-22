@@ -1,0 +1,135 @@
+/*
+	Example markup
+		
+    <div class="content-sections">
+        <div class="content-section--body">
+            
+            <div class="content-section--body-overlay">
+                
+            </div>
+        </div>
+        <div class="content-section--sidebar">
+            
+        </div>
+    </div>
+*/
+
+.content-sections{
+	width: 100%;
+	// overflow-x: hidden;
+}
+
+$slide-anim-time: .5s;
+
+$side-menu-width: 300px;
+$side-menu-side: right;
+
+$side-menu-side-multiplier: -1;
+
+$sidemenu-link-amount: 15;
+$sidemenu-link-offset: 50px;
+$sidemenu-link-delay: $slide-anim-time / $sidemenu-link-amount;
+
+$body-slide-ratio: .2;
+
+
+@if $side-menu-side == right {
+	$side-menu-side-multiplier: 1;
+}
+
+.content-section--side-menu{
+	position: fixed;
+	top: 0;
+	#{$side-menu-side}: 0;
+	z-index: 10;
+	height: 100%;
+	width: rem($side-menu-width);
+	max-width: 100%;
+
+	transform: translate(rem($side-menu-width * $side-menu-side-multiplier), 0);
+	transform: translate3d(rem($side-menu-width * $side-menu-side-multiplier), 0, 0);
+
+	transition: all $slide-anim-time ease-in-out;
+
+	.side-menu-is-active & {
+		transform: translate(0, 0);
+		transform: translate3d(0, 0, 0);
+
+		.no-csstransforms & {
+			#{$side-menu-side}: 0;
+		}
+	}
+
+	.side-menu__link-hide{
+		display: none;
+	}
+
+	.no-csstransforms & {
+		#{$side-menu-side}: rem($side-menu-width * -1);
+	}
+}
+
+.side-menu__close{
+	position: absolute;
+	color: #fff;
+	font-size: 3.2rem;
+	line-height: 1;
+	top: 0;
+	right: 0;
+}
+
+.side-menu__link{
+	opacity: 0;
+	transform: translate(0, rem($sidemenu-link-offset * $side-menu-side-multiplier));
+	transform: translate3d(0, rem($sidemenu-link-offset * $side-menu-side-multiplier),0);
+
+	transition: transform $slide-anim-time ease-in-out, opacity $slide-anim-time ease-in-out;
+	transition-delay: $slide-anim-time;
+	transition-duration: 0;
+
+	.side-menu-is-active & {
+		opacity: 1;
+		transform: translate(0,0);
+		transform: translate3d(0,0,0);
+		transition-duration: $slide-anim-time;
+	}
+}
+
+@for $i from 0 through $sidemenu-link-amount {
+	.side-menu-is-active .side-menu__link-#{$i}{
+		transition-delay: $i * $sidemenu-link-delay + .1;
+	}
+}
+
+
+.content-section--body{
+
+	transition-property: transform;
+	transition: $slide-anim-time ease-in-out;
+
+	.side-menu-is-active & {
+		transform: translate(rem($side-menu-width * $body-slide-ratio * ($side-menu-side-multiplier * -1)), 0);
+		transform: translate3d(rem($side-menu-width * $body-slide-ratio * ($side-menu-side-multiplier * -1)), 0, 0);
+	}
+	
+}
+
+// White faded overlay
+.content-section--body-overlay{
+	@extend %pseudo-setup;
+	@extend %full-stretch;
+	opacity: 0;
+	z-index: -1;
+
+	transform: translate3d(0, 0, 0);
+
+	transition-property: transform;
+	transition: $slide-anim-time ease-in-out, z-index 0 ease $slide-anim-time;
+
+	.side-menu-is-active & {
+		opacity: 1;
+		z-index: 9;
+
+		transition: all $slide-anim-time ease-in-out;
+	}
+}

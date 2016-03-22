@@ -1,0 +1,35 @@
+// This is to allow the sliders to work properly. No bespoke styles should go in here.
+
+.slider{
+	position: relative;
+	overflow: hidden;
+
+	.slide{
+		position: absolute;
+		width: 100%;
+		opacity: 0;
+		z-index: -1;
+		top: 0;
+		transform: translate3d(0,0,0);
+	}
+
+	.is-fading-in, .slide.is-active, .is-fading-out{
+		transition: all .5s ease-in-out, z-index 0s ease;
+	}
+
+	.is-fading-in, .slide.is-active{
+		z-index: 2;
+		position: relative;
+	}
+
+	.slide.is-active, .is-fading-in{
+		opacity: 1;
+	}
+
+	.is-fading-out{
+		opacity: 1;
+	}
+
+	.slide.is-active{
+	}
+}

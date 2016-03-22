@@ -1,0 +1,10 @@
+.justified-sections{
+	@extend .cf;
+}
+
+	.justified-section__left{
+		float: left;
+	}
+	.justified-section__right{
+		float: right;
+	}

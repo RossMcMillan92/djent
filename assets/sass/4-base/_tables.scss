@@ -1,0 +1,34 @@
+table{
+	width: 100%;
+}
+
+	thead{
+		td{
+			background-color: nth($palette--primary, 2);
+			color: #fff;
+		}
+	}
+
+	tbody{
+		tr{
+			&:nth-of-type(odd){
+				background-color: $palette--grey-light;
+			}
+		}
+
+		td{
+			color: $palette--body-text;
+		}
+	}
+
+	td{
+		font-size: rem(13px);
+		padding: rem($base-spacing-unit / 1.5) rem($base-spacing-unit);
+		border: solid 1px $base-ui-color;
+		text-transform: uppercase;
+
+		@include respond-max($beta){
+			display: block;
+			border-top: none;
+		};
+	}

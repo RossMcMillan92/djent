@@ -1,0 +1,42 @@
+.inner-content{
+	p{
+		color: $palette--body-text;
+	}
+}
+
+.text--capped{
+	max-width: rem(900px);
+}
+
+
+/* Images
+------------------------ */
+
+.img--left, .img-left, .img--right, .img-right{
+    max-width: 35%;
+    height: auto;
+
+    @include respond-max(em($gamma)){
+        max-width: 100%;
+        float: none;
+        display: block;
+        margin: rem($base-spacing-unit) auto;
+    }
+}
+
+.img--left, .img-left {
+	float: left;
+	margin-right: rem($base-spacing-unit);
+}
+
+.img--right, .img-right {
+	float: right;
+	margin-left: rem($base-spacing-unit);
+}
+
+span.img--left, span.img-left, span.img--right, span.img-right{
+	img{
+		max-width: 100%;
+		height: auto;
+	}
+}

@@ -1,0 +1,15 @@
+.pages {
+	position: relative;
+
+}
+
+.page {
+	height: 100%;
+	background-color: $palette--body-bg;
+/* 	.lightbox-is-active & {
+	filter: blur(5px) grayscale(50%);
+} */
+}	
+	.page__content{
+		padding: rem(20px);
+	}

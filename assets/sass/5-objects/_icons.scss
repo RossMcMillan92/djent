@@ -1,0 +1,94 @@
+@font-face {
+	font-family: 'icomoon';
+	src:url('../fonts/icomoon.eot');
+	src:url('../fonts/icomoon.eot#iefix') format('embedded-opentype'),
+		url('../fonts/icomoon.woff') format('woff'),
+		url('../fonts/icomoon.ttf') format('truetype'),
+		url('../fonts/icomoon.svg#icomoon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+
+
+%icon-preload{
+    .preload &{
+        display: none;
+    }
+}
+
+%icon{
+    
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    line-height: 1;
+
+    -moz-osx-font-smoothing: grayscale;
+
+    display: inline-block;
+    line-height: 1;
+
+    font-family: $base-font-family--icons;
+    vertical-align: baseline;
+}
+
+$icon-names: (
+    'search',
+    'menu',
+    'marker',
+    'phone',
+    'twitter',
+    'facebook',
+    'flickr',
+    'arrow-down',
+    'arrow-left',
+    'arrow-right',
+    'arrow-up',
+    'share',
+    'fax',
+    'eye',
+    'mail',
+    'youtube',
+    'cross'
+);
+
+$icon-chars: (
+    '\e600',
+    '\e9bd',
+    '\e947',
+    '\f095',
+    '\e601',
+    '\e602',
+    '\e603',
+    '\e604',
+    '\e605',
+    '\e606',
+    '\e607',
+    '\e608',
+    '\e034',
+    '\e609',
+    '\e60a',
+    '\e60b',
+    '\e60c'
+);
+
+
+/* Icons
+    This generates icon--name, icon-name.
+    icon--name is the core content. Should be extended by other classes.
+    icon-name uses :after and so can be insert in the content e.g. <span class="icon-name"></span>
+------------------------ */
+
+@for $i from 0 to length($icon-names){
+    .icon--#{nth($icon-names, $i+1)}, .icon-#{nth($icon-names, $i+1)}:after{
+        @extend %icon;
+        content: nth($icon-chars, $i+1);
+    }
+
+    .icon-#{nth($icon-names, $i+1)}:after{
+        @extend %icon-preload;
+    }
+}
+

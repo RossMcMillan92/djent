@@ -1,0 +1,75 @@
+%btn-reset{
+	background: none;
+	margin: 0;
+	padding: 0;
+	border: none;
+	font: inherit;
+	line-height: normal;
+	-webkit-appearance: none;
+}
+
+.btn,
+%btn {
+	@extend %btn-reset;
+
+	&:hover,
+	&:focus {
+		outline: none;
+	}
+}
+	.btn--text-icon{
+		&:after, span{
+			position: relative;
+			top: 2px;
+			margin-left: .5rem;
+
+			&:first-child{
+				margin-left: 0;
+				margin-right: .5rem;
+			}
+		}	
+	}
+	.btn--right-text-icon{
+		text-align: left;
+
+		span, &:after{
+			float: right;
+			margin-left: .5rem;
+		}	
+	}
+
+@mixin btn-creator($color) {
+	padding: rem($base-spacing-unit) rem($base-spacing-unit);
+	background-color: $color;
+	color: #fff;
+	text-transform: uppercase;
+	font-weight: 800;
+
+	&:hover {
+		background-color: lighten($color, 5%);
+	}
+
+	&:active {
+		background-color: darken($color, 5%);
+	}
+}
+
+.btn--primary {
+	@include btn-creator(nth($palette--primary, 1));
+}
+
+.btn--secondary {
+	@include btn-creator(nth($palette--primary, 2));
+}
+.btn--plain {
+	@include btn-creator($palette--grey-dark);
+}
+
+.btn--wide{
+	width: 100%;
+}
+
+.btn--rounded{
+	border-radius: rem(3px);
+}
+

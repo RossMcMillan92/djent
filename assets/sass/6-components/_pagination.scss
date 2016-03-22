@@ -1,0 +1,29 @@
+.pagination{
+	text-align: center;
+}
+
+.pagination-list{
+	@extend .list-hor;
+
+	li{
+		@extend .list-hor__item;
+		padding: 0 1rem;
+		vertical-align: middle;
+	}
+
+	a{
+		color: $palette--body-text;
+	}
+
+	.active a{
+		color: $palette--black;
+		border-bottom: solid 1px nth($palette--primary, 1);
+	}
+}
+	.pagination__left, .pagination__right{
+		font-size: rem(20px);
+
+		a{
+			color: $palette--black;
+		}
+	}

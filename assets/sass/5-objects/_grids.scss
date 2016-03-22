@@ -1,0 +1,232 @@
+$responsive:            true!default;
+
+$mobile-first:          true!default;
+
+$gutter:                $base-spacing-unit ;
+
+$use-silent-classes:    false!default;
+
+$push:                  true!default;
+$pull:                  true!default;
+
+$use-markup-fix:        true!default;
+
+$breakpoints: (
+    'palm' '(max-width: 600px)',
+    'lap' '(min-width: 601px) and (max-width: 1023px)',
+    'beta' '(max-width: 530px)',
+    'gamma' '(max-width: 720px)',
+    'delta' '(max-width: 840px)',
+    'portable' '(max-width: 1023px)',
+    'desk' '(min-width: 1024px)',
+    'epsilon' '(max-width: 1380px)'
+)!default;
+
+
+$breakpoint-has-widths: ('lap', 'portable', 'epsilon', 'delta', 'gamma', 'beta', 'palm', 'desk')!default;
+$breakpoint-has-push:   ('palm', 'lap', 'portable', 'desk')!default;
+$breakpoint-has-pull:   ('palm', 'lap', 'portable', 'desk')!default;
+
+$class-type:            unquote(".");
+
+@if $use-silent-classes == true{
+    $class-type:        unquote("%");
+}
+
+@mixin grid-media-query($media-query){
+    $breakpoint-found: false;
+
+    @each $breakpoint in $breakpoints{
+        $name: nth($breakpoint, 1);
+        $declaration: nth($breakpoint, 2);
+
+        @if $media-query == $name and $declaration{
+            $breakpoint-found: true;
+
+            @media only screen and #{$declaration}{
+                @content;
+            }
+        }
+    }
+
+    @if $breakpoint-found == false{
+        @warn "Breakpoint '#{$media-query}' does not exist"
+    }
+}
+
+
+
+@mixin silent-relative(){
+    @if $use-silent-classes == true{
+        position:relative;
+    }
+}
+
+#{$class-type}grid{
+    list-style:none;                /* [1] */
+    margin:0;                       /* [2] */
+    padding:0;                      /* [2] */
+    margin-left:-$gutter;           /* [3] */
+    @if $use-markup-fix != true{
+        letter-spacing:-0.31em;
+    }
+}
+
+@if $use-markup-fix != true{
+    /* Opera hack */
+    .opera:-o-prefocus,
+    #{$class-type}grid{
+        word-spacing:-0.43em;
+    }
+}
+
+
+    #{$class-type}grid__item{
+        display:inline-block;           /* [1] */
+        padding-left:$gutter;           /* [2] */
+        vertical-align:top;             /* [3] */
+        @if $mobile-first == true{
+            width:100%;                 /* [4] */
+        }
+        -webkit-box-sizing:border-box;  /* [5] */
+           -moz-box-sizing:border-box;  /* [5] */
+                box-sizing:border-box;  /* [5] */
+        @if $use-markup-fix != true{
+            letter-spacing:normal;
+            word-spacing:normal;
+        }
+    }
+
+
+#{$class-type}grid--rev{
+    direction:rtl;
+    text-align:left;
+
+    > #{$class-type}grid__item{
+        direction:ltr;
+        text-align:left;
+    }
+}
+
+#{$class-type}grid--full{
+    margin-left:0;
+
+    > #{$class-type}grid__item{
+        padding-left:0;
+    }
+}
+
+
+#{$class-type}grid--right{
+    text-align:right;
+
+    > #{$class-type}grid__item{
+        text-align:left;
+    }
+}
+
+#{$class-type}grid--center{
+    text-align:center;
+
+    > #{$class-type}grid__item{
+        text-align:left;
+    }
+}
+
+
+#{$class-type}grid--middle{
+
+    > #{$class-type}grid__item{
+        vertical-align:middle;
+    }
+}
+
+#{$class-type}grid--bottom{
+
+    > #{$class-type}grid__item{
+        vertical-align:bottom;
+    }
+}
+
+#{$class-type}grid--narrow{
+    margin-left:-($gutter / 2);
+
+    > #{$class-type}grid__item{
+        padding-left:$gutter / 2;
+    }
+}
+
+#{$class-type}grid--wide{
+    margin-left:-($gutter * 2);
+
+    > #{$class-type}grid__item{
+        padding-left:$gutter * 2;
+    }
+}
+
+.w-auto{
+    width: auto;
+}
+
+@mixin device-type($namespace:""){
+
+
+    #{$class-type}#{$namespace}one-whole         { width:100%; }
+
+
+
+    #{$class-type}#{$namespace}one-half          { width:50%; }
+
+    #{$class-type}#{$namespace}one-third         { width:33.333%; }
+    #{$class-type}#{$namespace}two-thirds        { width:66.666%; }
+
+
+    #{$class-type}#{$namespace}one-quarter       { width:25%; }
+    #{$class-type}#{$namespace}three-quarters    { width:75%; }
+
+
+    #{$class-type}#{$namespace}one-fifth         { width:20%; }
+    #{$class-type}#{$namespace}two-fifths        { width:40%; }
+    #{$class-type}#{$namespace}three-fifths      { width:60%; }
+    #{$class-type}#{$namespace}four-fifths       { width:80%; }
+
+
+    #{$class-type}#{$namespace}one-sixth         { width:16.666%; }
+    #{$class-type}#{$namespace}five-sixths       { width:83.333%; }
+
+    #{$class-type}#{$namespace}one-seventh         { width:(100% / 7); }
+
+    #{$class-type}#{$namespace}one-eighth        { width:12.5%; }
+    #{$class-type}#{$namespace}three-eighths     { width:37.5%; }
+    #{$class-type}#{$namespace}five-eighths      { width:62.5%; }
+    #{$class-type}#{$namespace}seven-eighths     { width:87.5%; }
+
+    #{$class-type}#{$namespace}one-ninth         { width:(100% / 9); }
+
+    #{$class-type}#{$namespace}one-tenth         { width:10%; }
+    #{$class-type}#{$namespace}three-tenths      { width:30%; }
+    #{$class-type}#{$namespace}seven-tenths      { width:70%; }
+    #{$class-type}#{$namespace}nine-tenths       { width:90%; }
+
+    #{$class-type}#{$namespace}one-twelfth       { width:8.333%; }
+    #{$class-type}#{$namespace}five-twelfths     { width:41.666% }
+    #{$class-type}#{$namespace}seven-twelfths    { width:58.333%; }
+    #{$class-type}#{$namespace}eleven-twelfths   { width:91.666%; }
+
+    #{$class-type}#{$namespace}hide   { display: none !important; }
+}
+
+@include device-type();
+
+
+@if $responsive == true{
+
+    @each $name in $breakpoint-has-widths {
+        @include grid-media-query($name) {
+           @include device-type('#{$name}--');
+        }
+    }
+
+
+}
+

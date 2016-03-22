@@ -1,0 +1,47 @@
+{
+  "name": "game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "babel-core": "^6.3.26",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-register": "^6.3.13",
+    "babelify": "^6.4.0",
+    "browser-sync": "^1.9.2",
+    "del": "^1.2.1",
+    "flux-react": "^2.6.6",
+    "gulp": "^3.9.0",
+    "gulp-autoprefixer": "^2.3.1",
+    "gulp-browserify": "^0.5.1",
+    "gulp-combine-media-queries": "^0.2.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-debug": "^2.1.2",
+    "gulp-filter": "^2.0.2",
+    "gulp-livereload": "^3.8.1",
+    "gulp-load-plugins": "^0.8.1",
+    "gulp-minify-css": "^0.3.13",
+    "gulp-mocha": "^2.2.0",
+    "gulp-notify": "^2.2.0",
+    "gulp-pixrem": "^0.1.4",
+    "gulp-rename": "^1.2.2",
+    "gulp-ruby-sass": "^1.4.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-tap": "^0.1.3",
+    "gulp-uglify": "^1.5.1",
+    "moment": "^2.10.6",
+    "react": "^0.13.3",
+    "react-a11y": "^0.1.1"
+  },
+  "devDependencies": {
+    "babel": "^6.3.26",
+    "babel-runtime": "^6.3.19",
+    "gulp-babel": "^6.1.1",
+    "mocha-babel": "^3.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

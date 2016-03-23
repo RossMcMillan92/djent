@@ -4,13 +4,9 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
-var context = new AudioContext();
-
-var BufferLoader = function BufferLoader(context, callback) {
+var BufferLoader = function BufferLoader(context) {
     var newInstrumentPack = new Array();
-    var loadCount = 0;
 
     var loadBuffer = function loadBuffer(instrument, index) {
         var bufferAmount = instrument.paths.length;
@@ -72,20 +68,22 @@ var BufferLoader = function BufferLoader(context, callback) {
     };
 };
 
-var createBufferList = function createBufferList(instrumentPack, cb) {
-    return BufferLoader(context, cb).load(instrumentPack);
+var loadInstrumentBuffers = function loadInstrumentBuffers(context, instrumentPack) {
+    return BufferLoader(context).load(instrumentPack);
 };
 
-var playSound = function playSound(buffer, time, duration) {
+var playSound = function playSound(context, buffer, time, duration) {
     var source = context.createBufferSource();
 
     source.buffer = buffer;
     source.connect(context.destination);
-
+    console.log('context.currentTime', context.currentTime);
     source.start(context.currentTime + time, 0, duration);
+
+    return source;
 };
 
-exports.createBufferList = createBufferList;
+exports.loadInstrumentBuffers = loadInstrumentBuffers;
 exports.playSound = playSound;
 
 },{}],2:[function(require,module,exports){
@@ -141,57 +139,163 @@ var generateTimeMap = function generateTimeMap(sequence) {
 exports.generateSequence = generateSequence;
 exports.generateTimeMap = generateTimeMap;
 
-},{"./tools":3}],3:[function(require,module,exports){
+},{"./tools":4}],3:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+
+var _beats = require('./beats');
+
+var _tools = require('./tools');
+
+var _audio = require('./audio');
+
+var defaultInstrument = {
+    id: '',
+    paths: [],
+    sequence: [],
+    timeMaps: [],
+    soundMap: []
+};
+
+var instruments = {
+    guitar: {
+        id: 'guitar',
+        paths: ['assets/audio/guitar-palm-zero-1.wav', 'assets/audio/guitar-palm-zero-2.wav', 'assets/audio/guitar-open-zero-1.wav', 'assets/audio/guitar-open-zero-2.wav', 'assets/audio/guitar-open-first-1.wav']
+    },
+
+    // 'assets/audio/guitar-open-first-2.wav',
+    // 'assets/audio/guitar-open-eighth.wav',
+    // 'assets/audio/guitar-dissonance-high.wav',
+    kick: {
+        id: 'kick',
+        paths: ['assets/audio/kick.wav']
+    },
+    snare: {
+        id: 'snare',
+        paths: ['assets/audio/snare.wav']
+    },
+    hihat: {
+        id: 'hihat',
+        paths: ['assets/audio/hihat.wav']
+    }
+};
+
+var getInstrument = function getInstrument(id, sequence) {
+    return _extends({}, defaultInstrument, instruments[id], { sequence: sequence });
+};
+
+var generateInstrumentTimeMap = function generateInstrumentTimeMap(instrument) {
+    var timeMap = (0, _beats.generateTimeMap)(instrument.sequence);
+
+    return _extends({}, instrument, {
+        timeMap: timeMap
+    });
+};
+
+var generateInstrumentSoundMap = function generateInstrumentSoundMap(instrument) {
+    var soundMap = instrument.sequence.map(function (hit) {
+        return instrument.buffers[(0, _tools.randFromTo)(0, instrument.buffers.length - 1)];
+    });
+
+    return _extends({}, instrument, {
+        soundMap: soundMap
+    });
+};
+
+var playInstrumentSoundsAtTempo = function playInstrumentSoundsAtTempo(context, bpmMultiplier) {
+    return function (instrument) {
+        instrument.sources = instrument.timeMap.reduce(function (sources, time, i) {
+            var instrumentSound = instrument.soundMap[i];
+            var startTime = time * bpmMultiplier;
+            var duration = 1 / instrument.sequence[i].beat * bpmMultiplier;
+
+            return instrument.sequence[i].volume ? [].concat(_toConsumableArray(sources), [(0, _audio.playSound)(context, instrumentSound, startTime, duration)]) : sources;
+        }, []);
+
+        return instrument;
+    };
+};
+
+var stopInstrumentSounds = function stopInstrumentSounds(instrument) {
+    instrument.sources.forEach(function (source) {
+        return source.stop();
+    });
+    return instrument;
+};
+
+exports.getInstrument = getInstrument;
+exports.generateInstrumentTimeMap = generateInstrumentTimeMap;
+exports.generateInstrumentSoundMap = generateInstrumentSoundMap;
+exports.playInstrumentSoundsAtTempo = playInstrumentSoundsAtTempo;
+exports.stopInstrumentSounds = stopInstrumentSounds;
+
+},{"./audio":1,"./beats":2,"./tools":4}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-	value: true
+  value: true
 });
 var repeat = function repeat(simsNeeded, fn) {
-	for (var i = simsNeeded - 1, x = 0; i >= 0; i--) {
-		fn(simsNeeded, x);
-		x++;
-	};
+  for (var i = simsNeeded - 1, x = 0; i >= 0; i--) {
+    fn(simsNeeded, x);
+    x++;
+  };
 };
 
 var compose = function compose() {
-	for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-		args[_key] = arguments[_key];
-	}
+  for (var _len = arguments.length, funcs = Array(_len), _key = 0; _key < _len; _key++) {
+    funcs[_key] = arguments[_key];
+  }
 
-	return function (x) {
-		return args.reduce(function (prev, cur) {
-			return cur.call(cur, prev);
-		}, x);
-	};
+  return function () {
+    if (funcs.length === 0) {
+      return arguments[0];
+    }
+
+    var last = funcs[funcs.length - 1];
+    var rest = funcs.slice(0, -1);
+
+    return rest.reduceRight(function (composed, f) {
+      return f(composed);
+    }, last.apply(undefined, arguments));
+  };
 };
 
 var randFromTo = function randFromTo(from, to) {
-	return Math.floor(Math.random() * (to - from + 1) + from);
+  return Math.floor(Math.random() * (to - from + 1) + from);
 };
 
 exports.repeat = repeat;
 exports.compose = compose;
 exports.randFromTo = randFromTo;
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 require('./polyfills/array.values.js');
+
+require('./polyfills/AudioContext');
 
 var _appAudio = require('./app/audio');
 
 var _appBeats = require('./app/beats');
 
+var _appInstruments = require('./app/instruments');
+
 var _appTools = require('./app/tools');
 
-var bpm = 70;
+var bpm = 100;
 var bpmMultiplier = 60 / bpm;
 var bars = 4;
 var beats = 4;
-var allowedLengths = [.75, 6];
+var allowedLengths = [3, 3, 3, .75];
 
 var mainBeat = (0, _appBeats.generateSequence)({ bars: bars, beats: beats, allowedLengths: allowedLengths, hitChance: 1 });
 
@@ -202,45 +306,35 @@ var predefinedSequences = {
     kick: mainBeat,
     guitar: mainBeat,
 
-    snare: [{ beat: 1, volume: 0 }, { beat: 1, volume: 1 }, { beat: 1, volume: 0 }, { beat: 1, volume: 1 }, { beat: 1, volume: 0 }, { beat: 1, volume: 1 }, { beat: 1, volume: 0 }, { beat: 1, volume: 1 }, { beat: 1, volume: 0 }, { beat: 1, volume: 0 }, { beat: 1, volume: 1 }, { beat: 1, volume: 0 }, { beat: 1, volume: 0 }, { beat: 1, volume: 0 }, { beat: 1, volume: 1 }, { beat: 1, volume: 0 }]
+    snare: [{ beat: 1, volume: 0 }, { beat: 1, volume: 0 }, { beat: 1, volume: 1 }, { beat: 1, volume: 0 }, { beat: 1, volume: 0 }, { beat: 1, volume: 0 }, { beat: 1, volume: 1 }, { beat: 1, volume: 0 }, { beat: 1, volume: 0 }, { beat: 1, volume: 0 }, { beat: 1, volume: 1 }, { beat: 1, volume: 0 }, { beat: 1, volume: 0 }, { beat: 1, volume: 0 }, { beat: 1, volume: 1 }, { beat: 1, volume: 0 }]
 };
-var instrumentPacks = [{
-    id: 'guitar',
-    paths: ['assets/audio/guitar-palm-zero-1.wav', 'assets/audio/guitar-palm-zero-2.wav', 'assets/audio/guitar-open-first-1.wav', 'assets/audio/guitar-open-first-2.wav', 'assets/audio/guitar-open-eighth.wav', 'assets/audio/guitar-dissonance-high.wav']
-}, {
-    id: 'kick',
-    paths: ['assets/audio/kick.wav']
-}, {
-    id: 'snare',
-    paths: ['assets/audio/snare.wav']
-}, {
-    id: 'hihat',
-    paths: ['assets/audio/hihat.wav']
-}];
 
-var init = function init(instrumentPack) {
-    var instruments = instrumentPack.map(function (instrument, i) {
-        console.log('instrument', instrument);
-        var sequence = predefinedSequences[instrument.id] || (0, _appBeats.generateSequence)({ bars: bars, beats: beats, allowedLengths: allowedLengths, volumeConstant: true });
-        var timeMap = (0, _appBeats.generateTimeMap)(sequence);
+var instrumentPack = [(0, _appInstruments.getInstrument)('guitar', predefinedSequences['guitar']), (0, _appInstruments.getInstrument)('kick', predefinedSequences['kick']), (0, _appInstruments.getInstrument)('snare', predefinedSequences['snare']), (0, _appInstruments.getInstrument)('hihat', predefinedSequences['hihat'])];
 
-        return _extends({}, instrument, {
-            sequence: sequence,
-            timeMap: timeMap
-        });
+var initiateInstruments = function initiateInstruments(instrumentPack, context) {
+    var playInstrumentSounds = (0, _appInstruments.playInstrumentSoundsAtTempo)(context, bpmMultiplier);
+    var createSoundsAndPlay = function createSoundsAndPlay(instrument) {
+        return (0, _appTools.compose)(playInstrumentSounds, _appInstruments.generateInstrumentSoundMap, _appInstruments.generateInstrumentTimeMap)(instrument);
+    };
+    var instruments = instrumentPack.map(createSoundsAndPlay);
+
+    document.querySelector('.js-play').addEventListener('click', function () {
+        instruments.map((0, _appTools.compose)(playInstrumentSounds, _appInstruments.stopInstrumentSounds));
     });
-
-    var sounds = instruments.forEach(function (instrument) {
-        console.log('instrument', instrument);
-        console.log('randFromTo(0, instrument.buffers.length-1)', instrument.buffers.length);
-        return instrument.timeMap.map(function (time, i) {
-            return instrument.sequence[i].volume && (0, _appAudio.playSound)(instrument.buffers[(0, _appTools.randFromTo)(0, instrument.buffers.length - 1)], time * bpmMultiplier, 1 / instrument.sequence[i].beat * bpmMultiplier);
-        });
-    });
+    window.context = context;
 };
-(0, _appAudio.createBufferList)(instrumentPacks).then(init);
 
-},{"./app/audio":1,"./app/beats":2,"./app/tools":3,"./polyfills/array.values.js":5}],5:[function(require,module,exports){
+var context = new AudioContext();
+(0, _appAudio.loadInstrumentBuffers)(context, instrumentPack).then(function (instrumentPack) {
+    return initiateInstruments(instrumentPack, context, predefinedSequences);
+});
+
+},{"./app/audio":1,"./app/beats":2,"./app/instruments":3,"./app/tools":4,"./polyfills/AudioContext":6,"./polyfills/array.values.js":7}],6:[function(require,module,exports){
+"use strict";
+
+window.AudioContext = window.AudioContext || window.webkitAudioContext;
+
+},{}],7:[function(require,module,exports){
 'use strict';
 
 var reduce = Function.bind.call(Function.call, Array.prototype.reduce);
@@ -264,4 +358,4 @@ if (!Object.entries) {
 	};
 }
 
-},{}]},{},[4])
+},{}]},{},[5])

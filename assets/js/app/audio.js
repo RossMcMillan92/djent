@@ -1,10 +1,7 @@
-window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
-const context = new AudioContext();
 
-const BufferLoader = (context, callback) => {
+const BufferLoader = (context) => {
     let newInstrumentPack = new Array();
-    let loadCount = 0;
 
     const loadBuffer = function(instrument, index) {
         const bufferAmount = instrument.paths.length;
@@ -74,21 +71,23 @@ const BufferLoader = (context, callback) => {
 }
 
 
-const createBufferList = (instrumentPack, cb) => {
-    return BufferLoader(context, cb)
+const loadInstrumentBuffers = (context, instrumentPack) => {
+    return BufferLoader(context)
         .load(instrumentPack);
 }
 
-const playSound = (buffer, time, duration) => {
+const playSound = (context, buffer, time, duration) => {
   const source = context.createBufferSource();
 
   source.buffer = buffer;
   source.connect(context.destination);
-
+  console.log('context.currentTime', context.currentTime);
   source.start(context.currentTime + time, 0, duration);
+
+  return source;
 }
 
 export {
-    createBufferList,
+    loadInstrumentBuffers,
     playSound
 }

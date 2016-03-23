@@ -1,0 +1,101 @@
+<group>
+key=53  loop_mode=one_shot
+<region> sample=paiste_2002_22_ride_bell-03.wav volume=0.000 pan=40.63 transpose=0 tune=0 lovel=0 hivel=42
+<region> sample=paiste_2002_22_ride_bell-05.wav volume=0.000 pan=40.63 transpose=0 tune=0 lovel=42 hivel=85
+<region> sample=paiste_2002_22_ride_bell-06.wav volume=0.000 pan=40.63 transpose=0 tune=0 lovel=85 hivel=127
+
+<group>
+key=36  loop_mode=one_shot
+<region> sample=bochka.wav volume=0.000 pan=0.00 transpose=0 tune=0 lovel=0 hivel=127
+
+<group>
+key=42  loop_mode=one_shot group=1 off_by=1
+<region> sample=hh pedal.wav volume=0.000 pan=-50.78 transpose=0 tune=0 lovel=0 hivel=127
+
+<group>
+key=52  loop_mode=one_shot
+<region> sample=china3 l.wav volume=0.000 pan=60.16 transpose=0 tune=0 lovel=0 hivel=85
+<region> sample=china3 m.wav volume=0.000 pan=60.16 transpose=0 tune=0 lovel=84 hivel=127
+
+<group>
+key=39  loop_mode=one_shot
+<region> sample=snare rimshot 04.wav volume=0.000 pan=0.00 transpose=0 tune=0 lovel=0 hivel=127
+<region> sample=drysn04ak2.wav volume=0.000 pan=0.00 transpose=0 tune=0 lovel=0 hivel=127
+<region> sample=dwmapsna3smp2(s).wav volume=0.000 pan=0.00 transpose=0 tune=0 lovel=0 hivel=127
+
+<group>
+key=38  loop_mode=one_shot
+<region> sample=drysn04ms1.wav volume=0.000 pan=0.00 transpose=0 tune=0 lovel=0 hivel=42
+<region> sample=drysn04h1.wav volume=0.000 pan=0.00 transpose=0 tune=0 lovel=42 hivel=85
+<region> sample=drysn04ak2.wav volume=0.000 pan=0.00 transpose=0 tune=0 lovel=85 hivel=127
+
+<group>
+key=46  loop_mode=one_shot group=1 off_by=1
+<region> sample=op_cl5.wav volume=0.000 pan=-50.00 transpose=0 tune=0 lovel=0 hivel=93
+<region> sample=op_cl7.wav volume=0.000 pan=-50.00 transpose=0 tune=0 lovel=93 hivel=127
+
+<group>
+key=44  loop_mode=one_shot group=1 off_by=1
+<region> sample=closed hat paiste 4.wav volume=0.000 pan=-50.00 transpose=0 tune=0 lovel=0 hivel=32
+<region> sample=closed hat paiste 3.wav volume=0.000 pan=-50.00 transpose=0 tune=0 lovel=32 hivel=64
+<region> sample=closed hat paiste 2.wav volume=0.000 pan=-50.00 transpose=0 tune=0 lovel=64 hivel=95
+<region> sample=closed hat paiste 1.wav volume=0.000 pan=-50.00 transpose=0 tune=0 lovel=95 hivel=127
+
+<group>
+key=48  loop_mode=one_shot
+<region> sample=tom 12 yamaha thinhead 3.wav volume=0.000 pan=0.00 transpose=0 tune=0 lovel=0 hivel=69
+<region> sample=tom 12 yamaha thinhead 2.wav volume=0.000 pan=0.00 transpose=0 tune=0 lovel=69 hivel=106
+<region> sample=tom 12 yamaha thinhead 1.wav volume=0.000 pan=0.00 transpose=0 tune=0 lovel=106 hivel=127
+
+<group>
+key=47  loop_mode=one_shot
+<region> sample=tom 13 yamaha thinhead 3.wav volume=0.000 pan=35.16 transpose=0 tune=0 lovel=0 hivel=69
+<region> sample=tom 13 yamaha thinhead 2.wav volume=0.000 pan=35.16 transpose=0 tune=0 lovel=69 hivel=106
+<region> sample=tom 13 yamaha thinhead 1.wav volume=0.000 pan=35.16 transpose=0 tune=0 lovel=106 hivel=127
+
+<group>
+key=45  loop_mode=one_shot
+<region> sample=drytm08s1.wav volume=0.000 pan=29.69 transpose=0 tune=0 lovel=0 hivel=69
+<region> sample=drytm08ms1.wav volume=0.000 pan=29.69 transpose=0 tune=0 lovel=69 hivel=106
+<region> sample=drytm08h1.wav volume=0.000 pan=29.69 transpose=0 tune=0 lovel=106 hivel=127
+
+<group>
+key=43  loop_mode=one_shot
+<region> sample=masterwork_custom_18_crash-01.wav volume=0.000 pan=48.44 transpose=0 tune=0 lovel=0 hivel=59
+<region> sample=f tom medium 1.wav volume=0.000 pan=48.44 transpose=0 tune=0 lovel=59 hivel=94
+<region> sample=f tom hard 4.wav volume=0.000 pan=48.44 transpose=0 tune=0 lovel=94 hivel=115
+<region> sample=f tom hard 2.wav volume=0.000 pan=48.44 transpose=0 tune=0 lovel=115 hivel=127
+
+<group>
+key=57  loop_mode=one_shot
+<region> sample=z10crasha3stk1mp2(s).wav volume=0.000 pan=-39.84 transpose=0 tune=0 lovel=0 hivel=64
+<region> sample=z10crasha3stk1mf2(s).wav volume=0.000 pan=-39.84 transpose=0 tune=0 lovel=64 hivel=127
+
+<group>
+key=55  loop_mode=one_shot
+<region> sample=splash 1.wav volume=0.000 pan=-19.53 transpose=0 tune=0 lovel=0 hivel=64
+<region> sample=splash 2.wav volume=0.000 pan=-19.53 transpose=0 tune=0 lovel=64 hivel=127
+
+<group>
+key=51  loop_mode=one_shot
+<region> sample=paiste_2002_22_ride-01.wav volume=0.000 pan=39.84 transpose=0 tune=0 lovel=0 hivel=12
+<region> sample=paiste_2002_22_ride-02.wav volume=0.000 pan=39.84 transpose=0 tune=0 lovel=12 hivel=23
+<region> sample=paiste_2002_22_ride-03.wav volume=0.000 pan=39.84 transpose=0 tune=0 lovel=23 hivel=35
+<region> sample=paiste_2002_22_ride-04.wav volume=0.000 pan=39.84 transpose=0 tune=0 lovel=35 hivel=46
+<region> sample=paiste_2002_22_ride-05.wav volume=0.000 pan=39.84 transpose=0 tune=0 lovel=46 hivel=58
+<region> sample=paiste_2002_22_ride-06.wav volume=0.000 pan=39.84 transpose=0 tune=0 lovel=58 hivel=69
+<region> sample=paiste_2002_22_ride-07.wav volume=0.000 pan=39.84 transpose=0 tune=0 lovel=69 hivel=81
+<region> sample=paiste_2002_22_ride-08.wav volume=0.000 pan=39.84 transpose=0 tune=0 lovel=81 hivel=92
+<region> sample=paiste_2002_22_ride-09.wav volume=0.000 pan=39.84 transpose=0 tune=0 lovel=92 hivel=104
+<region> sample=paiste_2002_22_ride-10.wav volume=0.000 pan=39.84 transpose=0 tune=0 lovel=104 hivel=115
+<region> sample=paiste_2002_22_ride-11.wav volume=0.000 pan=39.84 transpose=0 tune=0 lovel=115 hivel=127
+
+<group>
+key=49  loop_mode=one_shot
+<region> sample=paiste_2002_22_ride_edge-01.wav volume=0.000 pan=39.84 transpose=0 tune=0 lovel=0 hivel=18
+<region> sample=paiste_2002_22_ride_edge-02.wav volume=0.000 pan=39.84 transpose=0 tune=0 lovel=18 hivel=36
+<region> sample=paiste_2002_22_ride_edge-03.wav volume=0.000 pan=39.84 transpose=0 tune=0 lovel=36 hivel=54
+<region> sample=paiste_2002_22_ride_edge-04.wav volume=0.000 pan=39.84 transpose=0 tune=0 lovel=54 hivel=73
+<region> sample=paiste_2002_22_ride_edge-05.wav volume=0.000 pan=39.84 transpose=0 tune=0 lovel=73 hivel=86
+<region> sample=paiste_2002_22_ride_edge-06.wav volume=0.000 pan=39.84 transpose=0 tune=0 lovel=85 hivel=95
+<region> sample=paiste_2002_22_ride_edge-07.wav volume=0.000 pan=39.84 transpose=0 tune=0 lovel=94 hivel=127

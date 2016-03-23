@@ -8,44 +8,63 @@ window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
 var context = new AudioContext();
 
-var BufferLoader = function BufferLoader(context, urlList, callback) {
-    var onload = callback;
-    var bufferList = new Array();
+var BufferLoader = function BufferLoader(context, callback) {
+    var newInstrumentPack = new Array();
     var loadCount = 0;
 
-    var loadBuffer = function loadBuffer(url, index) {
-        // Load buffer asynchronously
-        var request = new XMLHttpRequest();
-        request.open("GET", url, true);
-        request.responseType = "arraybuffer";
+    var loadBuffer = function loadBuffer(instrument, index) {
+        var bufferAmount = instrument.paths.length;
+        var bufferCount = 0;
+        instrument.buffers = [];
 
-        request.onload = function () {
-            // Asynchronously decode the audio file data in request.response
-            context.decodeAudioData(request.response, function (buffer) {
-                if (!buffer) {
-                    alert('error decoding file data: ' + url);
-                    return;
-                }
-                bufferList[index] = buffer;
-                if (++loadCount == urlList.length) {
-                    onload(bufferList);
-                }
-            }, function (error) {
-                console.error('decodeAudioData error', error);
+        var loadingSound = new Promise(function (res, rej) {
+
+            instrument.paths.map(function (url, i) {
+                // Load buffer asynchronously
+                var request = new XMLHttpRequest();
+                request.open("GET", url, true);
+                request.responseType = "arraybuffer";
+
+                request.onload = function () {
+                    // Asynchronously decode the audio file data in request.response
+                    context.decodeAudioData(request.response, function (buffer) {
+                        if (!buffer) {
+                            alert('error decoding file data: ' + url);
+                            return;
+                        }
+
+                        instrument.buffers[i] = buffer;
+                        newInstrumentPack[index] = instrument;
+                        bufferCount++;
+                        if (bufferCount === bufferAmount) {
+                            res();
+                        }
+                    }, function (error) {
+                        rej();
+                        console.error('decodeAudioData error', error);
+                    });
+                };
+
+                request.onerror = function () {
+                    alert('BufferLoader: XHR error');
+                };
+
+                request.send();
             });
-        };
+        });
 
-        request.onerror = function () {
-            alert('BufferLoader: XHR error');
-        };
-
-        request.send();
+        return loadingSound;
     };
 
-    var load = function load() {
-        for (var i = 0; i < urlList.length; ++i) {
-            loadBuffer(urlList[i], i);
-        }
+    var load = function load(instrumentPack) {
+
+        var loadingSounds = instrumentPack.map(loadBuffer);
+
+        return new Promise(function (res, rej) {
+            Promise.all(loadingSounds).then(function () {
+                return res(newInstrumentPack);
+            })["catch"](rej);
+        });
     };
 
     return {
@@ -53,8 +72,8 @@ var BufferLoader = function BufferLoader(context, urlList, callback) {
     };
 };
 
-var createBufferList = function createBufferList(paths, cb) {
-    var bufferLoader = BufferLoader(context, paths, cb).load();
+var createBufferList = function createBufferList(instrumentPack, cb) {
+    return BufferLoader(context, cb).load(instrumentPack);
 };
 
 var playSound = function playSound(buffer, time, duration) {
@@ -63,7 +82,7 @@ var playSound = function playSound(buffer, time, duration) {
     source.buffer = buffer;
     source.connect(context.destination);
 
-    source.start(context.currentTime + time, 0, 1 / duration.beat);
+    source.start(context.currentTime + time, 0, duration);
 };
 
 exports.createBufferList = createBufferList;
@@ -84,7 +103,7 @@ var generateSequence = function generateSequence(_ref) {
     var bars = _ref.bars;
     var beats = _ref.beats;
     var allowedLengths = _ref.allowedLengths;
-    var volumeConstant = _ref.volumeConstant;
+    var hitChance = _ref.hitChance;
 
     var target = beats * bars;
     var sum = 0;
@@ -92,14 +111,13 @@ var generateSequence = function generateSequence(_ref) {
     var seq = [];
 
     while (Math.round(sum) < target) {
-        console.log('sum, target', sum, target);
         var randIndex = (0, _tools.randFromTo)(0, allowedLengths.length - 1);
         var newLength = allowedLengths[randIndex];
 
         if (sum + 1 / newLength <= target) {
             seq[i] = {
                 beat: newLength,
-                volume: volumeConstant ? 1 : Math.round(Math.random())
+                volume: Math.random() < hitChance ? 1 : 0
             };
             sum += 1 / newLength;
             i++;
@@ -114,7 +132,6 @@ var generateTimeMap = function generateTimeMap(sequence) {
         var result = seq.slice(0, i + 1).reduce(function (prev, cur, i, seq) {
             return prev + 1 / cur.beat;
         }, 0);
-        console.log('seq', seq[0].beat);
         return result;
     });
 
@@ -160,57 +177,70 @@ exports.randFromTo = randFromTo;
 },{}],4:[function(require,module,exports){
 'use strict';
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 require('./polyfills/array.values.js');
 
 var _appAudio = require('./app/audio');
 
 var _appBeats = require('./app/beats');
 
-var bars = 1;
-var beats = 4;
-var allowedLengths = [2, 3];
+var _appTools = require('./app/tools');
 
-var mainBeat = (0, _appBeats.generateSequence)({ bars: bars, beats: beats, allowedLengths: allowedLengths, volumeConstant: true });
+var bpm = 70;
+var bpmMultiplier = 60 / bpm;
+var bars = 4;
+var beats = 4;
+var allowedLengths = [.75, 6];
+
+var mainBeat = (0, _appBeats.generateSequence)({ bars: bars, beats: beats, allowedLengths: allowedLengths, hitChance: 1 });
 
 var predefinedSequences = {
 
-    hihat: [{ beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }],
+    hihat: [{ beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }],
 
     kick: mainBeat,
     guitar: mainBeat,
 
-    snare: [{ beat: 1, volume: 0 }, { beat: 1, volume: 0 }, { beat: 1, volume: 1 }, { beat: 1, volume: 0 }]
+    snare: [{ beat: 1, volume: 0 }, { beat: 1, volume: 1 }, { beat: 1, volume: 0 }, { beat: 1, volume: 1 }, { beat: 1, volume: 0 }, { beat: 1, volume: 1 }, { beat: 1, volume: 0 }, { beat: 1, volume: 1 }, { beat: 1, volume: 0 }, { beat: 1, volume: 0 }, { beat: 1, volume: 1 }, { beat: 1, volume: 0 }, { beat: 1, volume: 0 }, { beat: 1, volume: 0 }, { beat: 1, volume: 1 }, { beat: 1, volume: 0 }]
 };
-var paths = {
-    guitar: 'assets/audio/guitar.wav',
-    kick: 'assets/audio/kick.wav',
-    snare: 'assets/audio/snare.wav',
-    hihat: 'assets/audio/hihat.wav'
-};
+var instrumentPacks = [{
+    id: 'guitar',
+    paths: ['assets/audio/guitar-palm-zero-1.wav', 'assets/audio/guitar-palm-zero-2.wav', 'assets/audio/guitar-open-first-1.wav', 'assets/audio/guitar-open-first-2.wav', 'assets/audio/guitar-open-eighth.wav', 'assets/audio/guitar-dissonance-high.wav']
+}, {
+    id: 'kick',
+    paths: ['assets/audio/kick.wav']
+}, {
+    id: 'snare',
+    paths: ['assets/audio/snare.wav']
+}, {
+    id: 'hihat',
+    paths: ['assets/audio/hihat.wav']
+}];
 
-var init = function init(bufferList) {
-    var instruments = bufferList.map(function (buffer, i) {
-        var id = Object.keys(paths)[i];
-        var sequence = predefinedSequences[id] || (0, _appBeats.generateSequence)({ bars: bars, beats: beats, allowedLengths: allowedLengths, volumeConstant: true });
+var init = function init(instrumentPack) {
+    var instruments = instrumentPack.map(function (instrument, i) {
+        console.log('instrument', instrument);
+        var sequence = predefinedSequences[instrument.id] || (0, _appBeats.generateSequence)({ bars: bars, beats: beats, allowedLengths: allowedLengths, volumeConstant: true });
         var timeMap = (0, _appBeats.generateTimeMap)(sequence);
 
-        return {
-            id: id,
-            buffer: buffer,
+        return _extends({}, instrument, {
             sequence: sequence,
             timeMap: timeMap
-        };
+        });
     });
 
     var sounds = instruments.forEach(function (instrument) {
+        console.log('instrument', instrument);
+        console.log('randFromTo(0, instrument.buffers.length-1)', instrument.buffers.length);
         return instrument.timeMap.map(function (time, i) {
-            return instrument.sequence[i].volume && (0, _appAudio.playSound)(instrument.buffer, time, instrument.sequence[i]);
+            return instrument.sequence[i].volume && (0, _appAudio.playSound)(instrument.buffers[(0, _appTools.randFromTo)(0, instrument.buffers.length - 1)], time * bpmMultiplier, 1 / instrument.sequence[i].beat * bpmMultiplier);
         });
     });
 };
-(0, _appAudio.createBufferList)(Object.values(paths), init);
+(0, _appAudio.createBufferList)(instrumentPacks).then(init);
 
-},{"./app/audio":1,"./app/beats":2,"./polyfills/array.values.js":5}],5:[function(require,module,exports){
+},{"./app/audio":1,"./app/beats":2,"./app/tools":3,"./polyfills/array.values.js":5}],5:[function(require,module,exports){
 'use strict';
 
 var reduce = Function.bind.call(Function.call, Array.prototype.reduce);

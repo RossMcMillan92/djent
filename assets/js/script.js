@@ -7,12 +7,15 @@ import {
 
 import {
     generateSequence,
+    loopSequence
 } from './app/beats';
 
 import {
     getInstrument,
     generateInstrumentTimeMap,
-    generateInstrumentSoundMap,
+    generateInstrumentHitTypes,
+    repeatHits,
+    repeatSequence,
     playInstrumentSoundsAtTempo,
     stopInstrumentSounds
 } from './app/instruments';
@@ -22,51 +25,24 @@ import {
     compose
 } from './app/tools';
 
-const bpm            = 100;
+const bpm            = 70;
 const bpmMultiplier  = 60 / bpm;
-const bars           = 4;
+const bars           = 2;
 const beats          = 4;
-const allowedLengths = [ 3 ,3, 3, .75 ];
-
-const mainBeat = generateSequence({ bars, beats, allowedLengths, hitChance: 1 });
-
+const allowedLengths = [ 1, 4 ];
+const mainBeat       = generateSequence({ bars: 2, beats: 4, allowedLengths, hitChance: .75 });
+console.log('mainBeat', mainBeat.map(beat => beat.beat))
 const predefinedSequences = {
 
     hihat: [
         { beat: 1, volume: 1 },
-        { beat: 1, volume: 1 },
-        { beat: 1, volume: 1 },
-        { beat: 1, volume: 1 },
-        { beat: 1, volume: 1 },
-        { beat: 1, volume: 1 },
-        { beat: 1, volume: 1 },
-        { beat: 1, volume: 1 },
-        { beat: 1, volume: 1 },
-        { beat: 1, volume: 1 },
-        { beat: 1, volume: 1 },
-        { beat: 1, volume: 1 },
-        { beat: 1, volume: 1 },
-        { beat: 1, volume: 1 },
-        { beat: 1, volume: 1 },
-        { beat: 1, volume: 1 },
     ],
 
     kick: mainBeat,
+
     guitar: mainBeat,
 
     snare: [
-        { beat: 1 , volume: 0 },
-        { beat: 1 , volume: 0 },
-        { beat: 1 , volume: 1 },
-        { beat: 1 , volume: 0 },
-        { beat: 1 , volume: 0 },
-        { beat: 1 , volume: 0 },
-        { beat: 1 , volume: 1 },
-        { beat: 1 , volume: 0 },
-        { beat: 1 , volume: 0 },
-        { beat: 1 , volume: 0 },
-        { beat: 1 , volume: 1 },
-        { beat: 1 , volume: 0 },
         { beat: 1 , volume: 0 },
         { beat: 1 , volume: 0 },
         { beat: 1 , volume: 1 },
@@ -75,22 +51,49 @@ const predefinedSequences = {
 };
 
 const instrumentPack = [
-    getInstrument('guitar', predefinedSequences['guitar']),
-    getInstrument('kick', predefinedSequences['kick']),
-    getInstrument('snare', predefinedSequences['snare']),
-    getInstrument('hihat', predefinedSequences['hihat']),
-]
+    getInstrument('guitar', {
+        sequence: predefinedSequences['guitar']
+    }),
+
+    getInstrument('kick', {
+        sequence: predefinedSequences['kick']
+    }),
+
+    getInstrument('snare', {
+        sequence: loopSequence(predefinedSequences['snare'], bars * beats)
+    }),
+
+    getInstrument('hihat', {
+        sequence: loopSequence(predefinedSequences['hihat'], bars * beats)
+    }),
+];
 
 const initiateInstruments = (instrumentPack, context) => {
+    const lookaheadTime        = 0.050;
     const playInstrumentSounds = playInstrumentSoundsAtTempo(context, bpmMultiplier);
-    const createSoundsAndPlay = instrument => compose(playInstrumentSounds, generateInstrumentSoundMap, generateInstrumentTimeMap)(instrument);
-    const instruments = instrumentPack.map(createSoundsAndPlay);
+    const createSoundMaps      = instrument => compose(
+        generateInstrumentTimeMap,
+        repeatHits,
+        instrument => repeatSequence(instrument, bars * beats),
+        generateInstrumentHitTypes
+    )(instrument);
+
+    const instruments          = instrumentPack
+        .map(createSoundMaps);
+
+    let instrumentsPlaying     = instruments
+        .map(playInstrumentSounds);
 
     document.querySelector('.js-play').addEventListener('click', () => {
-        instruments.map(compose(playInstrumentSounds, stopInstrumentSounds))
+        instrumentsPlaying = instrumentsPlaying.map(compose(playInstrumentSounds, stopInstrumentSounds));
     });
+//     document.querySelector('.js-stop').addEventListener('click', () => {
+//         if(frame) cancelAnimationFrame(frame);
+//     });
     window.context = context;
 }
+
+
 
 const context = new AudioContext();
 loadInstrumentBuffers(context, instrumentPack)

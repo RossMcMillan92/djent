@@ -76,13 +76,17 @@ const loadInstrumentBuffers = (context, instrumentPack) => {
         .load(instrumentPack);
 }
 
-const playSound = (context, buffer, time, duration) => {
+const playSound = (context, buffer, time, duration, volume) => {
   const source = context.createBufferSource();
+  const gainNode = context.createGain();
+
+  source.connect(gainNode);
+
+  gainNode.connect(context.destination);
+  gainNode.gain.value = volume;
 
   source.buffer = buffer;
-  source.connect(context.destination);
-  console.log('context.currentTime', context.currentTime);
-  source.start(context.currentTime + time, 0, duration);
+  source.start(time, 0, duration);
 
   return source;
 }

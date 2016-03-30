@@ -72,13 +72,17 @@ var loadInstrumentBuffers = function loadInstrumentBuffers(context, instrumentPa
     return BufferLoader(context).load(instrumentPack);
 };
 
-var playSound = function playSound(context, buffer, time, duration) {
+var playSound = function playSound(context, buffer, time, duration, volume) {
     var source = context.createBufferSource();
+    var gainNode = context.createGain();
+
+    source.connect(gainNode);
+
+    gainNode.connect(context.destination);
+    gainNode.gain.value = volume;
 
     source.buffer = buffer;
-    source.connect(context.destination);
-    console.log('context.currentTime', context.currentTime);
-    source.start(context.currentTime + time, 0, duration);
+    source.start(time, 0, duration);
 
     return source;
 };
@@ -97,32 +101,104 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 var _tools = require('./tools');
 
+// const generateSequence = ({ bars, beats, allowedLengths, hitChance }) => {
+//     const target = beats * bars;
+//     let sum = 0;
+//     let i = 0;
+//     let seq = [];
+//
+//     while(sum < target){
+//         const randIndex = randFromTo(0, allowedLengths.length-1);
+//         let newLength = allowedLengths[randIndex];
+//
+//         if(sum + (1/newLength) <= target){
+//             newLength = newLength;
+//         } else if (!allowedLengths.filter(length => 1 / length < target - sum).length) {
+//             newLength = 1 / (target - sum);
+//         } else {
+//             continue;
+//         }
+//
+//         seq[i] = {
+//             beat: newLength,
+//             volume: Math.random() < hitChance ? 1 : 0
+//         };
+//         sum += (1/newLength);
+//         i++;
+//
+//     }
+//
+//     return seq;
+// };
+
 var generateSequence = function generateSequence(_ref) {
     var bars = _ref.bars;
     var beats = _ref.beats;
     var allowedLengths = _ref.allowedLengths;
     var hitChance = _ref.hitChance;
 
-    var target = beats * bars;
-    var sum = 0;
-    var i = 0;
-    var seq = [];
+    return (function loop(_x, _x2, _x3) {
+        var _again = true;
 
-    while (Math.round(sum) < target) {
-        var randIndex = (0, _tools.randFromTo)(0, allowedLengths.length - 1);
-        var newLength = allowedLengths[randIndex];
+        _function: while (_again) {
+            var seq = _x,
+                sum = _x2,
+                target = _x3;
+            _again = false;
 
-        if (sum + 1 / newLength <= target) {
-            seq[i] = {
-                beat: newLength,
-                volume: Math.random() < hitChance ? 1 : 0
-            };
-            sum += 1 / newLength;
-            i++;
+            var randIndex = (0, _tools.randFromTo)(0, allowedLengths.length - 1);
+            var newLength = allowedLengths[randIndex];
+
+            if (sum + 1 / newLength > target) {
+                if (!allowedLengths.filter(function (length) {
+                    return 1 / length < target - sum;
+                }).length) {
+                    newLength = 1 / (target - sum);
+                } else {
+                    _x = seq;
+                    _x2 = sum;
+                    _x3 = target;
+                    _again = true;
+                    randIndex = newLength = undefined;
+                    continue _function;
+                }
+            }
+
+            if (Math.floor(sum + .001) < target && isFinite(newLength)) {
+                sum += 1 / newLength;
+                var newBeat = {
+                    beat: newLength,
+                    volume: Math.random() < hitChance ? 1 : 0
+                };
+                _x = [].concat(_toConsumableArray(seq), [newBeat]);
+                _x2 = sum;
+                _x3 = target;
+                _again = true;
+                randIndex = newLength = newBeat = undefined;
+                continue _function;
+            }
+            return seq;
         }
+    })([], 0, beats * bars);
+};
+
+var loopSequence = function loopSequence(sequence, totalBeats) {
+    var totalBeatLength = Math.round(sequence.reduce(function (prev, next) {
+        return 1 / next.beat + prev;
+    }, 0));
+    var newSequence = [].concat(_toConsumableArray(sequence));
+
+    if (totalBeatLength === totalBeats) return newSequence;
+    if (totalBeatLength > totalBeats) return newSequence.slice(0, totalBeats - 1);
+
+    var i = 0;
+    while (Math.floor(totalBeatLength) < totalBeats) {
+        newSequence = newSequence.concat(newSequence[i]);
+        totalBeatLength += 1 / newSequence[i].beat;
+        i = i + 1 < newSequence.length ? i + 1 : 0;
     }
 
-    return seq;
+    return newSequence;
 };
 
 var generateTimeMap = function generateTimeMap(sequence) {
@@ -137,6 +213,7 @@ var generateTimeMap = function generateTimeMap(sequence) {
 };
 
 exports.generateSequence = generateSequence;
+exports.loopSequence = loopSequence;
 exports.generateTimeMap = generateTimeMap;
 
 },{"./tools":4}],3:[function(require,module,exports){
@@ -158,20 +235,21 @@ var _audio = require('./audio');
 
 var defaultInstrument = {
     id: '',
+    buffers: [],
+    durations: [],
+    hitTypes: [],
     paths: [],
     sequence: [],
-    timeMaps: [],
-    soundMap: []
+    sources: [],
+    timeMap: []
 };
 
 var instruments = {
     guitar: {
         id: 'guitar',
-        paths: ['assets/audio/guitar-palm-zero-1.wav', 'assets/audio/guitar-palm-zero-2.wav', 'assets/audio/guitar-open-zero-1.wav', 'assets/audio/guitar-open-zero-2.wav', 'assets/audio/guitar-open-first-1.wav']
+        paths: ['assets/audio/guitar-palm-zero-1.wav', 'assets/audio/guitar-palm-zero-2.wav', 'assets/audio/guitar-open-zero-1.wav', 'assets/audio/guitar-open-zero-2.wav', 'assets/audio/guitar-open-first-1.wav', 'assets/audio/guitar-open-first-2.wav', 'assets/audio/guitar-open-eighth.wav']
     },
 
-    // 'assets/audio/guitar-open-first-2.wav',
-    // 'assets/audio/guitar-open-eighth.wav',
     // 'assets/audio/guitar-dissonance-high.wav',
     kick: {
         id: 'kick',
@@ -187,8 +265,8 @@ var instruments = {
     }
 };
 
-var getInstrument = function getInstrument(id, sequence) {
-    return _extends({}, defaultInstrument, instruments[id], { sequence: sequence });
+var getInstrument = function getInstrument(id, other) {
+    return _extends({}, defaultInstrument, instruments[id], other);
 };
 
 var generateInstrumentTimeMap = function generateInstrumentTimeMap(instrument) {
@@ -199,80 +277,122 @@ var generateInstrumentTimeMap = function generateInstrumentTimeMap(instrument) {
     });
 };
 
-var generateInstrumentSoundMap = function generateInstrumentSoundMap(instrument) {
-    var soundMap = instrument.sequence.map(function (hit) {
-        return instrument.buffers[(0, _tools.randFromTo)(0, instrument.buffers.length - 1)];
+var generateInstrumentHitTypes = function generateInstrumentHitTypes(instrument) {
+    var hitTypes = instrument.sequence.map(function (hit) {
+        return (0, _tools.randFromTo)(0, instrument.buffers.length - 1);
     });
 
     return _extends({}, instrument, {
-        soundMap: soundMap
+        hitTypes: hitTypes
     });
 };
 
 var playInstrumentSoundsAtTempo = function playInstrumentSoundsAtTempo(context, bpmMultiplier) {
     return function (instrument) {
-        instrument.sources = instrument.timeMap.reduce(function (sources, time, i) {
-            var instrumentSound = instrument.soundMap[i];
-            var startTime = time * bpmMultiplier;
+        var startTimes = [];
+        var durations = [];
+        var sources = instrument.timeMap.reduce(function (sources, time, i) {
+            var instrumentSound = instrument.buffers[instrument.hitTypes[i]];
+            var startTime = context.currentTime + time * bpmMultiplier;
             var duration = 1 / instrument.sequence[i].beat * bpmMultiplier;
+            var source = (0, _audio.playSound)(context, instrumentSound, startTime, duration, instrument.sequence[i].volume);
 
-            return instrument.sequence[i].volume ? [].concat(_toConsumableArray(sources), [(0, _audio.playSound)(context, instrumentSound, startTime, duration)]) : sources;
+            startTimes[i] = startTime;
+            durations[i] = duration;
+
+            return [].concat(_toConsumableArray(sources), [source]);
         }, []);
 
-        return instrument;
+        var newInstrument = _extends({}, instrument, { sources: sources, startTimes: startTimes, durations: durations });
+
+        return newInstrument;
     };
+};
+
+var repeatHits = function repeatHits(instrument) {
+    var hitTypes = (0, _tools.repeatArray)(instrument.hitTypes, instrument.sequence.length);
+
+    return _extends({}, instrument, {
+        hitTypes: hitTypes
+    });
+};
+
+var repeatSequence = function repeatSequence(instrument, beats) {
+    var sequence = (0, _beats.loopSequence)(instrument.sequence, beats);
+
+    return _extends({}, instrument, {
+        sequence: sequence
+    });
 };
 
 var stopInstrumentSounds = function stopInstrumentSounds(instrument) {
     instrument.sources.forEach(function (source) {
-        return source.stop();
+        return source && source.stop();
     });
-    return instrument;
+    return _extends({}, instrument, {
+        sources: []
+    });
 };
 
 exports.getInstrument = getInstrument;
 exports.generateInstrumentTimeMap = generateInstrumentTimeMap;
-exports.generateInstrumentSoundMap = generateInstrumentSoundMap;
+exports.generateInstrumentHitTypes = generateInstrumentHitTypes;
 exports.playInstrumentSoundsAtTempo = playInstrumentSoundsAtTempo;
+exports.repeatHits = repeatHits;
+exports.repeatSequence = repeatSequence;
 exports.stopInstrumentSounds = stopInstrumentSounds;
 
 },{"./audio":1,"./beats":2,"./tools":4}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+	value: true
 });
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+
 var repeat = function repeat(simsNeeded, fn) {
-  for (var i = simsNeeded - 1, x = 0; i >= 0; i--) {
-    fn(simsNeeded, x);
-    x++;
-  };
+	for (var i = simsNeeded - 1, x = 0; i >= 0; i--) {
+		fn(simsNeeded, x);
+		x++;
+	};
+};
+
+var repeatArray = function repeatArray(arr, length) {
+	if (arr.length === length) return arr;
+	if (arr.length > length) return arr.slice(0, length);
+
+	var diff = Math.ceil(length / arr.length);
+	return Array.from(Array(diff).keys()).reduce(function (newArr, index) {
+		return newArr.concat.apply(newArr, _toConsumableArray(arr));
+	}, []).slice(0, length);
 };
 
 var compose = function compose() {
-  for (var _len = arguments.length, funcs = Array(_len), _key = 0; _key < _len; _key++) {
-    funcs[_key] = arguments[_key];
-  }
+	for (var _len = arguments.length, funcs = Array(_len), _key = 0; _key < _len; _key++) {
+		funcs[_key] = arguments[_key];
+	}
 
-  return function () {
-    if (funcs.length === 0) {
-      return arguments[0];
-    }
+	return function () {
+		if (funcs.length === 0) {
+			return arguments[0];
+		}
 
-    var last = funcs[funcs.length - 1];
-    var rest = funcs.slice(0, -1);
+		var last = funcs[funcs.length - 1];
+		var rest = funcs.slice(0, -1);
 
-    return rest.reduceRight(function (composed, f) {
-      return f(composed);
-    }, last.apply(undefined, arguments));
-  };
+		return rest.reduceRight(function (composed, f) {
+			return f(composed);
+		}, last.apply(undefined, arguments));
+	};
 };
 
 var randFromTo = function randFromTo(from, to) {
-  return Math.floor(Math.random() * (to - from + 1) + from);
+	return Math.floor(Math.random() * (to - from + 1) + from);
 };
 
 exports.repeat = repeat;
+exports.repeatArray = repeatArray;
 exports.compose = compose;
 exports.randFromTo = randFromTo;
 
@@ -291,36 +411,55 @@ var _appInstruments = require('./app/instruments');
 
 var _appTools = require('./app/tools');
 
-var bpm = 100;
+var bpm = 70;
 var bpmMultiplier = 60 / bpm;
-var bars = 4;
+var bars = 2;
 var beats = 4;
-var allowedLengths = [3, 3, 3, .75];
-
-var mainBeat = (0, _appBeats.generateSequence)({ bars: bars, beats: beats, allowedLengths: allowedLengths, hitChance: 1 });
-
+var allowedLengths = [1, 4];
+var mainBeat = (0, _appBeats.generateSequence)({ bars: 2, beats: 4, allowedLengths: allowedLengths, hitChance: .75 });
+console.log('mainBeat', mainBeat.map(function (beat) {
+    return beat.beat;
+}));
 var predefinedSequences = {
 
-    hihat: [{ beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }, { beat: 1, volume: 1 }],
+    hihat: [{ beat: 1, volume: 1 }],
 
     kick: mainBeat,
+
     guitar: mainBeat,
 
-    snare: [{ beat: 1, volume: 0 }, { beat: 1, volume: 0 }, { beat: 1, volume: 1 }, { beat: 1, volume: 0 }, { beat: 1, volume: 0 }, { beat: 1, volume: 0 }, { beat: 1, volume: 1 }, { beat: 1, volume: 0 }, { beat: 1, volume: 0 }, { beat: 1, volume: 0 }, { beat: 1, volume: 1 }, { beat: 1, volume: 0 }, { beat: 1, volume: 0 }, { beat: 1, volume: 0 }, { beat: 1, volume: 1 }, { beat: 1, volume: 0 }]
+    snare: [{ beat: 1, volume: 0 }, { beat: 1, volume: 0 }, { beat: 1, volume: 1 }, { beat: 1, volume: 0 }]
 };
 
-var instrumentPack = [(0, _appInstruments.getInstrument)('guitar', predefinedSequences['guitar']), (0, _appInstruments.getInstrument)('kick', predefinedSequences['kick']), (0, _appInstruments.getInstrument)('snare', predefinedSequences['snare']), (0, _appInstruments.getInstrument)('hihat', predefinedSequences['hihat'])];
+var instrumentPack = [(0, _appInstruments.getInstrument)('guitar', {
+    sequence: predefinedSequences['guitar']
+}), (0, _appInstruments.getInstrument)('kick', {
+    sequence: predefinedSequences['kick']
+}), (0, _appInstruments.getInstrument)('snare', {
+    sequence: (0, _appBeats.loopSequence)(predefinedSequences['snare'], bars * beats)
+}), (0, _appInstruments.getInstrument)('hihat', {
+    sequence: (0, _appBeats.loopSequence)(predefinedSequences['hihat'], bars * beats)
+})];
 
 var initiateInstruments = function initiateInstruments(instrumentPack, context) {
+    var lookaheadTime = 0.050;
     var playInstrumentSounds = (0, _appInstruments.playInstrumentSoundsAtTempo)(context, bpmMultiplier);
-    var createSoundsAndPlay = function createSoundsAndPlay(instrument) {
-        return (0, _appTools.compose)(playInstrumentSounds, _appInstruments.generateInstrumentSoundMap, _appInstruments.generateInstrumentTimeMap)(instrument);
+    var createSoundMaps = function createSoundMaps(instrument) {
+        return (0, _appTools.compose)(_appInstruments.generateInstrumentTimeMap, _appInstruments.repeatHits, function (instrument) {
+            return (0, _appInstruments.repeatSequence)(instrument, bars * beats);
+        }, _appInstruments.generateInstrumentHitTypes)(instrument);
     };
-    var instruments = instrumentPack.map(createSoundsAndPlay);
+
+    var instruments = instrumentPack.map(createSoundMaps);
+
+    var instrumentsPlaying = instruments.map(playInstrumentSounds);
 
     document.querySelector('.js-play').addEventListener('click', function () {
-        instruments.map((0, _appTools.compose)(playInstrumentSounds, _appInstruments.stopInstrumentSounds));
+        instrumentsPlaying = instrumentsPlaying.map((0, _appTools.compose)(playInstrumentSounds, _appInstruments.stopInstrumentSounds));
     });
+    //     document.querySelector('.js-stop').addEventListener('click', () => {
+    //         if(frame) cancelAnimationFrame(frame);
+    //     });
     window.context = context;
 };
 

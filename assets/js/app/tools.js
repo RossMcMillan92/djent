@@ -5,6 +5,16 @@ const repeat = (simsNeeded, fn) => {
 	};
 }
 
+const repeatArray = (arr, length) => {
+	if (arr.length === length) return arr;
+	if (arr.length > length) return arr.slice(0, length);
+
+	const diff = Math.ceil(length / arr.length)
+	return Array.from(Array(diff).keys())
+		.reduce((newArr, index) => newArr.concat(...arr), [])
+		.slice(0, length);
+}
+
 const compose = (...funcs) => {
   return (...args) => {
     if (funcs.length === 0) {
@@ -22,6 +32,7 @@ const randFromTo = (from,to) => Math.floor(Math.random()*(to-from+1)+from);
 
 export {
 	repeat,
+	repeatArray,
 	compose,
 	randFromTo
 }

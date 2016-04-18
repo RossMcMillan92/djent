@@ -6,6 +6,7 @@ const repeat = (simsNeeded, fn) => {
 }
 
 const repeatArray = (arr, length) => {
+	if (length === 0) return [];
 	if (arr.length === length) return arr;
 	if (arr.length > length) return arr.slice(0, length);
 

@@ -13,15 +13,73 @@
 	  height: 100%;
 	  width: 100%;
 	  background-color: #000;
+	  color: #fff;
 	}
 	</style>
 
 </head>
 <body class="preload">
+
+	<div>
+		<label for="bpm">BPM: </label>
+		<input type="number" class="js-bpm" value="70" id="bpm">
+	</div>
+	<div>
+		<label for="total-beats">Total Beats: </label>
+		<input type="number" class="js-total-beats" value="8" id="total-beats">
+	</div>
+	<div>
+		<label for="groove-beats">Groove Beats: </label>
+		<input type="number" class="js-groove-beats" value="8" id="groove-beats">
+	</div>
+	<div>
+		<label for="loop">Loop:</label>
+		<input type="checkbox" class="js-loop" id="loop">
+	</div>
+
+	<hr>
+
+	<div>
+		<label for="length-whole">One whole: </label>
+		<input type="number" class="js-length-whole" value="0" id="length-whole">
+
+		<label for="length-whole-triplet">Triplet:</label>
+		<input type="checkbox" class="js-length-whole-triplet" id="length-whole-triplet">
+	</div>
+	<div>
+		<label for="length-half">One half: </label>
+		<input type="number" class="js-length-half" value="1" id="length-half">
+
+		<label for="length-half-triplet">Triplet:</label>
+		<input type="checkbox" class="js-length-half-triplet" id="length-half-triplet">
+	</div>
+	<div>
+		<label for="length-quarter">One quarter: </label>
+		<input type="number" class="js-length-quarter" value="1" id="length-quarter">
+
+		<label for="length-quarter-triplet">Triplet:</label>
+		<input type="checkbox" class="js-length-quarter-triplet" id="length-quarter-triplet">
+	</div>
+	<div>
+		<label for="length-eighth">One eighth: </label>
+		<input type="number" class="js-length-eighth" value="1" id="length-eighth">
+
+		<label for="length-eighth-triplet">Triplet:</label>
+		<input type="checkbox" class="js-length-eighth-triplet" id="length-eighth-triplet">
+	</div>
+	<div>
+		<label for="length-sixteenth">One sixteenth: </label>
+		<input type="number" class="js-length-sixteenth" value="0" id="length-sixteenth">
+
+		<label for="length-sixteenth-triplet">Triplet:</label>
+		<input type="checkbox" class="js-length-sixteenth-triplet" id="length-sixteenth-triplet">
+	</div>
+
+	<hr>
+
 	<button class="js-stop">Stop</button>
 	<button class="js-play">Play again</button>
 	<button class="js-regenerate">Regenerate</button>
-	<input type="checkbox" class="js-loop" id="loop"><label for="loop">Loop</label>
 
 	<script src="assets/js/build.bundle.js"></script>
 	<script type='text/javascript' id="__bs_script__">//<![CDATA[

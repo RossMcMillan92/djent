@@ -414,6 +414,7 @@ var repeat = function repeat(simsNeeded, fn) {
 };
 
 var repeatArray = function repeatArray(arr, length) {
+	if (length === 0) return [];
 	if (arr.length === length) return arr;
 	if (arr.length > length) return arr.slice(0, length);
 
@@ -453,6 +454,8 @@ exports.randFromTo = randFromTo;
 
 },{}],5:[function(require,module,exports){
 'use strict';
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
 
 require('./polyfills/array.values.js');
 
@@ -522,7 +525,7 @@ var initiateBufferController = function initiateBufferController(context, buffer
 
     var regenerateEvent = function regenerateEvent() {
         stop();
-        deactivateListeners();
+        deactivate();
         init();
     };
 
@@ -530,7 +533,8 @@ var initiateBufferController = function initiateBufferController(context, buffer
         isLooping = evt.target.checked;
     };
 
-    var deactivateListeners = function deactivateListeners() {
+    var deactivate = function deactivate() {
+        context.close();
         playButton.removeEventListener('click', playEvent);
         stopButton.removeEventListener('click', stopEvent);
         regenerateButton.removeEventListener('click', regenerateEvent);
@@ -544,13 +548,16 @@ var initiateBufferController = function initiateBufferController(context, buffer
 };
 
 var init = function init() {
-    var bpm = 100;
-    var totalBeats = 1 * 4;
-    var grooveBeats = 1 * 4;
-    var allowedLengths = [1, 4, 2];
+    var bpm = parseInt(document.querySelector('.js-bpm').value);
+    var totalBeats = parseInt(document.querySelector('.js-total-beats').value);
+    var grooveBeats = parseInt(document.querySelector('.js-groove-beats').value);
+    console.log('test', document.querySelector('.js-length-half-triplet').checked);
+    var allowedLengths = [].concat(_toConsumableArray((0, _appTools.repeatArray)([.25 * (document.querySelector('.js-length-whole-triplet').checked ? 1.5 : 1)], parseInt(document.querySelector('.js-length-whole').value))), _toConsumableArray((0, _appTools.repeatArray)([.5 * (document.querySelector('.js-length-half-triplet').checked ? 1.5 : 1)], parseInt(document.querySelector('.js-length-half').value))), _toConsumableArray((0, _appTools.repeatArray)([1 * (document.querySelector('.js-length-quarter-triplet').checked ? 1.5 : 1)], parseInt(document.querySelector('.js-length-quarter').value))), _toConsumableArray((0, _appTools.repeatArray)([2 * (document.querySelector('.js-length-eighth-triplet').checked ? 1.5 : 1)], parseInt(document.querySelector('.js-length-eighth').value))), _toConsumableArray((0, _appTools.repeatArray)([4 * (document.querySelector('.js-length-sixteenth-triplet').checked ? 1.5 : 1)], parseInt(document.querySelector('.js-length-sixteenth').value))));
+    if (!allowedLengths.length) return;
+    console.log('allowedLengths', allowedLengths, parseInt(document.querySelector('.js-length-whole').value));
     var mainBeat = (0, _appBeats.generateSequence)({ totalBeats: grooveBeats, allowedLengths: allowedLengths, hitChance: 1 });
     var sequences = {
-        crash: [{ beat: .5, volume: 1 }],
+        crash: [{ beat: 1, volume: 1 }],
 
         hihat: [{ beat: 1, volume: 0 }],
 

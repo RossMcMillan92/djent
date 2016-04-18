@@ -2,22 +2,21 @@ import './polyfills/array.values.js';
 import './polyfills/AudioContext';
 
 import {
-    loadInstrumentBuffers
+    loadInstrumentBuffers,
+    playSound
 } from './app/audio';
 
 import {
-    generateSequence,
-    loopSequence
+    generateSequence
 } from './app/beats';
 
 import {
-    getInstrument,
+    getInstrumentPack,
     generateInstrumentTimeMap,
     generateInstrumentHitTypes,
     repeatHits,
     repeatSequence,
-    playInstrumentSoundsAtTempo,
-    stopInstrumentSounds
+    renderInstrumentSoundsAtTempo
 } from './app/instruments';
 
 import {
@@ -25,76 +24,102 @@ import {
     compose
 } from './app/tools';
 
-const bpm            = 70;
-const bpmMultiplier  = 60 / bpm;
-const bars           = 2;
-const beats          = 4;
-const allowedLengths = [ 1, 4 ];
-const mainBeat       = generateSequence({ bars: 2, beats: 4, allowedLengths, hitChance: .75 });
-console.log('mainBeat', mainBeat.map(beat => beat.beat))
-const predefinedSequences = {
+const generateRiff = ({ bpm, totalBeats, grooveBeats, allowedLengths, sequences }) => {
+    const bpmMultiplier  = 60 / bpm;
+    const context = new AudioContext();
+    const instrumentPack = getInstrumentPack(sequences, totalBeats);
 
-    hihat: [
-        { beat: 1, volume: 1 },
-    ],
+    loadInstrumentBuffers(context, instrumentPack)
+        .then((instrumentPack) => initiateInstruments(context, instrumentPack, totalBeats, bpmMultiplier))
+        .then(buffer => initiateBufferController(context, buffer))
+        .catch(console.log);
+}
 
-    kick: mainBeat,
-
-    guitar: mainBeat,
-
-    snare: [
-        { beat: 1 , volume: 0 },
-        { beat: 1 , volume: 0 },
-        { beat: 1 , volume: 1 },
-        { beat: 1 , volume: 0 },
-    ]
-};
-
-const instrumentPack = [
-    getInstrument('guitar', {
-        sequence: predefinedSequences['guitar']
-    }),
-
-    getInstrument('kick', {
-        sequence: predefinedSequences['kick']
-    }),
-
-    getInstrument('snare', {
-        sequence: loopSequence(predefinedSequences['snare'], bars * beats)
-    }),
-
-    getInstrument('hihat', {
-        sequence: loopSequence(predefinedSequences['hihat'], bars * beats)
-    }),
-];
-
-const initiateInstruments = (instrumentPack, context) => {
-    const lookaheadTime        = 0.050;
-    const playInstrumentSounds = playInstrumentSoundsAtTempo(context, bpmMultiplier);
-    const createSoundMaps      = instrument => compose(
+const initiateInstruments = (context, instrumentPack, totalBeats, bpmMultiplier) => {
+    const createSoundMaps = instrument => compose(
         generateInstrumentTimeMap,
         repeatHits,
-        instrument => repeatSequence(instrument, bars * beats),
+        instrument => repeatSequence(instrument, totalBeats),
         generateInstrumentHitTypes
     )(instrument);
 
-    const instruments          = instrumentPack
+    const instruments = instrumentPack
         .map(createSoundMaps);
 
-    let instrumentsPlaying     = instruments
-        .map(playInstrumentSounds);
-
-    document.querySelector('.js-play').addEventListener('click', () => {
-        instrumentsPlaying = instrumentsPlaying.map(compose(playInstrumentSounds, stopInstrumentSounds));
-    });
-//     document.querySelector('.js-stop').addEventListener('click', () => {
-//         if(frame) cancelAnimationFrame(frame);
-//     });
-    window.context = context;
+    return renderInstrumentSoundsAtTempo(instruments, totalBeats, bpmMultiplier);
 }
 
+const initiateBufferController = (context, buffer) => {
+    const playButton       = document.querySelector('.js-play');
+    const stopButton       = document.querySelector('.js-stop');
+    const regenerateButton = document.querySelector('.js-regenerate');
+    const loopCheckbox     = document.querySelector('.js-loop');
 
+    let src;
 
-const context = new AudioContext();
-loadInstrumentBuffers(context, instrumentPack)
-    .then((instrumentPack) => initiateInstruments(instrumentPack, context, predefinedSequences));
+    const play             = () => playSound(context, buffer, context.currentTime, buffer.duration, 1, true);
+    const stop             = () => { if (src) src.stop() };
+    let isLooping          = loopCheckbox.checked;
+
+    const playEvent = () => {
+        stop();
+        src = play();
+        src.loop = isLooping;
+    };
+
+    const stopEvent = stop;
+
+    const regenerateEvent = () => {
+        stop();
+        deactivateListeners();
+        init();
+    };
+
+    const loopEvent = (evt) => {
+        isLooping = evt.target.checked;
+    };
+
+    const deactivateListeners = () => {
+        playButton.removeEventListener('click', playEvent);
+        stopButton.removeEventListener('click', stopEvent);
+        regenerateButton.removeEventListener('click', regenerateEvent);
+        loopCheckbox.removeEventListener('change', loopEvent);
+    }
+
+    playButton.addEventListener('click', playEvent);
+    stopButton.addEventListener('click', stopEvent);
+    regenerateButton.addEventListener('click', regenerateEvent);
+    loopCheckbox.addEventListener('change', loopEvent);
+}
+
+const init = () => {
+    const bpm            = 100;
+    const totalBeats     = 1 * 4;
+    const grooveBeats    = 1 * 4;
+    const allowedLengths = [ 1, 4, 2 ];
+    const mainBeat       = generateSequence({ totalBeats: grooveBeats, allowedLengths, hitChance: 1 });
+    const sequences      = {
+        crash: [
+            { beat: .5, volume: 1 },
+        ],
+
+        hihat: [
+            { beat: 1, volume: 0 },
+
+        ],
+
+        kick: mainBeat,
+        guitar: mainBeat,
+
+        snare: [
+            { beat: 1, volume: 0 },
+            { beat: 1, volume: 0 },
+            { beat: 1, volume: 1 },
+            { beat: 1, volume: 0 },
+        ]
+    };
+
+    generateRiff({ bpm, totalBeats, grooveBeats, allowedLengths, sequences });
+}
+
+init();

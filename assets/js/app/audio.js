@@ -54,7 +54,6 @@ const BufferLoader = (context) => {
     }
 
     const load = function(instrumentPack) {
-
         const loadingSounds = instrumentPack.map(loadBuffer)
 
         return new Promise((res, rej) => {
@@ -62,7 +61,6 @@ const BufferLoader = (context) => {
                 .then(() => res(newInstrumentPack))
                 .catch(rej)
         })
-
     }
 
     return {
@@ -76,7 +74,15 @@ const loadInstrumentBuffers = (context, instrumentPack) => {
         .load(instrumentPack);
 }
 
-const playSound = (context, buffer, time, duration, volume) => {
+const renderSoundsToBuffer = (buffers) => {
+    const offlineCtx = new OfflineAudioContext(2,44100*40,44100);
+
+    buffers.forEach(buffer => playSound());
+
+    return newBuffer;
+}
+
+const playSound = (context, buffer, time, duration, volume, detune = 0) => {
   const source = context.createBufferSource();
   const gainNode = context.createGain();
 
@@ -88,10 +94,13 @@ const playSound = (context, buffer, time, duration, volume) => {
   source.buffer = buffer;
   source.start(time, 0, duration);
 
+  source.detune.value = detune;
+
   return source;
 }
 
 export {
     loadInstrumentBuffers,
+    renderSoundsToBuffer,
     playSound
 }

@@ -30,7 +30,7 @@ import { randFromTo } from './tools';
 //     return seq;
 // };
 
-const generateSequence = ({ bars, beats, allowedLengths, hitChance }) => {
+const generateSequence = ({ totalBeats, allowedLengths, hitChance }) => {
     return (function loop (seq, sum, target) {
         const randIndex = randFromTo(0, allowedLengths.length-1);
         let newLength = allowedLengths[randIndex];
@@ -52,7 +52,7 @@ const generateSequence = ({ bars, beats, allowedLengths, hitChance }) => {
             return loop([ ...seq, newBeat ], sum, target)
         }
         return seq
-    })([], 0, beats * bars);
+    })([], 0, totalBeats);
 };
 
 const loopSequence = (sequence, totalBeats) => {

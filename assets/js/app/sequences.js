@@ -1,39 +1,54 @@
-import { randFromTo } from './tools';
+import { randomFromArray } from './tools';
 
-// const generateSequence = ({ bars, beats, allowedLengths, hitChance }) => {
-//     const target = beats * bars;
-//     let sum = 0;
-//     let i = 0;
-//     let seq = [];
-//
-//     while(sum < target){
-//         const randIndex = randFromTo(0, allowedLengths.length-1);
-//         let newLength = allowedLengths[randIndex];
-//
-//         if(sum + (1/newLength) <= target){
-//             newLength = newLength;
-//         } else if (!allowedLengths.filter(length => 1 / length < target - sum).length) {
-//             newLength = 1 / (target - sum);
-//         } else {
-//             continue;
-//         }
-//
-//         seq[i] = {
-//             beat: newLength,
-//             volume: Math.random() < hitChance ? 1 : 0
-//         };
-//         sum += (1/newLength);
-//         i++;
-//
-//     }
-//
-//     return seq;
-// };
+const predefinedSequences = {
+    steadyWholes: {
+        sequence: [
+            { beat: .25, volume: 1 },
+        ]
+    },
+
+    steadyHalfs: {
+        sequence: [
+            { beat: .5, volume: 1 },
+        ],
+    },
+
+    steadyQuarters: {
+        sequence: [
+            { beat: 1, volume: 1 },
+        ]
+    },
+
+    middleBeat: {
+        sequence: [
+            { beat: 1, volume: 0 },
+            { beat: 1, volume: 0 },
+            { beat: 1, volume: 1 },
+            { beat: 1, volume: 0 },
+        ]
+    }
+}
+
+const instrumentSequences = {
+    hihat: [
+        predefinedSequences.steadyHalfs.sequence,
+        predefinedSequences.steadyQuarters.sequence,
+    ],
+    crash: [
+        predefinedSequences.steadyWholes.sequence,
+        predefinedSequences.steadyHalfs.sequence,
+        predefinedSequences.steadyQuarters.sequence,
+    ],
+    snare: [
+        predefinedSequences.middleBeat.sequence,
+    ],
+}
+
+const getSequenceForInstrument = (instrument) => randomFromArray(instrumentSequences[instrument]);
 
 const generateSequence = ({ totalBeats, allowedLengths, hitChance }) => {
     return (function loop (seq, sum, target) {
-        const randIndex = randFromTo(0, allowedLengths.length-1);
-        let newLength = allowedLengths[randIndex];
+        let newLength = randomFromArray(allowedLengths);
 
         if(sum + (1/newLength) > target){
             if (!allowedLengths.filter(length => 1 / length < target - sum).length) {
@@ -85,6 +100,7 @@ const generateTimeMap = sequence => {
 
 export {
     generateSequence,
+    getSequenceForInstrument,
     loopSequence,
     generateTimeMap
 }

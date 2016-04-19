@@ -7,21 +7,22 @@ import {
 } from './app/audio';
 
 import {
-    generateSequence
-} from './app/beats';
+    generateSequence,
+    getSequenceForInstrument,
+} from './app/sequences';
 
 import {
-    getInstrumentPack,
     generateInstrumentTimeMap,
     generateInstrumentHitTypes,
+    getInstrumentPack,
     repeatHits,
     repeatSequence,
     renderInstrumentSoundsAtTempo
 } from './app/instruments';
 
 import {
+    arraySelector,
     compose,
-    randFromTo,
     repeatArray
 } from './app/tools';
 
@@ -98,36 +99,33 @@ const init = () => {
     const bpm            = parseInt(document.querySelector('.js-bpm').value);
     const totalBeats     = parseInt(document.querySelector('.js-total-beats').value);
     const grooveBeats    = parseInt(document.querySelector('.js-groove-beats').value);
-    console.log('test', document.querySelector('.js-length-half-triplet').checked)
-    const allowedLengths = [
-        ...repeatArray([(.25 * (document.querySelector('.js-length-whole-triplet').checked ? 1.5 : 1 ))], parseInt(document.querySelector('.js-length-whole').value)),
-        ...repeatArray([(.5 * (document.querySelector('.js-length-half-triplet').checked ? 1.5 : 1 ))], parseInt(document.querySelector('.js-length-half').value)),
-        ...repeatArray([(1 * (document.querySelector('.js-length-quarter-triplet').checked ? 1.5 : 1 ))], parseInt(document.querySelector('.js-length-quarter').value)),
-        ...repeatArray([(2 * (document.querySelector('.js-length-eighth-triplet').checked ? 1.5 : 1 ))], parseInt(document.querySelector('.js-length-eighth').value)),
-        ...repeatArray([(4 * (document.querySelector('.js-length-sixteenth-triplet').checked ? 1.5 : 1 ))], parseInt(document.querySelector('.js-length-sixteenth').value)),
-    ];
+
+    const allowedLengths = arraySelector('.js-lengths')
+        .reduce((lengths, cur, index, arr) => {
+            const children = Array.from(cur.children);
+            const isTriplet = cur.querySelector('.js-triplet').checked;
+            const amount = parseInt(cur.querySelector('.js-amount').value);
+            const length = parseFloat(cur.dataset.length) * (isTriplet ? 1.5 : 1);
+
+            return [
+                ...lengths,
+                ...repeatArray([length], amount)
+            ]
+        }, []);
+
     if(!allowedLengths.length) return;
-    console.log('allowedLengths', allowedLengths, parseInt(document.querySelector('.js-length-whole').value))
-    const mainBeat       = generateSequence({ totalBeats: grooveBeats, allowedLengths, hitChance: 1 });
-    const sequences      = {
-        crash: [
-            { beat: 1, volume: 1 },
-        ],
 
-        hihat: [
-            { beat: 1, volume: 0 },
+    const mainBeat      = generateSequence({ totalBeats: grooveBeats, allowedLengths, hitChance: 1 });
+    const crashSequence = getSequenceForInstrument('crash');
+    const hihatSequence = getSequenceForInstrument('hihat');
+    const snareSequence = getSequenceForInstrument('snare');
 
-        ],
-
+    const sequences     = {
+        crash: crashSequence,
+        hihat: hihatSequence,
         kick: mainBeat,
         guitar: mainBeat,
-
-        snare: [
-            { beat: 1, volume: 0 },
-            { beat: 1, volume: 0 },
-            { beat: 1, volume: 1 },
-            { beat: 1, volume: 0 },
-        ]
+        snare: snareSequence
     };
 
     generateRiff({ bpm, totalBeats, grooveBeats, allowedLengths, sequences });

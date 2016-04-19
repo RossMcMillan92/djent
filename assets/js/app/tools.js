@@ -1,3 +1,5 @@
+const arraySelector = selector => Array.from(document.querySelectorAll(selector));
+
 const repeat = (simsNeeded, fn) => {
 	for (var i = simsNeeded - 1, x = 0; i >= 0; i--) {
 		fn(simsNeeded, x);
@@ -31,9 +33,13 @@ const compose = (...funcs) => {
 
 const randFromTo = (from,to) => Math.floor(Math.random()*(to-from+1)+from);
 
+const randomFromArray = (arr) => arr[randFromTo(0, arr.length-1)];
+
 export {
+	arraySelector,
 	repeat,
 	repeatArray,
 	compose,
+	randomFromArray,
 	randFromTo
 }

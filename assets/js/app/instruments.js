@@ -1,7 +1,7 @@
 import {
     loopSequence,
     generateTimeMap,
-} from './beats';
+} from './sequences';
 
 import {
     randFromTo,
@@ -65,31 +65,7 @@ const instruments = {
 
 const getInstrument = (id, other) => ({ ...defaultInstrument, ...instruments[id], ...other });
 
-const getInstrumentPack = (sequences, totalBeats) => {
-    const instrumentPack = [
-        getInstrument('guitar', {
-            sequence: sequences['guitar']
-        }),
-
-        getInstrument('kick', {
-            sequence: sequences['kick']
-        }),
-
-        getInstrument('snare', {
-            sequence: loopSequence(sequences['snare'], totalBeats)
-        }),
-
-        getInstrument('hihat', {
-            sequence: loopSequence(sequences['hihat'], totalBeats)
-        }),
-
-        getInstrument('crash', {
-            sequence: loopSequence(sequences['crash'], totalBeats)
-        }),
-    ];
-
-    return instrumentPack;
-}
+const getInstrumentPack = (sequences, totalBeats) => Object.keys(sequences).map(instrumentId => getInstrument(instrumentId, { sequence: loopSequence(sequences[instrumentId]) }));
 
 const generateInstrumentTimeMap = (instrument) => {
     const timeMap = generateTimeMap(instrument.sequence);

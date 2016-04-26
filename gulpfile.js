@@ -10,7 +10,7 @@ plugins.minifycss = require('gulp-minify-css');
 plugins.pixrem = require('gulp-pixrem');
 
 // js plugins
-plugins.browserify = require('gulp-browserify');
+plugins.browserify = require('browserify');
 plugins.babelify = require('babelify');
 plugins.uglify = require('gulp-uglify');
 plugins.mocha = require('gulp-mocha');
@@ -51,10 +51,10 @@ gulp.task('no-fn', function(){ return false; });
 // let's goooooo!
 gulp.task('default', function(){
 	gulp.start(
-		(config.sass.isEnabled ? 'styles' : 'no-fn'), 
-		(config.js.isEnabled ? 'scripts' : 'no-fn'), 
-		(config.js.isEnabled ? 'mocha' : 'no-fn'), 
-		(config.browserSync.isEnabled ? 'browser-sync' : 'no-fn'), 
+		(config.sass.isEnabled ? 'styles' : 'no-fn'),
+		(config.js.isEnabled ? 'scripts' : 'no-fn'),
+		(config.js.isEnabled ? 'mocha' : 'no-fn'),
+		(config.browserSync.isEnabled ? 'browser-sync' : 'no-fn'),
 		(config.watch.isEnabled ? 'watch' : 'no-fn')
 	);
 });

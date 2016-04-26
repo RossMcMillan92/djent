@@ -4,13 +4,14 @@ const BufferLoader = (context) => {
     let newInstrumentPack = new Array();
 
     const loadBuffer = function(instrument, index) {
-        const bufferAmount = instrument.paths.length;
+        const bufferAmount = instrument.sounds.length;
         let bufferCount = 0;
         instrument.buffers = [];
 
         const loadingSound = new Promise((res, rej) => {
 
-            instrument.paths.map((url, i) => {
+            instrument.sounds.map((sound, i) => {
+                const url = sound.path;
                 // Load buffer asynchronously
                 const request = new XMLHttpRequest();
                 request.open("GET", url, true);

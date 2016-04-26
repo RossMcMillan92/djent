@@ -1,6 +1,6 @@
 
 var mochaBabel = require("babel-register")({
-    presets: "es2015"
+    presets: ["es2015", "stage-0"]
 })
 
 module.exports = function(gulp, plugins, config, errorHandler) {

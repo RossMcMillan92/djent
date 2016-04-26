@@ -39,6 +39,8 @@
 
 	<hr>
 
+	<h2>Main Beat</h2>
+
 	<div class="js-lengths" data-length="0.25">
 		<label for="length-whole">One whole: </label>
 		<input type="number" class="js-amount" value="0" id="length-whole">
@@ -81,7 +83,11 @@
 	<button class="js-play">Play</button>
 	<button class="js-regenerate">Regenerate</button>
 
-	<script src="assets/js/build.bundle.js"></script>
+	<div id="root">
+
+	</div>
+
+	<script src="assets/build/app.js"></script>
 	<script type='text/javascript' id="__bs_script__">//<![CDATA[
 	    document.write("<script async src='//HOST:3000/browser-sync/browser-sync-client.1.9.2.js'><\/script>".replace(/HOST/g, location.hostname).replace(/PORT/g, location.port));
 	//]]></script>

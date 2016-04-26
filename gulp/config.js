@@ -4,7 +4,7 @@
 ---------------------- */
 
 config = {
-	
+
 	/* -----------------------
 	// BrowserSync
 	----------------------- */
@@ -23,7 +23,7 @@ config = {
 	js: {
 		isEnabled: true,
 
-		fileNames: [ 'modules/polyfills', 'script' ], // Array of file names
+		fileNames: [  'script' ], // Array of file names
 		path: './assets/js',
 		outputName: 'build', // what the final build will be called  (e.g. 'build.bundle.min.js')
 
@@ -48,13 +48,13 @@ config = {
 
 		masterFileName: 'master',
 		path: './assets/sass',
-		outputPath: './assets/css', 
+		outputPath: './assets/css',
 
 		minification: {
 			isEnabled: false,
 			suffix: 'min'
 		},
-	
+
 		// misc css settings
 		baseFontSize: '16px', // for pixrem
 		autoPrefixerBrowsers: ['last 2 version', 'ios 7', 'android 4'], // for auto prefixer

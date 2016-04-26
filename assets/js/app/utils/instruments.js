@@ -15,55 +15,99 @@ const defaultInstrument = {
     buffers: [],
     durations: [],
     hitTypes: [],
-    paths: [],
+    sounds: [],
     sequence: [],
     sources: [],
     timeMap: [],
 }
 
-const instruments = {
-    guitar: {
+const instruments = [
+    {
         id: 'guitar',
-        paths: [
-            'assets/audio/guitar-palm-zero-1.wav',
-            'assets/audio/guitar-palm-zero-2.wav',
-            'assets/audio/guitar-open-zero-1.wav',
-            'assets/audio/guitar-open-zero-2.wav',
-            'assets/audio/guitar-open-first-1.wav',
-            'assets/audio/guitar-open-first-2.wav',
-            // 'assets/audio/guitar-open-eighth.wav',
-            'assets/audio/guitar-dissonance-high.wav',
+        sounds: [
+            {
+                id: 'guitar-palm-zero-1',
+                path: 'assets/audio/guitar-palm-zero-1.wav',
+            },
+            {
+                id: 'guitar-palm-zero-2',
+                path: 'assets/audio/guitar-palm-zero-2.wav',
+            },
+            {
+                id: 'guitar-open-zero-1',
+                path: 'assets/audio/guitar-open-zero-1.wav',
+            },
+            {
+                id: 'guitar-open-zero-2',
+                path: 'assets/audio/guitar-open-zero-2.wav',
+            },
+            {
+                id: 'guitar-open-first-1',
+                path: 'assets/audio/guitar-open-first-1.wav',
+            },
+            {
+                id: 'guitar-open-first-2',
+                path: 'assets/audio/guitar-open-first-2.wav',
+            },
+            {
+                id: 'guitar-open-eighth',
+                path: 'assets/audio/guitar-open-eighth.wav',
+            },
+            {
+                id: 'guitar-dissonance-high',
+                path: 'assets/audio/guitar-dissonance-high.wav',
+            }
         ],
     },
-    kick: {
+    {
         id: 'kick',
-        paths: [
-            'assets/audio/kick.wav'
+        sounds: [
+            {
+                id: 'kick',
+                path: 'assets/audio/kick.wav'
+            }
         ],
     },
-    snare: {
+    {
         id: 'snare',
-        paths: [
-            'assets/audio/snare.wav'
+        sounds: [
+            {
+                id: 'snare',
+                path: 'assets/audio/snare.wav'
+            }
         ],
     },
-    hihat: {
+    {
         id: 'hihat',
-        paths: [
-            'assets/audio/hihat.wav'
+        sounds: [
+            {
+                id: 'hihat',
+                path: 'assets/audio/hihat.wav'
+            }
         ],
     },
-    crash: {
+    {
         id: 'crash',
-        paths: [
-            // 'assets/audio/crash1.wav',
-            // 'assets/audio/crash2.wav',
-            'assets/audio/china.wav',
+        sounds: [
+            {
+                id: 'crash1',
+                path: 'assets/audio/crash1.wav',
+            },
+            {
+                id: 'crash2',
+                path: 'assets/audio/crash2.wav',
+            },
+            {
+                id: 'china',
+                path: 'assets/audio/china.wav',
+            }
         ],
     }
-}
+]
 
-const getInstrument = (id, other) => ({ ...defaultInstrument, ...instruments[id], ...other });
+const getInstrument = (id, other) => ({ ...defaultInstrument, ...instruments.find(i => i.id === id), ...other });
+
+const getInstruments = () => [ ...instruments ];
 
 const getInstrumentPack = (sequences, totalBeats) => Object.keys(sequences).map(instrumentId => getInstrument(instrumentId, { sequence: loopSequence(sequences[instrumentId]) }));
 
@@ -110,26 +154,6 @@ const renderInstrumentSoundsAtTempo = (instruments, totalBeats, bpmMultiplier) =
         offlineCtx.startRendering();
     })
 }
-//
-// const renderInstrumentSoundsAtTempo = (context, bpmMultiplier) => (instrument) => {
-//     let startTimes = [];
-//     let durations  = [];
-//     const sources = instrument.timeMap.reduce((sources, time, i) => {
-//         const instrumentSound = instrument.buffers[instrument.hitTypes[i]];
-//         const startTime       = context.currentTime + (time * bpmMultiplier);
-//         const duration        = (1 / instrument.sequence[i].beat) * bpmMultiplier;
-//         const source          = playSound(context, instrumentSound, startTime, duration, instrument.sequence[i].volume);
-//
-//         startTimes[i] = startTime;
-//         durations[i]   = duration;
-//
-//         return [ ...sources, source ];
-//     }, []);
-//
-//     const newInstrument = { ...instrument, sources, startTimes, durations };
-//
-//     return newInstrument;
-// }
 
 const repeatHits = instrument => {
     const hitTypes = repeatArray(instrument.hitTypes, instrument.sequence.length);
@@ -152,6 +176,7 @@ const repeatSequence = (instrument, beats) => {
 
 export {
     getInstrument,
+    getInstruments,
     getInstrumentPack,
     generateInstrumentTimeMap,
     generateInstrumentHitTypes,

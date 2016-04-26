@@ -1,1 +1,3 @@
-{  }
+{
+  "plugins": ["transform-react-jsx", "external-helpers"],
+}

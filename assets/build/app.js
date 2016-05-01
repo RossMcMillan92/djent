@@ -345,11 +345,7 @@ var init = function init() {
         snare: snareSequence
     };
 
-    (0, _riffs.generateRiff)({ bpm: bpm, totalBeats: totalBeats, grooveBeats: grooveBeats, allowedLengths: allowedLengths, sequences: sequences }).then(function (buffer) {
-        return initiateBufferController(buffer);
-    });
-
-    return instruments;
+    return (0, _riffs.generateRiff)({ bpm: bpm, totalBeats: totalBeats, grooveBeats: grooveBeats, allowedLengths: allowedLengths, sequences: sequences });
 };
 
 var metaData = {
@@ -379,7 +375,9 @@ var Home = exports.Home = function (_Component) {
         }
 
         return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_Object$getPrototypeO = (0, _getPrototypeOf2.default)(Home)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.componentDidMount = function () {
-            init();
+            init().then(function (buffer) {
+                return initiateBufferController(buffer);
+            });
         }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
     }
 

@@ -109,10 +109,7 @@ const init = () => {
         snare  : snareSequence
     };
 
-    generateRiff({ bpm, totalBeats, grooveBeats, allowedLengths, sequences })
-        .then((buffer) => initiateBufferController(buffer))
-
-    return instruments;
+    return generateRiff({ bpm, totalBeats, grooveBeats, allowedLengths, sequences })
 }
 
 
@@ -131,7 +128,8 @@ const metaData = {
 export class Home extends Component {
 
     componentDidMount = () => {
-        init();
+        init()
+            .then((buffer) => initiateBufferController(buffer));
     }
 
     render() {

@@ -129,12 +129,17 @@ const metaData = {
 };
 
 export class Home extends Component {
-  render() {
-    return (
-      <section>
-        <DocumentMeta {...metaData} />
-        <InstrumentList instruments={getInstruments()} />
-      </section>
+
+    componentDidMount = () => {
+        init();
+    }
+
+    render() {
+        return (
+        <section>
+            <DocumentMeta {...metaData} />
+            <InstrumentList instruments={getInstruments()} />
+        </section>
     );
-  }
+    }
 }

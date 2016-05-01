@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 
 class InstrumentList extends React.Component {
     render () {
-        console.log(this.props)
-        const instrumentViews = this.props.instruments.map(instrument => {
-                const sounds = instrument.sounds.map(sound => <li>{sound.id}</li>);
+        const instrumentViews = this.props.instruments
+            .map((instrument, index) => {
+                const sounds = instrument.sounds.map((sound, i) => <li key={i}>{sound.id}</li>);
                 return (
-                    <div>
+                    <div key={index}>
                         <h3>{instrument.id}</h3>
                         <ul>
                             {sounds}

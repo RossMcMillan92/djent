@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
 
 import {
-    arraySelector,
-    repeatArray
-} from '../utils/tools';
-
-import {
     playSound
 } from '../utils/audio';
 
 import {
+    convertAllowedLengthsToArray,
     generateSequence,
     getSequenceForInstrument,
 } from '../utils/sequences';
@@ -17,24 +13,6 @@ import {
 import {
     generateRiff,
 } from '../utils/riffs';
-
-
-const init = () => {
-    const allowedLengths = arraySelector('.js-lengths')
-        .reduce((lengths, cur, index, arr) => {
-            const children = Array.from(cur.children);
-            const isTriplet = cur.querySelector('.js-triplet').checked;
-            const amount = parseInt(cur.querySelector('.js-amount').value);
-            const length = parseFloat(cur.dataset.length) * (isTriplet ? 1.5 : 1);
-
-            return [
-                ...lengths,
-                ...repeatArray([length], amount)
-            ]
-        }, []);
-
-    if(!allowedLengths.length) return;
-}
 
 const getSequences = (grooveBeats, allowedLengths) => {
     const mainBeat      = generateSequence({ totalBeats: grooveBeats, allowedLengths, hitChance: 1 });
@@ -56,13 +34,13 @@ const getSequences = (grooveBeats, allowedLengths) => {
 let currentSrc;
 let currentBuffer;
 
-const generateNewBuffer = ({ bpm, totalBeats, grooveBeats, allowedLengths }) => {
-    const sequences = getSequences(grooveBeats, allowedLengths);
+const generateNewBuffer = ({ bpm, totalBeats, grooveBeats, allowedLengths, instruments }) => {
+    const sequences = getSequences(grooveBeats, convertAllowedLengthsToArray(allowedLengths));
 
-    return generateRiff({ bpm, totalBeats, grooveBeats, allowedLengths, sequences })
+    return generateRiff({ bpm, totalBeats, grooveBeats, allowedLengths, sequences, instruments })
         .then((buffer) => {
             currentBuffer = buffer;
-            return Promise.resolve(buffer)
+            return buffer;
         });
 }
 
@@ -108,69 +86,9 @@ class SoundController extends Component {
                 <button onClick={this.stopEvent}>Stop</button>
                 <button onClick={this.regenerateEvent}>Regenerate</button>
 
-                <AllowedLengthsController
-                    allowedLengths={this.props.allowedLengths}
-                />
+
             </div>
         );
-    }
-}
-
-const names = {
-    "0.25": 'One whole',
-    "0.5": 'One Half',
-    "1": 'One Quarter',
-    "2": 'One Eighth',
-    "4": 'One Sixteenth',
-}
-
-class AllowedLengthsController extends Component {
-    render () {
-        const { allowedLengths } = this.props;
-
-        const allowedLengthsInputs = Object.keys(names)
-            .reduce((newObj, id, index, arr) => {
-                const name = isTriplet ? names[id / 1.5] : names[id];
-                const isTriplet = !name;
-                const amount = allowedLengths.reduce((prev, next) => {
-                    if (next === parseInt(id)) {
-                        return prev + 1;
-                    }
-
-                    return prev;
-                }, 0);
-
-                return [
-                    ...newObj,
-                    {
-                        id,
-                        name,
-                        amount
-                    }
-                ]
-
-            }, {})
-            .sort((a, b) => parseInt(a.id) - parseInt(b.id))
-
-        return (
-            <div>
-                {
-                    Object.values(allowedLengthsInputs)
-                        .map((length, i) => {
-                            return (
-                                <div key={i}>
-                                    <span>{length.name}: </span>
-                                    <span>{length.amount}</span>
-                                </div>
-                            );
-                        })
-                }
-            </div>
-        )
-
-
-            console.log('ALLOWEDLENGTHSINPUTS', allowedLengthsInputs)
-
     }
 }
 

@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
-import { items } from './items';
+import { instruments } from './instruments';
 import { config } from './config';
 
 const rootReducer = combineReducers({
   /* your reducers */
-  items,
   config,
+  instruments,
 });
 
 export default rootReducer;

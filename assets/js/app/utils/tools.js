@@ -9,10 +9,11 @@ const repeat = (simsNeeded, fn) => {
 
 const repeatArray = (arr, length) => {
 	if (length === 0) return [];
-	if (arr.length === length) return arr;
+	if (arr.length === length || arr.length === 0) return arr;
 	if (arr.length > length) return arr.slice(0, length);
 
 	const diff = Math.ceil(length / arr.length)
+
 	return Array.from(Array(diff).keys())
 		.reduce((newArr, index) => newArr.concat(...arr), [])
 		.slice(0, length);

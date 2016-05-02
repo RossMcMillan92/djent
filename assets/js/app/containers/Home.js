@@ -5,12 +5,12 @@ import DocumentMeta from 'react-document-meta';
 
 import ReactDOM from 'react-dom';
 
-import {
-    getInstruments,
-} from '../utils/instruments';
-
 import { SoundController } from '../components/SoundController';
 import { InstrumentList } from '../components/InstrumentList';
+import { AllowedLengthsController } from '../components/AllowedLengthsController';
+
+import * as configActions from '../actions/config';
+import * as instrumentsActions from '../actions/instruments';
 
 const metaData = {
   title: 'Djent',
@@ -32,7 +32,14 @@ class HomeComponent extends Component {
             <SoundController
                 { ...this.props }
             />
-            <InstrumentList instruments={getInstruments()} />
+            <AllowedLengthsController
+                actions={{ updateAllowedLengths: this.props.actions.updateAllowedLengths }}
+                allowedLengths={this.props.allowedLengths}
+            />
+            <InstrumentList
+                actions={{ updateInstrumentSound: this.props.actions.updateInstrumentSound }}
+                instruments={this.props.instruments}
+            />
         </section>
     );
     }
@@ -40,6 +47,7 @@ class HomeComponent extends Component {
 
 function mapStateToProps(state) {
   return {
+    instruments    : state.instruments,
     allowedLengths : state.config.allowedLengths,
     bpm            : state.config.bpm,
     totalBeats     : state.config.totalBeats,
@@ -48,7 +56,16 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return {};
+    const actions = {
+        ...configActions,
+        ...instrumentsActions
+    }
+
+    return {
+        actions: {
+            ...bindActionCreators(actions, dispatch)
+        }
+    };
 }
 
 const Home = connect(mapStateToProps, mapDispatchToProps)(HomeComponent);

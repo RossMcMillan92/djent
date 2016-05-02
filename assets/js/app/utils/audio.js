@@ -84,20 +84,22 @@ const renderSoundsToBuffer = (buffers) => {
 }
 
 const playSound = (context, buffer, time, duration, volume, detune = 0) => {
-  const source = context.createBufferSource();
-  const gainNode = context.createGain();
+    if (!buffer) return;
 
-  source.connect(gainNode);
+    const source = context.createBufferSource();
+    const gainNode = context.createGain();
 
-  gainNode.connect(context.destination);
-  gainNode.gain.value = volume;
+    source.connect(gainNode);
 
-  source.buffer = buffer;
-  source.start(time, 0, duration);
+    gainNode.connect(context.destination);
+    gainNode.gain.value = volume;
 
-  source.detune.value = detune;
+    source.buffer = buffer;
+    source.start(time, 0, duration);
 
-  return source;
+    source.detune.value = detune;
+
+    return source;
 }
 
 export {

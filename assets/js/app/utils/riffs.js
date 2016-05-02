@@ -5,7 +5,7 @@ import {
 import {
     generateInstrumentTimeMap,
     generateInstrumentHitTypes,
-    getInstrumentPack,
+    getInstrumentsSequences,
     repeatHits,
     repeatSequence,
     renderInstrumentSoundsAtTempo
@@ -15,10 +15,10 @@ import {
     compose,
 } from './tools';
 
-const generateRiff = ({ bpm, totalBeats, grooveBeats, allowedLengths, sequences }) => {
+const generateRiff = ({ bpm, totalBeats, grooveBeats, allowedLengths, sequences, instruments }) => {
     const bpmMultiplier  = 60 / bpm;
     const context        = new AudioContext();
-    const instrumentPack = getInstrumentPack(sequences, totalBeats);
+    const instrumentPack = getInstrumentsSequences(instruments, sequences, totalBeats);
 
     return loadInstrumentBuffers(context, instrumentPack)
         .then((instrumentPack) => initiateInstruments(context, instrumentPack, totalBeats, bpmMultiplier))
@@ -26,7 +26,7 @@ const generateRiff = ({ bpm, totalBeats, grooveBeats, allowedLengths, sequences 
             context.close();
             return buffer
         })
-        .catch(e => console.log(e));
+        .catch(e => { console.log(e); console.trace() });
 }
 
 const initiateInstruments = (context, instrumentPack, totalBeats, bpmMultiplier) => {
@@ -37,6 +37,7 @@ const initiateInstruments = (context, instrumentPack, totalBeats, bpmMultiplier)
         generateInstrumentHitTypes
     )(instrument);
 
+    console.log('CREATESOUNDMAPS', createSoundMaps)
     const instruments = instrumentPack
         .map(createSoundMaps);
 

@@ -1,4 +1,7 @@
-import { randomFromArray } from './tools';
+import {
+    randomFromArray,
+    repeatArray
+} from '../utils/tools';
 
 const predefinedSequences = {
     steadyWholes: {
@@ -46,6 +49,16 @@ const instrumentSequences = {
 
 const getSequenceForInstrument = (instrument) => randomFromArray(instrumentSequences[instrument]);
 
+const convertAllowedLengthsToArray = (objs) => {
+    return objs.reduce((newArr, obj) => {
+        if (obj.amount) {
+            const length = parseFloat(obj.id) * (obj.isTriplet ? 1.5 : 1);
+            return [ ...newArr, ...repeatArray([length], obj.amount) ];
+        }
+        return [ ...newArr ]
+    }, []);
+}
+
 const generateSequence = ({ totalBeats, allowedLengths, hitChance }) => {
     return (function loop (seq, sum, target) {
         let newLength = randomFromArray(allowedLengths);
@@ -71,6 +84,8 @@ const generateSequence = ({ totalBeats, allowedLengths, hitChance }) => {
 };
 
 const loopSequence = (sequence, totalBeats) => {
+    if(!sequence.length) return [];
+
     let totalBeatLength = Math.round(sequence.reduce((prev, next) => (1 / next.beat) + prev, 0));
     let newSequence = [ ...sequence ];
 
@@ -88,17 +103,20 @@ const loopSequence = (sequence, totalBeats) => {
 }
 
 const generateTimeMap = sequence => {
+    console.log('lmao1', sequence)
     const times = sequence.map((beat, i, seq) => {
         const result = seq.slice(0, i + 1).reduce((prev, cur, i, seq) => {
             return (prev + (1 / cur.beat));
         }, 0);
         return result;
     });
+    console.log('lmao2')
 
     return [0, ...times.slice(0, times.length-1)];
 }
 
 export {
+    convertAllowedLengthsToArray,
     generateSequence,
     getSequenceForInstrument,
     loopSequence,

@@ -15,6 +15,11 @@
 	  background-color: #000;
 	  color: #fff;
 	}
+
+	.strikeout {
+		color: #999;
+		text-decoration: line-through;
+	}
 	</style>
 
 </head>
@@ -39,49 +44,7 @@
 
 	<hr>
 
-	<h2>Main Beat</h2>
 
-	<div class="js-lengths" data-length="0.25">
-		<label for="length-whole">One whole: </label>
-		<input type="number" class="js-amount" value="0" id="length-whole">
-
-		<label for="length-whole-triplet">Triplet:</label>
-		<input type="checkbox" class="js-triplet" id="length-whole-triplet">
-	</div>
-	<div class="js-lengths" data-length="0.5">
-		<label for="length-half">One half: </label>
-		<input type="number" class="js-amount" value="1" id="length-half">
-
-		<label for="length-half-triplet">Triplet:</label>
-		<input type="checkbox" class="js-triplet" id="length-half-triplet">
-	</div>
-	<div class="js-lengths" data-length="1">
-		<label for="length-quarter">One quarter: </label>
-		<input type="number" class="js-amount" value="1" id="length-quarter">
-
-		<label for="length-quarter-triplet">Triplet:</label>
-		<input type="checkbox" class="js-triplet" id="length-quarter-triplet">
-	</div>
-	<div class="js-lengths" data-length="2">
-		<label for="length-eighth">One eighth: </label>
-		<input type="number" class="js-amount" value="1" id="length-eighth">
-
-		<label for="length-eighth-triplet">Triplet:</label>
-		<input type="checkbox" class="js-triplet" id="length-eighth-triplet">
-	</div>
-	<div class="js-lengths" data-length="4">
-		<label for="length-sixteenth">One sixteenth: </label>
-		<input type="number" class="js-amount" value="0" id="length-sixteenth">
-
-		<label for="length-sixteenth-triplet">Triplet:</label>
-		<input type="checkbox" class="js-triplet" id="length-sixteenth-triplet">
-	</div>
-
-	<hr>
-
-	<button class="js-stop">Stop</button>
-	<button class="js-play">Play</button>
-	<button class="js-regenerate">Regenerate</button>
 
 	<div id="root">
 

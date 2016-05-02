@@ -21,95 +21,7 @@ const defaultInstrument = {
     timeMap: [],
 }
 
-const instruments = [
-    {
-        id: 'guitar',
-        sounds: [
-            {
-                id: 'guitar-palm-zero-1',
-                path: 'assets/audio/guitar-palm-zero-1.wav',
-            },
-            {
-                id: 'guitar-palm-zero-2',
-                path: 'assets/audio/guitar-palm-zero-2.wav',
-            },
-            {
-                id: 'guitar-open-zero-1',
-                path: 'assets/audio/guitar-open-zero-1.wav',
-            },
-            {
-                id: 'guitar-open-zero-2',
-                path: 'assets/audio/guitar-open-zero-2.wav',
-            },
-            {
-                id: 'guitar-open-first-1',
-                path: 'assets/audio/guitar-open-first-1.wav',
-            },
-            {
-                id: 'guitar-open-first-2',
-                path: 'assets/audio/guitar-open-first-2.wav',
-            },
-            {
-                id: 'guitar-open-eighth',
-                path: 'assets/audio/guitar-open-eighth.wav',
-            },
-            {
-                id: 'guitar-dissonance-high',
-                path: 'assets/audio/guitar-dissonance-high.wav',
-            }
-        ],
-    },
-    {
-        id: 'kick',
-        sounds: [
-            {
-                id: 'kick',
-                path: 'assets/audio/kick.wav'
-            }
-        ],
-    },
-    {
-        id: 'snare',
-        sounds: [
-            {
-                id: 'snare',
-                path: 'assets/audio/snare.wav'
-            }
-        ],
-    },
-    {
-        id: 'hihat',
-        sounds: [
-            {
-                id: 'hihat',
-                path: 'assets/audio/hihat.wav'
-            }
-        ],
-    },
-    {
-        id: 'crash',
-        sounds: [
-            {
-                id: 'crash1',
-                path: 'assets/audio/crash1.wav',
-            },
-            {
-                id: 'crash2',
-                path: 'assets/audio/crash2.wav',
-            },
-            {
-                id: 'china',
-                path: 'assets/audio/china.wav',
-            }
-        ],
-    }
-]
-
-const getInstrument = (id, other) => ({ ...defaultInstrument, ...instruments.find(i => i.id === id), ...other });
-
-const getInstruments = () => [ ...instruments ];
-
-const getInstrumentPack = (sequences, totalBeats) => Object.keys(sequences).map(instrumentId => getInstrument(instrumentId, { sequence: loopSequence(sequences[instrumentId]) }));
+const getInstrumentsSequences = (instruments, sequences, totalBeats) => Object.keys(sequences).map(instrumentId => ({ ...instruments.find(i => i.id === instrumentId), sequence: loopSequence(sequences[instrumentId]) }));
 
 const generateInstrumentTimeMap = (instrument) => {
     const timeMap = generateTimeMap(instrument.sequence);
@@ -121,7 +33,12 @@ const generateInstrumentTimeMap = (instrument) => {
 }
 
 const generateInstrumentHitTypes = (instrument) => {
-    const hitTypes = instrument.sequence.map((hit) => randFromTo(0, instrument.buffers.length-1));
+    const activeSounds = instrument.sounds.reduce((newArr, sound, i) => sound.enabled ? [ ...newArr, { ...sound, index: i } ] : newArr, []);
+    let hitTypes = [];
+
+    if (activeSounds.length) {
+        hitTypes = instrument.sequence.map((hit) => activeSounds[randFromTo(0, activeSounds.length-1)].index);
+    }
 
     return {
         ...instrument,
@@ -175,9 +92,7 @@ const repeatSequence = (instrument, beats) => {
 
 
 export {
-    getInstrument,
-    getInstruments,
-    getInstrumentPack,
+    getInstrumentsSequences,
     generateInstrumentTimeMap,
     generateInstrumentHitTypes,
     renderInstrumentSoundsAtTempo,

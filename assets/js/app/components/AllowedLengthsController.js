@@ -33,7 +33,7 @@ class AllowedLengthsController extends Component {
                 return (
                     <div key={i}>
                         <span>{length.name}: </span>
-                        <input type="text" id={length.id} defaultValue={length.amount} onChange={this.onLengthAmountChange} />
+                        <input type="number" id={length.id} defaultValue={length.amount} onChange={this.onLengthAmountChange} />
                         <span> - {percentage}% </span>
                         <label htmlFor={length.id}>Triplet:</label>
                         <input id={length.id} type="checkbox" defaultChecked={length.isTriplet} onChange={this.onIsTripletChange} />

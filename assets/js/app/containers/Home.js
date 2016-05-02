@@ -5,6 +5,7 @@ import DocumentMeta from 'react-document-meta';
 
 import ReactDOM from 'react-dom';
 
+import { BPMController } from '../components/BPMController';
 import { SoundController } from '../components/SoundController';
 import { InstrumentList } from '../components/InstrumentList';
 import { AllowedLengthsController } from '../components/AllowedLengthsController';
@@ -29,6 +30,10 @@ class HomeComponent extends Component {
         return (
         <section>
             <DocumentMeta {...metaData} />
+            <BPMController
+                actions={{ updateBPM: this.props.actions.updateBPM }}
+                bpm={this.props.bpm}
+            />
             <SoundController
                 { ...this.props }
             />
@@ -52,6 +57,7 @@ function mapStateToProps(state) {
     bpm            : state.config.bpm,
     totalBeats     : state.config.totalBeats,
     grooveBeats    : state.config.grooveBeats,
+    hitChance      : state.config.hitChance,
   }
 }
 

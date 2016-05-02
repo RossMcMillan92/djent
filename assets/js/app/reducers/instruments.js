@@ -10,27 +10,27 @@ const initialState = [
             {
                 id: 'guitar-palm-zero-2',
                 path: 'assets/audio/guitar-palm-zero-2.wav',
-                enabled: false,
+                enabled: true,
             },
             {
                 id: 'guitar-open-zero-1',
                 path: 'assets/audio/guitar-open-zero-1.wav',
-                enabled: false,
+                enabled: true,
             },
             {
                 id: 'guitar-open-zero-2',
                 path: 'assets/audio/guitar-open-zero-2.wav',
-                enabled: false,
+                enabled: true,
             },
             {
                 id: 'guitar-open-first-1',
                 path: 'assets/audio/guitar-open-first-1.wav',
-                enabled: false,
+                enabled: true,
             },
             {
                 id: 'guitar-open-first-2',
                 path: 'assets/audio/guitar-open-first-2.wav',
-                enabled: false,
+                enabled: true,
             },
             {
                 id: 'guitar-open-eighth',
@@ -49,7 +49,7 @@ const initialState = [
         sounds: [
             {
                 id: 'kick',
-                path: 'assets/audio/kick.wav',
+                path: 'assets/audio/mastered/kick.wav',
                 enabled: true,
             }
         ],
@@ -59,7 +59,7 @@ const initialState = [
         sounds: [
             {
                 id: 'snare',
-                path: 'assets/audio/snare.wav',
+                path: 'assets/audio/mastered/snare.wav',
                 enabled: true,
             }
         ],
@@ -69,7 +69,7 @@ const initialState = [
         sounds: [
             {
                 id: 'hihat',
-                path: 'assets/audio/hihat.wav',
+                path: 'assets/audio/mastered/hihat.wav',
                 enabled: true,
             }
         ],
@@ -78,22 +78,32 @@ const initialState = [
         id: 'crash',
         sounds: [
             {
-                id: 'crash1',
-                path: 'assets/audio/crash1.wav',
+                id: 'crash-left',
+                path: 'assets/audio/mastered/crash-left.wav',
                 enabled: true,
             },
             {
-                id: 'crash2',
-                path: 'assets/audio/crash2.wav',
+                id: 'crash-right',
+                path: 'assets/audio/mastered/crash-right.wav',
                 enabled: true,
             },
             {
-                id: 'china',
-                path: 'assets/audio/china.wav',
+                id: 'china-left',
+                path: 'assets/audio/mastered/china-left.wav',
                 enabled: true,
             }
         ],
-    }
+    },
+    {
+        id: 'drone',
+        sounds: [
+            {
+                id: 'drone',
+                path: 'assets/audio/drone-high.wav',
+                enabled: true,
+            }
+        ],
+    },
 ];
 
 const updateInstrumentSoundByID = ({ instruments, soundID, parentID, prop, value }) => {

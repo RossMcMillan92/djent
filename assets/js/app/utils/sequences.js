@@ -29,6 +29,12 @@ const predefinedSequences = {
             { beat: 1, volume: 1 },
             { beat: 1, volume: 0 },
         ]
+    },
+
+    drone: {
+        sequence: [
+            { beat: 0.0625, volume: 1 },
+        ]
     }
 }
 
@@ -44,6 +50,9 @@ const instrumentSequences = {
     ],
     snare: [
         predefinedSequences.middleBeat.sequence,
+    ],
+    drone: [
+        predefinedSequences.drone.sequence,
     ],
 }
 

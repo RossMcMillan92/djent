@@ -14,18 +14,20 @@ import {
     generateRiff,
 } from '../utils/riffs';
 
-const getSequences = (grooveBeats, allowedLengths) => {
-    const mainBeat      = generateSequence({ totalBeats: grooveBeats, allowedLengths, hitChance: 1 });
+const getSequences = (grooveBeats, allowedLengths, hitChance) => {
+    const mainBeat      = generateSequence({ totalBeats: grooveBeats, allowedLengths, hitChance });
     const crashSequence = getSequenceForInstrument('crash');
     const hihatSequence = getSequenceForInstrument('hihat');
     const snareSequence = getSequenceForInstrument('snare');
+    const droneSequence = getSequenceForInstrument('drone');
 
     const sequences     = {
         crash  : crashSequence,
         hihat  : hihatSequence,
         kick   : mainBeat,
         guitar : mainBeat,
-        snare  : snareSequence
+        snare  : snareSequence,
+        drone  : droneSequence,
     };
 
     return sequences;
@@ -34,8 +36,8 @@ const getSequences = (grooveBeats, allowedLengths) => {
 let currentSrc;
 let currentBuffer;
 
-const generateNewBuffer = ({ bpm, totalBeats, grooveBeats, allowedLengths, instruments }) => {
-    const sequences = getSequences(grooveBeats, convertAllowedLengthsToArray(allowedLengths));
+const generateNewBuffer = ({ bpm, totalBeats, grooveBeats, allowedLengths, hitChance, instruments }) => {
+    const sequences = getSequences(grooveBeats, convertAllowedLengthsToArray(allowedLengths), hitChance);
 
     return generateRiff({ bpm, totalBeats, grooveBeats, allowedLengths, sequences, instruments })
         .then((buffer) => {

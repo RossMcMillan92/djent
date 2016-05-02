@@ -4,3 +4,10 @@ export function updateAllowedLengths(allowedLengths) {
     payload: { allowedLengths },
   };
 }
+
+export function updateBPM(bpm) {
+  return {
+    type: 'UPDATE_BPM',
+    payload: { bpm },
+  };
+}

@@ -8,14 +8,14 @@ const allowedLengths = [
         {
             id: "0.5",
             name: 'One Half',
-            amount: 2,
-            isTriplet: true
+            amount: 1,
+            isTriplet: false
         },
         {
             id: "1",
             name: 'One Quarter',
-            amount: 0,
-            isTriplet: true
+            amount:1,
+            isTriplet: false
         },
         {
             id: "2",
@@ -26,16 +26,17 @@ const allowedLengths = [
         {
             id: "4",
             name: 'One Sixteenth',
-            amount: 0,
+            amount: 1,
             isTriplet: false
         },
 ];
 
 const initialState = {
     allowedLengths,
-    bpm            : 80,
-    totalBeats     : 8,
+    bpm            : 90,
+    totalBeats     : 16,
     grooveBeats    : 8,
+    hitChance      : 1,
 };
 
 export function config(state = initialState, action) {
@@ -43,10 +44,14 @@ export function config(state = initialState, action) {
 
     switch (type) {
         case 'UPDATE_ALLOWED_LENGTHS':
-        console.log('payload.allowedLengths', payload.allowedLengths)
             return {
                 ...state,
                 allowedLengths: payload.allowedLengths
+            };
+        case 'UPDATE_BPM':
+            return {
+                ...state,
+                bpm: payload.bpm
             };
 
         default:

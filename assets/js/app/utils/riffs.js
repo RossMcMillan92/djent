@@ -15,13 +15,13 @@ import {
     compose,
 } from './tools';
 
-const generateRiff = ({ bpm, totalBeats, grooveBeats, allowedLengths, sequences, instruments }) => {
+const generateRiff = ({ bpm, totalBeatsProduct, allowedLengths, sequences, instruments }) => {
     const bpmMultiplier  = 60 / bpm;
     const context        = new AudioContext();
-    const instrumentPack = getInstrumentsSequences(instruments, sequences, totalBeats);
+    const instrumentPack = getInstrumentsSequences(instruments, sequences, totalBeatsProduct);
 
     return loadInstrumentBuffers(context, instrumentPack)
-        .then((instrumentPack) => initiateInstruments(context, instrumentPack, totalBeats, bpmMultiplier))
+        .then((instrumentPack) => initiateInstruments(context, instrumentPack, totalBeatsProduct, bpmMultiplier))
         .then(buffer => {
             context.close();
             return buffer
@@ -29,18 +29,18 @@ const generateRiff = ({ bpm, totalBeats, grooveBeats, allowedLengths, sequences,
         .catch(e => { console.log(e); console.trace() });
 }
 
-const initiateInstruments = (context, instrumentPack, totalBeats, bpmMultiplier) => {
+const initiateInstruments = (context, instrumentPack, totalBeatsProduct, bpmMultiplier) => {
     const createSoundMaps = instrument => compose(
         generateInstrumentTimeMap,
         repeatHits,
-        instrument => repeatSequence(instrument, totalBeats),
+        instrument => repeatSequence(instrument, totalBeatsProduct),
         generateInstrumentHitTypes
     )(instrument);
 
     const instruments = instrumentPack
         .map(createSoundMaps);
 
-    return renderInstrumentSoundsAtTempo(instruments, totalBeats, bpmMultiplier);
+    return renderInstrumentSoundsAtTempo(instruments, totalBeatsProduct, bpmMultiplier);
 }
 
 export {

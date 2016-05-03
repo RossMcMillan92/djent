@@ -40,6 +40,7 @@ const generateInstrumentHitTypes = (instrument) => {
         hitTypes = instrument.sequence.map((hit) => activeSounds[randFromTo(0, activeSounds.length-1)].index);
     }
 
+    console.log(instrument.id, activeSounds, hitTypes)
     return {
         ...instrument,
         hitTypes
@@ -56,7 +57,7 @@ const renderInstrumentSoundsAtTempo = (instruments, totalBeats, bpmMultiplier) =
         const sources = instrument.timeMap.reduce((sources, time, i) => {
             const instrumentSound = instrument.buffers[instrument.hitTypes[i]];
             const startTime       = offlineCtx.currentTime + (time * bpmMultiplier);
-            const duration        = (1 / instrument.sequence[i].beat) * bpmMultiplier;
+            const duration        = instrument.ringout ? instrumentSound.duration : (1 / instrument.sequence[i].beat) * bpmMultiplier;
             const source          = playSound(offlineCtx, instrumentSound, startTime, duration, instrument.sequence[i].volume, 0);
 
             startTimes[i] = startTime;

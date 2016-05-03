@@ -7,17 +7,24 @@ const predefinedSequences = {
     steadyWholes: {
         sequence: [
             { beat: .25, volume: 1 },
+            { beat: .25, volume: 1 },
         ]
     },
 
     steadyHalfs: {
         sequence: [
             { beat: .5, volume: 1 },
+            { beat: .5, volume: 1 },
+            { beat: .5, volume: 1 },
+            { beat: .5, volume: 1 },
         ],
     },
 
     steadyQuarters: {
         sequence: [
+            { beat: 1, volume: 1 },
+            { beat: 1, volume: 1 },
+            { beat: 1, volume: 1 },
             { beat: 1, volume: 1 },
         ]
     },

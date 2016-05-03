@@ -33,11 +33,9 @@ const allowedLengths = [
 
 const initialState = {
     allowedLengths,
-    bpm            : 90,
-    totalBeats     : 4,
-    grooveBeats    : 4,
-    hitChance      : 1,
-    isLooping      : false,
+    bpm              : 90,
+    hitChance        : 1,
+    isLooping        : false,
 };
 
 export function config(state = initialState, action) {

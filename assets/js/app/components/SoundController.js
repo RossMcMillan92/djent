@@ -14,8 +14,8 @@ import {
     generateRiff,
 } from '../utils/riffs';
 
-const getSequences = (grooveBeats, allowedLengths, hitChance) => {
-    const mainBeat      = generateSequence({ totalBeats: grooveBeats, allowedLengths, hitChance });
+const getSequences = (grooveTotalBeats, allowedLengths, hitChance) => {
+    const mainBeat      = generateSequence({ totalBeats: grooveTotalBeats, allowedLengths, hitChance });
     const crashSequence = getSequenceForInstrument('crash');
     const hihatSequence = getSequenceForInstrument('hihat');
     const snareSequence = getSequenceForInstrument('snare');
@@ -33,10 +33,14 @@ const getSequences = (grooveBeats, allowedLengths, hitChance) => {
     return sequences;
 }
 
-const generateNewBuffer = ({ bpm, totalBeats, grooveBeats, allowedLengths, hitChance, instruments }) => {
-    const sequences = getSequences(grooveBeats, convertAllowedLengthsToArray(allowedLengths), hitChance);
+const generateNewBuffer = ({ bpm, beats, allowedLengths, hitChance, instruments }) => {
+    const totalBeats              = beats.find(beat => beat.id === 'total');
+    const grooveTotalBeats        = beats.find(beat => beat.id === 'groove');
+    const grooveTotalBeatsProduct = grooveTotalBeats.beats * grooveTotalBeats.bars;
+    const totalBeatsProduct       = totalBeats.beats * totalBeats.bars;
+    const sequences               = getSequences(grooveTotalBeatsProduct, convertAllowedLengthsToArray(allowedLengths), hitChance);
 
-    return generateRiff({ bpm, totalBeats, grooveBeats, allowedLengths, sequences, instruments })
+    return generateRiff({ bpm, totalBeatsProduct,  allowedLengths, sequences, instruments })
         .then((buffer) => {
             return buffer;
         });
@@ -64,12 +68,14 @@ class SoundController extends Component {
 
     componentWillUpdate = (nextProps) => {
         if(nextProps.isLooping !== this.props.isLooping) {
-            loop(this.currentSrc, this.props.isLooping);
+            console.log('THIS.PROPS.ISLOOPING', this.props.isLooping)
+            loop(this.currentSrc, nextProps.isLooping);
         }
     }
 
     generate = (shouldPlay) => {
         console.log('generate')
+        stop(this.currentSrc);
         generateNewBuffer(this.props)
             .then((buffer) => {
                 this.currentBuffer = buffer;

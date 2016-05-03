@@ -76,6 +76,7 @@ const initialState = [
     },
     {
         id: 'crash',
+        ringout: true,
         sounds: [
             {
                 id: 'crash-left',

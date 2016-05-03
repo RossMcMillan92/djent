@@ -5,7 +5,7 @@ import { repeatArray } from '../utils/tools';
 class AllowedLengthsController extends Component {
 
     onLengthAmountChange = (event) => {
-        const [ id, value ] = [event.target.getAttribute('id'), parseInt(event.target.value)];
+        const [ id, value ] = [event.target.getAttribute('id'), parseFloat(event.target.value)];
         this.updateAllowedLengthsByID(id, 'amount', value);
     }
 

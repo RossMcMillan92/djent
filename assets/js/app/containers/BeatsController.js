@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
-import { updateBPM } from '../actions/config';
-import BPMController from '../components/BPMController';
+import { updateBeats } from '../actions/config';
+import BeatsController from '../components/BeatsController';
 
 const mapStateToProps = (state) => ({
-    bpm: state.config.bpm,
+    beats: state.beats,
 })
 
 const mapDispatchToProps = (dispatch) => {
     const actions = {
-        updateBPM,
+        updateBeats,
     }
     return {
         actions: {
@@ -19,4 +19,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BPMController);
+export default connect(mapStateToProps, mapDispatchToProps)(BeatsController);

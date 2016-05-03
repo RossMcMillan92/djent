@@ -1,9 +1,0 @@
-.header {
-	background-color: darken(nth($palette--primary, 1), 10%);
-}
-	.header__logo {
-		right: rem($base-spacing-unit);
-		color: #fff;
-		text-transform: uppercase;
-		font-weight: 800;
-	}

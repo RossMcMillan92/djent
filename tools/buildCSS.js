@@ -1,26 +1,11 @@
-const colors     = require('colors/safe');
+'use strict';
+
 const postcss    = require('postcss');
 const fs         = require('fs');
+const events    = require('./events');
 
 const buildCSS = (filename, inputCSSPath, outputCSSPath) => {
-    const cleanup = (src) => {
-        src.removeListener('finish', finish);
-        src.removeListener('error', error);
-    };
-    const start = () => {
-        startTime = Date.now();
-        console.log(colors.grey(`${filename} compiling`));
-    }
-    const finish = () => {
-        endTime = Date.now();
-        console.log(colors.green(`${colors.grey(filename)} finished: ${outputCSSPath} in ${colors.blue(endTime - startTime + 'ms')}`));
-    }
-    const error = (err, src) =>{
-        cleanup(src);
-        console.log(colors.red(`${colors.grey(filename)} ERROR: \n ${err}`));
-    };
-
-    start();
+    const startTime = events.onStart(filename);
 
     const rr = fs.createReadStream(inputCSSPath);
     rr.on('readable', () => {
@@ -35,9 +20,9 @@ const buildCSS = (filename, inputCSSPath, outputCSSPath) => {
             .then(function (result) {
                 fs.writeFileSync(outputCSSPath, result.css);
                 if ( result.map ) fs.writeFileSync('app.css.map', result.map);
-                finish();
+                events.onFinish(filename, outputCSSPath, startTime);
             })
-            .catch('error', err => error(err, src))
+            .catch('error', err => events.onError(err, src))
 
     }
 }

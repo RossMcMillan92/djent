@@ -112,14 +112,12 @@ const loopSequence = (sequence, totalBeats) => {
 }
 
 const generateTimeMap = sequence => {
-    console.log('lmao1', sequence)
     const times = sequence.map((beat, i, seq) => {
         const result = seq.slice(0, i + 1).reduce((prev, cur, i, seq) => {
             return (prev + (1 / cur.beat));
         }, 0);
         return result;
     });
-    console.log('lmao2')
 
     return [0, ...times.slice(0, times.length-1)];
 }

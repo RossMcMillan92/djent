@@ -3,6 +3,7 @@ const browserify = require('browserify');
 const source     = require('vinyl-source-stream');
 const fs         = require('fs');
 const colors     = require('colors/safe');
+const livereload = require('livereload');
 
 const jsSource = './assets/js';
 const jsBuild  = './assets/build';
@@ -18,7 +19,7 @@ const buildJS = (filename) => {
         console.log(colors.grey(`${filename} changed`));
     }
     const finish = () => {
-        console.log(colors.green(`${colors.grey(filename)} finished`));
+        console.log(colors.green(`${colors.grey(filename)} finished: ${outputJS}`));
     }
     const error = (err, src) =>{
         cleanup(src);
@@ -42,3 +43,5 @@ const buildJS = (filename) => {
 }
 buildJS('init');
 watch(jsSource, buildJS)
+const server = livereload.createServer();
+server.watch(outputJS);

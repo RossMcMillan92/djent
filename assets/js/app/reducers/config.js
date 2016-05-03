@@ -34,9 +34,10 @@ const allowedLengths = [
 const initialState = {
     allowedLengths,
     bpm            : 90,
-    totalBeats     : 16,
-    grooveBeats    : 8,
+    totalBeats     : 4,
+    grooveBeats    : 4,
     hitChance      : 1,
+    isLooping      : false,
 };
 
 export function config(state = initialState, action) {
@@ -52,6 +53,11 @@ export function config(state = initialState, action) {
             return {
                 ...state,
                 bpm: payload.bpm
+            };
+        case 'UPDATE_IS_LOOPING':
+            return {
+                ...state,
+                isLooping: payload.isLooping
             };
 
         default:

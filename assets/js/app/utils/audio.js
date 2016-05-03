@@ -1,7 +1,5 @@
-
-
 const BufferLoader = (context) => {
-    let newInstrumentPack = new Array();
+    let newInstrumentPack = [];
 
     const loadBuffer = function(instrument, index) {
         const bufferAmount = instrument.sounds.length;
@@ -11,6 +9,7 @@ const BufferLoader = (context) => {
         const loadingSound = new Promise((res, rej) => {
 
             instrument.sounds.map((sound, i) => {
+                if (!sound.enabled) return res();
                 const url = sound.path;
                 // Load buffer asynchronously
                 const request = new XMLHttpRequest();
@@ -26,7 +25,6 @@ const BufferLoader = (context) => {
                                 alert('error decoding file data: ' + url);
                                 return;
                             }
-
                             instrument.buffers[i] = buffer;
                             newInstrumentPack[index] = instrument;
                             bufferCount++;
@@ -35,7 +33,7 @@ const BufferLoader = (context) => {
                             }
                         },
                         function(error) {
-                            rej();
+                            rej(error);
                             console.error('decodeAudioData error', error);
                         }
                     );

@@ -37,7 +37,6 @@ const initiateInstruments = (context, instrumentPack, totalBeats, bpmMultiplier)
         generateInstrumentHitTypes
     )(instrument);
 
-    console.log('CREATESOUNDMAPS', createSoundMaps)
     const instruments = instrumentPack
         .map(createSoundMaps);
 

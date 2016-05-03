@@ -33,52 +33,60 @@ const getSequences = (grooveBeats, allowedLengths, hitChance) => {
     return sequences;
 }
 
-let currentSrc;
-let currentBuffer;
-
 const generateNewBuffer = ({ bpm, totalBeats, grooveBeats, allowedLengths, hitChance, instruments }) => {
     const sequences = getSequences(grooveBeats, convertAllowedLengthsToArray(allowedLengths), hitChance);
 
     return generateRiff({ bpm, totalBeats, grooveBeats, allowedLengths, sequences, instruments })
         .then((buffer) => {
-            currentBuffer = buffer;
             return buffer;
         });
 }
 
 const context          = new AudioContext();
+const loop             = (src, isLooping) => { if (src) { console.log('src', src, isLooping); src.loop = isLooping } };
 const stop             = (src) => { if (src) { src.onended = () => {}; src.stop(); } };
 const play             = (buffer) => playSound(context, buffer, context.currentTime, buffer.duration, 1, true);
-const playEvent = (buffer) => {
+const playBuffer = (buffer) => {
     if(!buffer) return;
     let nextBuffer;
-    if(currentSrc) stop(currentSrc);
-    currentSrc = play(buffer);
+    const newSrc = play(buffer);
 
-    return currentSrc;
+    return newSrc;
 }
 
 class SoundController extends Component {
-    componentWillMount = () => generateNewBuffer(this.props);
+    currentBuffer;
+    currentSrc;
+
+    componentWillMount = () => {
+        this.generate();
+    };
+
+    componentWillUpdate = (nextProps) => {
+        if(nextProps.isLooping !== this.props.isLooping) {
+            loop(this.currentSrc, this.props.isLooping);
+        }
+    }
+
+    generate = (shouldPlay) => {
+        console.log('generate')
+        generateNewBuffer(this.props)
+            .then((buffer) => {
+                this.currentBuffer = buffer;
+                if (shouldPlay) this.playEvent();
+            });
+    }
 
     playEvent = () => {
         console.log('play')
-        currentSrc = playEvent(currentBuffer);
+        stop(this.currentSrc);
+        this.currentSrc = playBuffer(this.currentBuffer);
+        loop(this.currentSrc, this.props.isLooping);
     }
 
     stopEvent = () => {
         console.log('stop')
-        stop(currentSrc)
-    }
-
-    regenerateEvent = () => {
-        console.log('Regenerate')
-        stop(currentSrc);
-        generateNewBuffer(this.props)
-            .then((buffer) => {
-                currentSrc = playEvent(buffer);
-            })
-
+        stop(this.currentSrc)
     }
 
     render () {
@@ -86,9 +94,7 @@ class SoundController extends Component {
             <div>
                 <button onClick={this.playEvent}>Start</button>
                 <button onClick={this.stopEvent}>Stop</button>
-                <button onClick={this.regenerateEvent}>Regenerate</button>
-
-
+                <button onClick={() => this.generate(true)}>Regenerate</button>
             </div>
         );
     }

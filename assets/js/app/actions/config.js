@@ -11,3 +11,10 @@ export function updateBPM(bpm) {
     payload: { bpm },
   };
 }
+
+export function updateIsLooping(isLooping) {
+  return {
+    type: 'UPDATE_IS_LOOPING',
+    payload: { isLooping },
+  };
+}

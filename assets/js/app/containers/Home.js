@@ -33,15 +33,19 @@ class HomeComponent extends Component {
                 <DocumentMeta {...metaData} />
                 <BPMController />
                 <LoopController />
+
                 <h2>Main Beats</h2>
                 <BeatsController id="total" />
+
                 <SoundController
                     { ...this.props }
                 />
+                
                 <AllowedLengthsController
                     actions={{ updateAllowedLengths: this.props.actions.updateAllowedLengths }}
                     allowedLengths={this.props.allowedLengths}
                 />
+
                 <h2>Groove Beats</h2>
                 <BeatsController id="groove" />
                 <InstrumentList

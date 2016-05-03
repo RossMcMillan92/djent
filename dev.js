@@ -1,47 +1,27 @@
 const watch      = require('node-watch');
-const browserify = require('browserify');
 const source     = require('vinyl-source-stream');
 const fs         = require('fs');
 const colors     = require('colors/safe');
 const livereload = require('livereload');
+const server     = livereload.createServer();
 
+// Build JS
+const buildJS  = require('./tools/buildJS');
 const jsSource = './assets/js';
 const jsBuild  = './assets/build';
-const inputJS  = `${jsSource}/script.js`;
-const outputJS = `${jsBuild}/app.js`;
+const inputJSPath  = `${jsSource}/script.js`;
+const outputJSPath = `${jsBuild}/app.js`;
+buildJS(inputJSPath, inputJSPath, outputJSPath);
+watch(jsSource, (filename) => buildJS(filename, inputJSPath, outputJSPath))
 
-const buildJS = (filename) => {
-    const cleanup = (src) => {
-        src.removeListener('finish', finish);
-        src.removeListener('error', error);
-    };
-    const start = () => {
-        console.log(colors.grey(`${filename} changed`));
-    }
-    const finish = () => {
-        console.log(colors.green(`${colors.grey(filename)} finished: ${outputJS}`));
-    }
-    const error = (err, src) =>{
-        cleanup(src);
-        console.log(colors.red(`${colors.grey(filename)} ERROR: \n ${err}`));
-    };
+// Build CSS
+const buildCSS  = require('./tools/buildCSS');
+const cssSource = './assets/src/styles';
+const cssBuild  = './assets/build';
+const inputCSSPath  = `${cssSource}/app.css`;
+const outputCSSPath = `${cssBuild}/app.css`;
+buildCSS(inputCSSPath, inputCSSPath, outputCSSPath);
+watch(cssSource, (filename) => buildCSS(filename, inputCSSPath, outputCSSPath))
 
-    start();
-
-    const src = browserify(inputJS)
-        .transform("babelify",
-            {
-                presets: ["es2015", "stage-0"],
-                plugins: ["transform-runtime"],
-            }
-        )
-        .bundle()
-        .addListener('error', err => error(err, src))
-        .pipe(fs.createWriteStream(outputJS))
-        .addListener('finish', finish);
-
-}
-buildJS('init');
-watch(jsSource, buildJS)
-const server = livereload.createServer();
-server.watch(outputJS);
+// Livereload
+server.watch([outputJSPath, outputCSSPath]);

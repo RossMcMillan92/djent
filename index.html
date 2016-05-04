@@ -1,89 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 	<meta charset="UTF-8">
 	<title>Djent</title>
-
-	<style>
-	body, html, canvas {
-	  display: block;
-	  margin: 0;
-	  padding: 0;
-	  height: 100%;
-	  width: 100%;
-	  background-color: #000;
-	  color: #fff;
-	}
-	</style>
-
+	<link rel="stylesheet" href="dist/app.css">
 </head>
 <body class="preload">
-
-	<div>
-		<label for="bpm">BPM: </label>
-		<input type="number" class="js-bpm" value="70" id="bpm">
-	</div>
-	<div>
-		<label for="total-beats">Total Beats: </label>
-		<input type="number" class="js-total-beats" value="8" id="total-beats">
-	</div>
-	<div>
-		<label for="groove-beats">Groove Beats: </label>
-		<input type="number" class="js-groove-beats" value="8" id="groove-beats">
-	</div>
-	<div>
-		<label for="loop">Loop:</label>
-		<input type="checkbox" class="js-loop" id="loop">
-	</div>
-
-	<hr>
-
-	<div class="js-lengths" data-length="0.25">
-		<label for="length-whole">One whole: </label>
-		<input type="number" class="js-amount" value="0" id="length-whole">
-
-		<label for="length-whole-triplet">Triplet:</label>
-		<input type="checkbox" class="js-triplet" id="length-whole-triplet">
-	</div>
-	<div class="js-lengths" data-length="0.5">
-		<label for="length-half">One half: </label>
-		<input type="number" class="js-amount" value="1" id="length-half">
-
-		<label for="length-half-triplet">Triplet:</label>
-		<input type="checkbox" class="js-triplet" id="length-half-triplet">
-	</div>
-	<div class="js-lengths" data-length="1">
-		<label for="length-quarter">One quarter: </label>
-		<input type="number" class="js-amount" value="1" id="length-quarter">
-
-		<label for="length-quarter-triplet">Triplet:</label>
-		<input type="checkbox" class="js-triplet" id="length-quarter-triplet">
-	</div>
-	<div class="js-lengths" data-length="2">
-		<label for="length-eighth">One eighth: </label>
-		<input type="number" class="js-amount" value="1" id="length-eighth">
-
-		<label for="length-eighth-triplet">Triplet:</label>
-		<input type="checkbox" class="js-triplet" id="length-eighth-triplet">
-	</div>
-	<div class="js-lengths" data-length="4">
-		<label for="length-sixteenth">One sixteenth: </label>
-		<input type="number" class="js-amount" value="0" id="length-sixteenth">
-
-		<label for="length-sixteenth-triplet">Triplet:</label>
-		<input type="checkbox" class="js-triplet" id="length-sixteenth-triplet">
-	</div>
-
-	<hr>
-
-	<button class="js-stop">Stop</button>
-	<button class="js-play">Play</button>
-	<button class="js-regenerate">Regenerate</button>
-
-	<script src="assets/js/build.bundle.js"></script>
-	<script type='text/javascript' id="__bs_script__">//<![CDATA[
-	    document.write("<script async src='//HOST:3000/browser-sync/browser-sync-client.1.9.2.js'><\/script>".replace(/HOST/g, location.hostname).replace(/PORT/g, location.port));
-	//]]></script>
-        </body>
+	<div id="root"></div>
+	<script src="dist/app.js"></script>
+</body>
 </html>

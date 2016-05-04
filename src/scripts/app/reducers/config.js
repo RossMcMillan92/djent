@@ -33,9 +33,9 @@ const allowedLengths = [
 
 const initialState = {
     allowedLengths,
-    bpm              : 90,
-    hitChance        : 1,
-    isLooping        : false,
+    bpm       : 90,
+    hitChance : 1,
+    isLooping : false,
 };
 
 export function config(state = initialState, action) {
@@ -57,6 +57,11 @@ export function config(state = initialState, action) {
                 ...state,
                 isLooping: payload.isLooping
             };
+        case 'UPDATE_HITCHANCE':
+            return {
+                ...state,
+                hitChance: payload.hitChance
+            }
 
         default:
             return state;

@@ -49,6 +49,4 @@ class AllowedLengthsController extends Component {
     }
 }
 
-export {
-    AllowedLengthsController,
-};
+export default AllowedLengthsController;

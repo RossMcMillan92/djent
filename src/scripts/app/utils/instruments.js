@@ -40,7 +40,6 @@ const generateInstrumentHitTypes = (instrument) => {
         hitTypes = instrument.sequence.map((hit) => activeSounds[randFromTo(0, activeSounds.length-1)].index);
     }
 
-    console.log(instrument.id, activeSounds, hitTypes)
     return {
         ...instrument,
         hitTypes

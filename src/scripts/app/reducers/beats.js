@@ -1,16 +1,15 @@
 const initialState =  [
     {
         id    : 'total',
+        bars  : 8,
         beats : 4,
-        bars  : 4
     },
     {
         id    : 'groove',
-        beats : 4,
-        bars  : 4
+        bars  : 1,
+        beats : 7.5,
     },
 ];
-
 
 const updateBeatByID = ({ beats, id, prop, value }) => {
     const newBeats = beats.map(beat => {

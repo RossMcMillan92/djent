@@ -18,7 +18,7 @@ const onFinish = (filename, outputPath, startTime) => {
 
 const onError = (err, src) =>{
     cleanup(src);
-    console.log(colors.red(`${colors.grey(filename)} ERROR: \n ${err}`));
+    console.log(colors.red(`ERROR: \n ${err}`));
 };
 
 module.exports = {

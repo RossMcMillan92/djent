@@ -19,9 +19,9 @@ export function updateIsLooping(isLooping) {
   };
 }
 
-export function updateBeats(id, prop, value) {
+export function updateHitChance(hitChance) {
   return {
-    type: 'UPDATE_BEATS',
-    payload: { id, prop, value },
+    type: 'UPDATE_HITCHANCE',
+    payload: { hitChance },
   };
 }

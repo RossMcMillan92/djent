@@ -47,7 +47,7 @@ const generateNewBuffer = ({ bpm, beats, allowedLengths, hitChance, instruments 
 }
 
 const context          = new AudioContext();
-const loop             = (src, isLooping) => { if (src) { console.log('src', src, isLooping); src.loop = isLooping } };
+const loop             = (src, isLooping) => { if (src) { src.loop = isLooping } };
 const stop             = (src) => { if (src) { src.onended = () => {}; src.stop(); } };
 const play             = (buffer) => playSound(context, buffer, context.currentTime, buffer.duration, 1, true);
 const playBuffer = (buffer) => {
@@ -68,13 +68,11 @@ class SoundController extends Component {
 
     componentWillUpdate = (nextProps) => {
         if(nextProps.isLooping !== this.props.isLooping) {
-            console.log('THIS.PROPS.ISLOOPING', this.props.isLooping)
             loop(this.currentSrc, nextProps.isLooping);
         }
     }
 
     generate = (shouldPlay) => {
-        console.log('generate')
         stop(this.currentSrc);
         generateNewBuffer(this.props)
             .then((buffer) => {
@@ -84,14 +82,12 @@ class SoundController extends Component {
     }
 
     playEvent = () => {
-        console.log('play')
         stop(this.currentSrc);
         this.currentSrc = playBuffer(this.currentBuffer);
         loop(this.currentSrc, this.props.isLooping);
     }
 
     stopEvent = () => {
-        console.log('stop')
         stop(this.currentSrc)
     }
 

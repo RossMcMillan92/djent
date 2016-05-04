@@ -6,13 +6,14 @@ import ReactDOM from 'react-dom';
 
 import BPMController from '../containers/BPMController';
 import LoopController from '../containers/LoopController';
-import BeatsController from '../containers/BeatsController';
+import BeatsController from '../components/BeatsController';
 import { SoundController } from '../components/SoundController';
 import { InstrumentList } from '../components/InstrumentList';
-import { AllowedLengthsController } from '../components/AllowedLengthsController';
+import BeatPanel from '../containers/BeatPanel';
 
 import * as configActions from '../actions/config';
 import * as instrumentsActions from '../actions/instruments';
+import { updateBeats } from '../actions/beats';
 
 const metaData = {
   title: 'DjenerationStation',
@@ -28,6 +29,10 @@ const metaData = {
 
 class HomeComponent extends Component {
     render() {
+        const totalBeat = this.props.beats.find(beat => beat.id === 'total');
+        const beats = this.props.beats.filter(beat => beat.id !== 'total')
+            .map((beat, i) => <BeatPanel beat={ beat } key={i} /> );
+
         return (
             <section>
                 <DocumentMeta {...metaData} />
@@ -35,19 +40,18 @@ class HomeComponent extends Component {
                 <LoopController />
 
                 <h2>Main Beats</h2>
-                <BeatsController id="total" />
+
+                <BeatsController
+                    beat={ totalBeat }
+                    actions={{ updateBeats: this.props.actions.updateBeats }}
+                />
 
                 <SoundController
                     { ...this.props }
                 />
-                
-                <AllowedLengthsController
-                    actions={{ updateAllowedLengths: this.props.actions.updateAllowedLengths }}
-                    allowedLengths={this.props.allowedLengths}
-                />
 
-                <h2>Groove Beats</h2>
-                <BeatsController id="groove" />
+                { beats }
+
                 <InstrumentList
                     actions={{ updateInstrumentSound: this.props.actions.updateInstrumentSound }}
                     instruments={this.props.instruments}
@@ -71,7 +75,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     const actions = {
         ...configActions,
-        ...instrumentsActions
+        ...instrumentsActions,
+        updateBeats
     }
 
     return {

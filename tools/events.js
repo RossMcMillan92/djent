@@ -17,7 +17,7 @@ const onFinish = (filename, outputPath, startTime) => {
 }
 
 const onError = (err, src) =>{
-    cleanup(src);
+    if(src) cleanup(src);
     console.log(colors.red(`ERROR: \n ${err}`));
 };
 

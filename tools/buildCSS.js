@@ -1,30 +1,30 @@
 'use strict';
 
-const postcss    = require('postcss');
-const fs         = require('fs');
-const events    = require('./events');
+const sass     = require('node-sass');
+const fs       = require('fs');
+const events   = require('./events');
+const atImport = require('postcss-import')
 
 const buildCSS = (filename, inputCSSPath, outputCSSPath) => {
     const startTime = events.onStart(filename);
 
-    const rr = fs.createReadStream(inputCSSPath);
-    rr.on('readable', () => {
-        const css = rr.read();
-        if(!css) return;
-        startBuild(css.toString());
-    });
+    sass.render({
+        file        : inputCSSPath,
+        outFile     : outputCSSPath,
+        outputStyle : 'nested',
+    }, (error, result) => {
+            if(!error){
+                // No errors during the compilation, write this result on the disk
+                return fs.writeFile(outputCSSPath, result.css, function(err){
+                    if(!err){
+                        return events.onFinish(filename, outputCSSPath, startTime);
+                    }
+                });
+            }
 
-    const startBuild = (cssString) => {
-        const src = postcss([ require('postcss-cssnext') ])
-            .process(cssString, { from: inputCSSPath, to: outputCSSPath })
-            .then(function (result) {
-                fs.writeFileSync(outputCSSPath, result.css);
-                if ( result.map ) fs.writeFileSync('app.css.map', result.map);
-                events.onFinish(filename, outputCSSPath, startTime);
-            })
-            .catch('error', err => events.onError(err, src))
-
-    }
+            return events.onError(`File: ${error.file}:${error.line} \n ${error.message}`);
+        }
+    );
 }
 
 module.exports = buildCSS;

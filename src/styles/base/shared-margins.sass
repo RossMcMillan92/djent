@@ -1,0 +1,36 @@
+/**
+ * Where `margin-bottom` is concerned,  this value will be the same as the
+ * base line-height. This allows us to keep a consistent vertical rhythm.
+ * As per: csswizardry.com/2012/06/single-direction-margin-declarations
+ */
+/**
+ * Base elements
+ */
+
+blockquote, p, address,
+ul, ol, dd,
+table,
+fieldset, figure,
+pre,
+hr,
+	margin-top: 0
+    margin-bottom: $base-spacing-unit
+
+h1, h2, h3, h4, h5, h6, hgroup
+	margin-top: 0
+    margin-bottom: $base-spacing-unit / 2
+
+/**
+ * `hr` elements only take up a few pixels,  so we need to give them special
+ * treatment regarding vertical rhythm.
+ */
+hr
+    margin-bottom:  $base-spacing-unit - 2px
+
+/**
+ * Where `margin-left` is concerned we want to try and indent certain elements
+ * by a consistent amount. Define that amount once,  here.
+ */
+ul, ol, dd
+    margin-left: $base-spacing-unit
+    margin-bottom: 3 * $base-spacing-unit

@@ -14,7 +14,7 @@ watch(jsSource, (filename) => buildJS(filename, inputJSPath, outputJSPath))
 // Build CSS
 const cssSource     = './src/styles';
 const cssBuild      = './dist';
-const inputCSSPath  = `${cssSource}/app.css`;
+const inputCSSPath  = `${cssSource}/app.sass`;
 const outputCSSPath = `${cssBuild}/app.css`;
 buildCSS(inputCSSPath, inputCSSPath, outputCSSPath);
 watch(cssSource, (filename) => buildCSS(filename, inputCSSPath, outputCSSPath))

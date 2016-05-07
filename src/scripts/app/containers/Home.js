@@ -31,31 +31,37 @@ class HomeComponent extends Component {
     render() {
         const totalBeat = this.props.beats.find(beat => beat.id === 'total');
         const beats = this.props.beats.filter(beat => beat.id !== 'total')
-            .map((beat, i) => <BeatPanel beat={ beat } key={i} /> );
+            .map((beat, i) => (
+                <div className="group-spacing-x group-spacing-y" key={i}>
+                    <BeatPanel beat={ beat } />
+                </div>
+            ) );
 
         return (
             <section>
-                <DocumentMeta {...metaData} />
-                <BPMController />
-                <LoopController />
+                <div className="group-capped-x group-centered">
+                    <DocumentMeta {...metaData} />
+                    <BPMController />
+                    <LoopController />
 
-                <h2>Main Beats</h2>
+                    <h2>Main Beats</h2>
 
-                <BeatsController
-                    beat={ totalBeat }
-                    actions={{ updateBeats: this.props.actions.updateBeats }}
-                />
+                    <BeatsController
+                        beat={ totalBeat }
+                        actions={{ updateBeats: this.props.actions.updateBeats }}
+                    />
 
-                <SoundController
-                    { ...this.props }
-                />
+                    <SoundController
+                        { ...this.props }
+                    />
 
-                { beats }
+                    { beats }
 
-                <InstrumentList
-                    actions={{ updateInstrumentSound: this.props.actions.updateInstrumentSound }}
-                    instruments={this.props.instruments}
-                />
+                    <InstrumentList
+                        actions={{ updateInstrumentSound: this.props.actions.updateInstrumentSound }}
+                        instruments={this.props.instruments}
+                    />
+                </div>
             </section>
         );
     }

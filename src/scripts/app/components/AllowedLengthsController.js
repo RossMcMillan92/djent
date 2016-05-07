@@ -32,11 +32,11 @@ class AllowedLengthsController extends Component {
                 const percentage = Math.round(length.amount / totalAmount * 100);
                 return (
                     <div key={i}>
-                        <span>{length.name}: </span>
-                        <input type="number" id={length.id} defaultValue={length.amount} onChange={this.onLengthAmountChange} />
+                        <label htmlFor={`${length.id}`}>{length.name}: </label>
+                        <input type="number" id={`${length.id}`} defaultValue={length.amount} onChange={this.onLengthAmountChange} />
                         <span> - {percentage}% </span>
-                        <label htmlFor={length.id}>Triplet:</label>
-                        <input id={length.id} type="checkbox" defaultChecked={length.isTriplet} onChange={this.onIsTripletChange} />
+                        <label htmlFor={`${length.id}-triplet`}>Triplet:</label>
+                        <input id={`${length.id}-triplet`} type="checkbox" defaultChecked={length.isTriplet} onChange={this.onIsTripletChange} />
                     </div>
                 );
             });

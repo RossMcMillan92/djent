@@ -51,7 +51,7 @@ const instrumentSequences = {
         predefinedSequences.steadyQuarters.sequence,
     ],
     crash: [
-        predefinedSequences.steadyWholes.sequence,
+        // predefinedSequences.steadyWholes.sequence,
         predefinedSequences.steadyHalfs.sequence,
         predefinedSequences.steadyQuarters.sequence,
     ],

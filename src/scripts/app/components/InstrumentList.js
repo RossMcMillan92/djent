@@ -17,14 +17,14 @@ class InstrumentList extends Component {
             .map((instrument, index) => {
                 const sounds = instrument.sounds.map((sound, i) => {
                     return (
-                        <li id={sound.id} data-parent-id={instrument.id} onClick={this.onSoundToggle} className={sound.enabled ? '' : 'strikeout'} key={i} >{sound.id}</li>
+                        <li id={sound.id} data-parent-id={instrument.id} onClick={this.onSoundToggle} className={`u-curp ${sound.enabled ? '' : 'text-strikeout'}`} key={i} >{sound.description || sound.id}</li>
                     );
                 } );
 
                 return (
-                    <div key={index}>
-                        <h3>{instrument.id}</h3>
-                        <ul>
+                    <div className="u-mb2" key={index}>
+                        <h3 className="title-secondary">{instrument.id}</h3>
+                        <ul className="cleanlist u-ml1">
                             {sounds}
                         </ul>
                     </div>

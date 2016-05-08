@@ -14,6 +14,8 @@ import {
     generateRiff,
 } from '../utils/riffs';
 
+import SVG from './SVG';
+
 const getSequences = (grooveTotalBeats, allowedLengths, hitChance) => {
     const mainBeat      = generateSequence({ totalBeats: grooveTotalBeats, allowedLengths, hitChance });
     const crashSequence = getSequenceForInstrument('crash');
@@ -93,11 +95,21 @@ class SoundController extends Component {
 
     render () {
         return (
-            <div>
-                <button onClick={this.playEvent}>Start</button>
-                <button onClick={this.stopEvent}>Stop</button>
-                <button onClick={() => this.generate(true)}>Regenerate</button>
-            </div>
+            <ul className="list-hor list-hor--tight">
+                <li className="list-hor__item">
+                    <button className="button-primary" onClick={this.playEvent}>
+                        <SVG icon="play" className="button-primary__svg-icon" />
+                    </button>
+                </li>
+                <li className="list-hor__item">
+                    <button className="button-primary" onClick={this.stopEvent}>
+                        <SVG icon="stop" className="button-primary__svg-icon" />
+                    </button>
+                </li>
+                <li className="list-hor__item">
+                    <button className="button-primary" onClick={() => this.generate(true)}>Regenerate</button>
+                </li>
+            </ul>
         );
     }
 }

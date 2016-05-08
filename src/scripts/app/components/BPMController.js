@@ -10,6 +10,7 @@ class BPMController extends Component {
 
     render = () => {
         const props = {
+            id: 'bpm',
             label: 'BPM',
             type: 'number',
             defaultValue: this.props.bpm,

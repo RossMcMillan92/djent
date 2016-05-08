@@ -1,17 +1,22 @@
 import React, { Component } from 'react';
 
-const InputBox = ({ defaultValue, defaultChecked, onChange, label, id, type }) => {
-    let inputProps   = {
-        id             : id,
-        type           : type ? type : 'text',
-        defaultValue   : defaultValue ? defaultValue : '',
-        defaultChecked : defaultChecked ? defaultChecked : '',
-        onChange       : onChange ? onChange : '',
+const InputBox = (props) => {
+    const inputProps   = {
+        id                 : id,
+        type               : 'text',
+        defaultValue       : '',
+        defaultChecked     : '',
+        onChange           : '',
+        className          : 'input-base',
+        containerClassName : 'input-container',
+        labelClassName     : 'input-label-base',
+        ...props
     };
+    const { containerClassName, labelClassName, label, id } = inputProps;
 
     return (
-        <div>
-            <label htmlFor={ id }>{ label }:</label>
+        <div className={containerClassName}>
+            <label className={ labelClassName } htmlFor={ id }>{ label }:</label>
             <input { ...inputProps } />
         </div>
     )

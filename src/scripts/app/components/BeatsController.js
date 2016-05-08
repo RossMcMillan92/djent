@@ -14,6 +14,7 @@ class BeatsController extends Component {
                 type: 'number',
                 id: type,
                 label: type,
+                containerClassName: 'u-dib',
                 defaultValue : this.props.beat[type],
                 onChange: (event) => this.onChange(event, type)
             }
@@ -22,7 +23,7 @@ class BeatsController extends Component {
         return (
             <div>
                 <InputBox { ...getProps('bars') } />
-                 x
+                <span className="group-spacing-x-small">&times;</span>
                 <InputBox { ...getProps('beats') } />
             </div>
         );

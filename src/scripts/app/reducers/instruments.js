@@ -5,32 +5,37 @@ const initialState = [
             {
                 id: 'guitar-palm-zero-1',
                 path: 'assets/audio/guitar-palm-zero-1.wav',
-                enabled: true,
+                enabled: false,
             },
             {
                 id: 'guitar-palm-zero-2',
                 path: 'assets/audio/guitar-palm-zero-2.wav',
-                enabled: true,
+                enabled: false,
             },
             {
                 id: 'guitar-open-zero-1',
                 path: 'assets/audio/guitar-open-zero-1.wav',
-                enabled: true,
+                enabled: false,
             },
             {
                 id: 'guitar-open-zero-2',
                 path: 'assets/audio/guitar-open-zero-2.wav',
+                enabled: false,
+            },
+            {
+                id: 'guitar-palm-first-1',
+                path: 'assets/audio/guitar-palm-first-1.wav',
                 enabled: true,
             },
             {
                 id: 'guitar-open-first-1',
                 path: 'assets/audio/guitar-open-first-1.wav',
-                enabled: true,
+                enabled: false,
             },
             {
                 id: 'guitar-open-first-2',
                 path: 'assets/audio/guitar-open-first-2.wav',
-                enabled: true,
+                enabled: false,
             },
             {
                 id: 'guitar-open-eighth',
@@ -38,8 +43,23 @@ const initialState = [
                 enabled: false,
             },
             {
+                id: 'guitar-open-sixth-second-1',
+                path: 'assets/audio/guitar-open-sixth-second-1.wav',
+                enabled: false,
+            },
+            {
+                id: 'guitar-root-dissonance',
+                path: 'assets/audio/guitar-root-dissonance.wav',
+                enabled: false,
+            },
+            {
                 id: 'guitar-dissonance-high',
                 path: 'assets/audio/guitar-dissonance-high.wav',
+                enabled: false,
+            },
+            {
+                id: 'guitar-dissonance-high-2',
+                path: 'assets/audio/guitar-dissonance-high-2.wav',
                 enabled: false,
             }
         ],
@@ -99,9 +119,14 @@ const initialState = [
         id: 'drone',
         sounds: [
             {
-                id: 'drone',
+                id: 'drone-high',
                 path: 'assets/audio/drone-high.wav',
-                enabled: true,
+                enabled: false,
+            },
+            {
+                id: 'drone-medium',
+                path: 'assets/audio/drone-medium.wav',
+                enabled: false,
             }
         ],
     },

@@ -14,7 +14,8 @@ class HitChanceController extends Component {
             id: 'hitChance',
             type: 'number',
             defaultValue: this.props.hitChance,
-            onChange: this.onChange
+            onChange: this.onChange,
+            step: ".1"
         }
         return (
             <InputBox { ...props } />

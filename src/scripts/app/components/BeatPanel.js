@@ -12,25 +12,25 @@ class BeatPanel extends Component {
 
     render = () => {
         return (
-            <section className="beat-panel">
+            <section className="panel">
                 <div className="group-padding-x group-padding-y">
-                    <h2 className="title-secondary">{ this.props.beat.id }</h2>
+                    <h2 className="title-primary">Randomised beat: { this.props.beat.id }</h2>
 
-                    <div className="beat-panel__section">
+                    <div className="group-spacing-y">
                         <AllowedLengthsController
                             actions={{ updateAllowedLengths: this.props.actions.updateAllowedLengths }}
                             allowedLengths={this.props.allowedLengths}
                         />
                     </div>
 
-                    <div className="beat-panel__section">
+                    <div className="group-spacing-y">
                         <BeatsController
                             beat={ this.props.beat }
                             actions={{ updateBeats: this.props.actions.updateBeats }}
                         />
                     </div>
 
-                    <div className="beat-panel__section">
+                    <div className="">
                         <HitChanceController
                             beatID={ this.props.beat.id }
                             hitChance={ this.props.hitChance }

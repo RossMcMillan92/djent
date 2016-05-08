@@ -1,26 +1,24 @@
 const BufferLoader = (context) => {
     let newInstrumentPack = [];
 
-    const loadBuffer = function(instrument, index) {
+    const loadBuffer = (instrument, index) => {
         const bufferAmount = instrument.sounds.length;
         let bufferCount = 0;
         instrument.buffers = [];
 
         const loadingSound = new Promise((res, rej) => {
-
             instrument.sounds.map((sound, i) => {
-                if (!sound.enabled) return res();
                 const url = sound.path;
                 // Load buffer asynchronously
                 const request = new XMLHttpRequest();
                 request.open("GET", url, true);
                 request.responseType = "arraybuffer";
 
-                request.onload = function() {
+                request.onload = () => {
                     // Asynchronously decode the audio file data in request.response
                     context.decodeAudioData(
                         request.response,
-                        function(buffer) {
+                        (buffer) => {
                             if (!buffer) {
                                 alert('error decoding file data: ' + url);
                                 return;
@@ -32,14 +30,14 @@ const BufferLoader = (context) => {
                                 res();
                             }
                         },
-                        function(error) {
+                        (error) => {
                             rej(error);
-                            console.error('decodeAudioData error', error);
                         }
                     );
                 }
 
-                request.onerror = function() {
+                request.onerror = (error) => {
+                    rej(error);
                     alert('BufferLoader: XHR error');
                 }
 
@@ -52,14 +50,14 @@ const BufferLoader = (context) => {
 
     }
 
-    const load = function(instrumentPack) {
-        const loadingSounds = instrumentPack.map(loadBuffer)
+    const load = (instrumentPack) => {
+        const loadingSounds = instrumentPack
+            .filter(instrument => instrument.sounds.filter(sound => sound.enabled).length)
+            .map(loadBuffer)
 
-        return new Promise((res, rej) => {
-            Promise.all(loadingSounds)
-                .then(() => res(newInstrumentPack))
-                .catch(rej)
-        })
+        return Promise.all(loadingSounds)
+                .then(() => newInstrumentPack)
+                .catch(e => console.log(e))
     }
 
     return {

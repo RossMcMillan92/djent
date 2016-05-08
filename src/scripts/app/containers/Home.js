@@ -41,26 +41,49 @@ class HomeComponent extends Component {
             <section>
                 <div className="group-capped-x group-centered">
                     <DocumentMeta {...metaData} />
-                    <BPMController />
-                    <LoopController />
 
-                    <h2>Main Beats</h2>
+                    <div className="group-spacing-y group-spacing-x">
+                        <div className="panel">
+                            <div className="group-padding-x group-padding-y">
+                                <h2 className="title-primary">Main Beats</h2>
 
-                    <BeatsController
-                        beat={ totalBeat }
-                        actions={{ updateBeats: this.props.actions.updateBeats }}
-                    />
+                                <div className="group-spacing-y">
+                                    <BPMController />
+                                </div>
 
-                    <SoundController
-                        { ...this.props }
-                    />
+                                <div className="group-spacing-y">
+                                    <BeatsController
+                                        beat={ totalBeat }
+                                        actions={{ updateBeats: this.props.actions.updateBeats }}
+                                    />
+                                </div>
+
+                                <div className="group-spacing-y">
+                                    <LoopController />
+                                </div>
+
+                                <SoundController
+                                    { ...this.props }
+                                />
+                            </div>
+                        </div>
+                    </div>
 
                     { beats }
 
-                    <InstrumentList
-                        actions={{ updateInstrumentSound: this.props.actions.updateInstrumentSound }}
-                        instruments={this.props.instruments}
-                    />
+                    <div className="group-spacing-y group-spacing-x">
+                        <div className="panel">
+                            <div className="group-padding-x group-padding-y">
+                                <h2 className="title-primary">Sounds</h2>
+
+                                <InstrumentList
+                                    actions={{ updateInstrumentSound: this.props.actions.updateInstrumentSound }}
+                                    instruments={this.props.instruments}
+                                />
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </section>
         );

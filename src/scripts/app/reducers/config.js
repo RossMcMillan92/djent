@@ -1,41 +1,41 @@
 const allowedLengths = [
         {
             id: "0.25",
-            name: 'One whole',
+            name: 'whole',
             amount: 0,
             isTriplet: false
         },
         {
             id: "0.5",
-            name: 'One Half',
+            name: 'half',
             amount: 1,
-            isTriplet: false
+            isTriplet: true
         },
         {
             id: "1",
-            name: 'One Quarter',
+            name: 'quarter',
             amount:1,
-            isTriplet: false
+            isTriplet: true
         },
         {
             id: "2",
-            name: 'One Eighth',
-            amount: 0,
-            isTriplet: false
+            name: 'eighth',
+            amount: 1,
+            isTriplet: true
         },
         {
             id: "4",
-            name: 'One Sixteenth',
-            amount: 1,
+            name: 'sixteenth',
+            amount: 0,
             isTriplet: false
         },
 ];
 
 const initialState = {
     allowedLengths,
-    bpm       : 90,
+    bpm       : 94,
     hitChance : 1,
-    isLooping : false,
+    isLooping : true,
 };
 
 export function config(state = initialState, action) {

@@ -36,11 +36,14 @@ const randFromTo = (from,to) => Math.floor(Math.random()*(to-from+1)+from);
 
 const randomFromArray = (arr) => arr[randFromTo(0, arr.length-1)];
 
+const capitalize = (string) => string[0].toUpperCase() + string.substring(1);
+
 export {
 	arraySelector,
-	repeat,
-	repeatArray,
+	capitalize,
 	compose,
+	repeat,
+	randFromTo,
 	randomFromArray,
-	randFromTo
+	repeatArray,
 }

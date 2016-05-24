@@ -23,7 +23,7 @@ class InstrumentList extends Component {
 
                 return (
                     <div className="u-mb2" key={index}>
-                        <h3 className="title-secondary">{instrument.id}</h3>
+                        <h3 className="title-secondary">{instrument.description || instrument.id}</h3>
                         <ul className="cleanlist u-ml1">
                             {sounds}
                         </ul>

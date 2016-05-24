@@ -6,8 +6,8 @@ import { App } from './containers/App';
 import { Home } from './containers/Home';
 
 export default (
-  <Route path="/" component={App}>
-    <IndexRoute component={Home} />
-    <Route status={404} path="*" component={Home} />
-  </Route>
+    <Route path="/" component={App}>
+        <IndexRoute component={Home} />
+        <Route status={404} path="*" component={Home} />
+    </Route>
 );

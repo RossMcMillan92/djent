@@ -1,64 +1,77 @@
 const initialState = [
     {
         id: 'guitar',
+        description: 'Guitar/Bass (Drop G#)',
         sounds: [
             {
                 id: 'guitar-palm-zero-1',
+                description: 'Sixth string, fret zero [Palm muted] - 1',
                 path: 'assets/audio/guitar-palm-zero-1.wav',
-                enabled: false,
-            },
-            {
-                id: 'guitar-palm-zero-2',
-                path: 'assets/audio/guitar-palm-zero-2.wav',
-                enabled: false,
-            },
-            {
-                id: 'guitar-open-zero-1',
-                path: 'assets/audio/guitar-open-zero-1.wav',
-                enabled: false,
-            },
-            {
-                id: 'guitar-open-zero-2',
-                path: 'assets/audio/guitar-open-zero-2.wav',
-                enabled: false,
-            },
-            {
-                id: 'guitar-palm-first-1',
-                path: 'assets/audio/guitar-palm-first-1.wav',
                 enabled: true,
             },
             {
-                id: 'guitar-open-first-1',
-                path: 'assets/audio/guitar-open-first-1.wav',
+                id: 'guitar-palm-zero-2',
+                description: 'Sixth string, fret zero [Palm muted] - 2',
+                path: 'assets/audio/guitar-palm-zero-2.wav',
+                enabled: true,
+            },
+            {
+                id: 'guitar-open-zero-1',
+                description: 'Sixth string, fret zero [Open note] - 1',
+                path: 'assets/audio/guitar-open-zero-1.wav',
+                enabled: true,
+            },
+            {
+                id: 'guitar-open-zero-2',
+                description: 'Sixth string, fret zero [Open note] - 2',
+                path: 'assets/audio/guitar-open-zero-2.wav',
+                enabled: true,
+            },
+            {
+                id: 'guitar-palm-first-1',
+                description: 'Sixth string, fret one [Palm muted]',
+                path: 'assets/audio/guitar-palm-first-1.wav',
                 enabled: false,
             },
             {
+                id: 'guitar-open-first-1',
+                description: 'Sixth string, fret one [Open note] - 1',
+                path: 'assets/audio/guitar-open-first-1.wav',
+                enabled: true,
+            },
+            {
                 id: 'guitar-open-first-2',
+                description: 'Sixth string, fret one [Open note] \t - 2',
                 path: 'assets/audio/guitar-open-first-2.wav',
                 enabled: false,
             },
             {
                 id: 'guitar-open-eighth',
+                description: 'Sixth string, fret eigh [Open]',
                 path: 'assets/audio/guitar-open-eighth.wav',
                 enabled: false,
             },
             {
                 id: 'guitar-open-sixth-second-1',
+                description: 'Fifth string, fret six [Open note]',
                 path: 'assets/audio/guitar-open-sixth-second-1.wav',
-                enabled: false,
+                enabled: true,
             },
             {
                 id: 'guitar-root-dissonance',
+                description: 'Third string, fret seven [Dissonant bend]',
                 path: 'assets/audio/guitar-root-dissonance.wav',
-                enabled: false,
+                enabled: true,
             },
             {
                 id: 'guitar-dissonance-high',
+                description: 'First string, fret ten [Dissonant chord]',
                 path: 'assets/audio/guitar-dissonance-high.wav',
                 enabled: false,
             },
             {
                 id: 'guitar-dissonance-high-2',
+                description: 'First string, fret eleven [Dissonant chord]',
                 path: 'assets/audio/guitar-dissonance-high-2.wav',
                 enabled: false,
             }
@@ -90,7 +103,7 @@ const initialState = [
             {
                 id: 'hihat',
                 path: 'assets/audio/mastered/hihat.wav',
-                enabled: true,
+                enabled: false,
             }
         ],
     },

@@ -14,6 +14,10 @@ import {
     generateRiff,
 } from '../utils/riffs';
 
+import {
+    capitalize,
+} from '../utils/tools';
+
 import SVG from './SVG';
 
 const getSequences = (grooveTotalBeats, allowedLengths, hitChance) => {
@@ -63,6 +67,10 @@ const playBuffer = (buffer) => {
 class SoundController extends Component {
     currentBuffer;
     currentSrc;
+    state = {
+        isPlaying: false,
+        isLoading: true,
+    }
 
     componentWillMount = () => {
         this.generate();
@@ -75,39 +83,57 @@ class SoundController extends Component {
     }
 
     generate = (shouldPlay) => {
+        this.setState({ isLoading: true });
         stop(this.currentSrc);
         generateNewBuffer(this.props)
             .then((buffer) => {
                 this.currentBuffer = buffer;
+                this.setState({ isLoading: false });
                 if (shouldPlay) this.playEvent();
             });
+    }
+
+    togglePlay = () => {
+        if (this.state.isPlaying) {
+            this.stopEvent();
+        } else {
+            this.playEvent();
+        }
     }
 
     playEvent = () => {
         stop(this.currentSrc);
         this.currentSrc = playBuffer(this.currentBuffer);
         loop(this.currentSrc, this.props.isLooping);
+        this.setState({ isPlaying: true });
     }
 
     stopEvent = () => {
         stop(this.currentSrc)
+        this.setState({ isPlaying: false });
+    }
+
+    generateEvent = () => {
+        if (!this.state.isLoading) this.generate(true);
     }
 
     render () {
+        const eventName = this.state.isPlaying ? 'stop' : 'play';
+
         return (
             <ul className="list-hor list-hor--tight">
                 <li className="list-hor__item">
-                    <button className="button-primary" onClick={this.playEvent}>
-                        <SVG icon="play" className="button-primary__svg-icon" />
+                    <button className="button-primary" title={ capitalize(eventName) } onClick={this.togglePlay}>
+                        {
+                            this.state.isLoading
+                            ? <span className="spinner" />
+                            : <SVG icon={ eventName } className="button-primary__svg-icon" />
+                        }
                     </button>
                 </li>
+
                 <li className="list-hor__item">
-                    <button className="button-primary" onClick={this.stopEvent}>
-                        <SVG icon="stop" className="button-primary__svg-icon" />
-                    </button>
-                </li>
-                <li className="list-hor__item">
-                    <button className="button-primary" onClick={() => this.generate(true)}>Regenerate</button>
+                    <button className="button-primary" onClick={() => this.generateEvent()}>Regenerate</button>
                 </li>
             </ul>
         );

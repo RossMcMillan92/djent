@@ -1,0 +1,24 @@
+$spinner__size: 21px
+$spinner__border-width: 3px
+
+.spinner
+    display: block
+    height: $spinner__size - ($spinner__border-width * 2)
+    width: $spinner__size - ($spinner__border-width * 2)
+    border-radius: $spinner__size
+    border: solid $spinner__border-width $palette-base-ui
+    border-color: $palette-base-ui $palette-base-ui $palette-base-ui $palette-alpha
+    animation: spin 1s infinite linear
+
+    &:after
+        position: absolute
+        top: 50%
+        left: 50%
+        margin-top: -($spinner__size / 2)
+        margin-left: -($spinner__size / 2)
+
+@keyframes spin
+    from
+        transform: rotate(0deg)
+    to
+        transform: rotate(360deg)

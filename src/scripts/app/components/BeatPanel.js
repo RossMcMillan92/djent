@@ -14,7 +14,7 @@ class BeatPanel extends Component {
         return (
             <section className="panel">
                 <div className="group-padding-x group-padding-y">
-                    <h2 className="title-primary">Randomised beat: { this.props.beat.id }</h2>
+                    <h2 className="title-primary">Randomised beat settings</h2>
 
                     <div className="group-spacing-y">
                         <AllowedLengthsController

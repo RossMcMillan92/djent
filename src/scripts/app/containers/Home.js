@@ -16,13 +16,13 @@ import * as instrumentsActions from '../actions/instruments';
 import { updateBeats } from '../actions/beats';
 
 const metaData = {
-  title: 'DjenerationStation',
-  description: 'Start you project easy and fast with modern tools',
-  canonical: 'http://example.com/path/to/page',
+  title: 'Djeneration Station',
+  description: 'A random metal riff generator. Thall.',
+  canonical: 'http://djenerationstation.com',
   meta: {
     charset: 'utf-8',
     name: {
-      keywords: 'react,meta,document,html,tags',
+      keywords: 'djeneration, station, react, redux, metal, riff, generator, thall, djent',
     },
   },
 };
@@ -45,7 +45,7 @@ class HomeComponent extends Component {
                     <div className="group-spacing-y group-spacing-x">
                         <div className="panel">
                             <div className="group-padding-x group-padding-y">
-                                <h2 className="title-primary">Main Beats</h2>
+                                <h2 className="title-primary">Main Settings</h2>
 
                                 <div className="group-spacing-y">
                                     <BPMController />

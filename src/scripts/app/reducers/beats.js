@@ -6,8 +6,8 @@ const initialState =  [
     },
     {
         id    : 'groove',
-        bars  : 1,
-        beats : 7.5,
+        bars  : 4,
+        beats : 4,
     },
 ];
 

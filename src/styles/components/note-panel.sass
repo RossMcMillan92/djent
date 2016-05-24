@@ -1,0 +1,76 @@
+.note-panel
+    background: #666
+    padding: $base-spacing-unit
+    border-top: solid 5px $palette-alpha
+
+.note-panel--disabled
+    background: #999
+    border-color: #666
+
+$note-panel__svg-size: 40px
+.note-panel__svg
+    position: relative
+    display: block
+    width: $note-panel__svg-size
+    height: $note-panel__svg-size
+    left: 50%
+    transform: translateX(-50%)
+    margin-bottom: $base-spacing-unit / 2
+    color: #fff
+
+.note-panel__amount-container
+    display: block
+    text-align: center
+    margin-bottom: $base-spacing-unit / 2
+
+.note-panel__amount
+    display: inline-block
+    font-size: rem(20px)
+    color: #fff
+    vertical-align: middle
+    min-width: 52px
+    text-align: right
+
+.note-panel__checkbox-container
+    position: relative
+    text-align: center
+
+.note-panel__label
+    font-size: rem(12px)
+    text-transform: uppercase
+    margin-right: $base-spacing-unit / 4
+    vertical-align: middle
+    color: #fff
+
+.note-panel__checkbox
+    vertical-align: middle
+
+.note-panel__btn-container
+    display: inline-block
+    vertical-align: middle
+
+.note-panel__btn
+    display: block
+    border: none
+    padding: $base-spacing-unit / 4
+    margin: 0
+    appearance: none
+    background: none
+    cursor: pointer
+
+    &:after
+        content: ""
+        width: 0
+        height: 0
+        border-style: solid
+        display: block
+
+.note-panel__btn--up
+    &:after
+        border-width: 0 5px 8.7px 5px
+        border-color: transparent transparent #fff transparent
+
+.note-panel__btn--down
+    &:after
+        border-width: 8.7px 5px 0 5px;
+        border-color: #fff transparent transparent transparent;

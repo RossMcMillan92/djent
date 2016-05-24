@@ -1,9 +1,14 @@
-$button-primary__svg-icon-size: 20px
+$button-primary__total-line-height: 21px
+$button-primary__line-height: 1.4
+$button-primary__font-size: round($button-primary__total-line-height / $button-primary__line-height)
+$button-primary__svg-icon-size: $button-primary__total-line-height
 
 .button-primary
     appearance: none
     padding: $base-spacing-unit
     text-transform: uppercase
+    line-height: $button-primary__line-height
+    font-size: $button-primary__font-size
     border: solid 1px $palette-base-ui
 
 .button-primary__svg-icon

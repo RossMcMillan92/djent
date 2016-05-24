@@ -134,7 +134,7 @@ const initialState = [
             {
                 id: 'drone-high',
                 path: 'assets/audio/drone-high.wav',
-                enabled: false,
+                enabled: true,
             },
             {
                 id: 'drone-medium',

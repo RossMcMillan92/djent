@@ -33,7 +33,7 @@ const generateInstrumentTimeMap = (instrument) => {
 }
 
 const generateInstrumentHitTypes = (instrument) => {
-    const activeSounds = instrument.sounds.reduce((newArr, sound, i) => sound.enabled ? [ ...newArr, { ...sound, index: i } ] : newArr, []);
+    const activeSounds = instrument.sounds.reduce((newArr, sound, i) => sound.enabled ? [ ...newArr, { ...sound, index: newArr.length } ] : newArr, []);
     let hitTypes = [];
 
     if (activeSounds.length) {

@@ -35,6 +35,8 @@ const initialState = {
     allowedLengths,
     bpm       : 94,
     hitChance : 1,
+    fadeIn    : false,
+    fadeOut   : true,
     isLooping : true,
 };
 
@@ -61,6 +63,16 @@ export function config(state = initialState, action) {
             return {
                 ...state,
                 hitChance: payload.hitChance
+            }
+        case 'UPDATE_FADEIN':
+            return {
+                ...state,
+                fadeIn: payload.fadeIn
+            }
+        case 'UPDATE_FADEOUT':
+            return {
+                ...state,
+                fadeOut: payload.fadeOut
             }
 
         default:

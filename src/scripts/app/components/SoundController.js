@@ -63,10 +63,30 @@ const playBuffer = (buffer) => {
 
     return newSrc;
 }
+const fadeIn = (gainNode, duration) => {
+    if (!duration) return gainNode
+    const startVal = -1;
+    const endVal = 0;
+    gainNode.gain.value = startVal;
+
+    let startTime = 0;
+    (function loop (t) {
+        if (!startTime) startTime = t;
+        const time = t - startTime;
+        const speed = duration === 0 ? 0 : time / duration;
+
+        gainNode.gain.value = startVal + speed
+        if (gainNode.gain.value < endVal) requestAnimationFrame(loop);
+        else gainNode.gain.value = endVal;
+    })(0.00);
+
+    return gainNode;
+}
 
 class SoundController extends Component {
     currentBuffer;
     currentSrc;
+    currentGainNode;
     state = {
         isPlaying: false,
         isLoading: true,
@@ -102,8 +122,17 @@ class SoundController extends Component {
     }
 
     playEvent = () => {
+        this.currentGainNode = context.createGain();
+
         stop(this.currentSrc);
         this.currentSrc = playBuffer(this.currentBuffer);
+
+        // Set up volume and fades
+        this.currentSrc.connect(this.currentGainNode);
+        this.currentGainNode.gain.value = 0;
+        this.currentGainNode.connect(context.destination);
+        this.currentGainNode = fadeIn(this.currentGainNode, (this.props.fadeIn ? 5000 : 0));
+
         loop(this.currentSrc, this.props.isLooping);
         this.setState({ isPlaying: true });
     }

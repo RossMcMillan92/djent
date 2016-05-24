@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom';
 
 import BPMController from '../containers/BPMController';
 import LoopController from '../containers/LoopController';
+import FadeController from '../components/FadeController';
 import BeatsController from '../components/BeatsController';
 import { SoundController } from '../components/SoundController';
 import { InstrumentList } from '../components/InstrumentList';
@@ -62,6 +63,14 @@ class HomeComponent extends Component {
                                     <LoopController />
                                 </div>
 
+                                <div className="group-spacing-y">
+                                    <FadeController
+                                        fadeIn={this.props.fadeIn}
+                                        fadeOut={this.props.fadeOut}
+                                        actions={{ updateFadeIn: this.props.actions.updateFadeIn }}
+                                    />
+                                </div>
+
                                 <SoundController
                                     { ...this.props }
                                 />
@@ -96,8 +105,10 @@ function mapStateToProps(state) {
     allowedLengths   : state.config.allowedLengths,
     bpm              : state.config.bpm,
     isLooping        : state.config.isLooping,
-    beats            : state.beats,
     hitChance        : state.config.hitChance,
+    fadeIn           : state.config.fadeIn,
+    fadeOut          : state.config.fadeOut,
+    beats            : state.beats,
   }
 }
 

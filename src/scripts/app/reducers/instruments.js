@@ -6,73 +6,73 @@ const initialState = [
             {
                 id: 'guitar-palm-zero-1',
                 description: 'Sixth string, fret zero [Palm muted] - 1',
-                path: 'assets/audio/guitar-palm-zero-1.wav',
+                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar-palm-zero-1.wav',
                 enabled: true,
             },
             {
                 id: 'guitar-palm-zero-2',
                 description: 'Sixth string, fret zero [Palm muted] - 2',
-                path: 'assets/audio/guitar-palm-zero-2.wav',
+                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar-palm-zero-2.wav',
                 enabled: true,
             },
             {
                 id: 'guitar-open-zero-1',
                 description: 'Sixth string, fret zero [Open note] - 1',
-                path: 'assets/audio/guitar-open-zero-1.wav',
+                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar-open-zero-1.wav',
                 enabled: true,
             },
             {
                 id: 'guitar-open-zero-2',
                 description: 'Sixth string, fret zero [Open note] - 2',
-                path: 'assets/audio/guitar-open-zero-2.wav',
+                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar-open-zero-2.wav',
                 enabled: true,
             },
             {
                 id: 'guitar-palm-first-1',
                 description: 'Sixth string, fret one [Palm muted]',
-                path: 'assets/audio/guitar-palm-first-1.wav',
+                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar-palm-first-1.wav',
                 enabled: false,
             },
             {
                 id: 'guitar-open-first-1',
                 description: 'Sixth string, fret one [Open note] - 1',
-                path: 'assets/audio/guitar-open-first-1.wav',
+                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar-open-first-1.wav',
                 enabled: true,
             },
             {
                 id: 'guitar-open-first-2',
                 description: 'Sixth string, fret one [Open note] \t - 2',
-                path: 'assets/audio/guitar-open-first-2.wav',
+                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar-open-first-2.wav',
                 enabled: false,
             },
             {
                 id: 'guitar-open-eighth',
                 description: 'Sixth string, fret eigh [Open]',
-                path: 'assets/audio/guitar-open-eighth.wav',
+                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar-open-eighth.wav',
                 enabled: false,
             },
             {
                 id: 'guitar-open-sixth-second-1',
                 description: 'Fifth string, fret six [Open note]',
-                path: 'assets/audio/guitar-open-sixth-second-1.wav',
+                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar-open-sixth-second-1.wav',
                 enabled: true,
             },
             {
                 id: 'guitar-root-dissonance',
                 description: 'Third string, fret seven [Dissonant bend]',
-                path: 'assets/audio/guitar-root-dissonance.wav',
+                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar-root-dissonance.wav',
                 enabled: true,
             },
             {
                 id: 'guitar-dissonance-high',
                 description: 'First string, fret ten [Dissonant chord]',
-                path: 'assets/audio/guitar-dissonance-high.wav',
+                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar-dissonance-high.wav',
                 enabled: false,
             },
             {
                 id: 'guitar-dissonance-high-2',
                 description: 'First string, fret eleven [Dissonant chord]',
-                path: 'assets/audio/guitar-dissonance-high-2.wav',
+                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar-dissonance-high-2.wav',
                 enabled: false,
             }
         ],
@@ -82,7 +82,7 @@ const initialState = [
         sounds: [
             {
                 id: 'kick',
-                path: 'assets/audio/mastered/kick.wav',
+                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/kick.wav',
                 enabled: true,
             }
         ],
@@ -92,7 +92,7 @@ const initialState = [
         sounds: [
             {
                 id: 'snare',
-                path: 'assets/audio/mastered/snare.wav',
+                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/snare.wav',
                 enabled: true,
             }
         ],
@@ -102,7 +102,7 @@ const initialState = [
         sounds: [
             {
                 id: 'hihat',
-                path: 'assets/audio/mastered/hihat.wav',
+                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/hihat.wav',
                 enabled: false,
             }
         ],
@@ -113,17 +113,17 @@ const initialState = [
         sounds: [
             {
                 id: 'crash-left',
-                path: 'assets/audio/mastered/crash-left.wav',
+                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/crash-left.wav',
                 enabled: true,
             },
             {
                 id: 'crash-right',
-                path: 'assets/audio/mastered/crash-right.wav',
+                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/crash-right.wav',
                 enabled: true,
             },
             {
                 id: 'china-left',
-                path: 'assets/audio/mastered/china-left.wav',
+                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/china-left.wav',
                 enabled: true,
             }
         ],
@@ -133,12 +133,12 @@ const initialState = [
         sounds: [
             {
                 id: 'drone-high',
-                path: 'assets/audio/drone-high.wav',
+                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/drone-high.wav',
                 enabled: true,
             },
             {
                 id: 'drone-medium',
-                path: 'assets/audio/drone-medium.wav',
+                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/drone-medium.wav',
                 enabled: false,
             }
         ],

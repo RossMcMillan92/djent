@@ -19,7 +19,7 @@ const [ node, entryFile, task ] = process.argv;
 // buildJS(inputJSPath, inputJSPath, outputJSPath);
 //
 // // Build CSS
-const cssSource     = './src/styles';
+// const cssSource     = './src/styles';
 // const cssBuild      = './dist';
 // const inputCSSPath  = `${cssSource}/app.sass`;
 // const outputCSSPath = `${cssBuild}/app.css`;
@@ -58,12 +58,12 @@ const startTests = (testSource, filename) => {
     glob(`${testSource}/**/*.js`, null, (er, files) => testFiles(files))
 }
 
-// startTests(testSource)
+startTests(testSource)
 
 // Watch
 // watch(jsSource, (filename) => buildJS(filename, inputJSPath, outputJSPath))
 // watch(cssSource, (filename) => buildCSS(filename, inputCSSPath, outputCSSPath))
-watch(cssSource, (filename) => startTests(null, filename))
+watch(testSource, (filename) => startTests(null, filename))
 
 // Livereload
 const server = livereload.createServer();

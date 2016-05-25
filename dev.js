@@ -4,7 +4,9 @@ const buildJS    = require('./tools/buildJS');
 const buildCSS   = require('./tools/buildCSS');
 
 const register = require("babel-register")({
-    presets: "es2015"
+    presets: ["es2015", "stage-0"],
+    plugins: ["transform-runtime"],
+    babelrc: false
 })
 
 const [ node, entryFile, task ] = process.argv;
@@ -17,7 +19,7 @@ const [ node, entryFile, task ] = process.argv;
 // buildJS(inputJSPath, inputJSPath, outputJSPath);
 //
 // // Build CSS
-// const cssSource     = './src/styles';
+const cssSource     = './src/styles';
 // const cssBuild      = './dist';
 // const inputCSSPath  = `${cssSource}/app.sass`;
 // const outputCSSPath = `${cssBuild}/app.css`;
@@ -26,34 +28,42 @@ const [ node, entryFile, task ] = process.argv;
 if (task === 'build') return;
 
 // Tests
-const testSource     = './src/scripts';
 const Mocha =  require('mocha');
 const fs = require("fs")
 const glob = require("glob")
 const mocha = new Mocha({
     ui: 'bdd',
 });
-var testDir = './src/scripts/app/test/**/*.js'
+var testSource = './src/scripts/app/test'
 
-glob(testDir, null, function (er, files) {
-    console.log('FILES', files)
-    files.forEach((file) => {
-        mocha.addFile(file)
-    })
-    // Run the tests.
-    mocha.run(function(failures){
-      process.on('exit', function () {
-        process.exit(failures);  // exit with non-zero status if there were failures
-      });
-    });
-})
+const startTests = (testSource, filename) => {
+    const testFiles = (files) => {
+        console.log('FILES', files)
+        files.forEach((file) => {
+            mocha.addFile(file)
+        })
+        // Run the tests.
+        mocha.run(function(failures){
+          process.on('exit', function () {
+            process.exit(failures);  // exit with non-zero status if there were failures
+          });
+        });
+    }
 
+    if (filename) {
+        testFiles([filename]);
+        return
+    }
 
-return
+    glob(`${testSource}/**/*.js`, null, (er, files) => testFiles(files))
+}
+
+// startTests(testSource)
 
 // Watch
-watch(jsSource, (filename) => buildJS(filename, inputJSPath, outputJSPath))
-watch(cssSource, (filename) => buildCSS(filename, inputCSSPath, outputCSSPath))
+// watch(jsSource, (filename) => buildJS(filename, inputJSPath, outputJSPath))
+// watch(cssSource, (filename) => buildCSS(filename, inputCSSPath, outputCSSPath))
+watch(cssSource, (filename) => startTests(null, filename))
 
 // Livereload
 const server = livereload.createServer();

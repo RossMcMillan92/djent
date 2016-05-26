@@ -1,13 +1,13 @@
 import { combineReducers } from 'redux';
-import { instruments } from './instruments';
-import { beats } from './beats';
-import { config } from './config';
+
+import config from './config';
+import beats from './beats';
+import instruments from './instruments';
 
 const rootReducer = combineReducers({
-  /* your reducers */
-  beats,
-  config,
-  instruments,
+    config,
+    beats,
+    instruments,
 });
 
 export default rootReducer;

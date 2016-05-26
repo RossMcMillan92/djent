@@ -4,7 +4,9 @@
   "description": "A metal breakdown generator, written in React w/ Redux for scripts and Sass for styles.",
   "author": "Ross McMillan - RossMcMillan92",
   "main": "",
-  "dependencies": {},
+  "dependencies": {
+    "deep-extend": "^0.4.1"
+  },
   "devDependencies": {
     "autoprefixer": "^6.3.6",
     "babel": "^6.3.26",

@@ -20,7 +20,7 @@ const updateBeatByID = ({ beats, id, prop, value }) => {
     return newBeats;
 }
 
-export function beats(state = initialState, action) {
+export default function beats(state = initialState, action) {
     let { type, payload } = action;
 
     switch (type) {

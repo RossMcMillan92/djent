@@ -9,6 +9,7 @@ class BPMController extends Component {
     }
 
     render = () => {
+        console.log('this.props', this.props)
         const props = {
             id: 'bpm',
             label: 'BPM',

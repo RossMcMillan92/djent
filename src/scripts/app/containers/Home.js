@@ -4,13 +4,15 @@ import { connect } from 'react-redux';
 import DocumentMeta from 'react-document-meta';
 import ReactDOM from 'react-dom';
 
+import BeatPanel from '../containers/BeatPanel';
 import BPMController from '../containers/BPMController';
 import LoopController from '../containers/LoopController';
-import FadeController from '../components/FadeController';
+import PresetController from '../containers/PresetController';
+
 import BeatsController from '../components/BeatsController';
-import { SoundController } from '../components/SoundController';
+import FadeController from '../components/FadeController';
 import { InstrumentList } from '../components/InstrumentList';
-import BeatPanel from '../containers/BeatPanel';
+import { SoundController } from '../components/SoundController';
 
 import * as configActions from '../actions/config';
 import * as instrumentsActions from '../actions/instruments';
@@ -33,7 +35,7 @@ class HomeComponent extends Component {
         const totalBeat = this.props.beats.find(beat => beat.id === 'total');
         const beats = this.props.beats.filter(beat => beat.id !== 'total')
             .map((beat, i) => (
-                <div className="group-spacing-x group-spacing-y" key={i}>
+                <div className="group-spacing-y" key={i}>
                     <BeatPanel beat={ beat } />
                 </div>
             ) );
@@ -43,52 +45,68 @@ class HomeComponent extends Component {
                 <div className="group-capped-x group-centered">
                     <DocumentMeta {...metaData} />
 
-                    <div className="group-spacing-y group-spacing-x">
-                        <div className="panel">
-                            <div className="group-padding-x group-padding-y">
-                                <h2 className="title-primary">Main Settings</h2>
+                    <div className="group-spacing-x">
+                        <div className="group-spacing-y">
+                            <div className="panel">
+                                <div className="group-padding-x group-padding-y">
+                                    <h2 className="title-primary">
+                                        Preset
+                                    </h2>
 
-                                <div className="group-spacing-y">
-                                    <BPMController />
+                                    <div className="group-spacing-y">
+                                        <PresetController />
+                                    </div>
                                 </div>
-
-                                <div className="group-spacing-y">
-                                    <BeatsController
-                                        beat={ totalBeat }
-                                        actions={{ updateBeats: this.props.actions.updateBeats }}
-                                    />
-                                </div>
-
-                                <div className="group-spacing-y">
-                                    <LoopController />
-                                </div>
-
-                                <div className="group-spacing-y">
-                                    <FadeController
-                                        fadeIn={this.props.fadeIn}
-                                        fadeOut={this.props.fadeOut}
-                                        actions={{ updateFadeIn: this.props.actions.updateFadeIn }}
-                                    />
-                                </div>
-
-                                <SoundController
-                                    { ...this.props }
-                                />
                             </div>
                         </div>
-                    </div>
 
-                    { beats }
+                        <div className="group-spacing-y">
+                            <div className="panel">
+                                <div className="group-padding-x group-padding-y">
+                                    <h2 className="title-primary">Main Settings</h2>
 
-                    <div className="group-spacing-y group-spacing-x">
-                        <div className="panel">
-                            <div className="group-padding-x group-padding-y">
-                                <h2 className="title-primary">Sounds</h2>
+                                    <div className="group-spacing-y">
+                                        <BPMController />
+                                    </div>
 
-                                <InstrumentList
-                                    actions={{ updateInstrumentSound: this.props.actions.updateInstrumentSound }}
-                                    instruments={this.props.instruments}
-                                />
+                                    <div className="group-spacing-y">
+                                        <BeatsController
+                                            beat={ totalBeat }
+                                            actions={{ updateBeats: this.props.actions.updateBeats }}
+                                        />
+                                    </div>
+
+                                    <div className="group-spacing-y">
+                                        <LoopController />
+                                    </div>
+
+                                    <div className="group-spacing-y">
+                                        <FadeController
+                                            fadeIn={this.props.fadeIn}
+                                            fadeOut={this.props.fadeOut}
+                                            actions={{ updateFadeIn: this.props.actions.updateFadeIn }}
+                                        />
+                                    </div>
+
+                                    <SoundController
+                                        { ...this.props }
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        { beats }
+
+                        <div className="group-spacing-y">
+                            <div className="panel">
+                                <div className="group-padding-x group-padding-y">
+                                    <h2 className="title-primary">Sounds</h2>
+
+                                    <InstrumentList
+                                        actions={{ updateInstrumentSound: this.props.actions.updateInstrumentSound }}
+                                        instruments={this.props.instruments}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>

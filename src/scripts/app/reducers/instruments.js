@@ -1,3 +1,4 @@
+
 const initialState = [
     {
         id: 'guitar',
@@ -163,7 +164,7 @@ const updateInstrumentSoundByID = ({ instruments, soundID, parentID, prop, value
     return newInstruments;
 }
 
-export function instruments(state = initialState, action) {
+export default function instruments(state = initialState, action) {
     let { type, payload } = action;
 
     switch (type) {

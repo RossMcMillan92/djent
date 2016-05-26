@@ -3,9 +3,11 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 import { updateBPM } from '../actions/config';
 import BPMController from '../components/BPMController';
+import presets from '../utils/presets';
 
 const mapStateToProps = (state) => ({
     bpm: state.config.bpm,
+    preset: presets[state.config.activePresetID],
 })
 
 const mapDispatchToProps = (dispatch) => {

@@ -40,6 +40,8 @@ const getSequences = (grooveTotalBeats, allowedLengths, hitChance) => {
 }
 
 const generateNewBuffer = ({ bpm, beats, allowedLengths, hitChance, instruments }) => {
+    if (!allowedLengths.filter(length => length.amount).length) return Promise.resolve(false);
+
     const totalBeats              = beats.find(beat => beat.id === 'total');
     const grooveTotalBeats        = beats.find(beat => beat.id === 'groove');
     const grooveTotalBeatsProduct = grooveTotalBeats.beats * grooveTotalBeats.bars;
@@ -90,6 +92,7 @@ class SoundController extends Component {
     state = {
         isPlaying: false,
         isLoading: true,
+        error: ''
     }
 
     componentWillMount = () => {
@@ -107,8 +110,11 @@ class SoundController extends Component {
         stop(this.currentSrc);
         generateNewBuffer(this.props)
             .then((buffer) => {
+                const newState = { isLoading: false, error: '' };
+
+                if (!buffer) newState.error = 'Enable some notes and regenerate!'
+                this.setState(newState)
                 this.currentBuffer = buffer;
-                this.setState({ isLoading: false });
                 if (shouldPlay) this.playEvent();
             });
     }
@@ -122,6 +128,7 @@ class SoundController extends Component {
     }
 
     playEvent = () => {
+        if (!this.currentBuffer || this.state.error) return;
         this.currentGainNode = context.createGain();
 
         stop(this.currentSrc);
@@ -150,21 +157,24 @@ class SoundController extends Component {
         const eventName = this.state.isPlaying ? 'stop' : 'play';
 
         return (
-            <ul className="list-hor list-hor--tight">
-                <li className="list-hor__item">
-                    <button className="button-primary" title={ capitalize(eventName) } onClick={this.togglePlay}>
-                        {
-                            this.state.isLoading
-                            ? <span className="spinner" />
-                            : <SVG icon={ eventName } className="button-primary__svg-icon" />
-                        }
-                    </button>
-                </li>
+            <div>
+                { this.state.error ? <p className="txt-error">{ this.state.error }</p> : null }
+                <ul className="list-hor list-hor--tight">
+                    <li className="list-hor__item">
+                        <button className="button-primary" title={ capitalize(eventName) } onClick={this.togglePlay}>
+                            {
+                                this.state.isLoading
+                                ? <span className="spinner" />
+                                : <SVG icon={ eventName } className="button-primary__svg-icon" />
+                            }
+                        </button>
+                    </li>
 
-                <li className="list-hor__item">
-                    <button className="button-primary" onClick={() => this.generateEvent()}>Regenerate</button>
-                </li>
-            </ul>
+                    <li className="list-hor__item">
+                        <button className="button-primary" onClick={() => this.generateEvent()}>Regenerate</button>
+                    </li>
+                </ul>
+            </div>
         );
     }
 }

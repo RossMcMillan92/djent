@@ -10,7 +10,6 @@ const BufferLoader = (context) => {
 
         const loadingSound = new Promise((res, rej) => {
             enabledSounds.map((sound, i) => {
-                console.log('ENABLEDSOUNDS', sound)
                 const url = sound.path;
                 // Load buffer asynchronously
                 const request = new XMLHttpRequest();

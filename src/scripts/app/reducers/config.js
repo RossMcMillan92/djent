@@ -1,3 +1,8 @@
+import presets from '../utils/presets';
+
+const activePresetID = 'preset1';
+const activePreset = presets[activePresetID];
+
 const allowedLengths = [
         {
             id: "0.25",
@@ -8,20 +13,20 @@ const allowedLengths = [
         {
             id: "0.5",
             name: 'half',
-            amount: 1,
-            isTriplet: true
+            amount: 0,
+            isTriplet: false
         },
         {
             id: "1",
             name: 'quarter',
-            amount:1,
-            isTriplet: true
+            amount: 0,
+            isTriplet: false
         },
         {
             id: "2",
             name: 'eighth',
-            amount: 1,
-            isTriplet: true
+            amount: 0,
+            isTriplet: false
         },
         {
             id: "4",
@@ -33,14 +38,15 @@ const allowedLengths = [
 
 const initialState = {
     allowedLengths,
+    activePresetID,
     bpm       : 94,
-    hitChance : 1,
     fadeIn    : false,
     fadeOut   : true,
+    hitChance : 1,
     isLooping : true,
 };
 
-export function config(state = initialState, action) {
+export default function config(state = initialState, action) {
     let { type, payload } = action;
 
     switch (type) {
@@ -74,6 +80,11 @@ export function config(state = initialState, action) {
                 ...state,
                 fadeOut: payload.fadeOut
             }
+        case 'UPDATE_ACTIVE_PRESET':
+            return {
+                ...state,
+                activePreset: payload.activePreset
+            };
 
         default:
             return state;

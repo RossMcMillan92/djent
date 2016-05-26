@@ -2,8 +2,6 @@
 
 A metal breakdown generator. Built with React/Redux, and PostCSS.
 
-### scripts
-
 #### Develop
 ```npm run dev```
 - Compiles JS

@@ -4,22 +4,23 @@ import InputBox from './InputBox';
 import presets from '../utils/presets';
 
 class PresetController extends Component {
-    onChange = (id) => {
+    onChange = (event) => {
+        const id = event.target.value;
+        console.log('ID', id)
         this.props.actions.applyPreset(id);
     }
 
     render = () => {
         const presetItems = presets
             .map((preset, i) => (
-                <li key={i} onClick={(e) => this.onChange(preset.id)}>{ preset.id }</li>
+                <option value={preset.id} key={i}>{ preset.description || preset.id }</option>
             ))
 
         return (
             <div>
-                preset { this.props.activePresetID }
-                <ul>
+                <select onChange={(e) => this.onChange(e)} defaultValue={this.props.activePresetID}>
                     { presetItems }
-                </ul>
+                </select>
             </div>
         );
     }

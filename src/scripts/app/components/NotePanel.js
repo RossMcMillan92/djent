@@ -44,8 +44,8 @@ class NotePanel extends Component {
                         </div>
                     </div>
                     <div className="note-panel__checkbox-container">
-                        <label className="note-panel__label" htmlFor={`${length.id}-triplet`}>Triplet:</label>
-                        <input className="note-panel__checkbox" id={`${length.id}-triplet`} data-id={length.id} type="checkbox" defaultChecked={length.isTriplet} onChange={this.onIsTripletChange} />
+                        <label className="note-panel__label" htmlFor={`${length.id}-triplet`}>Triplet: </label>
+                        <input className="note-panel__checkbox" id={`${length.id}-triplet`} data-id={length.id} type="checkbox" checked={length.isTriplet} onChange={this.onIsTripletChange} />
                     </div>
 
                 </div>

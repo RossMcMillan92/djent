@@ -30,7 +30,6 @@ describe('Sequences', () => {
 
             result = generateSequence({ totalBeats: 4, allowedLengths: [2,4], hitChance });
             resultSum = result.reduce(sumBeats, 0);
-            console.log('RESULTSUM', resultSum)
 
             expect(resultSum).to.equal(totalBeats);
         })

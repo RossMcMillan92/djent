@@ -1,9 +1,13 @@
 import blacktongue from './presets/blacktongue';
-import preset1 from './presets/preset1';
+import adtrBreakdown from './presets/adtr-breakdown';
+import swornIn from './presets/sworn-in';
+import thallTriplets from './presets/thall-triplets';
 
 const presets = [
+    adtrBreakdown,
     blacktongue,
-    preset1,
+    swornIn,
+    thallTriplets,
 ];
 
 export default presets;

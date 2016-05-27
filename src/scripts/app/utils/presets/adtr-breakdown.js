@@ -1,24 +1,25 @@
 const preset = {
-    id: 'preset1',
+    id: 'adtr-breakdown',
+    description: 'ADTR - Breakdown',
     settings: {
         config: {
-            bpm       : 94,
-            hitChance : 1,
-            allowedLengths: [
-                    {
-                        id: "0.5",
-                        amount: 1,
-                        isTriplet: true
-                    },
+            bpm            : 90,
+            hitChance      : .9,
+            allowedLengths : [
                     {
                         id: "1",
                         amount:1,
-                        isTriplet: true
+                        isTriplet: false
                     },
                     {
                         id: "2",
                         amount: 1,
-                        isTriplet: true
+                        isTriplet: false
+                    },
+                    {
+                        id: "4",
+                        amount: 2,
+                        isTriplet: false
                     },
             ],
         },
@@ -30,8 +31,8 @@ const preset = {
             },
             {
                 id    : 'groove',
-                bars  : 1,
-                beats : 12,
+                bars  : 2,
+                beats : 4,
             },
         ],
         instruments: [
@@ -44,26 +45,6 @@ const preset = {
                     },
                     {
                         id: 'guitar-palm-zero-2',
-                        enabled: true,
-                    },
-                    {
-                        id: 'guitar-open-zero-1',
-                        enabled: true,
-                    },
-                    {
-                        id: 'guitar-open-zero-2',
-                        enabled: true,
-                    },
-                    {
-                        id: 'guitar-open-first-1',
-                        enabled: true,
-                    },
-                    {
-                        id: 'guitar-open-sixth-second-1',
-                        enabled: true,
-                    },
-                    {
-                        id: 'guitar-root-dissonance',
                         enabled: true,
                     },
                 ],
@@ -91,14 +72,6 @@ const preset = {
                 ringout: true,
                 sounds: [
                     {
-                        id: 'crash-left',
-                        enabled: true,
-                    },
-                    {
-                        id: 'crash-right',
-                        enabled: true,
-                    },
-                    {
                         id: 'china-left',
                         enabled: true,
                     }
@@ -109,7 +82,7 @@ const preset = {
                 sounds: [
                     {
                         id: 'drone-high',
-                        enabled: true,
+                        enabled: false,
                     },
                 ],
             },

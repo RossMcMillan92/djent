@@ -3,7 +3,6 @@ import InputBox from '../components/InputBox';
 
 const onLoopChange = (event, callback) => {
     const fadeIn = event.target.checked;
-    console.log('FADEIN', fadeIn)
     callback(fadeIn);
 }
 

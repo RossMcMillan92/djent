@@ -1,48 +1,55 @@
 import { extendObjectArrayByID } from '../utils/tools';
 
 const allowedLengths = [
-        {
-            id: "0.25",
-            name: 'whole',
-            amount: 0,
-            isTriplet: false
-        },
-        {
-            id: "0.5",
-            name: 'half',
-            amount: 1,
-            isTriplet: false
-        },
-        {
-            id: "1",
-            name: 'quarter',
-            amount: 0,
-            isTriplet: false
-        },
-        {
-            id: "2",
-            name: 'eighth',
-            amount: 0,
-            isTriplet: false
-        },
-        {
-            id: "4",
-            name: 'sixteenth',
-            amount: 0,
-            isTriplet: false
-        },
+    {
+        id: "0.25",
+        name: 'whole',
+        amount: 0,
+        isTriplet: false
+    },
+    {
+        id: "0.5",
+        name: 'half',
+        amount: 0,
+        isTriplet: false
+    },
+    {
+        id: "1",
+        name: 'quarter',
+        amount: 0,
+        isTriplet: false
+    },
+    {
+        id: "2",
+        name: 'eighth',
+        amount: 0,
+        isTriplet: false
+    },
+    {
+        id: "4",
+        name: 'sixteenth',
+        amount: 0,
+        isTriplet: false
+    },
 ];
 
 const initialState = {
     allowedLengths,
-    activePresetID : 'preset1',
+    activePresetID : 'thall-triplets',
     bpm            : 50,
     fadeIn         : false,
     hitChance      : 1,
     isLooping      : true,
 };
 
-export default function config(state = initialState, action) {
+const getInitialState = () => {
+    return {
+        ...initialState,
+        allowedLengths: allowedLengths.map(length => ({ ...length }))
+    }
+}
+
+export default function config(state = getInitialState(), action) {
     let { type, payload } = action;
 
     switch (type) {
@@ -79,13 +86,13 @@ export default function config(state = initialState, action) {
         case 'APPLY_PRESET':
             const { preset } = payload;
             const { bpm, fadeIn, allowedLengths, hitChance } = preset.settings.config;
-            const newState = { ...initialState };
+            const newState = { ...getInitialState() };
 
             if (bpm) newState.bpm = bpm;
             if (fadeIn) newState.fadeIn = fadeIn;
             if (hitChance) newState.hitChance = hitChance;
             if (allowedLengths) {
-                newState.allowedLengths = extendObjectArrayByID(newState.allowedLengths, allowedLengths)
+                newState.allowedLengths = extendObjectArrayByID(newState.allowedLengths, [ ...allowedLengths ])
             }
 
             return {

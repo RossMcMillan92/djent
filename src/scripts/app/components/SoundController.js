@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import deepEqual from 'deep-equal';
 
 import {
     playSound
@@ -89,17 +90,20 @@ class SoundController extends Component {
     currentBuffer;
     currentSrc;
     currentGainNode;
+    isOutdated = false;
     state = {
-        isPlaying: false,
-        isLoading: false,
-        error: ''
+        isPlaying  : false,
+        isLoading  : false,
+        error      : '',
     }
 
-    // componentWillMount = () => {
-    //     this.generate();
-    // };
-
     componentWillUpdate = (nextProps) => {
+        if (!deepEqual(this.props, nextProps)) {
+            this.isOutdated = true;
+        } else {
+            this.isOutdated = false;
+        }
+
         if(nextProps.isLooping !== this.props.isLooping) {
             loop(this.currentSrc, nextProps.isLooping);
         }
@@ -171,7 +175,7 @@ class SoundController extends Component {
                     </li>
 
                     <li className="list-hor__item">
-                        <button className="button-primary" onClick={() => this.generateEvent()}>Generate</button>
+                        <button className={`button-primary ${this.isOutdated ? 'needs-attention' : ''}`} onClick={() => this.generateEvent()}>Generate</button>
                     </li>
                 </ul>
             </div>
@@ -179,6 +183,4 @@ class SoundController extends Component {
     }
 }
 
-export {
-    SoundController,
-};
+export default SoundController;

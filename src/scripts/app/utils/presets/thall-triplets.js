@@ -1,27 +1,32 @@
 const preset = {
-    id: 'blacktongue',
-    description: 'Black Tongue',
+    id: 'thall-triplets',
+    description: 'Thall - Triplets',
     settings: {
         config: {
-            bpm            : 50,
-            hitChance      : 1,
-            allowedLengths : [
+            bpm       : 94,
+            hitChance : 1,
+            allowedLengths: [
+                    {
+                        id: "0.5",
+                        amount: 1,
+                        isTriplet: true
+                    },
                     {
                         id: "1",
                         amount:1,
-                        isTriplet: false
+                        isTriplet: true
                     },
                     {
                         id: "2",
                         amount: 1,
-                        isTriplet: false
+                        isTriplet: true
                     },
             ],
         },
         beats: [
             {
                 id    : 'total',
-                bars  : 8,
+                bars  : 4,
                 beats : 4,
             },
             {
@@ -51,16 +56,16 @@ const preset = {
                         enabled: true,
                     },
                     {
-                        id: 'guitar-palm-first-1',
+                        id: 'guitar-open-first-1',
                         enabled: true,
                     },
                     {
                         id: 'guitar-open-sixth-second-1',
-                        enabled: false,
+                        enabled: true,
                     },
                     {
                         id: 'guitar-root-dissonance',
-                        enabled: false,
+                        enabled: true,
                     },
                 ],
             },
@@ -105,7 +110,7 @@ const preset = {
                 sounds: [
                     {
                         id: 'drone-high',
-                        enabled: false,
+                        enabled: true,
                     },
                 ],
             },

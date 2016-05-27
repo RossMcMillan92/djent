@@ -8,11 +8,11 @@ import BeatPanel from '../containers/BeatPanel';
 import BPMController from '../containers/BPMController';
 import LoopController from '../containers/LoopController';
 import PresetController from '../containers/PresetController';
+import SoundController from '../containers/SoundController';
 
 import BeatsController from '../components/BeatsController';
 import FadeController from '../components/FadeController';
 import { InstrumentList } from '../components/InstrumentList';
-import { SoundController } from '../components/SoundController';
 
 import * as configActions from '../actions/config';
 import * as instrumentsActions from '../actions/instruments';
@@ -93,9 +93,7 @@ class HomeComponent extends Component {
                                         />
                                     </div>
 
-                                    <SoundController
-                                        { ...this.props }
-                                    />
+                                    <SoundController />
                                 </div>
                             </div>
                         </div>

@@ -5,7 +5,9 @@
   "author": "Ross McMillan - RossMcMillan92",
   "main": "",
   "dependencies": {
-    "deep-extend": "^0.4.1"
+    "clone-deep": "^0.2.4",
+    "deep-extend": "^0.4.1",
+    "react-addons-shallow-compare": "^15.1.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.6",
@@ -40,6 +42,7 @@
     "postcss-cssnext": "^2.5.2",
     "postcss-import": "^8.1.2",
     "react": "^15.0.1",
+    "react-addons-shallow-compare": "^15.1.0",
     "react-document-meta": "^2.0.3",
     "react-dom": "^15.0.1",
     "react-hot-loader": "^1.3.0",

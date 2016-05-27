@@ -43,23 +43,23 @@ const preset = {
                     },
                     {
                         id: 'guitar-open-zero-1',
-                        enabled: true,
+                        enabled: false,
                     },
                     {
                         id: 'guitar-open-zero-2',
-                        enabled: true,
+                        enabled: false,
                     },
                     {
                         id: 'guitar-open-first-1',
-                        enabled: true,
+                        enabled: false,
                     },
                     {
                         id: 'guitar-open-sixth-second-1',
-                        enabled: true,
+                        enabled: false,
                     },
                     {
                         id: 'guitar-root-dissonance',
-                        enabled: true,
+                        enabled: false,
                     },
                 ],
             },
@@ -104,7 +104,7 @@ const preset = {
                 sounds: [
                     {
                         id: 'drone-high',
-                        enabled: true,
+                        enabled: false,
                     },
                 ],
             },

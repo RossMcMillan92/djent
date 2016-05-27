@@ -9,7 +9,6 @@ class BPMController extends Component {
     }
 
     render = () => {
-        console.log('this.props', this.props)
         const props = {
             id: 'bpm',
             label: 'BPM',
@@ -17,6 +16,7 @@ class BPMController extends Component {
             defaultValue: this.props.bpm,
             onChange: this.onBPMChange
         }
+
         return (
             <InputBox { ...props } />
         );

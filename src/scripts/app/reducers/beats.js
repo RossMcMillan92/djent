@@ -1,3 +1,5 @@
+import { extendObjectArrayByID } from '../utils/tools';
+
 const initialState =  [
     {
         id    : 'total',
@@ -26,6 +28,18 @@ export default function beats(state = initialState, action) {
     switch (type) {
         case 'UPDATE_BEATS':
             return updateBeatByID({ beats: state, id: payload.id, prop: payload.prop, value: payload.value })
+
+        case 'APPLY_PRESET':
+            const { preset } = payload;
+            const newBeats = preset.settings.beats;
+            const newState = [ ...initialState ];
+
+            if (newBeats) {
+                return extendObjectArrayByID(newState, newBeats);
+            }
+
+            return state;
+
         default:
             return state;
   }

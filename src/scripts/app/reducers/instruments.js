@@ -1,3 +1,4 @@
+import { extendObjectArrayByID } from '../utils/tools';
 
 const initialState = [
     {
@@ -8,25 +9,25 @@ const initialState = [
                 id: 'guitar-palm-zero-1',
                 description: 'Sixth string, fret zero [Palm muted] - 1',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar-palm-zero-1.wav',
-                enabled: true,
+                enabled: false,
             },
             {
                 id: 'guitar-palm-zero-2',
                 description: 'Sixth string, fret zero [Palm muted] - 2',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar-palm-zero-2.wav',
-                enabled: true,
+                enabled: false,
             },
             {
                 id: 'guitar-open-zero-1',
                 description: 'Sixth string, fret zero [Open note] - 1',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar-open-zero-1.wav',
-                enabled: true,
+                enabled: false,
             },
             {
                 id: 'guitar-open-zero-2',
                 description: 'Sixth string, fret zero [Open note] - 2',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar-open-zero-2.wav',
-                enabled: true,
+                enabled: false,
             },
             {
                 id: 'guitar-palm-first-1',
@@ -38,7 +39,7 @@ const initialState = [
                 id: 'guitar-open-first-1',
                 description: 'Sixth string, fret one [Open note] - 1',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar-open-first-1.wav',
-                enabled: true,
+                enabled: false,
             },
             {
                 id: 'guitar-open-first-2',
@@ -56,13 +57,13 @@ const initialState = [
                 id: 'guitar-open-sixth-second-1',
                 description: 'Fifth string, fret six [Open note]',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar-open-sixth-second-1.wav',
-                enabled: true,
+                enabled: false,
             },
             {
                 id: 'guitar-root-dissonance',
                 description: 'Third string, fret seven [Dissonant bend]',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar-root-dissonance.wav',
-                enabled: true,
+                enabled: false,
             },
             {
                 id: 'guitar-dissonance-high',
@@ -84,7 +85,7 @@ const initialState = [
             {
                 id: 'kick',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/kick.wav',
-                enabled: true,
+                enabled: false,
             }
         ],
     },
@@ -94,7 +95,7 @@ const initialState = [
             {
                 id: 'snare',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/snare.wav',
-                enabled: true,
+                enabled: false,
             }
         ],
     },
@@ -115,17 +116,17 @@ const initialState = [
             {
                 id: 'crash-left',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/crash-left.wav',
-                enabled: true,
+                enabled: false,
             },
             {
                 id: 'crash-right',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/crash-right.wav',
-                enabled: true,
+                enabled: false,
             },
             {
                 id: 'china-left',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/china-left.wav',
-                enabled: true,
+                enabled: false,
             }
         ],
     },
@@ -171,6 +172,26 @@ export default function instruments(state = initialState, action) {
         case 'UPDATE_INSTRUMENT_SOUND_PROP':
             return updateInstrumentSoundByID({ ...payload, instruments: state })
 
+        case 'APPLY_PRESET':
+            const { preset } = payload;
+            const instruments = preset.settings.instruments;
+
+            let newState = initialState.map(instrument => {
+                const newInstrument = instruments.find(newInstrument => newInstrument.id === instrument.id);
+
+                if (!newInstrument) return instrument;
+
+                if (newInstrument.sounds) {
+                    newInstrument.sounds = extendObjectArrayByID(instrument.sounds, newInstrument.sounds)
+                }
+
+                return newInstrument;
+            });
+
+            return [
+                ...newState
+            ];
+            
         default:
             return state;
   }

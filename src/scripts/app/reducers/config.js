@@ -1,7 +1,4 @@
-import presets from '../utils/presets';
-
-const activePresetID = 'preset1';
-const activePreset = presets[activePresetID];
+import { extendObjectArrayByID } from '../utils/tools';
 
 const allowedLengths = [
         {
@@ -13,7 +10,7 @@ const allowedLengths = [
         {
             id: "0.5",
             name: 'half',
-            amount: 0,
+            amount: 1,
             isTriplet: false
         },
         {
@@ -38,12 +35,12 @@ const allowedLengths = [
 
 const initialState = {
     allowedLengths,
-    activePresetID,
-    bpm       : 94,
-    fadeIn    : false,
-    fadeOut   : true,
-    hitChance : 1,
-    isLooping : true,
+    activePresetID : 'preset1',
+    bpm            : 50,
+    fadeIn         : false,
+    fadeOut        : true,
+    hitChance      : 1,
+    isLooping      : true,
 };
 
 export default function config(state = initialState, action) {
@@ -55,35 +52,51 @@ export default function config(state = initialState, action) {
                 ...state,
                 allowedLengths: payload.allowedLengths
             };
+
         case 'UPDATE_BPM':
             return {
                 ...state,
                 bpm: payload.bpm
             };
+
         case 'UPDATE_IS_LOOPING':
             return {
                 ...state,
                 isLooping: payload.isLooping
             };
+
         case 'UPDATE_HITCHANCE':
             return {
                 ...state,
                 hitChance: payload.hitChance
-            }
+            };
+
         case 'UPDATE_FADEIN':
             return {
                 ...state,
                 fadeIn: payload.fadeIn
-            }
+            };
+
         case 'UPDATE_FADEOUT':
             return {
                 ...state,
                 fadeOut: payload.fadeOut
+            };
+
+        case 'APPLY_PRESET':
+            const { preset } = payload;
+            const { bpm, fadeIn, allowedLengths } = preset.settings.config;
+            const newState = { ...initialState };
+
+            if (bpm) newState.bpm = bpm;
+            if (fadeIn) newState.fadeIn = fadeIn;
+            if (allowedLengths) {
+                newState.allowedLengths = extendObjectArrayByID(newState.allowedLengths, allowedLengths)
             }
-        case 'UPDATE_ACTIVE_PRESET':
+
             return {
-                ...state,
-                activePreset: payload.activePreset
+                ...newState,
+                activePresetID: preset.id
             };
 
         default:

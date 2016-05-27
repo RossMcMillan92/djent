@@ -31,9 +31,14 @@ const metaData = {
 };
 
 class HomeComponent extends Component {
+    componentWillMount = () => {
+        this.props.actions.applyPreset(this.props.activePresetID);
+    }
+
     render() {
         const totalBeat = this.props.beats.find(beat => beat.id === 'total');
-        const beats = this.props.beats.filter(beat => beat.id !== 'total')
+        const beats = this.props.beats
+            .filter(beat => beat.id !== 'total')
             .map((beat, i) => (
                 <div className="group-spacing-y" key={i}>
                     <BeatPanel beat={ beat } />
@@ -118,16 +123,17 @@ class HomeComponent extends Component {
 }
 
 function mapStateToProps(state) {
-  return {
-    instruments      : state.instruments,
-    allowedLengths   : state.config.allowedLengths,
-    bpm              : state.config.bpm,
-    isLooping        : state.config.isLooping,
-    hitChance        : state.config.hitChance,
-    fadeIn           : state.config.fadeIn,
-    fadeOut          : state.config.fadeOut,
-    beats            : state.beats,
-  }
+    return {
+        instruments      : state.instruments,
+        activePresetID   : state.config.activePresetID,
+        allowedLengths   : state.config.allowedLengths,
+        bpm              : state.config.bpm,
+        isLooping        : state.config.isLooping,
+        hitChance        : state.config.hitChance,
+        fadeIn           : state.config.fadeIn,
+        fadeOut          : state.config.fadeOut,
+        beats            : state.beats,
+    }
 }
 
 function mapDispatchToProps(dispatch) {

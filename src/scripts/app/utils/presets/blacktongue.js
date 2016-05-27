@@ -1,31 +1,26 @@
 const preset = {
-    id: 'preset1',
+    id: 'blacktongue',
     settings: {
         config: {
-            bpm       : 94,
+            bpm       : 20,
             hitChance : 1,
             allowedLengths: [
                     {
-                        id: "0.5",
-                        amount: 1,
-                        isTriplet: true
-                    },
-                    {
                         id: "1",
                         amount:1,
-                        isTriplet: true
+                        isTriplet: false
                     },
                     {
                         id: "2",
                         amount: 1,
-                        isTriplet: true
+                        isTriplet: false
                     },
             ],
         },
         beats: [
             {
                 id    : 'total',
-                bars  : 4,
+                bars  : 8,
                 beats : 4,
             },
             {

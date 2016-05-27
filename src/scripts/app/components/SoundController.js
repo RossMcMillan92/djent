@@ -91,13 +91,13 @@ class SoundController extends Component {
     currentGainNode;
     state = {
         isPlaying: false,
-        isLoading: true,
+        isLoading: false,
         error: ''
     }
 
-    componentWillMount = () => {
-        this.generate();
-    };
+    // componentWillMount = () => {
+    //     this.generate();
+    // };
 
     componentWillUpdate = (nextProps) => {
         if(nextProps.isLooping !== this.props.isLooping) {
@@ -171,7 +171,7 @@ class SoundController extends Component {
                     </li>
 
                     <li className="list-hor__item">
-                        <button className="button-primary" onClick={() => this.generateEvent()}>Regenerate</button>
+                        <button className="button-primary" onClick={() => this.generateEvent()}>Generate</button>
                     </li>
                 </ul>
             </div>

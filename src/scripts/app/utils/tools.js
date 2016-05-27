@@ -1,3 +1,5 @@
+import deepExtend from 'deep-extend';
+
 const arraySelector = selector => Array.from(document.querySelectorAll(selector));
 
 const repeat = (simsNeeded, fn) => {
@@ -17,6 +19,18 @@ const repeatArray = (arr, length) => {
 	return Array.from(Array(diff).keys())
 		.reduce((newArr, index) => newArr.concat(...arr), [])
 		.slice(0, length);
+}
+
+const extendObjectArrayByID = (one, two) => {
+    return one.map((value, i, arr) => {
+        const newValue = two.find(newValue => newValue.id === value.id);
+
+		if (newValue) {
+			return deepExtend({}, value, newValue);
+		}
+
+        return value;
+    })
 }
 
 const compose = (...funcs) => {
@@ -42,6 +56,7 @@ export {
 	arraySelector,
 	capitalize,
 	compose,
+	extendObjectArrayByID,
 	repeat,
 	randFromTo,
 	randomFromArray,

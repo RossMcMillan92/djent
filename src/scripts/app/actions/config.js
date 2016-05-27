@@ -1,3 +1,5 @@
+import presets from '../utils/presets';
+
 export function updateAllowedLengths(allowedLengths) {
   return {
     type: 'UPDATE_ALLOWED_LENGTHS',
@@ -38,4 +40,12 @@ export function updateFateOut(fadeOut) {
     type: 'UPDATE_FADEOUT',
     payload: { fadeOut },
   };
+}
+
+export function applyPreset(presetID) {
+    const preset = { ...presets.find(preset => preset.id === presetID) };
+    return {
+        type: 'APPLY_PRESET',
+        payload: { preset },
+    };
 }

@@ -50,7 +50,7 @@ const instrumentSequences = {
         predefinedSequences.steadyHalfs.sequence,
         predefinedSequences.steadyQuarters.sequence,
     ],
-    crash: [
+    cymbal: [
         // predefinedSequences.steadyWholes.sequence,
         predefinedSequences.steadyHalfs.sequence,
         predefinedSequences.steadyQuarters.sequence,

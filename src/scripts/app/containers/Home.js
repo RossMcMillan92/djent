@@ -11,6 +11,7 @@ import PresetController from '../containers/PresetController';
 import SoundController from '../containers/SoundController';
 
 import BeatsController from '../components/BeatsController';
+import Expandable from '../components/Expandable';
 import FadeController from '../components/FadeController';
 import { InstrumentList } from '../components/InstrumentList';
 
@@ -49,6 +50,14 @@ class HomeComponent extends Component {
             <section>
                 <div className="group-capped-x group-centered">
                     <DocumentMeta {...metaData} />
+
+                    <div className="group-spacing-x">
+                        <div className="group-spacing-y">
+                            <h1 className="title-primary">
+                                Djenerator
+                            </h1>
+                        </div>
+                    </div>
 
                     <div className="group-spacing-x">
                         <div className="group-spacing-y">
@@ -98,20 +107,26 @@ class HomeComponent extends Component {
                             </div>
                         </div>
 
-                        { beats }
+                        <Expandable
+                            title="Advanced Settings"
+                            titleClassName="u-curp"
+                        >
+                            { beats }
 
-                        <div className="group-spacing-y">
-                            <div className="panel">
-                                <div className="group-padding-x group-padding-y">
-                                    <h2 className="title-primary">Sounds</h2>
+                            <div className="group-spacing-y">
+                                <div className="panel">
+                                    <div className="group-padding-x group-padding-y">
+                                        <h2 className="title-primary">Sounds</h2>
 
-                                    <InstrumentList
-                                        actions={{ updateInstrumentSound: this.props.actions.updateInstrumentSound }}
-                                        instruments={this.props.instruments}
-                                    />
+                                        <InstrumentList
+                                            actions={{ updateInstrumentSound: this.props.actions.updateInstrumentSound }}
+                                            instruments={this.props.instruments}
+                                        />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </Expandable>
+
                     </div>
 
                 </div>

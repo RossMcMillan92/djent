@@ -23,13 +23,13 @@ import SVG from './SVG';
 
 const getSequences = (grooveTotalBeats, allowedLengths, hitChance) => {
     const mainBeat      = generateSequence({ totalBeats: grooveTotalBeats, allowedLengths, hitChance });
-    const crashSequence = getSequenceForInstrument('crash');
+    const cymbalSequence = getSequenceForInstrument('cymbal');
     const hihatSequence = getSequenceForInstrument('hihat');
     const snareSequence = getSequenceForInstrument('snare');
     const droneSequence = getSequenceForInstrument('drone');
 
     const sequences     = {
-        crash  : crashSequence,
+        cymbal  : cymbalSequence,
         hihat  : hihatSequence,
         kick   : mainBeat,
         guitar : mainBeat,
@@ -90,7 +90,6 @@ class SoundController extends Component {
     currentBuffer;
     currentSrc;
     currentGainNode;
-    isOutdated = false;
     state = {
         isPlaying  : false,
         isLoading  : false,
@@ -98,12 +97,6 @@ class SoundController extends Component {
     }
 
     componentWillUpdate = (nextProps) => {
-        if (!deepEqual(this.props, nextProps)) {
-            this.isOutdated = true;
-        } else {
-            this.isOutdated = false;
-        }
-
         if(nextProps.isLooping !== this.props.isLooping) {
             loop(this.currentSrc, nextProps.isLooping);
         }
@@ -116,7 +109,7 @@ class SoundController extends Component {
             .then((buffer) => {
                 const newState = { isLoading: false, error: '' };
 
-                if (!buffer) newState.error = 'Enable some notes and regenerate!'
+                if (!buffer) newState.error = 'Error!'
                 this.setState(newState)
                 this.currentBuffer = buffer;
                 if (shouldPlay) this.playEvent();
@@ -165,17 +158,19 @@ class SoundController extends Component {
                 { this.state.error ? <p className="txt-error">{ this.state.error }</p> : null }
                 <ul className="list-hor list-hor--tight">
                     <li className="list-hor__item">
-                        <button className="button-primary" title={ capitalize(eventName) } onClick={this.togglePlay}>
+                        <button className={`button-primary ${!this.currentBuffer ? 'needs-attention' : ''}`} onClick={() => this.generateEvent()}>
+                            { this.currentBuffer ? 'Regenerate' : 'Generate' }
+                        </button>
+                    </li>
+
+                    <li className="list-hor__item">
+                        <button className="button-primary" title={ capitalize(eventName) } onClick={this.togglePlay} disabled={!this.currentBuffer}>
                             {
                                 this.state.isLoading
                                 ? <span className="spinner" />
                                 : <SVG icon={ eventName } className="button-primary__svg-icon" />
                             }
                         </button>
-                    </li>
-
-                    <li className="list-hor__item">
-                        <button className={`button-primary ${this.isOutdated ? 'needs-attention' : ''}`} onClick={() => this.generateEvent()}>Generate</button>
                     </li>
                 </ul>
             </div>

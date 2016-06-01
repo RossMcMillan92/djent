@@ -1,33 +1,33 @@
 const preset = {
-    id: 'blacktongue',
-    description: 'Black Tongue',
+    id: 'thall-triplets-slow',
+    description: 'Thall - Triplets Slow',
     settings: {
         config: {
-            bpm            : 50,
-            hitChance      : 1,
-            allowedLengths : [
+            bpm       : 108,
+            hitChance : 1,
+            allowedLengths: [
                     {
-                        id: "1",
-                        amount:1,
-                        isTriplet: false
+                        id: "0.25",
+                        amount: 1,
+                        isTriplet: true
                     },
                     {
                         id: "2",
-                        amount: 1,
-                        isTriplet: false
+                        amount:1,
+                        isTriplet: true
                     },
             ],
         },
         beats: [
             {
                 id    : 'total',
-                bars  : 8,
+                bars  : 4,
                 beats : 4,
             },
             {
                 id    : 'groove',
-                bars  : 1,
-                beats : 12,
+                bars  : 4,
+                beats : 4,
             },
         ],
         instruments: [
@@ -35,32 +35,28 @@ const preset = {
                 id: 'guitar',
                 sounds: [
                     {
-                        id: 'guitar-palm-zero-1',
+                        id: 'sixth-0-open',
                         enabled: true,
                     },
                     {
-                        id: 'guitar-palm-zero-2',
+                        id: 'sixth-0-muted',
                         enabled: true,
                     },
                     {
-                        id: 'guitar-open-zero-1',
+                        id: 'sixth-1-open',
                         enabled: true,
                     },
                     {
-                        id: 'guitar-open-zero-2',
+                        id: 'sixth-1-muted',
                         enabled: true,
                     },
                     {
-                        id: 'guitar-palm-first-1',
+                        id: 'fifth-6-open',
                         enabled: true,
                     },
                     {
-                        id: 'guitar-open-sixth-second-1',
-                        enabled: false,
-                    },
-                    {
-                        id: 'guitar-root-dissonance',
-                        enabled: false,
+                        id: 'third-8-open',
+                        enabled: true,
                     },
                 ],
             },
@@ -98,15 +94,6 @@ const preset = {
                         id: 'china-left',
                         enabled: true,
                     }
-                ],
-            },
-            {
-                id: 'drone',
-                sounds: [
-                    {
-                        id: 'drone-high',
-                        enabled: false,
-                    },
                 ],
             },
         ]

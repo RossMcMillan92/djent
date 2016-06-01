@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { capitalize } from '../utils/tools';
+
+import Expandable from './Expandable';
 
 class InstrumentList extends Component {
 
@@ -15,18 +18,43 @@ class InstrumentList extends Component {
     render = () => {
         const instrumentViews = this.props.instruments
             .map((instrument, index) => {
-                const sounds = instrument.sounds.map((sound, i) => {
-                    return (
-                        <li id={sound.id} data-parent-id={instrument.id} onClick={this.onSoundToggle} className={`u-curp ${sound.enabled ? '' : 'text-strikeout'}`} key={i} >{sound.description || sound.id}</li>
-                    );
-                });
+                let categories = instrument.sounds
+                    .reduce((cats, sound) => {
+                        if (!cats.includes(sound.category)) {
+                            return [
+                                ...cats,
+                                sound.category
+                            ]
+                        }
+                        return cats;
+                    }, [])
+                    .map((id, index) => {
+                        const sounds = instrument.sounds
+                            .filter(sound => sound.category === id);
+                        const isExpanded = !!sounds.find(sound => sound.enabled);
+
+                        return (
+                            <Expandable
+                                title={ id || `${(instrument.description || capitalize(instrument.id))} (ungrouped)` }
+                                className="expandable-list u-mb05"
+                                titleClassName="expandable-list__title"
+                                bodyClassName="expandable-list__body"
+                                isExpanded={isExpanded}
+                                key={index}
+                            >
+                                <ul className="sound-list">
+                                    {sounds.map((sound, i) => (
+                                        <li id={sound.id} data-parent-id={instrument.id} onClick={this.onSoundToggle} className={`sound-list__item ${sound.enabled ? 'is-enabled' : ''}`} key={i} >{sound.description || sound.id}</li>
+                                    ))}
+                                </ul>
+                            </Expandable>
+                        );
+                    });
 
                 return (
                     <div className="u-mb2" key={index}>
                         <h3 className="title-secondary">{instrument.description || instrument.id}</h3>
-                        <ul className="cleanlist u-ml1">
-                            {sounds}
-                        </ul>
+                        {categories}
                     </div>
                 );
             });
@@ -42,3 +70,16 @@ class InstrumentList extends Component {
 export {
     InstrumentList,
 };
+
+var sort_by = function(field, reverse, primer){
+
+   var key = primer ?
+       function(x) {return primer(x[field])} :
+       function(x) {return x[field]};
+
+   reverse = !reverse ? 1 : -1;
+
+   return function (a, b) {
+       return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+     }
+}

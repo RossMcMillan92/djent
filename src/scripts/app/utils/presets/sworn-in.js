@@ -112,7 +112,7 @@ const preset = {
                 ],
             },
             {
-                id: 'crash',
+                id: 'cymbal',
                 ringout: true,
                 sounds: [
                     {

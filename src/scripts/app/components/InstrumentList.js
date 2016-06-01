@@ -19,7 +19,7 @@ class InstrumentList extends Component {
                     return (
                         <li id={sound.id} data-parent-id={instrument.id} onClick={this.onSoundToggle} className={`u-curp ${sound.enabled ? '' : 'text-strikeout'}`} key={i} >{sound.description || sound.id}</li>
                     );
-                } );
+                });
 
                 return (
                     <div className="u-mb2" key={index}>

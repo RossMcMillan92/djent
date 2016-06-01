@@ -6,7 +6,6 @@ import presets from '../utils/presets';
 class PresetController extends Component {
     onChange = (event) => {
         const id = event.target.value;
-        console.log('ID', id)
         this.props.actions.applyPreset(id);
     }
 

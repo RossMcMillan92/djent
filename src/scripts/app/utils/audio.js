@@ -1,3 +1,6 @@
+// cache
+const bufferCache = {};
+
 const BufferLoader = (context) => {
     let newInstrumentPack = [];
 
@@ -9,8 +12,18 @@ const BufferLoader = (context) => {
         newInstrument.buffers = [];
 
         const loadingSound = new Promise((res, rej) => {
-            enabledSounds.map((sound, i) => {
+            enabledSounds.forEach((sound, i) => {
                 const url = sound.path;
+                if (bufferCache[url]) {
+                    newInstrument.buffers[i] = bufferCache[url];
+                    newInstrumentPack[index] = newInstrument;
+                    bufferCount++;
+                    if(bufferCount === bufferAmount) {
+                        res();
+                    }
+                    return;
+                };
+
                 // Load buffer asynchronously
                 const request = new XMLHttpRequest();
                 request.open("GET", url, true);
@@ -26,6 +39,7 @@ const BufferLoader = (context) => {
                                 return;
                             }
                             newInstrument.buffers[i] = buffer;
+                            bufferCache[url] = buffer;
                             newInstrumentPack[index] = newInstrument;
                             bufferCount++;
                             if(bufferCount === bufferAmount) {
@@ -52,8 +66,8 @@ const BufferLoader = (context) => {
 
     }
 
-    const load = (instrumentPack) => {
-        const loadingSounds = instrumentPack
+    const load = (instruments) => {
+        const loadingSounds = instruments
             .filter(instrument => instrument.sounds.filter(sound => sound.enabled).length)
             .map(loadBuffer)
 
@@ -68,9 +82,9 @@ const BufferLoader = (context) => {
 }
 
 
-const loadInstrumentBuffers = (context, instrumentPack) => {
+const loadInstrumentBuffers = (context, instruments) => {
     return BufferLoader(context)
-        .load(instrumentPack);
+        .load(instruments);
 }
 
 const renderSoundsToBuffer = (buffers) => {

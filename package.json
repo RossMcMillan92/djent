@@ -6,6 +6,7 @@
   "main": "",
   "dependencies": {
     "clone-deep": "^0.2.4",
+    "deep-equal": "^1.0.1",
     "deep-extend": "^0.4.1",
     "react-addons-shallow-compare": "^15.1.0"
   },

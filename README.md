@@ -1,6 +1,6 @@
 # DjenerationStation
 
-A metal breakdown generator. Built with React/Redux, and PostCSS.
+A metal breakdown generator. Built with React/Redux, and Sass/PostCSS. [http://djenerationstation.com](http://djenerationstation.com)
 
 #### Develop
 ```npm run dev```

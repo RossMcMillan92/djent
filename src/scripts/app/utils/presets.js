@@ -5,10 +5,10 @@ import thallTriplets from './presets/thall-triplets';
 import thallTripletsSlow from './presets/thall-triplets-slow';
 
 const presets = [
-    adtrBreakdown,
-    blacktongue,
-    swornIn,
-    thallTriplets,
+    // adtrBreakdown,
+    // blacktongue,
+    // swornIn,
+    // thallTriplets,
     thallTripletsSlow,
 ];
 

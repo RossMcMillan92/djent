@@ -119,7 +119,7 @@ describe('Config reducer:', () => {
                         {
                             id: "0.5",
                             name: 'half',
-                            amount: 1,
+                            amount: 0,
                             isTriplet: false
                         },
                         {

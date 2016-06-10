@@ -21,7 +21,7 @@ const defaultInstrument = {
     timeMap: [],
 }
 
-const getInstrumentsSequences = (instruments, sequences, totalBeats) => Object.keys(sequences).map(instrumentId => ({ ...instruments.find(i => i.id === instrumentId), sequence: loopSequence(sequences[instrumentId]) }));
+const getInstrumentsSequences = (instruments, sequences, totalBeats) => Object.keys(sequences).map(instrumentId => ({ ...instruments.find(i => i.id === instrumentId), sequence: sequences[instrumentId] }));
 
 const generateInstrumentTimeMap = (instrument) => {
     const timeMap = generateTimeMap(instrument.sequence);

@@ -100,22 +100,27 @@ const generateSequence = ({ totalBeats, allowedLengths, hitChance }) => {
 };
 
 const loopSequence = (sequence, totalBeats) => {
-    if(!sequence.length) return [];
+    if (!sequence.length) return [];
 
-    let totalBeatLength = Math.round(sequence.reduce((prev, next) => (1 / next.beat) + prev, 0));
-    let newSequence = [ ...sequence ];
+    const totalBeatLength = sequence.reduce((prev, next) => (1 / next.beat) + prev, 0);
+    if (totalBeatLength === totalBeats) return [ ...sequence ];
 
-    if(totalBeatLength === totalBeats) return newSequence;
-    if(totalBeatLength > totalBeats) return newSequence.slice(0, totalBeats - 1);
-
+    let newSequence = [];
+    let newTotalBeatLength = 0;
     let i = 0;
-    while(Math.floor(totalBeatLength) < totalBeats ) {
-        newSequence = newSequence.concat(newSequence[i]);
-        totalBeatLength += 1 / newSequence[i].beat;
-        i = (i + 1) < newSequence.length ? i + 1 : 0
+    while (newTotalBeatLength < totalBeats ) {
+        let newBeat = sequence[i];
+
+        if (totalBeats - newTotalBeatLength < 1 / newBeat.beat) {
+            newBeat = { ...newBeat, beat: 1 / (totalBeats - newTotalBeatLength) };
+        }
+
+        newSequence = newSequence.concat(newBeat);
+        newTotalBeatLength += 1 / newBeat.beat;
+        i = (i + 1) < sequence.length ? i + 1 : 0;
     }
 
-    return newSequence
+    return newSequence;
 }
 
 const generateTimeMap = sequence => {

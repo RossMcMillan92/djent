@@ -26,7 +26,7 @@ const generateRiff = ({ bpm, totalBeatsProduct, allowedLengths, sequences, instr
             context.close();
             return buffer
         })
-        .catch(e => { console.log(e); console.trace() });
+        .catch(e => { console.error(e); });
 }
 
 const initiateInstruments = (context, instrumentPack, totalBeatsProduct, bpmMultiplier) => {

@@ -73,7 +73,7 @@ const BufferLoader = (context) => {
 
         return Promise.all(loadingSounds)
                 .then(() => newInstrumentPack)
-                .catch(e => console.log(e))
+                .catch(e => console.error(e))
     }
 
     return {

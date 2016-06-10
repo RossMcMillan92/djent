@@ -1,6 +1,7 @@
 import {
     convertAllowedLengthsToArray,
     generateSequence,
+    generateTimeMap,
     loopSequence,
 } from '../../utils/sequences';
 
@@ -217,6 +218,47 @@ describe('Sequences', () => {
             resultSum = result.reduce(sumBeats, 0);
 
             expect(resultSum).to.equal(2);
+        })
+    })
+
+    describe('generateTimeMap()', () => {
+        let initial_sequence = [
+            { beat: 1, volume: 0 },
+            { beat: 1, volume: 0 },
+            { beat: 1, volume: 1 },
+            { beat: 2, volume: 0 },
+            { beat: 2, volume: 0 },
+        ];
+
+        it('should return an array', () => {
+            let result = generateTimeMap(initial_sequence, 8);
+
+            expect(result).to.be.a('array');
+        })
+
+        it('should return an array where the first entry is 0', () => {
+            let result = generateTimeMap(initial_sequence, 8);
+
+            expect(result[0]).to.equal(0);
+        })
+
+        it('should convert an array of beat lengths to map of times based on 120bpm', () => {
+            let result = generateTimeMap(initial_sequence, 8);
+            let expectedResult = [0, 1, 2, 3, 3.5];
+
+            expect(result).to.deep.equal(expectedResult);
+
+            let sequence = [
+                { beat: 0.25, volume: 0 },
+                { beat: 0.25, volume: 0 },
+                { beat: 1, volume: 1 },
+                { beat: 2, volume: 0 },
+                { beat: 2, volume: 0 },
+            ];
+            result = generateTimeMap(sequence, 8);
+            expectedResult = [0, 4, 8, 9, 9.5];
+
+            expect(result).to.deep.equal(expectedResult);
         })
     })
 })

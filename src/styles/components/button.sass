@@ -2,6 +2,7 @@ $button-primary__total-line-height: 21px
 $button-primary__line-height: 1.4
 $button-primary__font-size: round($button-primary__total-line-height / $button-primary__line-height)
 $button-primary__svg-icon-size: $button-primary__total-line-height
+$button-primary__default-bg-color: #efefef
 
 .button-primary
     appearance: none
@@ -10,13 +11,31 @@ $button-primary__svg-icon-size: $button-primary__total-line-height
     line-height: $button-primary__line-height
     font-size: $button-primary__font-size
     border: solid 1px $palette-base-ui
+    cursor: pointer
+    background-color: $button-primary__default-bg-color
+    transition: all .1s ease-in-out
 
-    &.needs-attention
-        background-color: $palette-attention
-        color: #fff
+    &:hover,
+    &:focus
+        background-color: lighten($button-primary__default-bg-color, 5%)
+        box-shadow: 0 7px 5px -3px rgba(0, 0, 0, .07)
+        outline: none
 
+    &:active
+        box-shadow: 0 2px 2px -1px rgba(0, 0, 0, .05)
+        transform: scale(.99)
 
 .button-primary__svg-icon
     display: block
     width: $button-primary__svg-icon-size
     height: $button-primary__svg-icon-size
+
+.button-primary--positive
+    background-color: $palette-alpha
+    color: #fff
+    border-color: darken($palette-alpha, 5%)
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, .05)
+
+    &:hover,
+    &:focus
+        background-color: lighten($palette-alpha, 5%)

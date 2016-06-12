@@ -75,6 +75,20 @@ const initialState = [
                 enabled: false,
                 category: 'Sixth string [Open]'
             },
+            {
+                id: 'sixth-8-muted',
+                description: 'Fret 8',
+                path: 'assets/audio/guitar/sixth-8-muted.mp3',
+                enabled: false,
+                category: 'Sixth string [Muted]'
+            },
+            {
+                id: 'sixth-8-open',
+                description: 'Fret 8',
+                path: 'assets/audio/guitar/sixth-8-open.mp3',
+                enabled: false,
+                category: 'Sixth string [Open]'
+            },
 
             {
                 id: 'fifth-5-open',
@@ -160,6 +174,43 @@ const initialState = [
                 path: 'assets/audio/guitar/third-10-open.mp3',
                 enabled: false,
                 category: 'Third string [Open]'
+            },
+
+            {
+                id: 'third-7-bend',
+                description: 'Fret 7',
+                path: 'assets/audio/guitar/third-7-bend.mp3',
+                enabled: false,
+                category: 'Third string [Bend]'
+            },
+            {
+                id: 'third-8-bend',
+                description: 'Fret 8',
+                path: 'assets/audio/guitar/third-8-bend.mp3',
+                enabled: false,
+                category: 'Third string [Bend]'
+            },
+
+            {
+                id: 'dissonance-10',
+                description: 'Dissonance at fret 10',
+                path: 'assets/audio/guitar/dissonance-10.mp3',
+                enabled: false,
+                category: 'Misc'
+            },
+            {
+                id: 'dissonance-16',
+                description: 'Dissonance at fret 16',
+                path: 'assets/audio/guitar/dissonance-16.mp3',
+                enabled: false,
+                category: 'Misc'
+            },
+            {
+                id: 'scratch',
+                description: 'Scratch',
+                path: 'assets/audio/guitar/scratch.mp3',
+                enabled: false,
+                category: 'Misc'
             },
 
         ],

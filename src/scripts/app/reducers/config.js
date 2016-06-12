@@ -35,7 +35,7 @@ const allowedLengths = [
 
 const initialState = {
     allowedLengths,
-    activePresetID : 'thall-triplets-slow',
+    activePresetID : 'thall-buster',
     bpm            : 50,
     fadeIn         : false,
     hitChance      : 1,

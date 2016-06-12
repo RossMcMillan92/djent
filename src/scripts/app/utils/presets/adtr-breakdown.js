@@ -1,10 +1,10 @@
 const preset = {
     id: 'adtr-breakdown',
-    description: 'ADTR - Breakdown',
+    description: 'ADTR Breakdown',
     settings: {
         config: {
             bpm            : 90,
-            hitChance      : .9,
+            hitChance      : .8,
             allowedLengths : [
                     {
                         id: "1",
@@ -31,7 +31,7 @@ const preset = {
             },
             {
                 id    : 'groove',
-                bars  : 2,
+                bars  : 1,
                 beats : 4,
             },
         ],
@@ -40,11 +40,15 @@ const preset = {
                 id: 'guitar',
                 sounds: [
                     {
-                        id: 'guitar-palm-zero-1',
+                        id: 'sixth-3-muted',
                         enabled: true,
                     },
                     {
-                        id: 'guitar-palm-zero-2',
+                        id: 'sixth-4-muted',
+                        enabled: true,
+                    },
+                    {
+                        id: 'fifth-9-open',
                         enabled: true,
                     },
                 ],

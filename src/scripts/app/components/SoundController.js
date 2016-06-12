@@ -158,7 +158,7 @@ class SoundController extends Component {
                 { this.state.error ? <p className="txt-error">{ this.state.error }</p> : null }
                 <ul className="list-hor list-hor--tight">
                     <li className="list-hor__item">
-                        <button className={`button-primary ${!this.currentBuffer ? 'needs-attention' : ''}`} onClick={() => this.generateEvent()}>
+                        <button className="button-primary button-primary--positive" onClick={() => this.generateEvent()}>
                             { this.currentBuffer ? 'Regenerate' : 'Generate' }
                         </button>
                     </li>

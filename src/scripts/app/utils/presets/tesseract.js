@@ -1,24 +1,19 @@
 const preset = {
-    id: 'thall-triplets',
-    description: 'Thall - Triplets',
+    id: 'tesseract',
+    description: 'Tesseract',
     settings: {
         config: {
-            bpm       : 94,
-            hitChance : 1,
+            bpm       : 122,
+            hitChance : .78,
             allowedLengths: [
                     {
-                        id: "0.5",
-                        amount: 1,
-                        isTriplet: true
-                    },
-                    {
                         id: "1",
-                        amount:1,
+                        amount: 1,
                         isTriplet: true
                     },
                     {
                         id: "2",
-                        amount: 1,
+                        amount:1,
                         isTriplet: true
                     },
             ],
@@ -32,7 +27,7 @@ const preset = {
             {
                 id    : 'groove',
                 bars  : 1,
-                beats : 12,
+                beats : 6,
             },
         ],
         instruments: [
@@ -40,31 +35,23 @@ const preset = {
                 id: 'guitar',
                 sounds: [
                     {
-                        id: 'guitar-palm-zero-1',
+                        id: 'sixth-2-open',
                         enabled: true,
                     },
                     {
-                        id: 'guitar-palm-zero-2',
+                        id: 'sixth-4-open',
                         enabled: true,
                     },
                     {
-                        id: 'guitar-open-zero-1',
+                        id: 'fifth-5-open',
                         enabled: true,
                     },
                     {
-                        id: 'guitar-open-zero-2',
+                        id: 'fifth-7-open',
                         enabled: true,
                     },
                     {
-                        id: 'guitar-open-first-1',
-                        enabled: true,
-                    },
-                    {
-                        id: 'guitar-open-sixth-second-1',
-                        enabled: true,
-                    },
-                    {
-                        id: 'guitar-root-dissonance',
+                        id: 'fifth-10-open',
                         enabled: true,
                     },
                 ],
@@ -89,7 +76,6 @@ const preset = {
             },
             {
                 id: 'cymbal',
-                ringout: true,
                 sounds: [
                     {
                         id: 'crash-left',
@@ -103,15 +89,6 @@ const preset = {
                         id: 'china-left',
                         enabled: true,
                     }
-                ],
-            },
-            {
-                id: 'drone',
-                sounds: [
-                    {
-                        id: 'drone-high',
-                        enabled: true,
-                    },
                 ],
             },
         ]

@@ -1,9 +1,9 @@
 const preset = {
-    id: 'thall-triplets-slow',
-    description: 'Thall - Triplets Slow',
+    id: 'thall-triplets',
+    description: 'Thall - Triplets',
     settings: {
         config: {
-            bpm       : 133,
+            bpm       : 104,
             hitChance : 1,
             allowedLengths: [
                     {

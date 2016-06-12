@@ -7,13 +7,23 @@ const preset = {
             hitChance      : 1,
             allowedLengths : [
                     {
-                        id: "1",
+                        id: "0.25",
                         amount:1,
                         isTriplet: false
                     },
                     {
-                        id: "2",
+                        id: "0.5",
+                        amount:1,
+                        isTriplet: false
+                    },
+                    {
+                        id: "1",
                         amount: 1,
+                        isTriplet: false
+                    },
+                    {
+                        id: "2",
+                        amount: 5,
                         isTriplet: false
                     },
             ],
@@ -35,32 +45,12 @@ const preset = {
                 id: 'guitar',
                 sounds: [
                     {
-                        id: 'guitar-palm-zero-1',
+                        id: 'sixth-0-open',
                         enabled: true,
                     },
                     {
-                        id: 'guitar-palm-zero-2',
+                        id: 'sixth-0-muted',
                         enabled: true,
-                    },
-                    {
-                        id: 'guitar-open-zero-1',
-                        enabled: true,
-                    },
-                    {
-                        id: 'guitar-open-zero-2',
-                        enabled: true,
-                    },
-                    {
-                        id: 'guitar-palm-first-1',
-                        enabled: true,
-                    },
-                    {
-                        id: 'guitar-open-sixth-second-1',
-                        enabled: false,
-                    },
-                    {
-                        id: 'guitar-root-dissonance',
-                        enabled: false,
                     },
                 ],
             },

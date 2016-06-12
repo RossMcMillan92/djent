@@ -275,19 +275,19 @@ const initialState = [
             {
                 id: 'drone-medium',
                 description: 'Drone medium',
-                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/drones/drone-medium.wav',
+                path: 'assets/audio/drones/drone-medium.mp3',
                 enabled: false,
             },
             {
                 id: 'drone-high',
                 description: 'Drone high',
-                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/drones/drone-high.wav',
+                path: 'assets/audio/drones/drone-high.mp3',
                 enabled: false,
             },
             {
                 id: 'drone-high-2',
                 description: 'Drone creepy',
-                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/drones/drone-high-2.wav',
+                path: 'assets/audio/drones/drone-high-2.mp3',
                 enabled: false,
             },
         ],

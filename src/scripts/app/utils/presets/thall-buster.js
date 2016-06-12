@@ -98,6 +98,10 @@ const preset = {
                     {
                         id: 'drone-high',
                         enabled: true,
+                    },
+                    {
+                        id: 'drone-high-2',
+                        enabled: true,
                     }
                 ],
             },

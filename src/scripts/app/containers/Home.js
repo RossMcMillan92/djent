@@ -110,6 +110,7 @@ class HomeComponent extends Component {
                         <Expandable
                             title="Advanced Settings"
                             titleClassName="u-curp"
+                            enableStateSave={true}
                         >
                             { beats }
 

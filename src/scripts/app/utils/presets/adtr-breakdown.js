@@ -9,17 +9,14 @@ const preset = {
                     {
                         id: "1",
                         amount:1,
-                        isTriplet: false
                     },
                     {
                         id: "2",
                         amount: 1,
-                        isTriplet: false
                     },
                     {
                         id: "4",
                         amount: 2,
-                        isTriplet: false
                     },
             ],
         },
@@ -45,10 +42,6 @@ const preset = {
                     },
                     {
                         id: 'sixth-4-muted',
-                        enabled: true,
-                    },
-                    {
-                        id: 'fifth-9-open',
                         enabled: true,
                     },
                 ],

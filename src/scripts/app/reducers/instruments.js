@@ -322,9 +322,7 @@ export default function instruments(state = initialState, action) {
 
         case 'APPLY_PRESET':
             const { preset } = payload;
-            console.log('PRESET', preset)
             const instruments = preset.settings.instruments;
-            console.log('initialState', initialState)
 
             let newState = initialState.map(instrument => {
                 const newInstrument = instruments.find(newInstrument => newInstrument.id === instrument.id);
@@ -336,8 +334,6 @@ export default function instruments(state = initialState, action) {
                     sounds = extendObjectArrayByID(instrument.sounds, newInstrument.sounds)
                 }
 
-                console.log('instrument', instrument.id, instrument.sounds.map(sound => sound.id + ': ' + sound.enabled))
-                console.log('newInstrument', newInstrument.id, newInstrument.sounds.map(sound => sound.id + ': ' + sound.enabled))
                 return {
                     ...instrument,
                     ...newInstrument,

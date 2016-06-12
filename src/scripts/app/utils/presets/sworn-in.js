@@ -3,18 +3,20 @@ const preset = {
     description: 'Sworn In',
     settings: {
         config: {
-            bpm            : 100,
-            hitChance      : .7,
+            bpm            : 90,
+            hitChance      : .9,
             allowedLengths : [
                     {
-                        id: "0.5",
-                        amount: 3,
-                        isTriplet: false
+                        id: "0.25",
+                        amount: 1,
+                    },
+                    {
+                        id: "2",
+                        amount: 2,
                     },
                     {
                         id: "4",
-                        amount: 1,
-                        isTriplet: false
+                        amount: 3,
                     },
             ],
         },
@@ -35,53 +37,29 @@ const preset = {
                 id: 'guitar',
                 sounds: [
                     {
-                        id: 'guitar-palm-zero-1',
+                        id: 'sixth-0-muted',
                         enabled: true,
                     },
                     {
-                        id: 'guitar-palm-zero-2',
+                        id: 'sixth-0-open',
                         enabled: true,
                     },
                     {
-                        id: 'guitar-open-zero-1',
+                        id: 'sixth-1-muted',
                         enabled: true,
                     },
                     {
-                        id: 'guitar-open-zero-2',
+                        id: 'sixth-1-open',
                         enabled: true,
                     },
                     {
-                        id: 'guitar-palm-first-1',
+                        id: 'sixth-3-muted',
                         enabled: true,
                     },
                     {
-                        id: 'guitar-open-first-1',
+                        id: 'dissonance-10',
                         enabled: true,
                     },
-                    {
-                        id: 'guitar-open-first-2',
-                        enabled: true,
-                    },
-                    {
-                        id: 'guitar-open-eighth',
-                        enabled: false,
-                    },
-                    {
-                        id: 'guitar-open-sixth-second-1',
-                        enabled: true,
-                    },
-                    {
-                        id: 'guitar-root-dissonance',
-                        enabled: false,
-                    },
-                    {
-                        id: 'guitar-dissonance-high',
-                        enabled: true,
-                    },
-                    {
-                        id: 'guitar-dissonance-high-2',
-                        enabled: true,
-                    }
                 ],
             },
             {

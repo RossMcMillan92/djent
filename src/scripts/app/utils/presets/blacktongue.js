@@ -9,22 +9,18 @@ const preset = {
                     {
                         id: "0.25",
                         amount:1,
-                        isTriplet: false
                     },
                     {
                         id: "0.5",
                         amount:1,
-                        isTriplet: false
                     },
                     {
                         id: "1",
                         amount: 1,
-                        isTriplet: false
                     },
                     {
                         id: "2",
                         amount: 5,
-                        isTriplet: false
                     },
             ],
         },

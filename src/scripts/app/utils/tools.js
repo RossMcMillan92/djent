@@ -52,10 +52,13 @@ const randomFromArray = (arr) => arr[randFromTo(0, arr.length-1)];
 
 const capitalize = (string) => string[0].toUpperCase() + string.substring(1);
 
+const coinFlip = () => !!(Math.random() > 0.5)
+
 export {
 	arraySelector,
 	capitalize,
 	compose,
+	coinFlip,
 	extendObjectArrayByID,
 	repeat,
 	randFromTo,

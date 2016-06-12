@@ -11,29 +11,36 @@ class Expandable extends Component {
     constructor (props) {
         super();
 
+        const lsValue = props.enableStateSave ? window.localStorage.getItem(`expandable-${escape(props.title)}`) === 'true' : false;
+
         this.state = {
-            isExpanded: props.isExpanded || false
+            isExpanded: props.isExpanded || lsValue
         }
     }
 
     componentWillUpdate = (nextProps) => {
-        if (nextProps.isExpanded !== this.state.isExpanded && this.isPristine) {
+        if (nextProps.isExpanded !== this.state.isExpanded && nextProps.isExpanded !== undefined && this.isPristine) {
             this.setState({ isExpanded: nextProps.isExpanded });
         }
     }
 
     onClick = () => {
-        this.setState({ isExpanded: !this.state.isExpanded });
+        const newValue = !this.state.isExpanded;
+        this.setState({ isExpanded: newValue });
         this.isPristine = false
+
+        if (this.props.enableStateSave) {
+            window.localStorage.setItem(`expandable-${escape(this.props.title)}`, newValue)
+        }
     }
 
     render = () => {
         return (
             <div className={`expandable ${ this.state.isExpanded ? 'is-expanded' : '' } ${ this.props.className ? this.props.className : '' }`}>
-                <div className={`expandable__title ${this.props.titleClassName}`} onClick={this.onClick}>
+                <div className={`expandable__title ${this.props.titleClassName ? this.props.titleClassName : ''}`} onClick={this.onClick}>
                     { this.props.title }
                 </div>
-                <div className={`expandable__body ${this.props.bodyClassName}`} onClick={() => this.isPristine = false}>
+                <div className={`expandable__body ${this.props.bodyClassName ? this.props.bodyClassName : ''}`} onClick={() => this.isPristine = false}>
                     { this.props.children }
                 </div>
             </div>

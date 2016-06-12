@@ -8,7 +8,7 @@ import tesseract from './presets/tesseract';
 const presets = [
     adtrBreakdown,
     blacktongue,
-    // swornIn,
+    swornIn,
     thallBuster,
     thallTriplets,
     tesseract,

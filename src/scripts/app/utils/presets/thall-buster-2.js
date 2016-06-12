@@ -1,38 +1,33 @@
 const preset = {
-    id: 'thall-triplets',
-    description: 'Thall - Triplets',
+    id: 'thall-buster-2',
+    description: 'Thall - Buster 2',
     settings: {
         config: {
-            bpm       : 104,
+            bpm       : 87,
             hitChance : 1,
             allowedLengths: [
                     {
-                        id: "0.25",
-                        amount: 1,
-                        isTriplet: true
-                    },
-                    {
-                        id: "0.5",
-                        amount: 1,
-                        isTriplet: true
-                    },
-                    {
-                        id: "2",
+                        id: "1",
                         amount:1,
-                        isTriplet: true
+                        isTriplet: false
+                    },
+                    {
+                        id: "4",
+                        amount:3,
+                        isTriplet: false
                     },
             ],
         },
         beats: [
             {
                 id    : 'total',
-                bars  : 8,
+                bars  : 4,
                 beats : 4,
             },
             {
                 id    : 'groove',
                 bars  : 1,
-                beats : 12,
+                beats : 7.5,
             },
         ],
         instruments: [
@@ -48,15 +43,19 @@ const preset = {
                         enabled: true,
                     },
                     {
-                        id: 'sixth-1-open',
-                        enabled: true,
-                    },
-                    {
-                        id: 'sixth-1-muted',
+                        id: 'fifth-5-open',
                         enabled: true,
                     },
                     {
                         id: 'fifth-6-open',
+                        enabled: true,
+                    },
+                    {
+                        id: 'third-7-open',
+                        enabled: true,
+                    },
+                    {
+                        id: 'third-8-open',
                         enabled: true,
                     },
                     {
@@ -68,7 +67,7 @@ const preset = {
                         enabled: true,
                     },
                     {
-                        id: 'dissonance-10',
+                        id: 'scratch',
                         enabled: true,
                     },
                 ],
@@ -93,7 +92,6 @@ const preset = {
             },
             {
                 id: 'cymbal',
-                ringout: true,
                 sounds: [
                     {
                         id: 'crash-left',
@@ -105,6 +103,19 @@ const preset = {
                     },
                     {
                         id: 'china-left',
+                        enabled: true,
+                    }
+                ],
+            },
+            {
+                id: 'drone',
+                sounds: [
+                    {
+                        id: 'drone-high',
+                        enabled: true,
+                    },
+                    {
+                        id: 'drone-high-2',
                         enabled: true,
                     }
                 ],

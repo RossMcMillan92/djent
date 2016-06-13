@@ -4,20 +4,20 @@ import InputBox from './InputBox';
 
 class HitChanceController extends Component {
     onChange = (event) => {
-        const value = parseFloat(event.target.value);
+        const value = parseFloat(event.target.value) / 100;
         if (value) this.props.actions.updateHitChance(value);
     }
 
     render = () => {
         const props = {
-            label: 'Hit Chance',
+            label: 'Hit Chance (%)',
             id: 'hitChance',
             type: 'number',
-            defaultValue: this.props.hitChance,
+            defaultValue: this.props.hitChance * 100,
             onChange: this.onChange,
-            step: .05,
-            min: .05,
-            max: 1,
+            step: 5,
+            min: 5,
+            max: 100,
             className: 'input-base',
             labelClassName: 'input-label',
         }

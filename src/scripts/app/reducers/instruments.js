@@ -274,20 +274,20 @@ const initialState = [
         sounds: [
             {
                 id: 'drone-medium',
-                description: 'Drone medium',
-                path: 'assets/audio/drones/drone-medium.mp3',
+                description: 'Medium',
+                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/drones/drone-medium.mp3',
                 enabled: false,
             },
             {
                 id: 'drone-high',
-                description: 'Drone high',
-                path: 'assets/audio/drones/drone-high.mp3',
+                description: 'High',
+                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/drones/drone-high.mp3',
                 enabled: false,
             },
             {
                 id: 'drone-high-2',
-                description: 'Drone creepy',
-                path: 'assets/audio/drones/drone-high-2.mp3',
+                description: 'Creepy',
+                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/drones/drone-high-2.mp3',
                 enabled: false,
             },
         ],

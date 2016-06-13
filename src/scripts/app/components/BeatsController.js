@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import { capitalize } from '../utils/tools';
 import InputBox from './InputBox';
 
 class BeatsController extends Component {
@@ -13,18 +14,25 @@ class BeatsController extends Component {
             return {
                 type: 'number',
                 id: type,
-                label: type,
-                containerClassName: 'u-dib',
+                label: capitalize(type),
                 defaultValue : this.props.beat[type],
-                onChange: (event) => this.onChange(event, type)
+                onChange: (event) => this.onChange(event, type),
+                min: 1,
+                max: 8,
+                className: 'input-base',
+                labelClassName: 'input-label',
             }
         }
 
         return (
             <div>
-                <InputBox { ...getProps('bars') } />
+                <div className="u-dib">
+                    <InputBox { ...getProps('bars') } />
+                </div>
                 <span className="group-spacing-x-small">&times;</span>
-                <InputBox { ...getProps('beats') } />
+                <div className="u-dib">
+                    <InputBox { ...getProps('beats') } />
+                </div>
             </div>
         );
     }

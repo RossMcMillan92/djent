@@ -2,7 +2,7 @@ $button-primary__total-line-height: 21px
 $button-primary__line-height: 1.4
 $button-primary__font-size: round($button-primary__total-line-height / $button-primary__line-height)
 $button-primary__svg-icon-size: $button-primary__total-line-height
-$button-primary__default-bg-color: #efefef
+$button-primary__default-bg-color: #dfdfdf
 
 .button-primary
     position: relative
@@ -40,3 +40,8 @@ $button-primary__default-bg-color: #efefef
     &:hover,
     &:focus
         background-color: lighten($palette-alpha, 5%)
+
+.button-primary--small
+    padding: ($base-spacing-unit / 2) $base-spacing-unit
+    font-size: $base-font-size
+    line-height: 1.15

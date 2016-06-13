@@ -35,11 +35,12 @@ const allowedLengths = [
 
 const initialState = {
     allowedLengths,
-    activePresetID : 'thall-buster',
-    bpm            : 50,
-    fadeIn         : false,
-    hitChance      : 1,
-    isLooping      : true,
+    activePresetID       : 'thall-buster',
+    bpm                  : 50,
+    fadeIn               : false,
+    hitChance            : 1,
+    isLooping            : true,
+    continuousGeneration : false,
 };
 
 const getInitialState = () => {
@@ -60,9 +61,15 @@ export default function config(state = getInitialState(), action) {
             };
 
         case 'UPDATE_BPM':
+            let newBPM = payload.bpm;
+
+            if (!newBPM)       newBPM = 100;
+            if (newBPM < 50)   newBPM = 50;
+            if (newBPM > 9999) newBPM = 9999;
+
             return {
                 ...state,
-                bpm: payload.bpm
+                bpm: newBPM
             };
 
         case 'UPDATE_IS_LOOPING':
@@ -71,10 +78,22 @@ export default function config(state = getInitialState(), action) {
                 isLooping: payload.isLooping
             };
 
-        case 'UPDATE_HITCHANCE':
+        case 'UPDATE_CONTINUOUS_GENERATION':
             return {
                 ...state,
-                hitChance: payload.hitChance
+                continuousGeneration: payload.continuousGeneration
+            };
+
+        case 'UPDATE_HITCHANCE':
+            let newHitChance = payload.hitChance;
+
+            if (!newHitChance)       newHitChance = 1;
+            if (newHitChance < 0.05)   newHitChance = 0.05;
+            if (newHitChance > 1) newHitChance = 1;
+
+            return {
+                ...state,
+                hitChance: newHitChance
             };
 
         case 'UPDATE_FADEIN':

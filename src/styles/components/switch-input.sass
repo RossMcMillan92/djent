@@ -1,0 +1,50 @@
+$switch-input__handle-colour        : $palette-shade-alpha
+$switch-input__track-colour         : $palette-shade-delta
+$switch-input__track-colour--active : $palette-alpha
+$switch-input__height               : 30px
+$switch-input__width                : 60px
+$switch-input__spacing              : 6px
+$switch-input__handle-size          : $switch-input__height - $switch-input__spacing
+
+
+.switch-input
+    position: relative
+    cursor: pointer
+
+.switch-input__input
+    position: absolute
+    height: 0
+    width: 0
+    visibility: hidden
+
+.switch-input__toggle
+    position: relative
+    background: $switch-input__track-colour
+    border-radius: $switch-input__height
+    height: $switch-input__height
+    width: $switch-input__width
+    border: solid 1px $palette-base-ui
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05)
+
+    &::before
+        position: absolute
+        content: ""
+        top: $switch-input__spacing / 2
+        left: 0
+        transform: translate3d($switch-input__spacing / 2, 0, 0)
+        border-radius: $switch-input__handle-size
+        height: $switch-input__handle-size
+        width: $switch-input__handle-size
+        background: $switch-input__handle-colour
+        box-shadow: 0 1px 1px rgba(0, 0, 0, .2)
+        transition: all .15s ease-in-out
+
+    &:hover::before
+        box-shadow: 0 3px 1px rgba(0, 0, 0, .15)
+
+    &.is-active
+        background: $switch-input__track-colour--active
+        border-color: darken($palette-alpha, 5%)
+
+        &::before
+            transform: translate3d($switch-input__width - $switch-input__handle-size - $switch-input__spacing / 2, 0, 0)

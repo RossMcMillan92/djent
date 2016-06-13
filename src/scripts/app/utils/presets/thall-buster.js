@@ -48,10 +48,6 @@ const preset = {
                         enabled: true,
                     },
                     {
-                        id: 'dissonance-10',
-                        enabled: true,
-                    },
-                    {
                         id: 'scratch',
                         enabled: true,
                     },

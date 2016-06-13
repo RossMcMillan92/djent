@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
-
-import InputBox from './InputBox';
 import NotePanel from './NotePanel';
-import SVG from './SVG';
-import { repeatArray } from '../utils/tools';
 
 class AllowedLengthsController extends Component {
 
@@ -17,21 +13,21 @@ class AllowedLengthsController extends Component {
         }
 
         const lengths = allowedLengths
-            .map((length, i) => <NotePanel length={length} { ...notePanelProps } key={i} />);
+            .map((length, i) => (
+                <div className="grid__item one-fifth gamma--one-third beta--one-half palm--one-whole" key={i} >
+                    <div className="u-mb1" key={i} >
+                        <NotePanel length={length} { ...notePanelProps } />
+                    </div>
+                </div>
+                )
+            );
 
         return (
-            <div className="grid">
+            <div className="grid grid--center">
                 { lengths }
             </div>
         );
     }
 }
-// <InputBox
-//     id={length.id}
-//     label={length.name}
-//     defaultValue={length.amount}
-//     containerClassName="u-tar"
-//     type="number"
-//     onChange={this.onLengthAmountChange}
-// />
+
 export default AllowedLengthsController;

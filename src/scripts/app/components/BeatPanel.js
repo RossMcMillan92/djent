@@ -16,26 +16,30 @@ class BeatPanel extends Component {
                 <div className="group-padding-x group-padding-y">
                     <h2 className="title-primary">Randomised beat settings</h2>
 
-                    <div className="group-spacing-y">
+                    <div className="group-spacing-y u-mb0">
                         <AllowedLengthsController
                             actions={{ updateAllowedLengths: this.props.actions.updateAllowedLengths }}
                             allowedLengths={this.props.allowedLengths}
                         />
                     </div>
 
-                    <div className="group-spacing-y">
-                        <BeatsController
-                            beat={ this.props.beat }
-                            actions={{ updateBeats: this.props.actions.updateBeats }}
-                        />
-                    </div>
+                    <div className="grid grid--wide grid--middle">
+                        <div className="grid__item w-auto">
+                            <BeatsController
+                                beat={ this.props.beat }
+                                actions={{ updateBeats: this.props.actions.updateBeats }}
+                            />
+                        </div>
 
-                    <div className="">
-                        <HitChanceController
-                            beatID={ this.props.beat.id }
-                            hitChance={ this.props.hitChance }
-                            actions={{ updateHitChance: this.props.actions.updateHitChance }}
-                        />
+                        <div className="grid__item w-auto">
+                            <div className="">
+                                <HitChanceController
+                                    beatID={ this.props.beat.id }
+                                    hitChance={ this.props.hitChance }
+                                    actions={{ updateHitChance: this.props.actions.updateHitChance }}
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>

@@ -28,7 +28,7 @@ const preset = {
             },
             {
                 id    : 'groove',
-                bars  : 1,
+                bars  : 2,
                 beats : 4,
             },
         ],

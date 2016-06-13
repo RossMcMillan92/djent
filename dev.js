@@ -27,4 +27,8 @@ watch(cssSource, (filename) => buildCSS(filename, inputCSSPath, outputCSSPath))
 
 // Livereload
 const server = livereload.createServer();
-server.watch([outputJSPath, outputCSSPath]);
+server
+    .watch([outputJSPath, outputCSSPath])
+    .on('change', (filename) => {
+        console.log(`Reloaded: ${filename}`)
+    });;

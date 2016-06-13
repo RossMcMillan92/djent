@@ -38,9 +38,16 @@ const predefinedSequences = {
         ]
     },
 
+    offBeat: {
+        sequence: [
+            { beat: 1, volume: 0 },
+            { beat: 1, volume: 1 },
+        ]
+    },
+
     drone: {
         sequence: [
-            { beat: 0.0625, volume: 1 },
+            { beat: 0.125, volume: 1 },
         ]
     }
 }
@@ -56,6 +63,7 @@ const instrumentSequences = {
         predefinedSequences.steadyQuarters.sequence,
     ],
     snare: [
+        // predefinedSequences.offBeat.sequence,
         predefinedSequences.middleBeat.sequence,
     ],
     drone: [

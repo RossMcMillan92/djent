@@ -21,6 +21,13 @@ export function updateIsLooping(isLooping) {
   };
 }
 
+export function updateContinuousGeneration(continuousGeneration) {
+  return {
+    type: 'UPDATE_CONTINUOUS_GENERATION',
+    payload: { continuousGeneration },
+  };
+}
+
 export function updateHitChance(hitChance) {
   return {
     type: 'UPDATE_HITCHANCE',

@@ -27,7 +27,15 @@ export default function beats(state = initialState, action) {
 
     switch (type) {
         case 'UPDATE_BEATS':
-            return updateBeatByID({ beats: state, id: payload.id, prop: payload.prop, value: payload.value })
+            let { value, prop, id } = payload;
+
+            if (prop === 'bars' || prop === 'beats') {
+                if (!value)    value = 4;
+                if (value < 1) value = 1;
+                if (value > 8) value = 8;
+            }
+
+            return updateBeatByID({ beats: state, id, prop, value })
 
         case 'APPLY_PRESET':
             const { preset } = payload;

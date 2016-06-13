@@ -1,3 +1,13 @@
 .panel
-    background: $palette-gamma
-    border-radius: 3px
+    background: $palette-shade-beta
+
+    &:first-of-type
+        border-top-right-radius: 3px
+        border-top-left-radius: 3px
+
+    &:last-of-type
+        border-bottom-right-radius: 3px
+        border-bottom-left-radius: 3px
+
+.panel--dark
+    background: darken($palette-shade-beta, 10%)

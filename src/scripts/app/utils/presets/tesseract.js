@@ -21,19 +21,23 @@ const preset = {
         beats: [
             {
                 id    : 'total',
-                bars  : 4,
+                bars  : 8,
                 beats : 4,
             },
             {
                 id    : 'groove',
                 bars  : 1,
-                beats : 6,
+                beats : 7,
             },
         ],
         instruments: [
             {
                 id: 'guitar',
                 sounds: [
+                    {
+                        id: 'sixth-1-open',
+                        enabled: true,
+                    },
                     {
                         id: 'sixth-2-open',
                         enabled: true,
@@ -43,7 +47,7 @@ const preset = {
                         enabled: true,
                     },
                     {
-                        id: 'fifth-5-open',
+                        id: 'fifth-6-open',
                         enabled: true,
                     },
                     {
@@ -52,6 +56,10 @@ const preset = {
                     },
                     {
                         id: 'fifth-10-open',
+                        enabled: true,
+                    },
+                    {
+                        id: 'scratch',
                         enabled: true,
                     },
                 ],

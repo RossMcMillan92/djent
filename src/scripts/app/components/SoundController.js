@@ -96,6 +96,10 @@ class SoundController extends Component {
         error      : '',
     }
 
+    updateUI = (newState) => {
+        requestAnimationFrame(() => this.setState(newState));
+    }
+
     componentWillUpdate = (nextProps) => {
         if(nextProps.isLooping !== this.props.isLooping) {
             loop(this.currentSrc, nextProps.isLooping);
@@ -103,17 +107,18 @@ class SoundController extends Component {
     }
 
     generate = (shouldPlay) => {
-        this.setState({ isLoading: true });
-        stop(this.currentSrc);
+        this.stopEvent(this.currentSrc);
         generateNewBuffer(this.props)
             .then((buffer) => {
                 const newState = { isLoading: false, error: '' };
 
                 if (!buffer) newState.error = 'Error!'
-                this.setState(newState)
+                this.updateUI(newState)
                 this.currentBuffer = buffer;
                 if (shouldPlay) this.playEvent();
             });
+
+        this.updateUI({ isLoading: true });
     }
 
     togglePlay = () => {
@@ -138,12 +143,20 @@ class SoundController extends Component {
         this.currentGainNode = fadeIn(this.currentGainNode, (this.props.fadeIn ? 5000 : 0));
 
         loop(this.currentSrc, this.props.isLooping);
-        this.setState({ isPlaying: true });
+        this.updateUI({ isPlaying: true });
+
+        this.currentSrc.addEventListener('ended', this.onEnded)
+    }
+
+    onEnded = () => {
+        if (this.props.continuousGeneration) this.generate(true);
+        else this.stopEvent();
     }
 
     stopEvent = () => {
+        if (this.currentSrc) this.currentSrc.removeEventListener('ended', this.onEnded)
         stop(this.currentSrc)
-        this.setState({ isPlaying: false });
+        this.updateUI({ isPlaying: false });
     }
 
     generateEvent = () => {

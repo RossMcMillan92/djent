@@ -6,7 +6,7 @@ import { updateIsLooping } from '../actions/config';
 import LoopController from '../components/LoopController';
 
 const mapStateToProps = (state) => ({
-    isLooping: state.config.isLooping,
+    isLooping: state.config.get('isLooping'),
 })
 
 const mapDispatchToProps = (dispatch) => {

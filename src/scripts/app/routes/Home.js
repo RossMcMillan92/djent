@@ -48,8 +48,8 @@ export default class Home extends Component {
                     <DocumentMeta {...metaData} />
 
                     <div className="group-spacing-x">
-                        <div className="group-spacing-y">
-                            <h1 className="title-primary">
+                        <div className="group-spacing-y-large">
+                            <h1 className="title-primary u-txt-light">
                                 Djenerator
                             </h1>
                         </div>
@@ -114,7 +114,7 @@ export default class Home extends Component {
                                             </div>
                                         </div>
 
-                                        <div className="grid__item w-auto">
+                                        {/*<div className="grid__item w-auto">
                                             <div className="group-spacing-y-small">
                                                 <ContinuousGenerationController />
                                             </div>
@@ -124,7 +124,7 @@ export default class Home extends Component {
                                             <div className="group-spacing-y-small">
                                                 <FadeController />
                                             </div>
-                                        </div>
+                                        </div>*/}
                                     </div>
                                 </div>
                             </div>
@@ -132,7 +132,7 @@ export default class Home extends Component {
 
                         <Expandable
                             title="Advanced Settings"
-                            titleClassName="u-curp u-mb1"
+                            titleClassName="u-curp u-mb1 u-txt-light"
                             enableStateSave={true}
                         >
                             { beats }

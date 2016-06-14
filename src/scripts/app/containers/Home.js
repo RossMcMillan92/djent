@@ -11,7 +11,7 @@ import { updateBeats } from '../actions/beats';
 function mapStateToProps(state) {
     return {
         instruments      : state.instruments,
-        activePresetID   : state.config.activePresetID,
+        activePresetID   : state.config.get('activePresetID'),
         beats            : state.beats,
     }
 }

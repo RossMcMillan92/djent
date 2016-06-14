@@ -1,3 +1,4 @@
+import { fromJS, Map, List } from 'immutable';
 import { extendObjectArrayByID } from '../utils/tools';
 
 const allowedLengths = [
@@ -44,10 +45,8 @@ const initialState = {
 };
 
 const getInitialState = () => {
-    return {
-        ...initialState,
-        allowedLengths: allowedLengths.map(length => ({ ...length }))
-    }
+    console.log('GETINITIALSTATE', fromJS(initialState))
+    return fromJS(initialState)
 }
 
 export default function config(state = getInitialState(), action) {
@@ -55,10 +54,7 @@ export default function config(state = getInitialState(), action) {
 
     switch (type) {
         case 'UPDATE_ALLOWED_LENGTHS':
-            return {
-                ...state,
-                allowedLengths: payload.allowedLengths
-            };
+            return state.set('allowedLengths', List(allowedLengths));
 
         case 'UPDATE_BPM':
             let newBPM = payload.bpm;
@@ -67,22 +63,13 @@ export default function config(state = getInitialState(), action) {
             if (newBPM < 50)   newBPM = 50;
             if (newBPM > 9999) newBPM = 9999;
 
-            return {
-                ...state,
-                bpm: newBPM
-            };
+            return state.set('bpm', newBPM);
 
         case 'UPDATE_IS_LOOPING':
-            return {
-                ...state,
-                isLooping: payload.isLooping
-            };
+            return state.set('isLooping', payload.isLooping);
 
         case 'UPDATE_CONTINUOUS_GENERATION':
-            return {
-                ...state,
-                continuousGeneration: payload.continuousGeneration
-            };
+            return state.set('continuousGeneration', payload.continuousGeneration);
 
         case 'UPDATE_HITCHANCE':
             let newHitChance = payload.hitChance;
@@ -91,33 +78,25 @@ export default function config(state = getInitialState(), action) {
             if (newHitChance < 0.05)   newHitChance = 0.05;
             if (newHitChance > 1) newHitChance = 1;
 
-            return {
-                ...state,
-                hitChance: newHitChance
-            };
+            return
+                return state.set('hitChance', newHitChance);
 
         case 'UPDATE_FADEIN':
-            return {
-                ...state,
-                fadeIn: payload.fadeIn
-            };
+            return state.set('fadeIn', payload.fadeIn);
 
         case 'APPLY_PRESET':
             const { preset } = payload;
             const { bpm, fadeIn, allowedLengths, hitChance } = preset.settings.config;
-            const newState = { ...getInitialState() };
+            let newState = getInitialState().set('activePresetID', preset.id);
 
-            if (bpm) newState.bpm = bpm;
-            if (fadeIn) newState.fadeIn = fadeIn;
-            if (hitChance) newState.hitChance = hitChance;
+            if (bpm) newState = newState.set('bpm', bpm);
+            if (fadeIn) newState = newState.set('fadeIn', fadeIn);
+            if (hitChance) newState = newState.set('hitChance', hitChance);
             if (allowedLengths) {
-                newState.allowedLengths = extendObjectArrayByID(newState.allowedLengths, [ ...allowedLengths ])
+                newState = newState.set('allowedLengths', List(extendObjectArrayByID(newState.get('allowedLengths').toJS(), allowedLengths)));
             }
 
-            return {
-                ...newState,
-                activePresetID: preset.id
-            };
+            return fromJS(newState);
 
         default:
             return state;

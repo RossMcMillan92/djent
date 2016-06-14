@@ -6,7 +6,7 @@ import { updateFadeIn } from '../actions/config';
 import FadeController from '../components/FadeController';
 
 const mapStateToProps = (state) => ({
-    fadeIn: state.config.fadeIn,
+    fadeIn: state.config.get('fadeIn'),
 })
 
 

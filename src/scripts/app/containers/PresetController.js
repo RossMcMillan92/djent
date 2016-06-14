@@ -5,7 +5,7 @@ import { applyPreset } from '../actions/config';
 import PresetController from '../components/PresetController';
 
 const mapStateToProps = (state) => ({
-    activePresetID: state.config.activePresetID,
+    activePresetID: state.config.get('activePresetID'),
 })
 
 const mapDispatchToProps = (dispatch) => {

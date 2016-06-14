@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import deepEqual from 'deep-equal';
 
 import {
     playSound

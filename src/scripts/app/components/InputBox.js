@@ -5,6 +5,11 @@ class InputBox extends Component {
         this.refs.input.value = nextProps.defaultValue
     }
 
+    onClick = e => {
+        const input = e.target
+        input.select()
+    }
+
     render = () => {
         const inputProps   = {
             id                 : '',
@@ -22,7 +27,7 @@ class InputBox extends Component {
         return (
             <div className={containerClassName}>
                 <label className={ labelClassName } htmlFor={ id }>{ label }:</label>
-                <input ref="input" { ...inputProps } />
+                <input ref="input" { ...inputProps } onClick={this.onClick} />
             </div>
         )
     }

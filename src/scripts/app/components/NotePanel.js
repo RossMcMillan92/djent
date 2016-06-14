@@ -4,6 +4,7 @@ import { capitalize } from '../utils/tools';
 class NotePanel extends Component {
 
     onLengthAmountChange = (event, value) => {
+        console.log('THIS.PROPS.LENGTH', this.props.length)
         const { id, amount } = this.props.length;
         const newAmount = amount + value;
 

@@ -15,8 +15,7 @@ class BPMController extends Component {
             type: 'number',
             defaultValue: this.props.bpm,
             onChange: this.onBPMChange,
-            min: 50,
-            max: 9999,
+            step: 5,
             className: 'input-base',
             labelClassName: 'input-label',
         }

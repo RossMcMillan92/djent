@@ -17,8 +17,6 @@ class BeatsController extends Component {
                 label: capitalize(type),
                 defaultValue : this.props.beat[type],
                 onChange: (event) => this.onChange(event, type),
-                min: 1,
-                max: 8,
                 className: 'input-base',
                 labelClassName: 'input-label',
             }

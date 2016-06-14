@@ -6,7 +6,7 @@ import { updateContinuousGeneration } from '../actions/config';
 import ContinuousGenerationController from '../components/ContinuousGenerationController';
 
 const mapStateToProps = (state) => ({
-    continuousGeneration: state.config.continuousGeneration,
+    continuousGeneration: state.config.get('continuousGeneration'),
 })
 
 const mapDispatchToProps = (dispatch) => {

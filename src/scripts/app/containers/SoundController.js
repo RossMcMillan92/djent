@@ -5,13 +5,13 @@ import * as configActions from '../actions/config';
 import SoundController from '../components/SoundController';
 
 const mapStateToProps = (state) => ({
-    fadeIn: state.config.fadeIn,
-    isLooping: state.config.isLooping,
-    continuousGeneration: state.config.continuousGeneration,
-    bpm: state.config.bpm,
+    fadeIn: state.config.get('fadeIn'),
+    isLooping: state.config.get('isLooping'),
+    continuousGeneration: state.config.get('continuousGeneration'),
+    bpm: state.config.get('bpm'),
     beats: state.beats,
-    allowedLengths: state.config.allowedLengths,
-    hitChance: state.config.hitChance,
+    allowedLengths: state.config.get('allowedLengths'),
+    hitChance: state.config.get('hitChance'),
     instruments: state.instruments
 })
 

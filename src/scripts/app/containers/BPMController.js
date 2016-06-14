@@ -6,8 +6,8 @@ import BPMController from '../components/BPMController';
 import presets from '../utils/presets';
 
 const mapStateToProps = (state) => ({
-    bpm: state.config.bpm,
-    preset: presets.find(preset => preset.id === state.config.activePresetID),
+    bpm: state.config.get('bpm'),
+    preset: presets.find(preset => preset.id === state.config.get('activePresetID')),
 })
 
 const mapDispatchToProps = (dispatch) => {

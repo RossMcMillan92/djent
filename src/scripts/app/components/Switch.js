@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 
 class Switch extends Component {
+    shouldComponentUpdate = (nextProps) => {
+      return this.props.isActive !== nextProps.isActive;
+    }
+
     render = () => {
         const inputProps   = {
             id                 : '',

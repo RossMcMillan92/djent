@@ -3,10 +3,13 @@ import React, { Component } from 'react';
 import InputBox from './InputBox';
 
 class HitChanceController extends Component {
+    shouldComponentUpdate = (nextProps) => nextProps.hitChance !== this.props.hitChance;
+
     onChange = (event) => {
         const value = parseFloat(event.target.value) / 100;
         if (value) this.props.actions.updateHitChance(value);
     }
+
 
     render = () => {
         const props = {
@@ -16,8 +19,6 @@ class HitChanceController extends Component {
             defaultValue: this.props.hitChance * 100,
             onChange: this.onChange,
             step: 5,
-            min: 5,
-            max: 100,
             className: 'input-base',
             labelClassName: 'input-label',
         }

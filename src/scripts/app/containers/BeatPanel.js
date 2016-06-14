@@ -14,6 +14,7 @@ function mapStateToProps(state) {
     return {
         allowedLengths : state.config.allowedLengths,
         hitChance      : state.config.hitChance,
+        beats          : state.beats,
     }
 }
 

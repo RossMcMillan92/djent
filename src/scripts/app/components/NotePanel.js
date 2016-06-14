@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import deepEqual from 'deep-equal';
+
 import { capitalize } from '../utils/tools';
 
 class NotePanel extends Component {
+    shouldComponentUpdate = (nextProps) => !deepEqual(nextProps.length, this.props.length);
 
     onLengthAmountChange = (event, value) => {
         const { id, amount } = this.props.length;

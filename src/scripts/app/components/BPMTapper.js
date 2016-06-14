@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
-
 class BPMTapper extends Component {
+    shouldComponentUpdate = () => false;
+
     taps = [];
 
     onTap = (event) => {
@@ -35,8 +36,6 @@ class BPMTapper extends Component {
             label: 'BPM',
             type: 'number',
             className: 'button-primary button-primary--small',
-            defaultValue: this.props.bpm,
-            onChange: this.onBPMChange
         }
 
         return (

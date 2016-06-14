@@ -5,13 +5,6 @@ import BeatsController          from './BeatsController';
 import HitChanceController      from './HitChanceController';
 
 class BeatPanel extends Component {
-    componentWillUpdate = (nextProps) => {
-        console.log('lmao1 nextProps  :', nextProps.allowedLengths.map(a => a.amount))
-        console.log('lmao2 this.props :', this.props.allowedLengths.map(a => a.amount))
-        console.log('rofl1 nextProps  :', nextProps.beat)
-        console.log('rofl2 this.props :', this.props.beat)
-    }
-
     onHitChanceChange = (event) => {
         const hitChance = parseInt(event.target.value);
         this.props.beat.actions.updateHitChance(hitChance);

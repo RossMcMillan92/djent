@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import InputBox from './InputBox';
 
 class BPMController extends Component {
+    shouldComponentUpdate = (nextProps) => nextProps.bpm !== this.props.bpm;
+
     onBPMChange = (event) => {
         const bpm = parseFloat(event.target.value);
         this.props.actions.updateBPM(bpm);
@@ -15,8 +17,7 @@ class BPMController extends Component {
             type: 'number',
             defaultValue: this.props.bpm,
             onChange: this.onBPMChange,
-            min: 50,
-            max: 9999,
+            step: 5,
             className: 'input-base',
             labelClassName: 'input-label',
         }

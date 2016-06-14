@@ -16,17 +16,6 @@ const SVG = (props) => {
 export default SVG;
 
 const icons = {
-    arrowLeft: {
-        viewBox: '0 0 864 864',
-        pathCoordinates: 'M576 0q-6 0 -13 5l-414 414q-13 13 0 26l414 414q13 13 26 0l126 -126q13 -13 0 -26l-276 -275l276 -275q13 -13 0 -26l-126 -126q-7 -5 -13 -5z'
-    },
-
-    arrowRight: {
-        viewBox: '0 0 864 864',
-        pathCoordinates: 'M288 864q6 0 13 -5l414 -414q13 -13 0 -26l-414 -414q-13 -13 -26 0l-126 126q-13 13 0 26l275 275l-275 275q-13 13 0 26l126 126q7 5 13 5z'
-    },
-
-    // feedback-panel
     stop: {
         viewBox: '0 0 864 864',
         pathCoordinates: `M864 18q0 -8 -5 -13t-13 -5h-828q-8 0 -13 5t-5 13v828q0 8 5 13t13 5h828q8 0 13 -5t5 -13v-828z`

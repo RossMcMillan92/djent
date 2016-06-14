@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import deepEqual from 'deep-equal';
+
 import NotePanel from './NotePanel';
 
 class AllowedLengthsController extends Component {
+    shouldComponentUpdate = (nextProps) => !deepEqual(nextProps.allowedLengths, this.props.allowedLengths);
 
     render = () => {
         const { allowedLengths, actions } = this.props;

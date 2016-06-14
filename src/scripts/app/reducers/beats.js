@@ -15,8 +15,9 @@ const initialState =  [
 
 const updateBeatByID = ({ beats, id, prop, value }) => {
     const newBeats = beats.map(beat => {
-        if (beat.id === id) beat[prop] = value;
-        return beat;
+        const newBeat = { ...beat }
+        if (newBeat.id === id) newBeat[prop] = value;
+        return newBeat;
     })
 
     return newBeats;

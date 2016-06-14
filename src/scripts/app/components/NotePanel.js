@@ -4,7 +4,6 @@ import { capitalize } from '../utils/tools';
 class NotePanel extends Component {
 
     onLengthAmountChange = (event, value) => {
-        console.log('THIS.PROPS.LENGTH', this.props.length)
         const { id, amount } = this.props.length;
         const newAmount = amount + value;
 
@@ -20,8 +19,9 @@ class NotePanel extends Component {
 
     updateAllowedLengthsByID = (id, prop, value) => {
         const newAllowedLengths = this.props.allowedLengths.map(obj => {
-            if (obj.id === id) obj[prop] = value;
-            return obj;
+            const newObj = { ...obj };
+            if (newObj.id === id) newObj[prop] = value;
+            return newObj;
         });
 
         this.props.actions.updateAllowedLengths(newAllowedLengths);

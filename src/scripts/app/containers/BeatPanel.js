@@ -11,10 +11,10 @@ import * as instrumentsActions from '../actions/instruments';
 import * as beatsActions from '../actions/beats';
 
 function mapStateToProps(state) {
-    console.log('state.config.get()',state.config.get('allowedLengths'))
     return {
         allowedLengths : state.config.get('allowedLengths'),
         hitChance      : state.config.get('hitChance'),
+        beats          : state.beats,
     }
 }
 

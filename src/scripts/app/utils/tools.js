@@ -26,10 +26,10 @@ const extendObjectArrayByID = (one, two) => {
         const newValue = two.find(newValue => newValue.id === value.id);
 
 		if (newValue) {
-			return deepExtend({}, value, newValue);
+			return deepExtend({}, { ...value }, { ...newValue });
 		}
 
-        return value;
+        return { ...value };
     })
 }
 

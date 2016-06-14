@@ -35,7 +35,7 @@ const allowedLengths = [
 ];
 
 const initialState = {
-    allowedLengths,
+    allowedLengths       : allowedLengths.map(obj => Map(obj)),
     activePresetID       : 'thall-buster',
     bpm                  : 50,
     fadeIn               : false,
@@ -45,7 +45,6 @@ const initialState = {
 };
 
 const getInitialState = () => {
-    console.log('GETINITIALSTATE', fromJS(initialState))
     return fromJS(initialState)
 }
 
@@ -54,7 +53,7 @@ export default function config(state = getInitialState(), action) {
 
     switch (type) {
         case 'UPDATE_ALLOWED_LENGTHS':
-            return state.set('allowedLengths', List(allowedLengths));
+            return state.set('allowedLengths', payload.allowedLengths.map(obj => ({ ...obj })));
 
         case 'UPDATE_BPM':
             let newBPM = payload.bpm;
@@ -75,8 +74,8 @@ export default function config(state = getInitialState(), action) {
             let newHitChance = payload.hitChance;
 
             if (!newHitChance)       newHitChance = 1;
-            if (newHitChance < 0.05)   newHitChance = 0.05;
-            if (newHitChance > 1) newHitChance = 1;
+            if (newHitChance < 0.05) newHitChance = 0.05;
+            if (newHitChance > 1)    newHitChance = 1;
 
             return
                 return state.set('hitChance', newHitChance);
@@ -89,14 +88,14 @@ export default function config(state = getInitialState(), action) {
             const { bpm, fadeIn, allowedLengths, hitChance } = preset.settings.config;
             let newState = getInitialState().set('activePresetID', preset.id);
 
-            if (bpm) newState = newState.set('bpm', bpm);
-            if (fadeIn) newState = newState.set('fadeIn', fadeIn);
+            if (bpm) newState       = newState.set('bpm', bpm);
+            if (fadeIn) newState    = newState.set('fadeIn', fadeIn);
             if (hitChance) newState = newState.set('hitChance', hitChance);
             if (allowedLengths) {
                 newState = newState.set('allowedLengths', List(extendObjectArrayByID(newState.get('allowedLengths').toJS(), allowedLengths)));
             }
 
-            return fromJS(newState);
+            return newState;
 
         default:
             return state;

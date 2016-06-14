@@ -19,8 +19,9 @@ class NotePanel extends Component {
 
     updateAllowedLengthsByID = (id, prop, value) => {
         const newAllowedLengths = this.props.allowedLengths.map(obj => {
-            if (obj.id === id) obj[prop] = value;
-            return obj;
+            const newObj = { ...obj };
+            if (newObj.id === id) newObj[prop] = value;
+            return newObj;
         });
 
         this.props.actions.updateAllowedLengths(newAllowedLengths);

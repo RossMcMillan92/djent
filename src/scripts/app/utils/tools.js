@@ -46,6 +46,21 @@ const compose = (...funcs) => {
   }
 }
 
+const deepCloneObject = (obj) => Object.keys(obj)
+    .reduce((newObject, objKey, i) => {
+        const value = obj[objKey];
+        const newValue = (typeof value === 'object' && !Array.isArray(value))
+                    ? deepCloneObject(value)
+                    : (Array.isArray(value))
+                      ? value.map(deepCloneObject)
+                      : value;
+
+        return {
+            ...newObject,
+            [objKey]: newValue
+        }
+    }, {});
+
 const randFromTo = (from,to) => Math.floor(Math.random()*(to-from+1)+from);
 
 const randomFromArray = (arr) => arr[randFromTo(0, arr.length-1)];
@@ -59,6 +74,7 @@ export {
 	capitalize,
 	compose,
 	coinFlip,
+	deepCloneObject,
 	extendObjectArrayByID,
 	repeat,
 	randFromTo,

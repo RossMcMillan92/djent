@@ -40,6 +40,7 @@ const initiateInstruments = (context, instrumentPack, totalBeatsProduct, bpmMult
     const instruments = instrumentPack
         .map(createSoundMaps);
 
+    console.log('INSTRUMENTS', instruments)
     return renderInstrumentSoundsAtTempo(instruments, totalBeatsProduct, bpmMultiplier);
 }
 

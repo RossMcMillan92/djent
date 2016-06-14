@@ -10,18 +10,19 @@ import {
 
 import { playSound } from './audio';
 
-const defaultInstrument = {
-    id: '',
-    buffers: [],
-    durations: [],
-    hitTypes: [],
-    sounds: [],
-    sequence: [],
-    sources: [],
-    timeMap: [],
-}
+const getInstrumentsSequences = (instruments, sequences, totalBeats) => {
+    return Object.keys(sequences)
+        .map(instrumentId => {
+            const instrument = instruments.find(i => i.id === instrumentId);
+            const predefinedSequence = instrument.predefinedSequence;
+            const newSequence = predefinedSequence || sequences[instrumentId];
 
-const getInstrumentsSequences = (instruments, sequences, totalBeats) => Object.keys(sequences).map(instrumentId => ({ ...instruments.find(i => i.id === instrumentId), sequence: sequences[instrumentId] }));
+            return {
+                ...instrument,
+                sequence: newSequence
+            }
+        });
+}
 
 const generateInstrumentTimeMap = (instrument) => {
     const timeMap = generateTimeMap(instrument.sequence);
@@ -33,6 +34,13 @@ const generateInstrumentTimeMap = (instrument) => {
 }
 
 const generateInstrumentHitTypes = (instrument) => {
+    const predefinedHitTypes = instrument.predefinedHitTypes;
+
+    if (predefinedHitTypes) return {
+        ...instrument,
+        hitTypes: predefinedHitTypes
+    }
+
     const activeSounds = instrument.sounds.reduce((newArr, sound, i) => sound.enabled ? [ ...newArr, { ...sound, index: newArr.length } ] : newArr, []);
     let hitTypes = [];
 

@@ -8,7 +8,7 @@ class PresetController extends Component {
 
     onChange = (event) => {
         const id = event.target.value;
-        this.props.actions.applyPreset(id);
+        this.props.actions.applyPresetByID(id);
     }
 
     render = () => {

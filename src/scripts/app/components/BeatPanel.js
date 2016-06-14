@@ -24,19 +24,19 @@ class BeatPanel extends Component {
                     </div>
 
                     <div className="grid grid--wide grid--middle">
-                        <div className="grid__item w-auto">
-                            <BeatsController
-                                beat={ this.props.beat }
-                                actions={{ updateBeats: this.props.actions.updateBeats }}
+                        <div className="grid__item one-half alpha--one-whole">
+                            <HitChanceController
+                                beatID={ this.props.beat.id }
+                                hitChance={ this.props.hitChance }
+                                actions={{ updateHitChance: this.props.actions.updateHitChance }}
                             />
                         </div>
 
-                        <div className="grid__item w-auto">
+                        <div className="grid__item one-half alpha--one-whole">
                             <div className="">
-                                <HitChanceController
-                                    beatID={ this.props.beat.id }
-                                    hitChance={ this.props.hitChance }
-                                    actions={{ updateHitChance: this.props.actions.updateHitChance }}
+                                <BeatsController
+                                    beat={ this.props.beat }
+                                    actions={{ updateBeats: this.props.actions.updateBeats }}
                                 />
                             </div>
                         </div>

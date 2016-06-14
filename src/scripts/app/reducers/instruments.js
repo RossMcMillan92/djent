@@ -2,7 +2,7 @@ import { extendObjectArrayByID } from '../utils/tools';
 
 const initialState = [
     {
-        id: 'guitar',
+        id: 'g',
         description: 'Guitar/Bass (Drop G#)',
         sounds: [
             {
@@ -216,37 +216,37 @@ const initialState = [
         ],
     },
     {
-        id: 'kick',
+        id: 'k',
         sounds: [
             {
-                id: 'kick',
+                id: 'k',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/kick.wav',
                 enabled: false,
             }
         ],
     },
     {
-        id: 'snare',
+        id: 's',
         sounds: [
             {
-                id: 'snare',
+                id: 's',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/snare.wav',
                 enabled: false,
             }
         ],
     },
     {
-        id: 'hihat',
+        id: 'h',
         sounds: [
             {
-                id: 'hihat',
+                id: 'h',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/hihat.wav',
                 enabled: false,
             }
         ],
     },
     {
-        id: 'cymbal',
+        id: 'c',
         ringout: true,
         sounds: [
             {
@@ -270,7 +270,7 @@ const initialState = [
         ],
     },
     {
-        id: 'drone',
+        id: 'd',
         sounds: [
             {
                 id: 'drone-medium',

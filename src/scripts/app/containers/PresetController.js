@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
-import { applyPreset } from '../actions/config';
+import { applyPresetByID } from '../actions/config';
 import PresetController from '../components/PresetController';
 
 const mapStateToProps = (state) => ({
@@ -10,7 +10,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     const actions = {
-        applyPreset,
+        applyPresetByID,
     }
     return {
         actions: {

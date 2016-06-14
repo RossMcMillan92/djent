@@ -12,7 +12,8 @@ const mapStateToProps = (state) => ({
     beats: state.beats,
     allowedLengths: state.config.allowedLengths,
     hitChance: state.config.hitChance,
-    instruments: state.instruments
+    instruments: state.instruments,
+    customPreset: state.customPreset,
 })
 
 const mapDispatchToProps = (dispatch) => {

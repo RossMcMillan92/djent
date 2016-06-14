@@ -15,20 +15,20 @@ import Expandable from '../components/Expandable';
 import InstrumentList from '../components/InstrumentList';
 
 const metaData = {
-  title: 'Djeneration Station',
-  description: 'A random metal riff generator. Thall.',
-  canonical: 'http://djenerationstation.com',
-  meta: {
-    charset: 'utf-8',
-    name: {
-      keywords: 'djeneration, station, react, redux, metal, riff, generator, thall, djent',
+    title: 'Djeneration Station',
+    description: 'A random metal riff generator. Thall.',
+    canonical: 'http://djenerationstation.com',
+    meta: {
+        charset: 'utf-8',
+        name: {
+            keywords: 'djeneration, station, react, redux, metal, riff, generator, thall, djent',
+        },
     },
-  },
 };
 
 export default class Home extends Component {
     componentWillMount = () => {
-        this.props.actions.applyPreset(this.props.activePresetID);
+        this.props.actions.applyPresetByID(this.props.activePresetID);
     }
 
     render = () => {
@@ -74,20 +74,20 @@ export default class Home extends Component {
                                     <h2 className="title-primary u-mt05">Main Settings</h2>
 
                                     <div className="grid grid--wide grid--middle">
-                                        <div className="grid__item w-auto">
+                                        <div className="grid__item one-half alpha--one-whole">
                                             <div className="group-spacing-y-small">
-                                                <div className="grid grid--bottom">
-                                                    <div className="grid__item w-auto">
+                                                <div className="u-flex-row u-flex-end">
+                                                    <div className="u-flex-grow-1 u-mr1">
                                                         <BPMController />
                                                     </div>
-                                                    <div className="grid__item w-auto">
+                                                    <div className="">
                                                         <BPMTapper />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="grid__item w-auto">
+                                        <div className="grid__item one-half alpha--one-whole">
                                             <div className="group-spacing-y-small">
                                                 <BeatsController
                                                     beat={ totalBeat }

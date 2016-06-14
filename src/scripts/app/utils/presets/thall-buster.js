@@ -1,5 +1,5 @@
 const preset = {
-    id: 'thall-buster',
+    id: 'tb',
     description: 'Thall - Buster',
     settings: {
         config: {
@@ -37,7 +37,7 @@ const preset = {
         ],
         instruments: [
             {
-                id: 'guitar',
+                id: 'g',
                 sounds: [
                     {
                         id: 'sixth-0-muted',
@@ -52,27 +52,85 @@ const preset = {
                         enabled: true,
                     },
                 ],
+                predefinedSequence: [
+                    { beat: 1, volume:1 },
+                    { beat: 4, volume:1 },
+                    { beat: 1, volume:1 },
+                    { beat: 4, volume:1 },
+                    { beat: 4, volume:1 },
+                    { beat: 1, volume:1 },
+                    { beat: 1, volume:1 },
+                    { beat: 1, volume:1 },
+                    { beat: 4, volume:1 },
+                    { beat: 1, volume:1 },
+                    { beat: 4, volume:1 },
+                    { beat: 4, volume:1 },
+                    { beat: 2, volume:1 },
+                    { beat: 1, volume:1 },
+                    { beat: 4, volume:1 },
+                    { beat: 1, volume:1 },
+                    { beat: 4, volume:1 },
+                    { beat: 4, volume:1 },
+                    { beat: 1, volume:1 },
+                    { beat: 1, volume:1 },
+                    { beat: 1, volume:1 },
+                    { beat: 4, volume:1 },
+                    { beat: 1, volume:1 },
+                    { beat: 4, volume:1 },
+                    { beat: 4, volume:1 },
+                    { beat: 2, volume:1 }
+                ],
+                predefinedHitTypes: [1, 0, 2, 0, 2, 2, 2, 2, 0, 2, 1, 1, 2, 1, 0, 2, 0, 2, 2, 2, 2, 0, 2, 1, 1, 2],
             },
             {
-                id: 'kick',
+                id: 'k',
                 sounds: [
                     {
-                        id: 'kick',
+                        id: 'k',
+                        enabled: true,
+                    }
+                ],
+                predefinedSequence: [
+                    { beat: 1, volume:1 },
+                    { beat: 4, volume:1 },
+                    { beat: 1, volume:1 },
+                    { beat: 4, volume:1 },
+                    { beat: 4, volume:1 },
+                    { beat: 1, volume:1 },
+                    { beat: 1, volume:1 },
+                    { beat: 1, volume:1 },
+                    { beat: 4, volume:1 },
+                    { beat: 1, volume:1 },
+                    { beat: 4, volume:1 },
+                    { beat: 4, volume:1 },
+                    { beat: 2, volume:1 },
+                    { beat: 1, volume:1 },
+                    { beat: 4, volume:1 },
+                    { beat: 1, volume:1 },
+                    { beat: 4, volume:1 },
+                    { beat: 4, volume:1 },
+                    { beat: 1, volume:1 },
+                    { beat: 1, volume:1 },
+                    { beat: 1, volume:1 },
+                    { beat: 4, volume:1 },
+                    { beat: 1, volume:1 },
+                    { beat: 4, volume:1 },
+                    { beat: 4, volume:1 },
+                    { beat: 2, volume:1 }
+                ],
+                predefinedHitTypes: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            },
+            {
+                id: 's',
+                sounds: [
+                    {
+                        id: 's',
                         enabled: true,
                     }
                 ],
             },
             {
-                id: 'snare',
-                sounds: [
-                    {
-                        id: 'snare',
-                        enabled: true,
-                    }
-                ],
-            },
-            {
-                id: 'cymbal',
+                id: 'c',
                 sounds: [
                     {
                         id: 'crash-left',
@@ -89,7 +147,7 @@ const preset = {
                 ],
             },
             {
-                id: 'drone',
+                id: 'd',
                 sounds: [
                     {
                         id: 'drone-high',
@@ -101,8 +159,8 @@ const preset = {
                     }
                 ],
             },
-        ]
-    }
+        ],
+    },
 }
 
 export default preset;

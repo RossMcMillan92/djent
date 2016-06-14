@@ -6,13 +6,10 @@ $push               : true!default
 $pull               : true!default
 $use-markup-fix     : true!default
 
-$breakpoints: ( 'palm' '(max-width: 400px)', 'lap' '(min-width: 601px) and (max-width: 1023px)', 'beta' '(max-width: 640px)', 'gamma' '(max-width: 768px)', 'delta' '(max-width: 840px)', 'epsilon' '(max-width: 980px)', 'portable' '(max-width: 1023px)', 'desk' '(min-width: 1024px)' ) !default
+$breakpoints: ( 'palm' '(max-width: 400px)', 'lap' '(min-width: 601px) and (max-width: 1023px)', 'alpha' '(max-width: 500px)', 'beta' '(max-width: 640px)', 'gamma' '(max-width: 768px)', 'delta' '(max-width: 840px)', 'epsilon' '(max-width: 980px)', 'portable' '(max-width: 1023px)', 'desk' '(min-width: 1024px)' ) !default
 
 
-$breakpoint-has-widths: ( 'lap', 'portable', 'epsilon', 'delta', 'gamma', 'beta', 'palm', 'desk' ) !default
-
-$breakpoint-has-push:   ('palm', 'lap', 'portable', 'desk') !default
-$breakpoint-has-pull:   ('palm', 'lap', 'portable', 'desk') !default
+$breakpoint-has-widths: ( 'lap', 'portable', 'epsilon', 'delta', 'gamma', 'beta', 'alpha', 'palm', 'desk' ) !default
 
 $class-type:            unquote(".")
 

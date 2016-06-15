@@ -1,6 +1,3 @@
-import { compress, decompress } from 'lzutf8';
-import presets from '../utils/presets';
-
 export function updateAllowedLengths(allowedLengths) {
   return {
     type: 'UPDATE_ALLOWED_LENGTHS',
@@ -58,24 +55,7 @@ export function updateFateOut(fadeOut) {
   };
 }
 
-function parseQueryString(url) {
-    return !url.includes('?') ? {} : url
-    .split('?')[1]
-    .split('&')
-    .reduce((list, query) => {
-        const [ key, value ] = query.split('=');
-        return { ...list, [key]: value || '' };
-    }, {});
-}
-
-let externalPreset = false;
-export function applyPresetByID(presetID) {
-    const queries = parseQueryString(window.location.href);
-    const decompressedData = queries.preset && JSON.parse(decompress(queries.preset, {inputEncoding: 'Base64'}))
-    const preset = !externalPreset && decompressedData ? decompressedData : { ...presets.find(preset => preset.id === presetID) };
-
-    if (decompressedData) externalPreset = true;
-
+export function applyPreset(preset) {;
     return {
         type: 'APPLY_PRESET',
         payload: { preset },

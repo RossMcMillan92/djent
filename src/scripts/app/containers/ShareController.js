@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 
-import BeatPanel from '../components/BeatPanel';
+import ShareController from '../components/ShareController';
 
 import * as configActions from '../actions/config';
 import * as instrumentsActions from '../actions/instruments';
@@ -10,15 +10,12 @@ import * as beatsActions from '../actions/beats';
 
 function mapStateToProps(state) {
     return {
-        allowedLengths : state.config.allowedLengths
+        customPreset: state.customPreset,
     }
 }
 
 function mapDispatchToProps(dispatch) {
     const actions = {
-        ...configActions,
-        ...instrumentsActions,
-        ...beatsActions,
     }
 
     return {
@@ -28,4 +25,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BeatPanel);
+export default connect(mapStateToProps, mapDispatchToProps)(ShareController);

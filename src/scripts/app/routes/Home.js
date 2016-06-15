@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
 import DocumentMeta from 'react-document-meta';
+import { compress, decompress } from 'lzutf8';
+
+import BeatsController from '../components/BeatsController';
+import Expandable from '../components/Expandable';
+import InstrumentList from '../components/InstrumentList';
 
 import BeatPanel from '../containers/BeatPanel';
 import BPMController from '../containers/BPMController';
@@ -7,12 +12,12 @@ import BPMTapper from '../containers/BPMTapper';
 import ContinuousGenerationController from '../containers/ContinuousGenerationController';
 import FadeController from '../containers/FadeController';
 import LoopController from '../containers/LoopController';
+import ShareController from '../containers/ShareController';
 import PresetController from '../containers/PresetController';
 import SoundController from '../containers/SoundController';
 
-import BeatsController from '../components/BeatsController';
-import Expandable from '../components/Expandable';
-import InstrumentList from '../components/InstrumentList';
+import presets from '../utils/presets';
+import { getHashQueryParam } from '../utils/tools';
 
 const metaData = {
     title: 'Djeneration Station',
@@ -28,7 +33,15 @@ const metaData = {
 
 export default class Home extends Component {
     componentWillMount = () => {
-        this.props.actions.applyPresetByID(this.props.activePresetID);
+        const hashPreset = getHashQueryParam('preset');
+        const decompressedData = hashPreset
+                              && hashPreset.length % 4 === 0
+                              && decompress(hashPreset, {inputEncoding: 'Base64'})
+        const data = /[A-Za-z0-9+/=]/.test(decompressedData) ? JSON.parse(decompressedData) : false;
+        const preset = data ? data : { ...presets.find(preset => preset.id === this.props.activePresetID) }
+
+        // window.location.hash = '';
+        this.props.actions.applyPreset(preset);
     }
 
     render = () => {
@@ -111,6 +124,12 @@ export default class Home extends Component {
                                         <div className="grid__item w-auto">
                                             <div className="group-spacing-y-small">
                                                 <LoopController />
+                                            </div>
+                                        </div>
+
+                                        <div className="grid__item w-auto">
+                                            <div className="group-spacing-y-small">
+                                                <ShareController />
                                             </div>
                                         </div>
 

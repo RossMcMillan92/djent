@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { compress, decompress } from 'lzutf8';
-console.log('LZUTF8', compress)
 
 import {
     playSound
@@ -53,9 +51,6 @@ const generateNewBuffer = ({ bpm, beats, allowedLengths, hitChance, instruments 
     const sequences               = getSequences(grooveTotalBeatsProduct, convertAllowedLengthsToArray(allowedLengths), hitChance);
 
     return generateRiff({ bpm, totalBeatsProduct,  allowedLengths, sequences, instruments })
-        .then((buffer) => {
-            return buffer;
-        });
 }
 
 const context          = new AudioContext();
@@ -112,13 +107,15 @@ class SoundController extends Component {
     generate = (shouldPlay) => {
         this.stopEvent(this.currentSrc);
         generateNewBuffer(this.props)
-            .then((buffer) => {
+            .then(({ buffer, instruments }) => {
+                console.log('BUFFER, INSTRUMENTS', buffer, instruments)
                 const newState = { isLoading: false, error: '' };
 
                 if (!buffer) newState.error = 'Error!'
                 this.currentBuffer = buffer;
                 if (shouldPlay) this.playEvent();
-                this.updateUI(newState)
+                this.props.actions.updateCustomPresetInstruments(instruments);
+                this.updateUI(newState);
             });
 
         this.updateUI({ isLoading: true });
@@ -168,8 +165,7 @@ class SoundController extends Component {
 
     render () {
         const eventName = this.state.isPlaying ? 'stop' : 'play';
-        const compressedPreset = compress(JSON.stringify(this.props.customPreset), {outputEncoding: "Base64" });
-        console.log('COMPRESSEDPRESET', compressedPreset)
+
 
         return (
             <div>
@@ -191,30 +187,6 @@ class SoundController extends Component {
                         </button>
                     </li>
                 </ul>
-                <div>
-                    { compose(JSON.stringify)(this.props.customPreset).length }
-                </div>
-                <div>
-                    { compose(JSON.stringify)(this.props.customPreset) }
-                </div>
-                <div>
-                    { compose(compress, JSON.stringify)(this.props.customPreset).length }
-                </div>
-                <div>
-                    { compose(compress, JSON.stringify)(this.props.customPreset) }
-                </div>
-                <div>
-                    { compressedPreset.length }
-                </div>
-                <div>
-                    { compressedPreset }
-                </div>
-                <div>
-                    { escape(compressedPreset).length }
-                </div>
-                <div>
-                    { escape(compressedPreset) }
-                </div>
             </div>
         );
     }

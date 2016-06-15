@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 import * as configActions from '../actions/config';
+import * as customPresetActions from '../actions/customPreset';
 import SoundController from '../components/SoundController';
 
 const mapStateToProps = (state) => ({
@@ -13,12 +14,12 @@ const mapStateToProps = (state) => ({
     allowedLengths: state.config.allowedLengths,
     hitChance: state.config.hitChance,
     instruments: state.instruments,
-    customPreset: state.customPreset,
 })
 
 const mapDispatchToProps = (dispatch) => {
     const actions = {
         ...configActions,
+        ...customPresetActions,
     }
     return {
         actions: {

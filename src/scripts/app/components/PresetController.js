@@ -7,8 +7,8 @@ class PresetController extends Component {
     shouldComponentUpdate = (nextProps) => nextProps.activePresetID !== this.props.activePresetID;
 
     onChange = (event) => {
-        const id = event.target.value;
-        this.props.actions.applyPresetByID(id);
+        const presetID = event.target.value;
+        this.props.actions.applyPreset(presets.find(preset => preset.id === presetID));
     }
 
     render = () => {

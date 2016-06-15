@@ -22,11 +22,11 @@ const generateRiff = ({ bpm, totalBeatsProduct, allowedLengths, sequences, instr
 
     return loadInstrumentBuffers(context, instrumentPack)
         .then((instrumentPack) => initiateInstruments(context, instrumentPack, totalBeatsProduct, bpmMultiplier))
-        .then(buffer => {
+        .then(({ buffer, instruments }) => {
             context.close();
-            return buffer
+            return Promise.resolve({ buffer, instruments })
         })
-        .catch(e => { console.error(e); });
+        .catch(e => { (console.error || console.log).call(console, e); });
 }
 
 const initiateInstruments = (context, instrumentPack, totalBeatsProduct, bpmMultiplier) => {
@@ -40,8 +40,9 @@ const initiateInstruments = (context, instrumentPack, totalBeatsProduct, bpmMult
     const instruments = instrumentPack
         .map(createSoundMaps);
 
-    console.log('INSTRUMENTS', instruments)
-    return renderInstrumentSoundsAtTempo(instruments, totalBeatsProduct, bpmMultiplier);
+        console.log('INSTRUMENTS', instruments)
+    return renderInstrumentSoundsAtTempo(instruments, totalBeatsProduct, bpmMultiplier)
+        .then(buffer => Promise.resolve({ buffer, instruments }));
 }
 
 export {

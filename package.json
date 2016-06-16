@@ -59,7 +59,7 @@
   "scripts": {
     "build": "node dev.js build",
     "dev": "node dev.js",
-    "test": "node tests.js"
+    "test": "./node_modules/mocha/bin/mocha ./src/scripts/app/test/* --require babel-core/register --watch"
   },
   "license": "ISC"
 }

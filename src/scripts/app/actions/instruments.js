@@ -4,3 +4,10 @@ export function updateInstrumentSound({ soundID, parentID, prop, value }) {
     payload: { soundID, parentID, prop, value },
   };
 }
+
+export function updateCustomPresetInstruments(instruments) {
+    return {
+        type: 'UPDATE_CUSTOM_PRESET_INSTRUMENTS',
+        payload: { instruments },
+    };
+}

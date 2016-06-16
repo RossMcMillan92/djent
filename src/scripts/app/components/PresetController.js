@@ -19,7 +19,7 @@ class PresetController extends Component {
 
         return (
             <div>
-                <select onChange={(e) => this.onChange(e)} defaultValue={this.props.activePresetID}>
+                <select onChange={(e) => this.onChange(e)} value={this.props.activePresetID}>
                     { presetItems }
                 </select>
             </div>

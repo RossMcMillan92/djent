@@ -6,12 +6,14 @@ import Home from '../routes/Home';
 
 import * as configActions from '../actions/config';
 import * as instrumentsActions from '../actions/instruments';
+import * as modalActions from '../actions/modal';
 import { updateBeats } from '../actions/beats';
 
 function mapStateToProps(state) {
     return {
         instruments      : state.instruments,
         activePresetID   : state.config.activePresetID,
+        allowedLengths   : state.config.allowedLengths,
         beats            : state.beats,
     }
 }
@@ -20,6 +22,7 @@ function mapDispatchToProps(dispatch) {
     const actions = {
         ...configActions,
         ...instrumentsActions,
+        ...modalActions,
         updateBeats
     }
 

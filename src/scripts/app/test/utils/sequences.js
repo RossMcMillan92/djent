@@ -2,6 +2,7 @@ import {
     convertAllowedLengthsToArray,
     generateSequence,
     generateTimeMap,
+    getAllowedLengthsFromSequence,
     loopSequence,
 } from '../../utils/sequences';
 
@@ -260,5 +261,88 @@ describe('Sequences', () => {
 
             expect(result).to.deep.equal(expectedResult);
         })
+    })
+
+    describe('getAllowedLengthsFromSequence()', () => {
+        const initial_allowedLengths = [
+            {
+                id: "0.25",
+                name: 'whole',
+                amount: 0,
+                isTriplet: false
+            },
+            {
+                id: "0.5",
+                name: 'half',
+                amount: 0,
+                isTriplet: false
+            },
+            {
+                id: "1",
+                name: 'quarter',
+                amount: 0,
+                isTriplet: false
+            },
+            {
+                id: "2",
+                name: 'eighth',
+                amount: 0,
+                isTriplet: false
+            },
+            {
+                id: "4",
+                name: 'sixteenth',
+                amount: 0,
+                isTriplet: false
+            },
+        ];
+
+        it('should return an array', () => {
+            expect(getAllowedLengthsFromSequence([
+                {"beat":1,"volume":1},
+                {"beat":2,"volume":1},
+                {"beat":1,"volume":1},
+                {"beat":1,"volume":1},
+                {"beat":4,"volume":1},
+                {"beat":2,"volume":1},
+            ], initial_allowedLengths)).to.be.a('array');
+        })
+
+        it('should return a clone of initial allowedLengths with the summed amounts', () => {
+            const results = getAllowedLengthsFromSequence([
+                {"beat":1,"volume":1},
+                {"beat":2,"volume":1},
+                {"beat":1,"volume":1},
+                {"beat":1,"volume":1},
+                {"beat":4,"volume":1},
+                {"beat":2,"volume":1},
+            ], initial_allowedLengths)
+
+            expect(results.find(result => result.id === '0.25').amount).to.equal(0)
+            expect(results.find(result => result.id === '0.5').amount).to.equal(0)
+            expect(results.find(result => result.id === '1').amount).to.equal(3)
+            expect(results.find(result => result.id === '2').amount).to.equal(2)
+            expect(results.find(result => result.id === '4').amount).to.equal(1)
+        });
+
+        it('should take into account triplets', () => {
+            const results = getAllowedLengthsFromSequence([
+                {"beat":1.5,"volume":1},
+                {"beat":3,"volume":1},
+                {"beat":1.5,"volume":1},
+                {"beat":1.5,"volume":1},
+                {"beat":4,"volume":1},
+                {"beat":3,"volume":1},
+            ], initial_allowedLengths)
+
+            expect(results.find(result => result.id === '0.25').amount).to.equal(0)
+            expect(results.find(result => result.id === '0.5').amount).to.equal(0)
+            expect(results.find(result => result.id === '1').amount).to.equal(3)
+            expect(results.find(result => result.id === '2').amount).to.equal(2)
+            expect(results.find(result => result.id === '4').amount).to.equal(1)
+
+            expect(results.find(result => result.id === '1').isTriplet).to.equal(true)
+            expect(results.find(result => result.id === '2').isTriplet).to.equal(true)
+        });
     })
 })

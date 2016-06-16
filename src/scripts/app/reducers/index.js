@@ -3,13 +3,13 @@ import { combineReducers } from 'redux';
 import config from './config';
 import beats from './beats';
 import instruments from './instruments';
-import customPreset from './customPreset';
+import modal from './modal';
 
 const rootReducer = combineReducers({
     config,
     beats,
     instruments,
-    customPreset,
+    modal,
 });
 
 export default rootReducer;

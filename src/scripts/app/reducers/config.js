@@ -92,6 +92,7 @@ export default function config(state = getInitialState(), action) {
 
         case 'APPLY_PRESET':
             const { preset } = payload;
+            console.log('PRESET LMAOOO', preset)
             const { bpm, fadeIn, allowedLengths, hitChance } = preset.settings.config;
             const newState = { ...getInitialState() };
 

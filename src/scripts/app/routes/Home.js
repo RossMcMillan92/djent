@@ -5,6 +5,7 @@ import { compress, decompress } from 'lzutf8';
 import BeatsController from '../components/BeatsController';
 import Expandable from '../components/Expandable';
 import InstrumentList from '../components/InstrumentList';
+import Spinner from '../components/Spinner';
 
 import BeatPanel from '../containers/BeatPanel';
 import BPMController from '../containers/BPMController';
@@ -12,13 +13,17 @@ import BPMTapper from '../containers/BPMTapper';
 import ContinuousGenerationController from '../containers/ContinuousGenerationController';
 import FadeController from '../containers/FadeController';
 import LoopController from '../containers/LoopController';
+import Modal from '../containers/Modal';
 import ShareController from '../containers/ShareController';
 import PresetController from '../containers/PresetController';
 import SoundController from '../containers/SoundController';
 
 import presets from '../utils/presets';
-import { getHashQueryParam } from '../utils/tools';
+import { getAllowedLengthsFromSequence } from '../utils/sequences';
+import { getActiveSoundsFromHitTypes } from '../utils/instruments';
+import { getHashQueryParam, loadScript } from '../utils/tools';
 
+const googleAPIKey = 'AIzaSyCUN26hzVNf0P_ED_oALvsVx3ffmyzliOI';
 const metaData = {
     title: 'Djeneration Station',
     description: 'A random metal riff generator. Thall.',
@@ -32,16 +37,68 @@ const metaData = {
 };
 
 export default class Home extends Component {
-    componentWillMount = () => {
-        const hashPreset = getHashQueryParam('preset');
-        const decompressedData = hashPreset
-                              && hashPreset.length % 4 === 0
-                              && decompress(hashPreset, {inputEncoding: 'Base64'})
-        const data = /[A-Za-z0-9+/=]/.test(decompressedData) ? JSON.parse(decompressedData) : false;
-        const preset = data ? data : { ...presets.find(preset => preset.id === this.props.activePresetID) }
+    state = {
+        googleAPIHasLoaded: false
+    }
 
-        // window.location.hash = '';
+    componentWillMount = () => {
+        this.handleGoogleAPI();
+
+        if (!this.props.params.shareID) return this.props.actions.applyPreset({ ...presets.find(preset => preset.id === this.props.activePresetID) });
+        console.log('SPINNER', Spinner)
+        this.props.actions.enableModal({
+            content: (<Spinner subtext="Loading riff" />)
+        });
+    }
+
+    handleGoogleAPI = () => {
+        loadScript('https://apis.google.com/js/client.js?onload=handleClientLoad')
+        const handleClientLoad = () => {
+            gapi.client.setApiKey(googleAPIKey);
+            gapi.client.load('urlshortener', 'v1')
+                .then(() => {
+                    if (this.props.params.shareID) {
+                        this.getPresetData(this.props.params.shareID)
+                            .then(this.handlePreset);
+                    }
+                    this.setState({ googleAPIHasLoaded: true })
+                });
+        }
+        window.handleClientLoad = handleClientLoad
+    }
+
+    getPresetData = (shareID) => {
+        return gapi.client.urlshortener.url.get({
+              'shortUrl': `http://goo.gl/${shareID}`
+            })
+            .then((response) => {
+                return getHashQueryParam('share',response.result.longUrl)
+            }, (reason) => {
+                console.log('Error: ' + reason.result.error.message);
+            })
+    }
+
+    handlePreset = (data) => {
+        if (!data) return;
+
+        const decompressedData = data
+                              && data.length % 4 === 0
+                              && decompress(data, {inputEncoding: 'Base64'});
+        const preset = /[A-Za-z0-9+/=]/.test(decompressedData) ? JSON.parse(decompressedData) : false;
+
+        if (!preset) {
+            this.props.actions.applyPreset({ ...presets.find(preset => preset.id === this.props.activePresetID) });
+            this.props.actions.disableModal();
+            return;
+        }
+
+        preset.settings.config.allowedLengths = getAllowedLengthsFromSequence(preset.settings.instruments.find(i => i.id === 'g').predefinedSequence, this.props.allowedLengths)
+        preset.settings.instruments = preset.settings.instruments
+            .map(i => ({ ...i, sounds: getActiveSoundsFromHitTypes(i.predefinedHitTypes) }))
+
         this.props.actions.applyPreset(preset);
+        this.props.actions.disableModal();
+        return
     }
 
     render = () => {
@@ -57,6 +114,7 @@ export default class Home extends Component {
 
         return (
             <section>
+                <Modal />
                 <div className="group-capped-x group-centered">
                     <DocumentMeta {...metaData} />
 
@@ -129,7 +187,7 @@ export default class Home extends Component {
 
                                         <div className="grid__item w-auto">
                                             <div className="group-spacing-y-small">
-                                                <ShareController />
+                                                <ShareController googleAPIHasLoaded={this.state.googleAPIHasLoaded} />
                                             </div>
                                         </div>
 

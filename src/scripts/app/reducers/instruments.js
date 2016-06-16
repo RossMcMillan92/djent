@@ -1,4 +1,4 @@
-import { extendObjectArrayByID } from '../utils/tools';
+import { extendObjectArrayByID, deepCloneObject } from '../utils/tools';
 
 const initialState = [
     {
@@ -314,7 +314,8 @@ const updateInstrumentSoundByID = ({ instruments, soundID, parentID, prop, value
 }
 
 export default function instruments(state = initialState, action) {
-    let { type, payload } = action;
+    const { type, payload } = action;
+    let newState
 
     switch (type) {
         case 'UPDATE_INSTRUMENT_SOUND_PROP':
@@ -324,7 +325,7 @@ export default function instruments(state = initialState, action) {
             const { preset } = payload;
             const instruments = preset.settings.instruments;
 
-            let newState = initialState.map(instrument => {
+            newState = initialState.map(instrument => {
                 const newInstrument = instruments.find(newInstrument => newInstrument.id === instrument.id);
 
                 if (!newInstrument) return instrument;
@@ -341,10 +342,24 @@ export default function instruments(state = initialState, action) {
                 };
             });
 
-            return [
-                ...newState
-            ];
+            return newState;
 
+        case 'UPDATE_CUSTOM_PRESET_INSTRUMENTS':
+            newState = state
+                .map(instrument => {
+                    const i = payload.instruments
+                        .find(i => i.id === instrument.id);
+
+                    if (!i) return { ...instrument };
+
+                    return {
+                        ...instrument,
+                        hitTypes: [ ...i.hitTypes ],
+                        sequence: i.sequence.map(seq => deepCloneObject(seq)),
+                    }
+                });
+
+            return newState;
         default:
             return state;
   }

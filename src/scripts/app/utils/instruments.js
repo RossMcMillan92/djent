@@ -56,6 +56,12 @@ const generateInstrumentHitTypes = (instrument) => {
     }
 }
 
+const getActiveSoundsFromHitTypes = (hitTypes) => (!hitTypes ? [] : hitTypes)
+        .reduce((newArr, hit, i) => {
+            return newArr.includes(hit) ? newArr : [ ...newArr, hit ];
+        }, [])
+        .map(hit => ({ id: hit, enabled: true, hitTypes }));
+
 const renderInstrumentSoundsAtTempo = (instruments, totalBeats, bpmMultiplier) => {
     const timeLength = totalBeats * bpmMultiplier;
     const offlineCtx = new OfflineAudioContext(2, 44100 * timeLength, 44100);
@@ -105,6 +111,7 @@ export {
     getInstrumentsSequences,
     generateInstrumentTimeMap,
     generateInstrumentHitTypes,
+    getActiveSoundsFromHitTypes,
     renderInstrumentSoundsAtTempo,
     repeatHits,
     repeatSequence,

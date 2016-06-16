@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import { compress, decompress } from 'lzutf8';
-import { loadScript } from '../utils/tools';
-
-const clientId = 'djenerator-1343';
-const apiKey = 'AIzaSyCUN26hzVNf0P_ED_oALvsVx3ffmyzliOI';
-const scopes = 'https://www.googleapis.com/auth/urlshortener';
+import { deepCloneObject } from '../utils/tools';
 
 class ShareController extends Component {
     state = {
@@ -12,23 +8,46 @@ class ShareController extends Component {
         shortURL: ''
     }
 
-    componentWillMount = () => {
-        loadScript('https://apis.google.com/js/client.js?onload=handleClientLoad')
-        const handleClientLoad = () => {
-            gapi.client.setApiKey(apiKey);
-            gapi.client.load('urlshortener', 'v1')
-                .then(() => this.setState({ isEnabled: true }) );
-        }
-        window.handleClientLoad = handleClientLoad
+    generatePreset = () => {
+        console.log('THIS.PROPS.ACTIVEPRESETID', this.props)
+        const preset = {
+            id: this.props.activePresetID,
+            settings: {
+                config: {
+                    bpm            : this.props.bpm,
+                    hitChance      : this.props.hitChance,
+                },
+                beats: this.props.beats.map(beat => deepCloneObject(beat)),
+                instruments: this.props.instruments
+                    .map(instrument => {
+                        return {
+                            id: instrument.id,
+                            predefinedHitTypes: instrument.hitTypes,
+                            predefinedSequence: instrument.sequence,
+                        }
+                    }),
+            }
+        };
+
+        this.getShareableURL(preset)
+            .then((url) => {
+                const shareableURL = `${window.location.href.split('#')[0]}#share/${url.split('/').pop()}`;
+                this.setState({ shortURL: shareableURL })
+            });
     }
 
     onClick = e => {
-        const compressedPreset = compress(JSON.stringify(this.props.customPreset), {outputEncoding: "Base64" });
-        const shareableURL = `${window.location.href.split('#')[0]}#preset=${compressedPreset}`;
+        this.generatePreset();
+    }
+
+    getShareableURL = (preset) => {
+        const compressedPreset = compress(JSON.stringify(preset), {outputEncoding: "Base64" });
+        const shareableURL = `${window.location.href.split('#')[0]}#share=${compressedPreset}`;
         console.log('SHAREABLEURL', shareableURL)
 
-        this.getShortURL(shareableURL)
-            .then((url) => this.setState({ shortURL: url }));
+        if (shareableURL.length > 3000) alert('No can do');
+
+        return this.getShortURL(shareableURL)
     }
 
     getShortURL = url => {
@@ -44,7 +63,7 @@ class ShareController extends Component {
         return (
             <div className="">
             { this.state.shortURL }
-                <button className="button-primary" onClick={this.onClick} disabled={!this.state.isEnabled}>Share Riff</button>
+                <button className="button-primary" onClick={this.onClick} disabled={!this.props.googleAPIHasLoaded}>Share Riff</button>
             </div>
         );
     }

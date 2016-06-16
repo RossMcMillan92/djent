@@ -16,6 +16,7 @@ import {
 } from './tools';
 
 const generateRiff = ({ bpm, totalBeatsProduct, allowedLengths, sequences, instruments }) => {
+    console.log('INSTRUMENTS', instruments)
     const bpmMultiplier  = 60 / bpm;
     const context        = new AudioContext();
     const instrumentPack = getInstrumentsSequences(instruments, sequences, totalBeatsProduct);

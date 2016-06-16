@@ -42,7 +42,7 @@ const getSequences = (grooveTotalBeats, allowedLengths, hitChance) => {
 }
 
 const generateNewBuffer = ({ bpm, beats, allowedLengths, hitChance, instruments }) => {
-    if (!allowedLengths.filter(length => length.amount).length) return Promise.resolve(false);
+    if (!allowedLengths.filter(length => length.amount).length) return Promise.reject('There are no allowed lengths given');
 
     const totalBeats              = beats.find(beat => beat.id === 'total');
     const grooveTotalBeats        = beats.find(beat => beat.id === 'groove');

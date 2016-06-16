@@ -1,5 +1,5 @@
 const preset = {
-    id: 't',
+    id: 'tes',
     description: 'Tesseract',
     settings: {
         config: {

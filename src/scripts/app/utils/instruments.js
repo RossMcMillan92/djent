@@ -16,9 +16,7 @@ const getInstrumentsSequences = (instruments, sequences, totalBeats) => {
         .map(instrumentId => {
             const instrument = instruments.find(i => i.id === instrumentId);
             const predefinedSequence = instrument.predefinedSequence;
-            console.log('PREDEFINEDSEQUENCE', predefinedSequence)
             const newSequence = predefinedSequence || sequences[instrumentId];
-            console.log('NEWSEQUENCE', newSequence)
 
             return {
                 ...instrument,
@@ -38,20 +36,18 @@ const generateInstrumentTimeMap = (instrument) => {
 
 const generateInstrumentHitTypes = (instrument) => {
     const predefinedHitTypes = instrument.predefinedHitTypes;
-    console.log('PREDEFINEDHITTYPES', predefinedHitTypes)
 
     if (predefinedHitTypes && predefinedHitTypes.length) return {
         ...instrument,
         hitTypes: [ ...predefinedHitTypes ]
     }
-    console.log('LOL', predefinedHitTypes)
-
-    const activeSounds = instrument.sounds.reduce((newArr, sound, i) => sound.enabled ? [ ...newArr, { ...sound, index: newArr.length } ] : newArr, []);
+    // TODO: IF THIS WORKS COME BACK AND REMOVE INDEX
+    const activeSounds = instrument.sounds.reduce((newArr, sound, i) => sound.enabled ? [ ...newArr, { ...sound } ] : newArr, []);
     let hitTypes = [];
 
     if (activeSounds.length) {
-        hitTypes = instrument.sequence.map((hit) => activeSounds[randFromTo(0, activeSounds.length-1)].index);
-        console.log('HITTYPES', hitTypes)
+        hitTypes = instrument.sequence.map((hit) => {
+            return activeSounds[randFromTo(0, activeSounds.length-1)].id});
     }
 
     return {
@@ -68,11 +64,9 @@ const renderInstrumentSoundsAtTempo = (instruments, totalBeats, bpmMultiplier) =
         let startTimes = [];
         let durations  = [];
         const sources = instrument.timeMap.reduce((sources, time, i) => {
-            console.log('INSTRUMENT', instrument, instrument.hitTypes[i])
             const instrumentSound = instrument.buffers[instrument.hitTypes[i]];
             const startTime       = offlineCtx.currentTime + (time * bpmMultiplier);
             const duration        = instrument.ringout ? instrumentSound.duration : (1 / instrument.sequence[i].beat) * bpmMultiplier;
-            console.log('DURATION', duration)
             const source          = playSound(offlineCtx, instrumentSound, startTime, duration, instrument.sequence[i].volume, 0);
 
             startTimes[i] = startTime;

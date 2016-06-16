@@ -16,4 +16,11 @@ const presets = [
     tesseract,
 ];
 
+const createPreset = ({ sequence, hitTypes }) => {
+
+}
+
 export default presets;
+export {
+    createPreset
+}

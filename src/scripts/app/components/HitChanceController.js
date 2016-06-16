@@ -12,7 +12,6 @@ class HitChanceController extends Component {
 
 
     render = () => {
-        console.log('THIS.PROPS.HITCHANCE', this.props.hitChance)
         const props = {
             label: 'Hit Chance (%)',
             id: 'hitChance',

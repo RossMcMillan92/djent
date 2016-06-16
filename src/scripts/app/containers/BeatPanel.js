@@ -10,6 +10,7 @@ import * as beatsActions from '../actions/beats';
 
 function mapStateToProps(state) {
     return {
+        hitChance      : state.config.hitChance,
         allowedLengths : state.config.allowedLengths
     }
 }

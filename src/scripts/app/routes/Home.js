@@ -5,6 +5,7 @@ import { compress, decompress } from 'lzutf8';
 import BeatsController from '../components/BeatsController';
 import Expandable from '../components/Expandable';
 import InstrumentList from '../components/InstrumentList';
+import Panel from '../components/Panel';
 import Spinner from '../components/Spinner';
 
 import BeatPanel from '../containers/BeatPanel';
@@ -37,6 +38,9 @@ const metaData = {
 };
 
 export default class Home extends Component {
+    static contextTypes = {
+        router: React.PropTypes.object.isRequired
+    }
     state = {
         googleAPIHasLoaded: false
     }
@@ -45,7 +49,7 @@ export default class Home extends Component {
         this.handleGoogleAPI();
 
         if (!this.props.params.shareID) return this.props.actions.applyPreset({ ...presets.find(preset => preset.id === this.props.activePresetID) });
-        console.log('SPINNER', Spinner)
+
         this.props.actions.enableModal({
             content: (<Spinner subtext="Loading riff" />)
         });
@@ -111,12 +115,13 @@ export default class Home extends Component {
                     </div>
                 )
             );
-
+            console.log('props', this.props)
+console.log('context', this.context)
         return (
             <section>
+                <DocumentMeta {...metaData} />
                 <Modal />
                 <div className="group-capped-x group-centered">
-                    <DocumentMeta {...metaData} />
 
                     <div className="group-spacing-x">
                         <div className="group-spacing-y-large">
@@ -128,83 +133,89 @@ export default class Home extends Component {
 
                     <div className="group-spacing-x">
                         <div className="group-spacing-y">
-                            <div className="panel">
-                                <div className="group-padding-x group-padding-y">
-                                    <h2 className="title-primary">
-                                        Preset
-                                    </h2>
+                            <Panel>
+                                <h2 className="title-primary">
+                                    Preset
+                                </h2>
 
-                                    <PresetController />
-                                </div>
-                            </div>
+                                <PresetController />
+                            </Panel>
                         </div>
 
                         <div className="group-spacing-y">
-                            <div className="panel">
-                                <div className="group-padding-x group-padding-y-small">
-                                    <h2 className="title-primary u-mt05">Main Settings</h2>
+                            <Panel>
+                                <h2 className="title-primary u-mt05">Main Settings</h2>
 
-                                    <div className="grid grid--wide grid--middle">
-                                        <div className="grid__item one-half alpha--one-whole">
-                                            <div className="group-spacing-y-small">
-                                                <div className="u-flex-row u-flex-end">
-                                                    <div className="u-flex-grow-1 u-mr1">
-                                                        <BPMController />
-                                                    </div>
-                                                    <div className="">
-                                                        <BPMTapper />
-                                                    </div>
+                                <div className="grid grid--wide grid--middle">
+                                    <div className="grid__item one-half alpha--one-whole">
+                                        <div className="group-spacing-y-small">
+                                            <div className="u-flex-row u-flex-end">
+                                                <div className="u-flex-grow-1 u-mr1">
+                                                    <BPMController />
+                                                </div>
+                                                <div className="">
+                                                    <BPMTapper />
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
 
-                                        <div className="grid__item one-half alpha--one-whole">
-                                            <div className="group-spacing-y-small">
-                                                <BeatsController
-                                                    beat={ totalBeat }
-                                                    actions={{ updateBeats: this.props.actions.updateBeats }}
-                                                />
-                                            </div>
+                                    <div className="grid__item one-half alpha--one-whole">
+                                        <div className="group-spacing-y-small">
+                                            <BeatsController
+                                                beat={ totalBeat }
+                                                actions={{ updateBeats: this.props.actions.updateBeats }}
+                                            />
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </Panel>
 
-                            <div className="panel panel--dark">
-                                <div className="group-padding-x group-padding-y-small">
-                                    <div className="grid grid--wide grid--middle">
-                                        <div className="grid__item w-auto">
-                                            <div className="group-spacing-y-small">
-                                                <SoundController />
-                                            </div>
+                            <Panel theme="dark" sizeY="small">
+                                <div className="grid grid--wide grid--middle">
+                                    <div className="grid__item w-auto">
+                                        <div className="group-spacing-y-small">
+                                            <SoundController />
                                         </div>
-
-                                        <div className="grid__item w-auto">
-                                            <div className="group-spacing-y-small">
-                                                <LoopController />
-                                            </div>
-                                        </div>
-
-                                        <div className="grid__item w-auto">
-                                            <div className="group-spacing-y-small">
-                                                <ShareController googleAPIHasLoaded={this.state.googleAPIHasLoaded} />
-                                            </div>
-                                        </div>
-
-                                        {/*<div className="grid__item w-auto">
-                                            <div className="group-spacing-y-small">
-                                                <ContinuousGenerationController />
-                                            </div>
-                                        </div>
-
-                                        <div className="grid__item w-auto">
-                                            <div className="group-spacing-y-small">
-                                                <FadeController />
-                                            </div>
-                                        </div>*/}
                                     </div>
+
+                                    {
+                                        this.props.route.id === 'share'
+                                        ? (
+                                            <a href="javascript:void(0)" onClick={() => this.context.router.push('/')}>
+                                                Generate new riff
+                                            </a>
+                                        )
+                                        : (
+                                            <div>
+                                                <div className="grid__item w-auto">
+                                                    <div className="group-spacing-y-small">
+                                                        <LoopController />
+                                                    </div>
+                                                </div>
+
+                                                <div className="grid__item w-auto u-self-end">
+                                                    <div className="group-spacing-y-small">
+                                                        <ShareController googleAPIHasLoaded={this.state.googleAPIHasLoaded} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )
+                                    }
+
+                                    {/*<div className="grid__item w-auto">
+                                        <div className="group-spacing-y-small">
+                                            <ContinuousGenerationController />
+                                        </div>
+                                    </div>
+
+                                    <div className="grid__item w-auto">
+                                        <div className="group-spacing-y-small">
+                                            <FadeController />
+                                        </div>
+                                    </div>*/}
                                 </div>
-                            </div>
+                            </Panel>
                         </div>
 
                         <Expandable
@@ -212,19 +223,19 @@ export default class Home extends Component {
                             titleClassName="u-curp u-mb1 u-txt-light"
                             enableStateSave={true}
                         >
-                            { beats }
+                            <Panel>
+                                { beats }
+                            </Panel>
 
                             <div className="group-spacing-y">
-                                <div className="panel">
-                                    <div className="group-padding-x group-padding-y">
-                                        <h2 className="title-primary">Sounds</h2>
+                                <Panel>
+                                    <h2 className="title-primary">Sounds</h2>
 
-                                        <InstrumentList
-                                            actions={{ updateInstrumentSound: this.props.actions.updateInstrumentSound }}
-                                            instruments={this.props.instruments}
-                                        />
-                                    </div>
-                                </div>
+                                    <InstrumentList
+                                        actions={{ updateInstrumentSound: this.props.actions.updateInstrumentSound }}
+                                        instruments={this.props.instruments}
+                                    />
+                                </Panel>
                             </div>
                         </Expandable>
 

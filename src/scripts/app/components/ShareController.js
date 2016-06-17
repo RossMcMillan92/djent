@@ -9,7 +9,6 @@ class ShareController extends Component {
     }
 
     generatePreset = () => {
-        console.log('THIS.PROPS.ACTIVEPRESETID', this.props)
         const preset = {
             id: this.props.activePresetID,
             settings: {
@@ -43,7 +42,6 @@ class ShareController extends Component {
     getShareableURL = (preset) => {
         const compressedPreset = compress(JSON.stringify(preset), {outputEncoding: "Base64" });
         const shareableURL = `${window.location.href.split('#')[0]}#share=${compressedPreset}`;
-        console.log('SHAREABLEURL', shareableURL)
 
         if (shareableURL.length > 3000) alert('No can do');
 
@@ -55,7 +53,6 @@ class ShareController extends Component {
             .then((response) => {
                 return response.result.id
             }, (reason) => {
-                console.log('Error: ' + reason.result.error.message);
             })
     }
 

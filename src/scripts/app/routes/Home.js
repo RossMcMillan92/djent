@@ -13,7 +13,6 @@ import BPMController from '../containers/BPMController';
 import BPMTapper from '../containers/BPMTapper';
 import ContinuousGenerationController from '../containers/ContinuousGenerationController';
 import FadeController from '../containers/FadeController';
-import LoopController from '../containers/LoopController';
 import Modal from '../containers/Modal';
 import ShareController from '../containers/ShareController';
 import PresetController from '../containers/PresetController';
@@ -78,7 +77,7 @@ export default class Home extends Component {
             .then((response) => {
                 return getHashQueryParam('share',response.result.longUrl)
             }, (reason) => {
-                console.log('Error: ' + reason.result.error.message);
+                (console.error || console.log).call(console, reason)
             })
     }
 
@@ -106,6 +105,7 @@ export default class Home extends Component {
     }
 
     render = () => {
+        const isShareRoute = this.props.route.id === 'share'
         const totalBeat = this.props.beats.find(beat => beat.id === 'total');
         const beats = this.props.beats
             .filter(beat => beat.id !== 'total')
@@ -115,8 +115,9 @@ export default class Home extends Component {
                     </div>
                 )
             );
-            console.log('props', this.props)
-console.log('context', this.context)
+        const usePredefinedSettings = isShareRoute;
+        const generateButtonText = isShareRoute ? 'Load riff' : 'Generate Riff';
+
         return (
             <section>
                 <DocumentMeta {...metaData} />
@@ -132,15 +133,21 @@ console.log('context', this.context)
                     </div>
 
                     <div className="group-spacing-x">
-                        <div className="group-spacing-y">
-                            <Panel>
-                                <h2 className="title-primary">
-                                    Preset
-                                </h2>
+                        {
+                            isShareRoute
+                            ? null
+                            : (
+                                <div className="group-spacing-y">
+                                    <Panel>
+                                        <h2 className="title-primary">
+                                            Preset
+                                        </h2>
 
-                                <PresetController />
-                            </Panel>
-                        </div>
+                                        <PresetController />
+                                    </Panel>
+                                </div>
+                            )
+                        }
 
                         <div className="group-spacing-y">
                             <Panel>
@@ -160,14 +167,21 @@ console.log('context', this.context)
                                         </div>
                                     </div>
 
-                                    <div className="grid__item one-half alpha--one-whole">
-                                        <div className="group-spacing-y-small">
-                                            <BeatsController
-                                                beat={ totalBeat }
-                                                actions={{ updateBeats: this.props.actions.updateBeats }}
-                                            />
-                                        </div>
-                                    </div>
+                                    {
+                                        isShareRoute
+                                        ? null
+                                        : (
+                                            <div className="grid__item one-half alpha--one-whole">
+                                                <div className="group-spacing-y-small">
+                                                    <BeatsController
+                                                        beat={ totalBeat }
+                                                        actions={{ updateBeats: this.props.actions.updateBeats }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )
+                                    }
+
                                 </div>
                             </Panel>
 
@@ -175,29 +189,27 @@ console.log('context', this.context)
                                 <div className="grid grid--wide grid--middle">
                                     <div className="grid__item w-auto">
                                         <div className="group-spacing-y-small">
-                                            <SoundController />
+                                            <SoundController
+                                                usePredefinedSettings={ usePredefinedSettings }
+                                                generateButtonText={ generateButtonText }
+                                            />
                                         </div>
                                     </div>
 
                                     {
-                                        this.props.route.id === 'share'
+                                        isShareRoute
                                         ? (
-                                            <a href="javascript:void(0)" onClick={() => this.context.router.push('/')}>
-                                                Generate new riff
-                                            </a>
+                                            <div className="grid__item w-auto u-self-end">
+                                                <span className="u-mr1">or</span>
+                                                <a className="link-base" onClick={e => this.context.router.push('/')}>
+                                                    Generate new riff
+                                                </a>
+                                            </div>
                                         )
                                         : (
-                                            <div>
-                                                <div className="grid__item w-auto">
-                                                    <div className="group-spacing-y-small">
-                                                        <LoopController />
-                                                    </div>
-                                                </div>
-
-                                                <div className="grid__item w-auto u-self-end">
-                                                    <div className="group-spacing-y-small">
-                                                        <ShareController googleAPIHasLoaded={this.state.googleAPIHasLoaded} />
-                                                    </div>
+                                            <div className="grid__item w-auto u-self-end">
+                                                <div className="group-spacing-y-small">
+                                                    <ShareController googleAPIHasLoaded={this.state.googleAPIHasLoaded} />
                                                 </div>
                                             </div>
                                         )
@@ -218,26 +230,32 @@ console.log('context', this.context)
                             </Panel>
                         </div>
 
-                        <Expandable
-                            title="Advanced Settings"
-                            titleClassName="u-curp u-mb1 u-txt-light"
-                            enableStateSave={true}
-                        >
-                            <Panel>
-                                { beats }
-                            </Panel>
+                        {
+                            isShareRoute
+                            ? null
+                            : (
+                                <Expandable
+                                    title="Advanced Settings"
+                                    titleClassName="u-curp u-mb1 u-txt-light"
+                                    enableStateSave={true}
+                                >
+                                    <Panel>
+                                        { beats }
+                                    </Panel>
 
-                            <div className="group-spacing-y">
-                                <Panel>
-                                    <h2 className="title-primary">Sounds</h2>
+                                    <div className="group-spacing-y">
+                                        <Panel>
+                                            <h2 className="title-primary">Sounds</h2>
 
-                                    <InstrumentList
-                                        actions={{ updateInstrumentSound: this.props.actions.updateInstrumentSound }}
-                                        instruments={this.props.instruments}
-                                    />
-                                </Panel>
-                            </div>
-                        </Expandable>
+                                            <InstrumentList
+                                                actions={{ updateInstrumentSound: this.props.actions.updateInstrumentSound }}
+                                                instruments={this.props.instruments}
+                                            />
+                                        </Panel>
+                                    </div>
+                                </Expandable>
+                            )
+                        }
 
                     </div>
 

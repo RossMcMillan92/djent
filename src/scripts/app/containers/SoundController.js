@@ -7,7 +7,6 @@ import SoundController from '../components/SoundController';
 
 const mapStateToProps = (state) => ({
     fadeIn: state.config.fadeIn,
-    isLooping: state.config.isLooping,
     continuousGeneration: state.config.continuousGeneration,
     bpm: state.config.bpm,
     beats: state.beats,

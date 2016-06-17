@@ -21,6 +21,7 @@ import {
 
 import SVG from './SVG';
 import Waveform from './Waveform';
+import LoopController from './LoopController';
 
 const getSequences = (grooveTotalBeats, allowedLengths, hitChance) => {
     const mainBeat       = generateSequence({ totalBeats: grooveTotalBeats, allowedLengths, hitChance });
@@ -41,7 +42,7 @@ const getSequences = (grooveTotalBeats, allowedLengths, hitChance) => {
     return sequences;
 }
 
-const generateNewBuffer = ({ bpm, beats, allowedLengths, hitChance, instruments }) => {
+const generateNewBuffer = ({ bpm, beats, allowedLengths, hitChance, instruments, usePredefinedSettings }) => {
     if (!allowedLengths.filter(length => length.amount).length) return Promise.reject('There are no allowed lengths given');
 
     const totalBeats              = beats.find(beat => beat.id === 'total');
@@ -50,7 +51,7 @@ const generateNewBuffer = ({ bpm, beats, allowedLengths, hitChance, instruments 
     const totalBeatsProduct       = totalBeats.beats * totalBeats.bars;
     const sequences               = getSequences(grooveTotalBeatsProduct, convertAllowedLengthsToArray(allowedLengths), hitChance);
 
-    return generateRiff({ bpm, totalBeatsProduct,  allowedLengths, sequences, instruments })
+    return generateRiff({ bpm, totalBeatsProduct, allowedLengths, sequences, instruments, usePredefinedSettings })
 }
 
 const context          = new AudioContext();
@@ -91,6 +92,7 @@ class SoundController extends Component {
     state = {
         isPlaying  : false,
         isLoading  : false,
+        isLooping  : true,
         error      : '',
     }
 
@@ -98,9 +100,9 @@ class SoundController extends Component {
         requestAnimationFrame(() => this.setState(newState));
     }
 
-    componentWillUpdate = (nextProps) => {
-        if(nextProps.isLooping !== this.props.isLooping) {
-            loop(this.currentSrc, nextProps.isLooping);
+    componentWillUpdate = (nextProps, nextState) => {
+        if(nextState.isLooping !== this.state.isLooping) {
+            loop(this.currentSrc, nextState.isLooping);
         }
     }
 
@@ -108,7 +110,6 @@ class SoundController extends Component {
         this.stopEvent(this.currentSrc);
         generateNewBuffer(this.props)
             .then(({ buffer, instruments }) => {
-                console.log('BUFFER, INSTRUMENTS', buffer, instruments)
                 const newState = { isLoading: false, error: '' };
 
                 if (!buffer) newState.error = 'Error!'
@@ -142,7 +143,7 @@ class SoundController extends Component {
         this.currentGainNode.connect(context.destination);
         this.currentGainNode = fadeIn(this.currentGainNode, (this.props.fadeIn ? 5000 : 0));
 
-        loop(this.currentSrc, this.props.isLooping);
+        loop(this.currentSrc, this.state.isLooping);
         this.updateUI({ isPlaying: true });
 
         this.currentSrc.addEventListener('ended', this.onEnded)
@@ -166,18 +167,17 @@ class SoundController extends Component {
     render () {
         const eventName = this.state.isPlaying ? 'stop' : 'play';
 
-
         return (
             <div>
                 { this.state.error ? <p className="txt-error">{ this.state.error }</p> : null }
                 <ul className="list-hor list-hor--tight">
                     <li className="list-hor__item">
                         <button className="button-primary button-primary--positive" onClick={() => this.generateEvent()}>
-                            { this.currentBuffer ? 'Regenerate' : 'Generate' }
+                            { this.props.generateButtonText || 'Generate Riff' }
                         </button>
                     </li>
 
-                    <li className="list-hor__item">
+                    <li className="list-hor__item u-mr1">
                         <button className="button-primary" title={ capitalize(eventName) } onClick={this.togglePlay} disabled={!this.currentBuffer}>
                             {
                                 this.state.isLoading
@@ -185,6 +185,15 @@ class SoundController extends Component {
                                 : <SVG icon={ eventName } className="button-primary__svg-icon" />
                             }
                         </button>
+                    </li>
+
+                    <li className="list-hor__item">
+                        <LoopController
+                            isLooping={this.state.isLooping}
+                            actions={{
+                                updateIsLooping: (newVal) => this.setState({ isLooping: newVal })
+                            }}
+                        />
                     </li>
                 </ul>
             </div>

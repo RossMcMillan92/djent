@@ -39,7 +39,6 @@ const initialState = {
     bpm                  : 50,
     fadeIn               : false,
     hitChance            : 1,
-    isLooping            : true,
     continuousGeneration : false,
 };
 
@@ -64,12 +63,6 @@ export default function config(state = getInitialState(), action) {
             return {
                 ...state,
                 bpm: payload.bpm
-            };
-
-        case 'UPDATE_IS_LOOPING':
-            return {
-                ...state,
-                isLooping: payload.isLooping
             };
 
         case 'UPDATE_CONTINUOUS_GENERATION':

@@ -15,14 +15,13 @@ import {
     compose,
 } from './tools';
 
-const generateRiff = ({ bpm, totalBeatsProduct, allowedLengths, sequences, instruments }) => {
-    console.log('INSTRUMENTS', instruments)
+const generateRiff = ({ bpm, totalBeatsProduct, allowedLengths, sequences, instruments, usePredefinedSettings }) => {
     const bpmMultiplier  = 60 / bpm;
     const context        = new AudioContext();
-    const instrumentPack = getInstrumentsSequences(instruments, sequences, totalBeatsProduct);
+    const instrumentPack = getInstrumentsSequences({ sequences, instruments, usePredefinedSettings, totalBeats: totalBeatsProduct });
 
     return loadInstrumentBuffers(context, instrumentPack)
-        .then((instrumentPack) => initiateInstruments(context, instrumentPack, totalBeatsProduct, bpmMultiplier))
+        .then((instrumentPack) => initiateInstruments({ context, instrumentPack, totalBeatsProduct, bpmMultiplier, usePredefinedSettings }))
         .then(({ buffer, instruments }) => {
             context.close();
             return Promise.resolve({ buffer, instruments })
@@ -30,18 +29,17 @@ const generateRiff = ({ bpm, totalBeatsProduct, allowedLengths, sequences, instr
         .catch(e => { (console.error || console.log).call(console, e); });
 }
 
-const initiateInstruments = (context, instrumentPack, totalBeatsProduct, bpmMultiplier) => {
+const initiateInstruments = ({ context, instrumentPack, totalBeatsProduct, bpmMultiplier, usePredefinedSettings }) => {
     const createSoundMaps = instrument => compose(
         generateInstrumentTimeMap,
         repeatHits,
         instrument => repeatSequence(instrument, totalBeatsProduct),
         generateInstrumentHitTypes
-    )(instrument);
+    )(instrument, usePredefinedSettings);
 
     const instruments = instrumentPack
         .map(createSoundMaps);
 
-        console.log('INSTRUMENTS', instruments)
     return renderInstrumentSoundsAtTempo(instruments, totalBeatsProduct, bpmMultiplier)
         .then(buffer => Promise.resolve({ buffer, instruments }));
 }

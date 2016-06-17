@@ -20,7 +20,6 @@ export default class Waveform extends Component {
         var channelData = this.props.buffer.getChannelData(0);
         var step = Math.ceil(channelData.length / width);
 
-        console.log('THIS.REFS.CANVAS', this.refs.canvas)
         var ctx = this.refs.canvas.getContext('2d');
         ctx.fillStyle = this.props.color;
         this.draw(width, step, middle, channelData, ctx);

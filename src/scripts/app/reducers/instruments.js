@@ -217,9 +217,11 @@ const initialState = [
     },
     {
         id: 'k',
+        description: 'Kick',
         sounds: [
             {
                 id: 'k',
+                description: 'Basic kick',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/kick.wav',
                 enabled: false,
             }
@@ -227,9 +229,11 @@ const initialState = [
     },
     {
         id: 's',
+        description: 'Snare',
         sounds: [
             {
                 id: 's',
+                description: 'Basic snare',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/snare.wav',
                 enabled: false,
             }
@@ -237,9 +241,11 @@ const initialState = [
     },
     {
         id: 'h',
+        description: 'Hihat',
         sounds: [
             {
                 id: 'h',
+                description: 'Basic hihat',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/hihat.wav',
                 enabled: false,
             }
@@ -247,22 +253,26 @@ const initialState = [
     },
     {
         id: 'c',
+        description: 'Cymbal',
         ringout: true,
         sounds: [
             {
                 id: 'crash-left',
+                description: 'Crash left',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/crash-left.wav',
                 enabled: false,
                 category: 'Crash'
             },
             {
                 id: 'crash-right',
+                description: 'Crash right',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/crash-right.wav',
                 enabled: false,
                 category: 'Crash'
             },
             {
                 id: 'china-left',
+                description: 'China left',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/china-left.wav',
                 enabled: false,
                 category: 'China'
@@ -271,6 +281,7 @@ const initialState = [
     },
     {
         id: 'd',
+        description: 'Drone',
         sounds: [
             {
                 id: 'drone-medium',

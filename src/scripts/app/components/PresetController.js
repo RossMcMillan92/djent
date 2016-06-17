@@ -18,10 +18,11 @@ class PresetController extends Component {
             ))
 
         return (
-            <div>
-                <select onChange={(e) => this.onChange(e)} value={this.props.activePresetID}>
+            <div className="input-container">
+                <select className="input-base input-base--dropdown" onChange={(e) => this.onChange(e)} value={this.props.activePresetID}>
                     { presetItems }
                 </select>
+                <div className="input-dropdown-icon"></div>
             </div>
         );
     }

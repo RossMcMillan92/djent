@@ -1,12 +1,27 @@
 .input-container
+    position: relative
     max-width: 252px
 
 .input-base
     border: solid 1px $palette-base-ui
     padding: $base-spacing-unit / 2
     width: 100%
+    color: $palette-base-text
+    appearance: none
 
     &:hover,
     &:focus
         box-shadow: 0 7px 5px -3px rgba(0, 0, 0, .07)
         outline: none
+
+.input-dropdown-icon
+    position: absolute
+    top: 50%
+    right: $base-spacing-unit / 1.5
+    transform: translateY(-50%)
+    width: 0
+    height: 0
+    border-style: solid
+    display: block
+    border-width: 8.7px 5px 0 5px
+    border-color: $palette-base-ui transparent transparent transparent

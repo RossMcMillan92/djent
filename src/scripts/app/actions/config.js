@@ -16,13 +16,6 @@ export function updateBPM(bpm) {
     };
 }
 
-export function updateIsLooping(isLooping) {
-  return {
-    type: 'UPDATE_IS_LOOPING',
-    payload: { isLooping },
-  };
-}
-
 export function updateContinuousGeneration(continuousGeneration) {
   return {
     type: 'UPDATE_CONTINUOUS_GENERATION',

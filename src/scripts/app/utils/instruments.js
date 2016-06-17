@@ -11,19 +11,21 @@ import {
 
 import { playSound } from './audio';
 
-const getInstrumentsSequences = (instruments, sequences, totalBeats) => {
-    return Object.keys(sequences)
+const getInstrumentsSequences = ({ instruments, sequences, totalBeats, usePredefinedSettings }) =>
+    Object.keys(sequences)
         .map(instrumentId => {
             const instrument = instruments.find(i => i.id === instrumentId);
             const predefinedSequence = instrument.predefinedSequence;
-            const newSequence = predefinedSequence || sequences[instrumentId];
+            const newSequence = usePredefinedSettings && predefinedSequence
+                              ? predefinedSequence
+                              : sequences[instrumentId];
 
             return {
                 ...instrument,
                 sequence: newSequence.map(seq => deepCloneObject(seq))
             }
         });
-}
+
 
 const generateInstrumentTimeMap = (instrument) => {
     const timeMap = generateTimeMap(instrument.sequence);
@@ -34,10 +36,10 @@ const generateInstrumentTimeMap = (instrument) => {
     }
 }
 
-const generateInstrumentHitTypes = (instrument) => {
+const generateInstrumentHitTypes = (instrument, usePredefinedSettings) => {
     const predefinedHitTypes = instrument.predefinedHitTypes;
 
-    if (predefinedHitTypes && predefinedHitTypes.length) return {
+    if (usePredefinedSettings && predefinedHitTypes && predefinedHitTypes.length) return {
         ...instrument,
         hitTypes: [ ...predefinedHitTypes ]
     }
@@ -56,7 +58,8 @@ const generateInstrumentHitTypes = (instrument) => {
     }
 }
 
-const getActiveSoundsFromHitTypes = (hitTypes) => (!hitTypes ? [] : hitTypes)
+const getActiveSoundsFromHitTypes = (hitTypes) =>
+    (!hitTypes ? [] : hitTypes)
         .reduce((newArr, hit, i) => {
             return newArr.includes(hit) ? newArr : [ ...newArr, hit ];
         }, [])

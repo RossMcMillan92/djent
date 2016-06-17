@@ -16,31 +16,34 @@ import {
 
 import {
     capitalize,
+    compose,
 } from '../utils/tools';
 
 import SVG from './SVG';
+import Waveform from './Waveform';
+import LoopController from './LoopController';
 
 const getSequences = (grooveTotalBeats, allowedLengths, hitChance) => {
-    const mainBeat      = generateSequence({ totalBeats: grooveTotalBeats, allowedLengths, hitChance });
+    const mainBeat       = generateSequence({ totalBeats: grooveTotalBeats, allowedLengths, hitChance });
     const cymbalSequence = getSequenceForInstrument('cymbal');
-    const hihatSequence = getSequenceForInstrument('hihat');
-    const snareSequence = getSequenceForInstrument('snare');
-    const droneSequence = getSequenceForInstrument('drone');
+    const hihatSequence  = getSequenceForInstrument('hihat');
+    const snareSequence  = getSequenceForInstrument('snare');
+    const droneSequence  = getSequenceForInstrument('drone');
 
     const sequences     = {
-        cymbal  : cymbalSequence,
-        hihat  : hihatSequence,
-        kick   : mainBeat,
-        guitar : mainBeat,
-        snare  : snareSequence,
-        drone  : droneSequence,
+        c : cymbalSequence,
+        h : hihatSequence,
+        k : mainBeat,
+        g : mainBeat,
+        s : snareSequence,
+        d : droneSequence,
     };
 
     return sequences;
 }
 
-const generateNewBuffer = ({ bpm, beats, allowedLengths, hitChance, instruments }) => {
-    if (!allowedLengths.filter(length => length.amount).length) return Promise.resolve(false);
+const generateNewBuffer = ({ bpm, beats, allowedLengths, hitChance, instruments, usePredefinedSettings }) => {
+    if (!allowedLengths.filter(length => length.amount).length) return Promise.reject('There are no allowed lengths given');
 
     const totalBeats              = beats.find(beat => beat.id === 'total');
     const grooveTotalBeats        = beats.find(beat => beat.id === 'groove');
@@ -48,10 +51,7 @@ const generateNewBuffer = ({ bpm, beats, allowedLengths, hitChance, instruments 
     const totalBeatsProduct       = totalBeats.beats * totalBeats.bars;
     const sequences               = getSequences(grooveTotalBeatsProduct, convertAllowedLengthsToArray(allowedLengths), hitChance);
 
-    return generateRiff({ bpm, totalBeatsProduct,  allowedLengths, sequences, instruments })
-        .then((buffer) => {
-            return buffer;
-        });
+    return generateRiff({ bpm, totalBeatsProduct, allowedLengths, sequences, instruments, usePredefinedSettings })
 }
 
 const context          = new AudioContext();
@@ -92,6 +92,7 @@ class SoundController extends Component {
     state = {
         isPlaying  : false,
         isLoading  : false,
+        isLooping  : true,
         error      : '',
     }
 
@@ -99,22 +100,23 @@ class SoundController extends Component {
         requestAnimationFrame(() => this.setState(newState));
     }
 
-    componentWillUpdate = (nextProps) => {
-        if(nextProps.isLooping !== this.props.isLooping) {
-            loop(this.currentSrc, nextProps.isLooping);
+    componentWillUpdate = (nextProps, nextState) => {
+        if(nextState.isLooping !== this.state.isLooping) {
+            loop(this.currentSrc, nextState.isLooping);
         }
     }
 
     generate = (shouldPlay) => {
         this.stopEvent(this.currentSrc);
         generateNewBuffer(this.props)
-            .then((buffer) => {
+            .then(({ buffer, instruments }) => {
                 const newState = { isLoading: false, error: '' };
 
                 if (!buffer) newState.error = 'Error!'
-                this.updateUI(newState)
                 this.currentBuffer = buffer;
                 if (shouldPlay) this.playEvent();
+                this.props.actions.updateCustomPresetInstruments(instruments);
+                this.updateUI(newState);
             });
 
         this.updateUI({ isLoading: true });
@@ -141,7 +143,7 @@ class SoundController extends Component {
         this.currentGainNode.connect(context.destination);
         this.currentGainNode = fadeIn(this.currentGainNode, (this.props.fadeIn ? 5000 : 0));
 
-        loop(this.currentSrc, this.props.isLooping);
+        loop(this.currentSrc, this.state.isLooping);
         this.updateUI({ isPlaying: true });
 
         this.currentSrc.addEventListener('ended', this.onEnded)
@@ -171,11 +173,11 @@ class SoundController extends Component {
                 <ul className="list-hor list-hor--tight">
                     <li className="list-hor__item">
                         <button className="button-primary button-primary--positive" onClick={() => this.generateEvent()}>
-                            { this.currentBuffer ? 'Regenerate' : 'Generate' }
+                            { this.props.generateButtonText || 'Generate Riff' }
                         </button>
                     </li>
 
-                    <li className="list-hor__item">
+                    <li className="list-hor__item u-mr1">
                         <button className="button-primary" title={ capitalize(eventName) } onClick={this.togglePlay} disabled={!this.currentBuffer}>
                             {
                                 this.state.isLoading
@@ -183,6 +185,15 @@ class SoundController extends Component {
                                 : <SVG icon={ eventName } className="button-primary__svg-icon" />
                             }
                         </button>
+                    </li>
+
+                    <li className="list-hor__item">
+                        <LoopController
+                            isLooping={this.state.isLooping}
+                            actions={{
+                                updateIsLooping: (newVal) => this.setState({ isLooping: newVal })
+                            }}
+                        />
                     </li>
                 </ul>
             </div>

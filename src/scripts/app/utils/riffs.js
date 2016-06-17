@@ -15,32 +15,33 @@ import {
     compose,
 } from './tools';
 
-const generateRiff = ({ bpm, totalBeatsProduct, allowedLengths, sequences, instruments }) => {
+const generateRiff = ({ bpm, totalBeatsProduct, allowedLengths, sequences, instruments, usePredefinedSettings }) => {
     const bpmMultiplier  = 60 / bpm;
     const context        = new AudioContext();
-    const instrumentPack = getInstrumentsSequences(instruments, sequences, totalBeatsProduct);
+    const instrumentPack = getInstrumentsSequences({ sequences, instruments, usePredefinedSettings, totalBeats: totalBeatsProduct });
 
     return loadInstrumentBuffers(context, instrumentPack)
-        .then((instrumentPack) => initiateInstruments(context, instrumentPack, totalBeatsProduct, bpmMultiplier))
-        .then(buffer => {
+        .then((instrumentPack) => initiateInstruments({ context, instrumentPack, totalBeatsProduct, bpmMultiplier, usePredefinedSettings }))
+        .then(({ buffer, instruments }) => {
             context.close();
-            return buffer
+            return Promise.resolve({ buffer, instruments })
         })
-        .catch(e => { console.error(e); });
+        .catch(e => { (console.error || console.log).call(console, e); });
 }
 
-const initiateInstruments = (context, instrumentPack, totalBeatsProduct, bpmMultiplier) => {
+const initiateInstruments = ({ context, instrumentPack, totalBeatsProduct, bpmMultiplier, usePredefinedSettings }) => {
     const createSoundMaps = instrument => compose(
         generateInstrumentTimeMap,
         repeatHits,
         instrument => repeatSequence(instrument, totalBeatsProduct),
         generateInstrumentHitTypes
-    )(instrument);
+    )(instrument, usePredefinedSettings);
 
     const instruments = instrumentPack
         .map(createSoundMaps);
 
-    return renderInstrumentSoundsAtTempo(instruments, totalBeatsProduct, bpmMultiplier);
+    return renderInstrumentSoundsAtTempo(instruments, totalBeatsProduct, bpmMultiplier)
+        .then(buffer => Promise.resolve({ buffer, instruments }));
 }
 
 export {

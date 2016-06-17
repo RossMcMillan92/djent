@@ -35,7 +35,7 @@ export default class InstrumentList extends Component {
 
                         return (
                             <Expandable
-                                title={ id || `${(instrument.description || capitalize(instrument.id))} (ungrouped)` }
+                                title={ id || `${(instrument.description || capitalize(instrument.id))}` }
                                 className="expandable-list u-mb05"
                                 titleClassName="expandable-list__title"
                                 bodyClassName="expandable-list__body"

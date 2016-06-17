@@ -3,7 +3,7 @@ $switch-input__track-colour         : $palette-shade-delta
 $switch-input__track-colour--active : $palette-alpha
 $switch-input__height               : 30px
 $switch-input__width                : 60px
-$switch-input__spacing              : 6px
+$switch-input__spacing              : 8px
 $switch-input__handle-size          : $switch-input__height - $switch-input__spacing
 
 
@@ -29,7 +29,7 @@ $switch-input__handle-size          : $switch-input__height - $switch-input__spa
     &::before
         position: absolute
         content: ""
-        top: $switch-input__spacing / 2
+        top: $switch-input__spacing / 3
         left: 0
         transform: translate3d($switch-input__spacing / 2, 0, 0)
         border-radius: $switch-input__handle-size
@@ -47,4 +47,4 @@ $switch-input__handle-size          : $switch-input__height - $switch-input__spa
         border-color: darken($palette-alpha, 5%)
 
         &::before
-            transform: translate3d($switch-input__width - $switch-input__handle-size - $switch-input__spacing / 2, 0, 0)
+            transform: translate($switch-input__width - $switch-input__handle-size - $switch-input__spacing / 1.5, 0)

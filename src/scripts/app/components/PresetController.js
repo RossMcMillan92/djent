@@ -7,8 +7,8 @@ class PresetController extends Component {
     shouldComponentUpdate = (nextProps) => nextProps.activePresetID !== this.props.activePresetID;
 
     onChange = (event) => {
-        const id = event.target.value;
-        this.props.actions.applyPreset(id);
+        const presetID = event.target.value;
+        this.props.actions.applyPreset(presets.find(preset => preset.id === presetID));
     }
 
     render = () => {
@@ -18,10 +18,11 @@ class PresetController extends Component {
             ))
 
         return (
-            <div>
-                <select onChange={(e) => this.onChange(e)} defaultValue={this.props.activePresetID}>
+            <div className="input-container">
+                <select className="input-base input-base--dropdown" onChange={(e) => this.onChange(e)} value={this.props.activePresetID}>
                     { presetItems }
                 </select>
+                <div className="input-dropdown-icon"></div>
             </div>
         );
     }

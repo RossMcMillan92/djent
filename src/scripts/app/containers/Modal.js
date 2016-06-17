@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
-
-import { updateIsLooping } from '../actions/config';
-import LoopController from '../components/LoopController';
+import * as modalActions from '../actions/modal';
+import Modal from '../components/Modal';
+import presets from '../utils/presets';
 
 const mapStateToProps = (state) => ({
-    isLooping: state.config.isLooping,
+    modal: state.modal,
 })
 
 const mapDispatchToProps = (dispatch) => {
     const actions = {
-        updateIsLooping,
+        ...modalActions,
     }
     return {
         actions: {
@@ -20,4 +20,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoopController);
+export default connect(mapStateToProps, mapDispatchToProps)(Modal);

@@ -8,6 +8,7 @@
     "clone-deep": "^0.2.4",
     "deep-equal": "^1.0.1",
     "deep-extend": "^0.4.1",
+    "lzutf8": "^0.3.4",
     "react-addons-shallow-compare": "^15.1.0"
   },
   "devDependencies": {
@@ -58,7 +59,7 @@
   "scripts": {
     "build": "node dev.js build",
     "dev": "node dev.js",
-    "test": "node tests.js"
+    "test": "./node_modules/mocha/bin/mocha ./src/scripts/app/test/* --require babel-core/register --watch"
   },
   "license": "ISC"
 }

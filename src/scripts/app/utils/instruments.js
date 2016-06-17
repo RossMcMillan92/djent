@@ -4,24 +4,28 @@ import {
 } from './sequences';
 
 import {
+    deepCloneObject,
     randFromTo,
     repeatArray,
 } from './tools';
 
 import { playSound } from './audio';
 
-const defaultInstrument = {
-    id: '',
-    buffers: [],
-    durations: [],
-    hitTypes: [],
-    sounds: [],
-    sequence: [],
-    sources: [],
-    timeMap: [],
-}
+const getInstrumentsSequences = ({ instruments, sequences, totalBeats, usePredefinedSettings }) =>
+    Object.keys(sequences)
+        .map(instrumentId => {
+            const instrument = instruments.find(i => i.id === instrumentId);
+            const predefinedSequence = instrument.predefinedSequence;
+            const newSequence = usePredefinedSettings && predefinedSequence
+                              ? predefinedSequence
+                              : sequences[instrumentId];
 
-const getInstrumentsSequences = (instruments, sequences, totalBeats) => Object.keys(sequences).map(instrumentId => ({ ...instruments.find(i => i.id === instrumentId), sequence: sequences[instrumentId] }));
+            return {
+                ...instrument,
+                sequence: newSequence.map(seq => deepCloneObject(seq))
+            }
+        });
+
 
 const generateInstrumentTimeMap = (instrument) => {
     const timeMap = generateTimeMap(instrument.sequence);
@@ -32,12 +36,20 @@ const generateInstrumentTimeMap = (instrument) => {
     }
 }
 
-const generateInstrumentHitTypes = (instrument) => {
-    const activeSounds = instrument.sounds.reduce((newArr, sound, i) => sound.enabled ? [ ...newArr, { ...sound, index: newArr.length } ] : newArr, []);
+const generateInstrumentHitTypes = (instrument, usePredefinedSettings) => {
+    const predefinedHitTypes = instrument.predefinedHitTypes;
+
+    if (usePredefinedSettings && predefinedHitTypes && predefinedHitTypes.length) return {
+        ...instrument,
+        hitTypes: [ ...predefinedHitTypes ]
+    }
+    // TODO: IF THIS WORKS COME BACK AND REMOVE INDEX
+    const activeSounds = instrument.sounds.reduce((newArr, sound, i) => sound.enabled ? [ ...newArr, { ...sound } ] : newArr, []);
     let hitTypes = [];
 
     if (activeSounds.length) {
-        hitTypes = instrument.sequence.map((hit) => activeSounds[randFromTo(0, activeSounds.length-1)].index);
+        hitTypes = instrument.sequence.map((hit) => {
+            return activeSounds[randFromTo(0, activeSounds.length-1)].id});
     }
 
     return {
@@ -45,6 +57,13 @@ const generateInstrumentHitTypes = (instrument) => {
         hitTypes
     }
 }
+
+const getActiveSoundsFromHitTypes = (hitTypes) =>
+    (!hitTypes ? [] : hitTypes)
+        .reduce((newArr, hit, i) => {
+            return newArr.includes(hit) ? newArr : [ ...newArr, hit ];
+        }, [])
+        .map(hit => ({ id: hit, enabled: true, hitTypes }));
 
 const renderInstrumentSoundsAtTempo = (instruments, totalBeats, bpmMultiplier) => {
     const timeLength = totalBeats * bpmMultiplier;
@@ -95,6 +114,7 @@ export {
     getInstrumentsSequences,
     generateInstrumentTimeMap,
     generateInstrumentHitTypes,
+    getActiveSoundsFromHitTypes,
     renderInstrumentSoundsAtTempo,
     repeatHits,
     repeatSequence,

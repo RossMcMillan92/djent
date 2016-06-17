@@ -21,8 +21,8 @@ const repeatArray = (arr, length) => {
 		.slice(0, length);
 }
 
-const extendObjectArrayByID = (one, two) => {
-    return one.map((value, i, arr) => {
+const extendObjectArrayByID = (one, two) =>
+    one.map((value, i, arr) => {
         const newValue = two.find(newValue => newValue.id === value.id);
 
 		if (newValue) {
@@ -31,19 +31,61 @@ const extendObjectArrayByID = (one, two) => {
 
         return value;
     })
+
+const compose = (...funcs) =>
+	(...args) => {
+	    if (funcs.length === 0) {
+		    return args[0]
+	    }
+
+	    const last = funcs[funcs.length - 1]
+	    const rest = funcs.slice(0, -1)
+
+	    return rest.reduceRight((composed, f) => f(composed), last(...args))
+	}
+
+const deepCloneObject = (obj) => Object.keys(obj)
+    .reduce((newObject, objKey, i) => {
+        const value = obj[objKey];
+        const newValue = (typeof value === 'object' && !Array.isArray(value))
+                    ? deepCloneObject(value)
+                    : (Array.isArray(value))
+                      ? value.map(deepCloneObject)
+                      : value;
+
+        return {
+            ...newObject,
+            [objKey]: newValue
+        }
+    }, {});
+
+const updateObjByID = ({ objs, id, prop, value }) =>
+    objs.map(beat => {
+        const newObj = { ...beat };
+        if (newObj.id === id) newObj[prop] = value;
+        return newObj;
+    });
+
+const parseQueryString = (url = window.location.href) =>
+	!url.includes('?') ? {} : url
+	    .split('?')[1]
+	    .split('&')
+	    .reduce((list, query) => {
+	        const [ key, value ] = query.split('=');
+	        return { ...list, [key]: value || '' };
+	    }, {});
+
+const getHashQueryParam = (param, url = window.location.hash) => {
+    const paramPart1 = url.split(`${param}\=`)[1];
+    if (!paramPart1) return '';
+
+    return paramPart1.split('&')[0]
 }
 
-const compose = (...funcs) => {
-  return (...args) => {
-    if (funcs.length === 0) {
-      return args[0]
-    }
-
-    const last = funcs[funcs.length - 1]
-    const rest = funcs.slice(0, -1)
-
-    return rest.reduceRight((composed, f) => f(composed), last(...args))
-  }
+const loadScript = (path) => {
+	const script = document.createElement('script');
+	script.src = path;
+	document.body.appendChild(script);
 }
 
 const randFromTo = (from,to) => Math.floor(Math.random()*(to-from+1)+from);
@@ -59,9 +101,14 @@ export {
 	capitalize,
 	compose,
 	coinFlip,
+	deepCloneObject,
 	extendObjectArrayByID,
+	getHashQueryParam,
+	loadScript,
+	parseQueryString,
 	repeat,
 	randFromTo,
 	randomFromArray,
 	repeatArray,
+	updateObjByID,
 }

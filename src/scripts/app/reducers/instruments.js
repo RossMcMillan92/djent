@@ -1,8 +1,8 @@
-import { extendObjectArrayByID } from '../utils/tools';
+import { extendObjectArrayByID, deepCloneObject } from '../utils/tools';
 
 const initialState = [
     {
-        id: 'guitar',
+        id: 'g',
         description: 'Guitar/Bass (Drop G#)',
         sounds: [
             {
@@ -216,53 +216,63 @@ const initialState = [
         ],
     },
     {
-        id: 'kick',
+        id: 'k',
+        description: 'Kick',
         sounds: [
             {
-                id: 'kick',
+                id: 'k',
+                description: 'Basic kick',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/kick.wav',
                 enabled: false,
             }
         ],
     },
     {
-        id: 'snare',
+        id: 's',
+        description: 'Snare',
         sounds: [
             {
-                id: 'snare',
+                id: 's',
+                description: 'Basic snare',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/snare.wav',
                 enabled: false,
             }
         ],
     },
     {
-        id: 'hihat',
+        id: 'h',
+        description: 'Hihat',
         sounds: [
             {
-                id: 'hihat',
+                id: 'h',
+                description: 'Basic hihat',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/hihat.wav',
                 enabled: false,
             }
         ],
     },
     {
-        id: 'cymbal',
+        id: 'c',
+        description: 'Cymbal',
         ringout: true,
         sounds: [
             {
                 id: 'crash-left',
+                description: 'Crash left',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/crash-left.wav',
                 enabled: false,
                 category: 'Crash'
             },
             {
                 id: 'crash-right',
+                description: 'Crash right',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/crash-right.wav',
                 enabled: false,
                 category: 'Crash'
             },
             {
                 id: 'china-left',
+                description: 'China left',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/china-left.wav',
                 enabled: false,
                 category: 'China'
@@ -270,7 +280,8 @@ const initialState = [
         ],
     },
     {
-        id: 'drone',
+        id: 'd',
+        description: 'Drone',
         sounds: [
             {
                 id: 'drone-medium',
@@ -314,7 +325,8 @@ const updateInstrumentSoundByID = ({ instruments, soundID, parentID, prop, value
 }
 
 export default function instruments(state = initialState, action) {
-    let { type, payload } = action;
+    const { type, payload } = action;
+    let newState
 
     switch (type) {
         case 'UPDATE_INSTRUMENT_SOUND_PROP':
@@ -324,7 +336,7 @@ export default function instruments(state = initialState, action) {
             const { preset } = payload;
             const instruments = preset.settings.instruments;
 
-            let newState = initialState.map(instrument => {
+            newState = initialState.map(instrument => {
                 const newInstrument = instruments.find(newInstrument => newInstrument.id === instrument.id);
 
                 if (!newInstrument) return instrument;
@@ -341,10 +353,24 @@ export default function instruments(state = initialState, action) {
                 };
             });
 
-            return [
-                ...newState
-            ];
+            return newState;
 
+        case 'UPDATE_CUSTOM_PRESET_INSTRUMENTS':
+            newState = state
+                .map(instrument => {
+                    const i = payload.instruments
+                        .find(i => i.id === instrument.id);
+
+                    if (!i) return { ...instrument };
+
+                    return {
+                        ...instrument,
+                        hitTypes: [ ...i.hitTypes ],
+                        sequence: i.sequence.map(seq => deepCloneObject(seq)),
+                    }
+                });
+
+            return newState;
         default:
             return state;
   }

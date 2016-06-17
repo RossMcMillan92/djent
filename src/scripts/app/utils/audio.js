@@ -9,13 +9,13 @@ const BufferLoader = (context) => {
         const enabledSounds = newInstrument.sounds.filter(sound => sound.enabled);
         const bufferAmount = enabledSounds.length;
         let bufferCount = 0;
-        newInstrument.buffers = [];
+        newInstrument.buffers = {};
 
         const loadingSound = new Promise((res, rej) => {
             enabledSounds.forEach((sound, i) => {
                 const url = sound.path;
                 if (bufferCache[url]) {
-                    newInstrument.buffers[i] = bufferCache[url];
+                    newInstrument.buffers[sound.id] = bufferCache[url];
                     newInstrumentPack[index] = newInstrument;
                     bufferCount++;
                     if(bufferCount === bufferAmount) {
@@ -38,7 +38,7 @@ const BufferLoader = (context) => {
                                 alert('error decoding file data: ' + url);
                                 return;
                             }
-                            newInstrument.buffers[i] = buffer;
+                            newInstrument.buffers[sound.id] = buffer;
                             bufferCache[url] = buffer;
                             newInstrumentPack[index] = newInstrument;
                             bufferCount++;
@@ -73,7 +73,7 @@ const BufferLoader = (context) => {
 
         return Promise.all(loadingSounds)
                 .then(() => newInstrumentPack)
-                .catch(e => console.error(e))
+                .catch(e => (console.error || console.log).call(console, e))
     }
 
     return {

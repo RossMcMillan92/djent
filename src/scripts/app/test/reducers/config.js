@@ -201,25 +201,6 @@ describe('Config reducer:', () => {
         });
     });
 
-    describe('Action type: UPDATE_IS_LOOPING', () => {
-        it('should update isLooping', () => {
-            const stateAfterAdd = {
-                ...initialState,
-                isLooping: false,
-            };
-            const payload = {
-                isLooping: false
-            };
-            const action = {
-                type: 'UPDATE_IS_LOOPING',
-                payload,
-            };
-
-            expect(config(initialState, action))
-                .to.deep.equal(stateAfterAdd);
-        });
-    });
-
     describe('Action type: UPDATE_HITCHANCE', () => {
         it('should update hitChance', () => {
             const stateAfterAdd = {

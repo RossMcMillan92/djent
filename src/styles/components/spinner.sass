@@ -1,10 +1,12 @@
 $spinner__size: 21px
+$spinner__size-large: 100px
 $spinner__border-width: 3px
+$spinner__border-width-large: 5px
 
 .spinner
     display: block
-    height: $spinner__size - ($spinner__border-width * 2)
-    width: $spinner__size - ($spinner__border-width * 2)
+    height: $spinner__size
+    width: $spinner__size
     border-radius: $spinner__size
     border: solid $spinner__border-width $palette-base-ui
     border-color: $palette-base-ui $palette-base-ui $palette-base-ui $palette-alpha
@@ -22,3 +24,19 @@ $spinner__border-width: 3px
         transform: rotate(0deg)
     to
         transform: rotate(360deg)
+
+.spinner--large
+    height: $spinner__size-large
+    width: $spinner__size-large
+    border-radius: $spinner__size-large
+    border-width: $spinner__border-width-large
+
+    &:after
+        margin-top: -($spinner__size-large / 2)
+        margin-left: -($spinner__size-large / 2)
+
+.spinner__subtext
+    margin-top: $base-spacing-unit
+    text-align: center
+    color: $palette-shade-gamma
+    font-size: rem(14px)

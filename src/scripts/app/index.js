@@ -2,11 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { Router, useRouterHistory } from 'react-router';
-import { createHistory } from 'history';
+import { createHashHistory } from 'history';
 import configureStore from './store/configureStore';
 import routes from './routes';
 
-const history = useRouterHistory(createHistory)({ queryKey: false });
+const history = useRouterHistory(createHashHistory)({ queryKey: false });
 const store = configureStore();
 
 ReactDOM.render(

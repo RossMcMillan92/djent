@@ -1,5 +1,5 @@
 const preset = {
-    id: 'tesseract',
+    id: 'tes',
     description: 'Tesseract',
     settings: {
         config: {
@@ -32,7 +32,7 @@ const preset = {
         ],
         instruments: [
             {
-                id: 'guitar',
+                id: 'g',
                 sounds: [
                     {
                         id: 'sixth-1-open',
@@ -65,25 +65,25 @@ const preset = {
                 ],
             },
             {
-                id: 'kick',
+                id: 'k',
                 sounds: [
                     {
-                        id: 'kick',
+                        id: 'k',
                         enabled: true,
                     }
                 ],
             },
             {
-                id: 'snare',
+                id: 's',
                 sounds: [
                     {
-                        id: 'snare',
+                        id: 's',
                         enabled: true,
                     }
                 ],
             },
             {
-                id: 'cymbal',
+                id: 'c',
                 sounds: [
                     {
                         id: 'crash-left',

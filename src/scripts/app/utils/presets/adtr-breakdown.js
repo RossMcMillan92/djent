@@ -1,5 +1,5 @@
 const preset = {
-    id: 'adtr-breakdown',
+    id: 'adtr',
     description: 'ADTR Breakdown',
     settings: {
         config: {
@@ -34,7 +34,7 @@ const preset = {
         ],
         instruments: [
             {
-                id: 'guitar',
+                id: 'g',
                 sounds: [
                     {
                         id: 'sixth-3-muted',
@@ -47,25 +47,25 @@ const preset = {
                 ],
             },
             {
-                id: 'kick',
+                id: 'k',
                 sounds: [
                     {
-                        id: 'kick',
+                        id: 'k',
                         enabled: true,
                     }
                 ],
             },
             {
-                id: 'snare',
+                id: 's',
                 sounds: [
                     {
-                        id: 'snare',
+                        id: 's',
                         enabled: true,
                     }
                 ],
             },
             {
-                id: 'cymbal',
+                id: 'c',
                 ringout: true,
                 sounds: [
                     {
@@ -75,7 +75,7 @@ const preset = {
                 ],
             },
             {
-                id: 'drone',
+                id: 'd',
                 sounds: [
                     {
                         id: 'drone-high',

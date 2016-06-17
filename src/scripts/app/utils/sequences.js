@@ -107,6 +107,19 @@ const generateSequence = ({ totalBeats, allowedLengths, hitChance }) => {
     })([], 0, totalBeats);
 };
 
+const getAllowedLengthsFromSequence = (sequence, allowedLengths) => {
+    return allowedLengths.map(length => {
+        const amount         = sequence.filter(item => item.beat === parseFloat(length.id)).length;
+        const amountTriplets = sequence.filter(item => item.beat === parseFloat(length.id) * 1.5).length;
+
+        return {
+            ...length,
+            amount    : amount || amountTriplets,
+            isTriplet : !!amountTriplets
+        }
+    })
+}
+
 const loopSequence = (sequence, totalBeats) => {
     if (!sequence.length) return [];
 
@@ -146,6 +159,7 @@ export {
     convertAllowedLengthsToArray,
     generateSequence,
     getSequenceForInstrument,
+    getAllowedLengthsFromSequence,
     loopSequence,
     generateTimeMap
 }

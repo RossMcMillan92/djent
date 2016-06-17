@@ -1,4 +1,4 @@
-import { extendObjectArrayByID } from '../utils/tools';
+import { extendObjectArrayByID, updateObjByID } from '../utils/tools';
 
 const initialState =  [
     {
@@ -13,16 +13,6 @@ const initialState =  [
     },
 ];
 
-const updateBeatByID = ({ beats, id, prop, value }) => {
-    const newBeats = beats.map(beat => {
-        const newBeat = { ...beat };
-        if (newBeat.id === id) newBeat[prop] = value;
-        return newBeat;
-    })
-
-    return newBeats;
-}
-
 export default function beats(state = initialState, action) {
     let { type, payload } = action;
 
@@ -30,23 +20,14 @@ export default function beats(state = initialState, action) {
         case 'UPDATE_BEATS':
             let { value, prop, id } = payload;
 
-            if (prop === 'bars' || prop === 'beats') {
-                if (!value)    value = 4;
-                if (value < 1) value = 1;
-                if (value > 8) value = 8;
-            }
-
-            return updateBeatByID({ beats: state, id, prop, value })
+            return updateObjByID({ objs: state, id, prop, value })
 
         case 'APPLY_PRESET':
             const { preset } = payload;
             const newBeats = preset.settings.beats;
             const newState = [ ...initialState ];
 
-            if (newBeats) {
-                return extendObjectArrayByID(newState, newBeats);
-            }
-
+            if (newBeats) return extendObjectArrayByID(newState, newBeats);
             return state;
 
         default:

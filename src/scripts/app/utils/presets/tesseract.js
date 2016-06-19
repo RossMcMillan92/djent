@@ -4,8 +4,13 @@ const preset = {
     settings: {
         config: {
             bpm       : 122,
-            hitChance : .78,
+            hitChance : .95,
             allowedLengths: [
+                    {
+                        id: "0.25",
+                        amount: 1,
+                        isTriplet: true
+                    },
                     {
                         id: "1",
                         amount: 1,
@@ -35,10 +40,6 @@ const preset = {
                 id: 'g',
                 sounds: [
                     {
-                        id: 'sixth-1-open',
-                        enabled: true,
-                    },
-                    {
                         id: 'sixth-2-open',
                         enabled: true,
                     },
@@ -47,7 +48,7 @@ const preset = {
                         enabled: true,
                     },
                     {
-                        id: 'fifth-6-open',
+                        id: 'fifth-5-open',
                         enabled: true,
                     },
                     {
@@ -56,10 +57,6 @@ const preset = {
                     },
                     {
                         id: 'fifth-10-open',
-                        enabled: true,
-                    },
-                    {
-                        id: 'scratch',
                         enabled: true,
                     },
                 ],

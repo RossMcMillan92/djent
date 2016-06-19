@@ -33,10 +33,12 @@ class ShareController extends Component {
 
         this.getShareableURL(preset)
             .then((url) => {
-                const shareableURL = `${window.location.href.split('#')[0]}#share/${url.split('/').pop()}`;
-                const content = (<ShareBox url={shareableURL} />);
+                if (url) {
+                    const shareableURL = `${window.location.href.split('#')[0]}#share/${url.split('/').pop()}`;
+                    const content = (<ShareBox url={shareableURL} />);
+                    this.props.actions.enableModal({ content, isCloseable: true })
+                }
                 this.setState({ isLoading: false })
-                this.props.actions.enableModal({ content, isCloseable: true })
             });
     }
 

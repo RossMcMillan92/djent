@@ -61,7 +61,6 @@ export default class Home extends Component {
 
     componentWillUpdate = (nextProps) => {
         if (!this.props.params.shareID && nextProps.params.shareID) {
-            console.log('LMAO')
             this.checkForShareData(nextProps.params.shareID);
 
         }
@@ -87,7 +86,6 @@ export default class Home extends Component {
     }
 
     getPresetData = (shareID) => {
-        console.log('SHAREID', shareID)
         return gapi.client.urlshortener.url.get({
               'shortUrl': `http://goo.gl/${shareID}`
             })

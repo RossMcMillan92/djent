@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import ShareController from '../components/ShareController';
 
 import * as modalActions from '../actions/modal';
-console.log('MODALACTIONS', modalActions)
 
 function mapStateToProps(state) {
     return {

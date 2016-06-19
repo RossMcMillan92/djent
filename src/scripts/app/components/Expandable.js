@@ -11,7 +11,7 @@ class Expandable extends Component {
     constructor (props) {
         super();
 
-        const lsValue = props.enableStateSave ? window.localStorage.getItem(`expandable-${escape(props.title)}`) === 'true' : false;
+        const lsValue = props.enableStateSave && window.localStorage ? window.localStorage.getItem(`expandable-${escape(props.title)}`) === 'true' : false;
 
         this.state = {
             isExpanded: props.isExpanded || lsValue
@@ -29,7 +29,7 @@ class Expandable extends Component {
         this.setState({ isExpanded: newValue });
         this.isPristine = false
 
-        if (this.props.enableStateSave) {
+        if (this.props.enableStateSave && window.localStorage) {
             window.localStorage.setItem(`expandable-${escape(this.props.title)}`, newValue)
         }
     }

@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import { compress, decompress } from 'lzutf8';
 import { deepCloneObject } from '../utils/tools';
 
+import ShareBox from './ShareBox.js'
+
 class ShareController extends Component {
     state = {
         isEnabled: false,
+        isLoading: false,
         shortURL: ''
     }
 
@@ -31,11 +34,14 @@ class ShareController extends Component {
         this.getShareableURL(preset)
             .then((url) => {
                 const shareableURL = `${window.location.href.split('#')[0]}#share/${url.split('/').pop()}`;
-                this.setState({ shortURL: shareableURL })
+                const content = (<ShareBox url={shareableURL} />);
+                this.setState({ isLoading: false })
+                this.props.actions.enableModal({ content, isCloseable: true })
             });
     }
 
     onClick = e => {
+        this.setState({ isLoading: true });
         this.generatePreset();
     }
 
@@ -50,17 +56,18 @@ class ShareController extends Component {
 
     getShortURL = url => {
         return gapi.client.urlshortener.url.insert({ 'longUrl': url })
-            .then((response) => {
-                return response.result.id
-            }, (reason) => {
-            })
+            .then((response) => response.result.id, (reason) => (console.error || console.log).call(conole, reason));
     }
 
     render = () => {
         return (
             <div className="">
-            { this.state.shortURL }
-                <button className="button-primary" onClick={this.onClick} disabled={!this.props.googleAPIHasLoaded}>Share Riff</button>
+                <button className={`button-primary u-flex-row ${ this.state.isLoading ? '' : 'icon-is-hidden' }`} onClick={this.onClick} disabled={!this.props.googleAPIHasLoaded}>
+                    <span className="button-primary__inner">Share Riff</span>
+                    <span className="button-primary__icon">
+                        <span className="spinner" />
+                    </span>
+                </button>
             </div>
         );
     }

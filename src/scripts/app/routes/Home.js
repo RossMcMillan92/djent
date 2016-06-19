@@ -45,32 +45,49 @@ export default class Home extends Component {
     }
 
     componentWillMount = () => {
-        this.handleGoogleAPI();
+        this.handleGoogleAPI()
+            .then(() => {
+                this.checkForShareData(this.props.params.shareID);
+                this.setState({ googleAPIHasLoaded: true })
+            });
 
         if (!this.props.params.shareID) return this.props.actions.applyPreset({ ...presets.find(preset => preset.id === this.props.activePresetID) });
 
         this.props.actions.enableModal({
-            content: (<Spinner subtext="Loading riff" />)
+            content: (<Spinner subtext="Loading..." />),
+            isCloseable: false,
         });
     }
 
-    handleGoogleAPI = () => {
-        loadScript('https://apis.google.com/js/client.js?onload=handleClientLoad')
-        const handleClientLoad = () => {
-            gapi.client.setApiKey(googleAPIKey);
-            gapi.client.load('urlshortener', 'v1')
-                .then(() => {
-                    if (this.props.params.shareID) {
-                        this.getPresetData(this.props.params.shareID)
-                            .then(this.handlePreset);
-                    }
-                    this.setState({ googleAPIHasLoaded: true })
-                });
+    componentWillUpdate = (nextProps) => {
+        if (!this.props.params.shareID && nextProps.params.shareID) {
+            console.log('LMAO')
+            this.checkForShareData(nextProps.params.shareID);
+
         }
-        window.handleClientLoad = handleClientLoad
+    }
+
+    handleGoogleAPI = () => {
+        return new Promise((res, rej) => {
+            loadScript('https://apis.google.com/js/client.js?onload=handleClientLoad')
+            const handleClientLoad = () => {
+                gapi.client.setApiKey(googleAPIKey);
+                gapi.client.load('urlshortener', 'v1')
+                    .then(res);
+            }
+            window.handleClientLoad = handleClientLoad
+        })
+    }
+
+    checkForShareData = (shareID) => {
+        if (shareID) {
+            this.getPresetData(shareID)
+                .then(this.handlePreset);
+        }
     }
 
     getPresetData = (shareID) => {
+        console.log('SHAREID', shareID)
         return gapi.client.urlshortener.url.get({
               'shortUrl': `http://goo.gl/${shareID}`
             })
@@ -101,7 +118,6 @@ export default class Home extends Component {
 
         this.props.actions.applyPreset(preset);
         this.props.actions.disableModal();
-        return
     }
 
     render = () => {
@@ -110,9 +126,7 @@ export default class Home extends Component {
         const beats = this.props.beats
             .filter(beat => beat.id !== 'total')
             .map((beat, i) => (
-                    <div className="group-spacing-y" key={i}>
-                        <BeatPanel beat={ beat } />
-                    </div>
+                    <BeatPanel beat={ beat } key={i} />
                 )
             );
         const usePredefinedSettings = isShareRoute;
@@ -133,11 +147,11 @@ export default class Home extends Component {
                     </div>
 
                     <div className="group-spacing-x">
-                        {
-                            isShareRoute
-                            ? null
-                            : (
-                                <div className="group-spacing-y">
+                        <div className="group-spacing-y">
+                            {
+                                isShareRoute
+                                ? null
+                                : (
                                     <Panel>
                                         <h2 className="title-primary">
                                             Preset
@@ -145,72 +159,29 @@ export default class Home extends Component {
 
                                         <PresetController />
                                     </Panel>
-                                </div>
-                            )
-                        }
-
-                        <div className="group-spacing-y">
-                            <Panel>
-                                <h2 className="title-primary u-mt05">Main Settings</h2>
-
-                                <div className="grid grid--wide grid--middle">
-                                    <div className="grid__item one-half alpha--one-whole">
-                                        <div className="group-spacing-y-small">
-                                            <div className="u-flex-row u-flex-end">
-                                                <div className="u-flex-grow-1 u-mr1">
-                                                    <BPMController />
-                                                </div>
-                                                <div className="">
-                                                    <BPMTapper />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {
-                                        isShareRoute
-                                        ? null
-                                        : (
-                                            <div className="grid__item one-half alpha--one-whole">
-                                                <div className="group-spacing-y-small">
-                                                    <BeatsController
-                                                        beat={ totalBeat }
-                                                        actions={{ updateBeats: this.props.actions.updateBeats }}
-                                                    />
-                                                </div>
-                                            </div>
-                                        )
-                                    }
-
-                                </div>
-                            </Panel>
+                                )
+                            }
 
                             <Panel theme="dark" sizeY="small">
-                                <div className="grid grid--wide grid--middle">
-                                    <div className="grid__item w-auto">
-                                        <div className="group-spacing-y-small">
-                                            <SoundController
-                                                usePredefinedSettings={ usePredefinedSettings }
-                                                generateButtonText={ generateButtonText }
-                                            />
-                                        </div>
-                                    </div>
+                                <div className="u-flex-row u-flex-justify u-flex-center u-flex-wrap">
+                                    <SoundController
+                                        usePredefinedSettings={ usePredefinedSettings }
+                                        generateButtonText={ generateButtonText }
+                                    />
 
                                     {
                                         isShareRoute
                                         ? (
-                                            <div className="grid__item w-auto u-self-end">
-                                                <span className="u-mr1">or</span>
+                                            <div className="group-spacing-y-small">
+                                                <span className="u-mr05">or</span>
                                                 <a className="link-base" onClick={e => this.context.router.push('/')}>
                                                     Generate new riff
                                                 </a>
                                             </div>
                                         )
                                         : (
-                                            <div className="grid__item w-auto u-self-end">
-                                                <div className="group-spacing-y-small">
-                                                    <ShareController googleAPIHasLoaded={this.state.googleAPIHasLoaded} />
-                                                </div>
+                                            <div className="group-spacing-y-small">
+                                                <ShareController googleAPIHasLoaded={this.state.googleAPIHasLoaded} />
                                             </div>
                                         )
                                     }
@@ -239,6 +210,41 @@ export default class Home extends Component {
                                     titleClassName="u-curp u-mb1 u-txt-light"
                                     enableStateSave={true}
                                 >
+                                    <Panel>
+                                        <h2 className="title-primary u-mt05">Main Settings</h2>
+
+                                        <div className="grid grid--wide grid--middle">
+                                            <div className="grid__item one-half alpha--one-whole">
+                                                <div className="group-spacing-y-small">
+                                                    <div className="u-flex-row u-flex-end">
+                                                        <div className="u-flex-grow-1 u-mr1">
+                                                            <BPMController />
+                                                        </div>
+                                                        <div className="">
+                                                            <BPMTapper />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {
+                                                isShareRoute
+                                                ? null
+                                                : (
+                                                    <div className="grid__item one-half alpha--one-whole">
+                                                        <div className="group-spacing-y-small">
+                                                            <BeatsController
+                                                                beat={ totalBeat }
+                                                                actions={{ updateBeats: this.props.actions.updateBeats }}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+
+                                        </div>
+                                    </Panel>
+
                                     <Panel>
                                         { beats }
                                     </Panel>

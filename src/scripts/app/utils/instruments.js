@@ -11,12 +11,14 @@ import {
 
 import { playSound } from './audio';
 
+const godMode = window.location.href.includes('godmode=1');
+
 const getInstrumentsSequences = ({ instruments, sequences, totalBeats, usePredefinedSettings }) =>
     Object.keys(sequences)
         .map(instrumentId => {
             const instrument = instruments.find(i => i.id === instrumentId);
             const predefinedSequence = instrument.predefinedSequence;
-            const newSequence = usePredefinedSettings && predefinedSequence
+            const newSequence = (godMode || usePredefinedSettings) && predefinedSequence
                               ? predefinedSequence
                               : sequences[instrumentId];
 
@@ -39,11 +41,11 @@ const generateInstrumentTimeMap = (instrument) => {
 const generateInstrumentHitTypes = (instrument, usePredefinedSettings) => {
     const predefinedHitTypes = instrument.predefinedHitTypes;
 
-    if (usePredefinedSettings && predefinedHitTypes && predefinedHitTypes.length) return {
+    if ((godMode || usePredefinedSettings) && predefinedHitTypes && predefinedHitTypes.length) return {
         ...instrument,
         hitTypes: [ ...predefinedHitTypes ]
     }
-    // TODO: IF THIS WORKS COME BACK AND REMOVE INDEX
+
     const activeSounds = instrument.sounds.reduce((newArr, sound, i) => sound.enabled ? [ ...newArr, { ...sound } ] : newArr, []);
     let hitTypes = [];
 

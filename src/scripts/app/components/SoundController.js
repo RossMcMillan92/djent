@@ -170,32 +170,31 @@ class SoundController extends Component {
         return (
             <div>
                 { this.state.error ? <p className="txt-error">{ this.state.error }</p> : null }
-                <ul className="list-hor list-hor--tight">
-                    <li className="list-hor__item">
-                        <button className="button-primary button-primary--positive" onClick={() => this.generateEvent()}>
-                            { this.props.generateButtonText || 'Generate Riff' }
+                <div className="u-flex-row u-flex-wrap">
+                    <div className="group-spacing-y-small u-mr05">
+                        <button className={`button-primary button-primary--positive u-flex-row ${ this.state.isLoading ? '' : 'icon-is-hidden' }`} onClick={() => this.generateEvent()}>
+                            <span className="button-primary__inner">{ this.props.generateButtonText || 'Generate Riff' }</span>
+                            <span className="button-primary__icon">
+                                <span className="spinner" />
+                            </span>
                         </button>
-                    </li>
+                    </div>
 
-                    <li className="list-hor__item u-mr1">
+                    <div className="group-spacing-y-small u-mr1">
                         <button className="button-primary" title={ capitalize(eventName) } onClick={this.togglePlay} disabled={!this.currentBuffer}>
-                            {
-                                this.state.isLoading
-                                ? <span className="spinner" />
-                                : <SVG icon={ eventName } className="button-primary__svg-icon" />
-                            }
+                            <SVG icon={ eventName } className="button-primary__svg-icon" />
                         </button>
-                    </li>
+                    </div>
 
-                    <li className="list-hor__item">
+                    <div className="group-spacing-y-small u-mr1">
                         <LoopController
                             isLooping={this.state.isLooping}
                             actions={{
                                 updateIsLooping: (newVal) => this.setState({ isLooping: newVal })
                             }}
                         />
-                    </li>
-                </ul>
+                    </div>
+                </div>
             </div>
         );
     }

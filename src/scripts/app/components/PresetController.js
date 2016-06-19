@@ -12,15 +12,19 @@ class PresetController extends Component {
     }
 
     render = () => {
+        const activePreset = presets.find(preset => preset.id === this.props.activePresetID);
         const presetItems = presets
             .map((preset, i) => (
                 <option value={preset.id} key={i}>{ preset.description || preset.id }</option>
-            ))
+            ));
+
+        if (!activePreset) presetItems.push(<option value='custom' key={presetItems.length}>Custom</option>)
 
         return (
             <div className="input-container">
-                <select className="input-base input-base--dropdown" onChange={(e) => this.onChange(e)} value={this.props.activePresetID}>
+                <select className="input-base input-base--dropdown" onChange={(e) => this.onChange(e)} value={activePreset ? this.props.activePresetID : 'custom'}>
                     { presetItems }
+
                 </select>
                 <div className="input-dropdown-icon"></div>
             </div>

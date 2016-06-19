@@ -1,7 +1,7 @@
-export function enableModal({ content }) {
+export function enableModal({ content, isCloseable }) {
     return {
         type: 'ENABLE_MODAL',
-        payload: { content },
+        payload: { content, isCloseable },
     };
 }
 

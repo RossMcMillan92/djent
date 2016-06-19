@@ -4,9 +4,8 @@ import { connect } from 'react-redux';
 
 import ShareController from '../components/ShareController';
 
-import * as configActions from '../actions/config';
-import * as instrumentsActions from '../actions/instruments';
-import * as beatsActions from '../actions/beats';
+import * as modalActions from '../actions/modal';
+console.log('MODALACTIONS', modalActions)
 
 function mapStateToProps(state) {
     return {
@@ -21,6 +20,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     const actions = {
+        ...modalActions
     }
 
     return {

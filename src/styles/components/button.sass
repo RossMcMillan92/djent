@@ -14,6 +14,7 @@ $button-primary__default-bg-color: #dfdfdf
     border: solid 1px $palette-base-ui
     cursor: pointer
     background-color: $button-primary__default-bg-color
+    white-space: nowrap
     transition: all .1s ease-in-out
 
     &:hover,
@@ -30,6 +31,21 @@ $button-primary__default-bg-color: #dfdfdf
     display: block
     width: $button-primary__svg-icon-size
     height: $button-primary__svg-icon-size
+
+.button-primary__inner
+    transition: transform .25s ease-in-out
+    margin-right: $base-spacing-unit / 2
+
+    .icon-is-hidden &
+        transform: translate(($button-primary__total-line-height + ($base-spacing-unit / 2)) / 2, 0)
+
+.button-primary__icon
+    transition: all .25s ease-in-out
+
+    .icon-is-hidden &
+        transform: scale(0.7)
+        opacity: 0
+
 
 .button-primary--positive
     background-color: $palette-alpha

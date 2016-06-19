@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
+
 import * as modalActions from '../actions/modal';
 import Modal from '../components/Modal';
 import presets from '../utils/presets';
 
 const mapStateToProps = (state) => ({
-    modal: state.modal,
+    isActive: state.modal.isActive,
+    content: state.modal.content,
+    isCloseable: state.modal.isCloseable,
 })
 
 const mapDispatchToProps = (dispatch) => {

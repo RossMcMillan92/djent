@@ -95,7 +95,7 @@ const renderSoundsToBuffer = (buffers) => {
     return newBuffer;
 }
 
-const playSound = (context, buffer, time, duration, volume, detune = 0) => {
+const playSound = (context, buffer, time, duration, volume) => {
     if (!buffer) return;
 
     const source = context.createBufferSource();
@@ -108,8 +108,6 @@ const playSound = (context, buffer, time, duration, volume, detune = 0) => {
 
     source.buffer = buffer;
     source.start(time, 0, duration);
-
-    source.detune.value = detune;
 
     return source;
 }

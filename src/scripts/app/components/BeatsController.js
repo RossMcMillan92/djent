@@ -17,7 +17,7 @@ class BeatsController extends Component {
             return {
                 type: 'number',
                 id: type,
-                label: capitalize(type),
+                label: `${capitalize(type)} (1 - 8)`,
                 defaultValue : this.props.beat[type],
                 onChange: (event) => this.onChange(event, type),
                 className: 'input-base',

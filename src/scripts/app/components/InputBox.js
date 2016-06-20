@@ -15,14 +15,14 @@ class InputBox extends Component {
             className          : 'input-base',
             containerClassName : 'input-container',
             labelClassName     : 'input-label-base',
-            ...this.props
+            ...this.props,
         };
         const { containerClassName, labelClassName, label, id } = inputProps;
 
         return (
             <div className={containerClassName}>
                 <label className={ labelClassName } htmlFor={ id }>{ label }:</label>
-                <input ref="input" { ...inputProps } />
+                <input ref="input" { ...inputProps} />
             </div>
         )
     }

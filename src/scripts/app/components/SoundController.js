@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import deepEqual from 'deep-equal';
 
 import {
-    playSound
+    playSound,
 } from '../utils/audio';
 
 import {
@@ -17,6 +18,7 @@ import {
 import {
     capitalize,
     compose,
+    deepClone,
 } from '../utils/tools';
 
 import SVG from './SVG';
@@ -55,6 +57,7 @@ const generateNewBuffer = ({ bpm, beats, allowedLengths, hitChance, instruments,
 }
 
 const context          = new AudioContext();
+window.lol = context
 const loop             = (src, isLooping) => { if (src) { src.loop = isLooping } };
 const stop             = (src) => { if (src) { src.onended = () => {}; src.stop(0); } };
 const play             = (buffer) => playSound(context, buffer, context.currentTime, buffer.duration, 1, true);
@@ -86,13 +89,10 @@ const fadeIn = (gainNode, duration) => {
 }
 
 class SoundController extends Component {
-    currentBuffer;
-    currentSrc;
     currentGainNode;
+    isOutDated = true;
     state = {
-        isPlaying  : false,
         isLoading  : false,
-        isLooping  : true,
         error      : '',
     }
 
@@ -101,29 +101,50 @@ class SoundController extends Component {
     }
 
     componentWillUpdate = (nextProps, nextState) => {
-        if(nextState.isLooping !== this.state.isLooping) {
-            loop(this.currentSrc, nextState.isLooping);
+        if (nextProps.isLooping !== this.props.isLooping) loop(this.props.currentSrc, nextProps.isLooping);
+        if (typeof this.props.generationState === "undefined") return;
+
+        // Check against the generation state to see if we're out of date
+        if (   nextProps.bpm !== this.props.generationState.bpm
+            || nextProps.hitChance !== this.props.generationState.hitChance
+            || !deepEqual(nextProps.beats, this.props.generationState.beats)
+            || !deepEqual(nextProps.allowedLengths, this.props.generationState.allowedLengths)
+            || nextProps.instruments
+                .filter((instrument, i) =>
+                    !deepEqual(instrument.sounds, this.props.generationState.instruments[i].sounds)
+                ).length
+        ) {
+            this.isOutDated = true;
+        } else {
+            this.isOutDated = false;
         }
     }
 
     generate = (shouldPlay) => {
-        this.stopEvent(this.currentSrc);
-        generateNewBuffer(this.props)
+        this.stopEvent(this.props.currentSrc);
+
+        const { bpm, beats, allowedLengths, hitChance, instruments, usePredefinedSettings } = this.props;
+        const generationState = deepClone({ bpm, beats, allowedLengths, hitChance, instruments, usePredefinedSettings });
+
+        this.props.actions.updateGenerationState(generationState);
+
+        generateNewBuffer({ ...generationState, instruments })
             .then(({ buffer, instruments }) => {
                 const newState = { isLoading: false, error: '' };
 
                 if (!buffer) newState.error = 'Error!'
-                this.currentBuffer = buffer;
+                this.props.actions.updateCurrentBuffer(buffer);
                 if (shouldPlay) this.playEvent();
                 this.props.actions.updateCustomPresetInstruments(instruments);
                 this.updateUI(newState);
             });
 
+        this.isOutDated = false;
         this.updateUI({ isLoading: true });
     }
 
     togglePlay = () => {
-        if (this.state.isPlaying) {
+        if (this.props.isPlaying) {
             this.stopEvent();
         } else {
             this.playEvent();
@@ -131,22 +152,22 @@ class SoundController extends Component {
     }
 
     playEvent = () => {
-        if (!this.currentBuffer || this.state.error) return;
+        if (!this.props.currentBuffer || this.state.error) return;
         this.currentGainNode = context.createGain();
 
-        stop(this.currentSrc);
-        this.currentSrc = playBuffer(this.currentBuffer);
+        stop(this.props.currentSrc);
+        this.props.actions.updateCurrentSrc(playBuffer(this.props.currentBuffer));
 
         // Set up volume and fades
-        this.currentSrc.connect(this.currentGainNode);
+        this.props.currentSrc.connect(this.currentGainNode);
         this.currentGainNode.gain.value = 0;
         this.currentGainNode.connect(context.destination);
         this.currentGainNode = fadeIn(this.currentGainNode, (this.props.fadeIn ? 5000 : 0));
 
-        loop(this.currentSrc, this.state.isLooping);
-        this.updateUI({ isPlaying: true });
+        loop(this.props.currentSrc, this.props.isLooping);
+        this.props.actions.updateIsPlaying(true);
 
-        this.currentSrc.addEventListener('ended', this.onEnded)
+        this.props.currentSrc.addEventListener('ended', this.onEnded)
     }
 
     onEnded = () => {
@@ -155,9 +176,9 @@ class SoundController extends Component {
     }
 
     stopEvent = () => {
-        if (this.currentSrc) this.currentSrc.removeEventListener('ended', this.onEnded)
-        stop(this.currentSrc)
-        this.updateUI({ isPlaying: false });
+        if (this.props.currentSrc) this.props.currentSrc.removeEventListener('ended', this.onEnded)
+        stop(this.props.currentSrc)
+        this.props.actions.updateIsPlaying(false);
     }
 
     generateEvent = () => {
@@ -165,14 +186,14 @@ class SoundController extends Component {
     }
 
     render () {
-        const eventName = this.state.isPlaying ? 'stop' : 'play';
+        const eventName = this.props.isPlaying ? 'stop' : 'play';
 
         return (
             <div>
                 { this.state.error ? <p className="txt-error">{ this.state.error }</p> : null }
                 <div className="u-flex-row u-flex-wrap">
                     <div className="group-spacing-y-small u-mr05">
-                        <button className={`button-primary button-primary--positive u-flex-row ${ this.state.isLoading ? '' : 'icon-is-hidden' }`} onClick={() => this.generateEvent()}>
+                        <button className={`button-primary ${ this.isOutDated ? 'button-primary--positive' : '' } u-flex-row ${ this.state.isLoading ? '' : 'icon-is-hidden' }`} onClick={() => this.generateEvent()}>
                             <span className="button-primary__inner">{ this.props.generateButtonText || 'Generate Riff' }</span>
                             <span className="button-primary__icon">
                                 <span className="spinner" />
@@ -181,16 +202,16 @@ class SoundController extends Component {
                     </div>
 
                     <div className="group-spacing-y-small u-mr1">
-                        <button className="button-primary" title={ capitalize(eventName) } onClick={this.togglePlay} disabled={!this.currentBuffer}>
+                        <button className="button-primary" title={ capitalize(eventName) } onClick={this.togglePlay} disabled={!this.props.currentBuffer}>
                             <SVG icon={ eventName } className="button-primary__svg-icon" />
                         </button>
                     </div>
 
                     <div className="group-spacing-y-small u-mr1">
                         <LoopController
-                            isLooping={this.state.isLooping}
+                            isLooping={this.props.isLooping}
                             actions={{
-                                updateIsLooping: (newVal) => this.setState({ isLooping: newVal })
+                                updateIsLooping: (newVal) => this.props.actions.updateIsLooping(newVal)
                             }}
                         />
                     </div>

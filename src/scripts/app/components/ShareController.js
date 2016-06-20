@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { compress, decompress } from 'lzutf8';
-import { deepCloneObject } from '../utils/tools';
+import { deepClone } from '../utils/tools';
 
 import ShareBox from './ShareBox.js'
 
@@ -13,13 +13,13 @@ class ShareController extends Component {
 
     generatePreset = () => {
         const preset = {
-            id: this.props.activePresetID,
+            id: 'custom',
             settings: {
                 config: {
                     bpm            : this.props.bpm,
                     hitChance      : this.props.hitChance,
                 },
-                beats: this.props.beats.map(beat => deepCloneObject(beat)),
+                beats: deepClone(this.props.beats),
                 instruments: this.props.instruments
                     .map(instrument => {
                         return {

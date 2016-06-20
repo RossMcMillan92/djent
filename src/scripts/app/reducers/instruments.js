@@ -1,4 +1,4 @@
-import { extendObjectArrayByID, deepCloneObject } from '../utils/tools';
+import { extendObjectArrayByID, deepClone } from '../utils/tools';
 
 const initialState = [
     {
@@ -366,7 +366,7 @@ export default function instruments(state = initialState, action) {
                     return {
                         ...instrument,
                         hitTypes: [ ...i.hitTypes ],
-                        sequence: i.sequence.map(seq => deepCloneObject(seq)),
+                        sequence: deepClone(i.sequence),
                     }
                 });
 

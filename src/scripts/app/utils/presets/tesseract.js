@@ -3,30 +3,31 @@ const preset = {
     description: 'Tesseract',
     settings: {
         config: {
-            bpm       : 122,
+            bpm       : 112,
             hitChance : .95,
             allowedLengths: [
                     {
-                        id: "0.25",
+                        id: "0.5",
                         amount: 1,
-                        isTriplet: true
                     },
                     {
                         id: "1",
                         amount: 1,
-                        isTriplet: true
                     },
                     {
                         id: "2",
+                        amount: 1,
+                    },
+                    {
+                        id: "4",
                         amount:1,
-                        isTriplet: true
                     },
             ],
         },
         beats: [
             {
                 id    : 'total',
-                bars  : 8,
+                bars  : 4,
                 beats : 4,
             },
             {
@@ -40,23 +41,19 @@ const preset = {
                 id: 'g',
                 sounds: [
                     {
-                        id: 'sixth-2-open',
+                        id: 'sixth-0-open',
                         enabled: true,
                     },
                     {
-                        id: 'sixth-4-open',
+                        id: 'sixth-1-open',
                         enabled: true,
                     },
                     {
-                        id: 'fifth-5-open',
+                        id: 'fifth-8-open',
                         enabled: true,
                     },
                     {
-                        id: 'fifth-7-open',
-                        enabled: true,
-                    },
-                    {
-                        id: 'fifth-10-open',
+                        id: 'scratch',
                         enabled: true,
                     },
                 ],

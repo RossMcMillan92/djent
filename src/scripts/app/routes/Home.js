@@ -7,8 +7,6 @@ import Expandable from '../components/Expandable';
 import InstrumentList from '../components/InstrumentList';
 import Panel from '../components/Panel';
 import Spinner from '../components/Spinner';
-import Waveform from '../components/Waveform';
-
 
 import BeatPanel from '../containers/BeatPanel';
 import BPMController from '../containers/BPMController';
@@ -19,6 +17,7 @@ import Modal from '../containers/Modal';
 import ShareController from '../containers/ShareController';
 import PresetController from '../containers/PresetController';
 import SoundController from '../containers/SoundController';
+import Visualiser from '../containers/Visualiser';
 
 import presets from '../utils/presets';
 import { getAllowedLengthsFromSequence } from '../utils/sequences';
@@ -161,6 +160,10 @@ export default class Home extends Component {
                                 )
                             }
 
+                            <Panel>
+                                <Visualiser />
+                            </Panel>
+
                             <Panel theme="dark" sizeY="small">
                                 <div className="u-flex-row u-flex-justify u-flex-center u-flex-wrap">
                                     <SoundController
@@ -209,6 +212,7 @@ export default class Home extends Component {
                                     titleClassName="u-curp u-mb1 u-txt-light"
                                     enableStateSave={true}
                                 >
+                                <div>
                                     <Panel>
                                         <h2 className="title-primary u-mt05">Main Settings</h2>
 
@@ -247,6 +251,7 @@ export default class Home extends Component {
                                     <Panel>
                                         { beats }
                                     </Panel>
+                                </div>
 
                                     <div className="group-spacing-y">
                                         <Panel>

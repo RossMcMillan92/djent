@@ -45,20 +45,23 @@ const compose = (...funcs) =>
 	    return rest.reduceRight((composed, f) => f(composed), last(...args))
 	}
 
-const deepCloneObject = (obj) => Object.keys(obj)
-    .reduce((newObject, objKey, i) => {
-        const value = obj[objKey];
-        const newValue = (typeof value === 'object' && !Array.isArray(value))
-                    ? deepCloneObject(value)
-                    : (Array.isArray(value))
-                      ? value.map(deepCloneObject)
-                      : value;
+const deepClone = (obj) =>
+	Array.isArray(obj)
+	? obj.map(deepClone)
+	: Object.keys(obj)
+	    .reduce((newObject, objKey, i) => {
+	        const value = obj[objKey];
+	        const newValue = (typeof value === 'object' && !Array.isArray(value))
+	                    ? deepClone(value)
+	                    : (Array.isArray(value))
+	                      ? value.map(deepClone)
+	                      : value;
 
-        return {
-            ...newObject,
-            [objKey]: newValue
-        }
-    }, {});
+	        return {
+	            ...newObject,
+	            [objKey]: newValue
+	        }
+	    }, {});
 
 const updateObjByID = ({ objs, id, prop, value }) =>
     objs.map(beat => {
@@ -102,7 +105,7 @@ export {
 	capitalize,
 	compose,
 	coinFlip,
-	deepCloneObject,
+	deepClone,
 	extendObjectArrayByID,
 	getHashQueryParam,
 	loadScript,

@@ -13,20 +13,16 @@ class BPMController extends Component {
     render = () => {
         const props = {
             id: 'bpm',
-            label: 'BPM',
+            label: 'BPM (50 - 999)',
             type: 'number',
             defaultValue: this.props.bpm,
             onChange: this.onBPMChange,
             step: 5,
-            dataMin: 50,
-            dataMax: 9999,
             className: 'input-base',
             labelClassName: 'input-label',
         }
 
-        return (
-            <InputBox { ...props } />
-        );
+        return <InputBox { ...props } />
     }
 }
 

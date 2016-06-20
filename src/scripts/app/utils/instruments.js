@@ -4,27 +4,25 @@ import {
 } from './sequences';
 
 import {
-    deepCloneObject,
+    deepClone,
     randFromTo,
     repeatArray,
 } from './tools';
 
 import { playSound } from './audio';
 
-const godMode = window.location.href.includes('godmode=1');
-
 const getInstrumentsSequences = ({ instruments, sequences, totalBeats, usePredefinedSettings }) =>
     Object.keys(sequences)
         .map(instrumentId => {
             const instrument = instruments.find(i => i.id === instrumentId);
             const predefinedSequence = instrument.predefinedSequence;
-            const newSequence = (godMode || usePredefinedSettings) && predefinedSequence
+            const newSequence = usePredefinedSettings && predefinedSequence
                               ? predefinedSequence
                               : sequences[instrumentId];
 
             return {
                 ...instrument,
-                sequence: newSequence.map(seq => deepCloneObject(seq))
+                sequence: deepClone(newSequence)
             }
         });
 
@@ -41,7 +39,7 @@ const generateInstrumentTimeMap = (instrument) => {
 const generateInstrumentHitTypes = (instrument, usePredefinedSettings) => {
     const predefinedHitTypes = instrument.predefinedHitTypes;
 
-    if ((godMode || usePredefinedSettings) && predefinedHitTypes && predefinedHitTypes.length) return {
+    if (usePredefinedSettings && predefinedHitTypes && predefinedHitTypes.length) return {
         ...instrument,
         hitTypes: [ ...predefinedHitTypes ]
     }
@@ -65,7 +63,7 @@ const getActiveSoundsFromHitTypes = (hitTypes) =>
         .reduce((newArr, hit, i) => {
             return newArr.includes(hit) ? newArr : [ ...newArr, hit ];
         }, [])
-        .map(hit => ({ id: hit, enabled: true, hitTypes }));
+        .map(hit => ({ id: hit, enabled: true }));
 
 const renderInstrumentSoundsAtTempo = (instruments, totalBeats, bpmMultiplier) => {
     const timeLength = totalBeats * bpmMultiplier;

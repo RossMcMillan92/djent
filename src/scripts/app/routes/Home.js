@@ -7,6 +7,8 @@ import Expandable from '../components/Expandable';
 import InstrumentList from '../components/InstrumentList';
 import Panel from '../components/Panel';
 import Spinner from '../components/Spinner';
+import Waveform from '../components/Waveform';
+
 
 import BeatPanel from '../containers/BeatPanel';
 import BPMController from '../containers/BPMController';
@@ -62,7 +64,6 @@ export default class Home extends Component {
     componentWillUpdate = (nextProps) => {
         if (!this.props.params.shareID && nextProps.params.shareID) {
             this.checkForShareData(nextProps.params.shareID);
-
         }
     }
 
@@ -132,7 +133,7 @@ export default class Home extends Component {
 
         return (
             <section>
-                <DocumentMeta {...metaData} />
+                <DocumentMeta { ...metaData } />
                 <Modal />
                 <div className="group-capped-x group-centered">
 

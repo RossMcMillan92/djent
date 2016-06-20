@@ -16,7 +16,8 @@ const repeatArray = (arr, length) => {
 
 	const diff = Math.ceil(length / arr.length)
 
-	return Array.from(Array(diff).keys())
+	return Array(diff)
+		.fill()
 		.reduce((newArr, index) => newArr.concat(...arr), [])
 		.slice(0, length);
 }

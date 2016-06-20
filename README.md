@@ -1,6 +1,6 @@
 # DjenerationStation
 
-A metal breakdown generator, a random sequence and hit generator the Web Audio API. UI built with React/Redux, and Sass/PostCSS. [http://djenerationstation.com](http://djenerationstation.com)
+A metal breakdown generator. Web Audio API, React/Redux, Sass/PostCSS. [http://djenerationstation.com](http://djenerationstation.com)
 
 #### Develop
 ```node dev.js```

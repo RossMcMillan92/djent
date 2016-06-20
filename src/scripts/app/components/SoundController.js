@@ -56,18 +56,10 @@ const generateNewBuffer = ({ bpm, beats, allowedLengths, hitChance, instruments,
     return generateRiff({ bpm, totalBeatsProduct, allowedLengths, sequences, instruments, usePredefinedSettings })
 }
 
-const context          = new AudioContext();
-window.lol = context
 const loop             = (src, isLooping) => { if (src) { src.loop = isLooping } };
 const stop             = (src) => { if (src) { src.onended = () => {}; src.stop(0); } };
-const play             = (buffer) => playSound(context, buffer, context.currentTime, buffer.duration, 1, true);
-const playBuffer = (buffer) => {
-    if(!buffer) return;
-    let nextBuffer;
-    const newSrc = play(buffer);
+const play             = (context, buffer) => playSound(context, buffer, context.currentTime, buffer.duration, 1, true);
 
-    return newSrc;
-}
 const fadeIn = (gainNode, duration) => {
     if (!duration) return gainNode
     const startVal = -1;
@@ -90,10 +82,15 @@ const fadeIn = (gainNode, duration) => {
 
 class SoundController extends Component {
     currentGainNode;
+    context;
     isOutDated = true;
     state = {
         isLoading  : false,
         error      : '',
+    }
+
+    componentWillMount = () => {
+        this.context = new AudioContext();
     }
 
     updateUI = (newState) => {
@@ -153,15 +150,15 @@ class SoundController extends Component {
 
     playEvent = () => {
         if (!this.props.currentBuffer || this.state.error) return;
-        this.currentGainNode = context.createGain();
+        this.currentGainNode = this.context.createGain();
 
         stop(this.props.currentSrc);
-        this.props.actions.updateCurrentSrc(playBuffer(this.props.currentBuffer));
+        this.props.actions.updateCurrentSrc(this.props.currentBuffer ? play(this.context, this.props.currentBuffer) : null);
 
         // Set up volume and fades
         this.props.currentSrc.connect(this.currentGainNode);
         this.currentGainNode.gain.value = 0;
-        this.currentGainNode.connect(context.destination);
+        this.currentGainNode.connect(this.context.destination);
         this.currentGainNode = fadeIn(this.currentGainNode, (this.props.fadeIn ? 5000 : 0));
 
         loop(this.props.currentSrc, this.props.isLooping);

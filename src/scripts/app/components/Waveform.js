@@ -29,7 +29,8 @@ export default class Waveform extends Component {
                 return newArr
             }, [])
             .forEach((item, i) => {
-                ctx.fillRect(i, (height - (Math.abs(item * this.zoom) * height)), 1, height)
+                const value = Math.abs(item);
+                ctx.fillRect(i, (height - (((value * this.zoom) * height))), 1, height)
             });
     }
 

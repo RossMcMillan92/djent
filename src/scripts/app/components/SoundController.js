@@ -56,7 +56,7 @@ const generateNewBuffer = ({ bpm, beats, allowedLengths, hitChance, instruments,
 
 const context          = new AudioContext();
 const loop             = (src, isLooping) => { if (src) { src.loop = isLooping } };
-const stop             = (src) => { if (src) { src.onended = () => {}; src.stop(); } };
+const stop             = (src) => { if (src) { src.onended = () => {}; src.stop(0); } };
 const play             = (buffer) => playSound(context, buffer, context.currentTime, buffer.duration, 1, true);
 const playBuffer = (buffer) => {
     if(!buffer) return;

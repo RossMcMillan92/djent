@@ -1,9 +1,9 @@
 # DjenerationStation
 
-A metal breakdown generator. Built with React/Redux, and Sass/PostCSS. [http://djenerationstation.com](http://djenerationstation.com)
+A metal breakdown generator, a random sequence and hit generator the Web Audio API. UI built with React/Redux, and Sass/PostCSS. [http://djenerationstation.com](http://djenerationstation.com)
 
 #### Develop
-```npm run dev```
+```node dev.js```
 - Compiles JS
 - Compiles Sass
 - Watches src for changes
@@ -11,10 +11,10 @@ A metal breakdown generator. Built with React/Redux, and Sass/PostCSS. [http://d
 
 
 #### Build
-```npm run build```
+```node dev.js build```
 - Compiles JS
 - Compiles Sass
 
 #### Test
-```npm test```
+```node tests.js```
 - Runs tests from ```./src/scripts/app/test```

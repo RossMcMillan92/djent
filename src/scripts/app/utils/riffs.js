@@ -23,7 +23,7 @@ const generateRiff = ({ bpm, totalBeatsProduct, allowedLengths, sequences, instr
     return loadInstrumentBuffers(context, instrumentPack)
         .then((instrumentPack) => initiateInstruments({ context, instrumentPack, totalBeatsProduct, bpmMultiplier, usePredefinedSettings }))
         .then(({ buffer, instruments }) => {
-            context.close();
+            if (context.close) context.close();
             return Promise.resolve({ buffer, instruments })
         })
         .catch(e => { (console.error || console.log).call(console, e); });

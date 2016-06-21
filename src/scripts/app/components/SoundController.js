@@ -115,7 +115,7 @@ class SoundController extends Component {
 
     generate = (shouldPlay) => {
         if (this.audioContext) this.audioContext.close();
-        this.audioContext = new AudioContext();
+
         this.stopEvent(this.props.currentSrc);
 
         const { bpm, beats, allowedLengths, hitChance, instruments, usePredefinedSettings } = this.props;
@@ -129,7 +129,8 @@ class SoundController extends Component {
 
                 if (!buffer) newState.error = 'Error!'
                 this.props.actions.updateCurrentBuffer(buffer);
-                if (shouldPlay) this.playEvent();
+                this.audioContext = new AudioContext();
+                if (shouldPlay) this.playEvent(this.audioContext);
                 this.props.actions.updateCustomPresetInstruments(instruments);
                 this.updateUI(newState);
             });
@@ -146,26 +147,23 @@ class SoundController extends Component {
         }
     }
 
-    playEvent = () => {
+    playEvent = (context) => {
         if (!this.props.currentBuffer || this.state.error) return;
-        console.log('THIS.CONTEXT1', this.audioContext)
-        this.currentGainNode = this.audioContext.createGain();
+        this.currentGainNode = context.createGain();
 
         stop(this.props.currentSrc);
-        this.props.actions.updateCurrentSrc(this.props.currentBuffer ? play(this.audioContext, this.props.currentBuffer) : null);
-        console.log('THIS.CONTEXT2', this.audioContext)
+        this.props.actions.updateCurrentSrc(this.props.currentBuffer ? play(context, this.props.currentBuffer) : null);
 
         // Set up volume and fades
         this.props.currentSrc.connect(this.currentGainNode);
         this.currentGainNode.gain.value = 0;
-        this.currentGainNode.connect(this.audioContext.destination);
+        this.currentGainNode.connect(context.destination);
         this.currentGainNode = fadeIn(this.currentGainNode, (this.props.fadeIn ? 5000 : 0));
 
         loop(this.props.currentSrc, this.props.isLooping);
         this.props.actions.updateIsPlaying(true);
 
-        this.props.currentSrc.addEventListener('ended', this.onEnded)
-        console.log('THIS.CONTEXT3', this.audioContext)
+        this.props.currentSrc.addEventListener('ended', this.onEnded);
     }
 
     onEnded = () => {

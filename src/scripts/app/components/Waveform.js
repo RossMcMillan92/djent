@@ -1,24 +1,49 @@
 import React, { Component } from 'react';
 
-import { repeat } from '../utils/tools'
+import { repeat, compose } from '../utils/tools'
 
-const resolution = 1;
+const incrementBySpeed = (val, targetVal, dist) => val + (dist * (targetVal - val));
 
-const level = (x, y, w, h) => {
+const level = (x, y, w, h, targetColor) => {
+    let lastUpdateTime = 0;
+    let vy = 2; // px/s
+    let vc = 5; // px/s
     let state = {
         x,
         y,
         w,
         h,
+        color: [255, 255, 255],
+        targetColor: targetColor,
+        targety: 0,
     }
 
-    const update = (args) => {
+    const updateState = (args) => {
         state = Object.assign({}, state, args);
     }
 
     const draw = ctx => {
-        // console.log('STATE.X, STATE.Y, STATE.W, STATE.H', state.x, state.y, state.w, state.h)
+        ctx.fillStyle = `rgb(${state.color[0]}, ${state.color[1]}, ${state.color[2]})`;
         ctx.fillRect(state.x, state.y, state.w, state.h)
+    }
+
+    const update = (t) => {
+        if (!t) return;
+
+        const time = (t - lastUpdateTime) / 1000;
+
+        // if (state.x === 0) console.log('DISTY', state.color)
+        const disty = time * vy;
+        state.y = Math.round((state.y + disty * (state.targety - state.y)) * 100) / 100;
+
+        const distc = time * vc;
+        const r = Math.min(255, Math.max(0, Math.abs(Math.round(state.color[0] + (distc * (state.targetColor[0] - state.color[0]))))))
+        const g = Math.min(255, Math.max(0, Math.abs(Math.round(state.color[1] + (distc * (state.targetColor[1] - state.color[1]))))))
+        const b = Math.min(255, Math.max(0, Math.abs(Math.round(state.color[2] + (distc * (state.targetColor[2] - state.color[2]))))))
+        state.color = [r, g, b];
+
+
+        lastUpdateTime = t;
     }
 
     return {
@@ -27,11 +52,28 @@ const level = (x, y, w, h) => {
         w: state.w,
         h: state.h,
         update,
+        updateState,
         draw,
     }
 }
 
+const createInitialLevels = (levelAmount, height, resolution) => {
+    return Array(levelAmount)
+        .fill()
+        .map((xxx, i) => {
+            const x  = i * resolution;
+            const y  = 0;
+            const w  = resolution === 1 ? 1 : resolution - 1;
+            const h  = height;
+            const targetColor = [255, 0, 0];
+            return level(x, y, w, h, targetColor);
+        })
+}
+
+const resolution = 3;
 export default class Waveform extends Component {
+    loopIsEnabled = false;
+    ctx;
     levels = [];
 
     componentWillUpdate = () => {
@@ -39,77 +81,65 @@ export default class Waveform extends Component {
         const height = this.props.height;
         const levelAmount = Math.floor(width / resolution);
 
-        if (this.levels.length === levelAmount) return;
-
-        this.levels = Array(levelAmount)
-            .fill()
-            .map((xxx, i) => {
-                const x  = i * resolution;
-                const y  = 0;
-                const w  = resolution === 1 ? 1 : resolution - 1;
-                const h  = height - y;
-                return level(x, y, w, h)
-            })
+        if (this.levels.length !== levelAmount) {
+            this.levels = createInitialLevels(levelAmount, height, resolution);
+        }
     }
 
     componentDidUpdate = () => {
-        if (!this.props.buffer) return null;
+        if (!this.props.buffer) return;
 
-        const width = this.props.width;
-        const height = this.props.height;
+        if (!this.ctx) this.ctx = this.refs.canvas.getContext('2d');
+
         const data = this.props.buffer.getChannelData(0);
-        const step = Math.ceil(data.length / width);
-        const ctx = this.refs.canvas.getContext('2d');
+        this.updateLevels(data, this.ctx);
 
-        ctx.fillStyle = this.props.color;
-        this.draw(data, ctx);
+        if (!this.loopIsEnabled) {
+            this.loop();
+            this.loopIsEnabled = true;
+        }
     }
 
-    draw = (data, ctx) => {
-        let highestAverage = 0;
+    loop = (t) => {
+        const ctx = this.ctx;
+        const currentTime = this.props.currentSrc ? this.props.currentSrc.context.currentTime : false;
+        const duration = this.props.currentSrc ? this.props.currentSrc.buffer.duration : false;
+        const percentPassed = currentTime / duration;
+        const indexThreshold = Math.ceil(this.levels.length * percentPassed);
+
+        ctx.clearRect(0, 0, this.props.width, this.props.height);
+        this.levels.forEach((level, i) => {
+            if (currentTime && i <= indexThreshold) level.updateState({ targetColor: [0, 0, 0] });
+            level.draw(ctx);
+            level.update(t);
+        })
+        requestAnimationFrame(this.loop);
+    }
+
+    updateLevels = (data, ctx) => {
         const { width, height } = this.props;
         const levelAmount = this.levels.length;
+        const step = Math.ceil(data.length / width) * resolution;
+
+        let highestAverage = 0;
         const newData = this.levels
             .map((item, i) => {
-                const dataIndex = i * levelAmount;
-                const average = data.slice(dataIndex, dataIndex + levelAmount).reduce((a, b) => a + Math.abs(b), 0) / levelAmount;
+                const dataIndex = i * step;
+                const average = data.slice(dataIndex, dataIndex + step).reduce((a, b) => a + Math.abs(b), 0) / step;
                 if (average > highestAverage) highestAverage = average;
                 return average;
             }, []);
         const scale = height / highestAverage;
-
-        console.log('NEWDATA', newData.length, newData)
-        console.log('THIS.LEVELS', this.levels.length, this.levels)
-
-        ctx.clearRect(0, 0, width, height);
+        const targetColor = [Math.random() * 255, Math.random() * 255, Math.random() * 255];
 
         newData
             .forEach((item, i) => {
                 const value = item * (this.props.amplified ? scale : 1);
                 const level = this.levels[i];
                 const y  = height - value;
-                const h  = height - y;
 
-                level.update({ y, h });
-                level.draw(ctx)
+                level.updateState({ targety: y, targetColor });
             });
-    }
-
-    drawx = (width, step, height, data, ctx) => {
-
-        const levels = Array(Math.floor(newData.length / resolution))
-            .fill()
-            .map((xxx, i) => {
-                const item = (newData.slice(i, i+resolution).reduce((a, b) => a + b, 0)) / resolution;
-                const value = item * (this.props.amplified ? scale : 1);
-                const x  = i * resolution;
-                const y  = height - value;
-                const w  = resolution === 1 ? 1 : resolution - 1;
-                const h  = height - y;
-
-                return level(x, y, w, h)
-            })
-            .forEach(level => level.draw(ctx));
     }
 
     render = () => (

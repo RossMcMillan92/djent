@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { repeat } from '../utils/tools'
 
 export default class Waveform extends Component {
-    zoom = 7;
 
     componentDidUpdate = () => {
         if (!this.props.buffer) return null;
@@ -20,17 +19,29 @@ export default class Waveform extends Component {
 
     draw = (width, step, height, data, ctx) => {
         ctx.clearRect(0, 0, this.props.width, this.props.height);
+        let highestAverage = 0;
         const newData = data
+            // get average of data in step
             .reduce((newArr, item, i, origArr) => {
                 if (i % step === 0) {
-                    newArr.push(origArr.slice(i - step, i).reduce((a, b) => a + b, 0) / step);
-                }
-
+                    const average = origArr.slice(i - step, i).reduce((a, b) => a + Math.abs(b), 0) / step;
+                    if (average > highestAverage) highestAverage = average;
+                    newArr.push(average);
+                };
                 return newArr
             }, [])
+
+        const zoom = height / highestAverage;
+        console.log('HIGHESTAVERAGE', highestAverage)
+        const drawnLines = newData
             .forEach((item, i) => {
-                const value = Math.abs(item);
-                ctx.fillRect(i, (height - (((value * this.zoom) * height))), 1, height)
+                const value = item * (this.props.amplified ? zoom : 1);
+                const x  = i;
+                const y  = height - value;
+                const w  = 1;
+                const h  = height - y;
+
+                ctx.fillRect(x, y, w, h)
             });
     }
 

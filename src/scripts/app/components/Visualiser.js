@@ -7,15 +7,12 @@ class Visualiser extends Component {
 
     componentDidUpdate = (nextProps) => {
         this.containerWidth = this.refs.container.offsetWidth;
-
-        console.log(nextProps)
     }
 
     render = () => {
         return (
             <div ref="container">
                 <Waveform buffer={this.props.currentBuffer} width={this.containerWidth} height={100} color="#1b8a94" amplified={true} />
-                <Waveform buffer={this.props.currentBuffer} width={this.containerWidth} height={100} color="#1b8a94" />
             </div>
         );
     }

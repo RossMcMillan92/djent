@@ -188,7 +188,7 @@ class SoundController extends Component {
                 { this.state.error ? <p className="txt-error">{ this.state.error }</p> : null }
                 <div className="u-flex-row u-flex-wrap">
                     <div className="group-spacing-y-small u-mr05">
-                        <button className={`button-primary ${ this.isOutDated ? 'button-primary--positive' : '' } u-flex-row ${ this.state.isLoading ? '' : 'icon-is-hidden' }`} onClick={() => this.generateEvent()}>
+                        <button className={`button-primary ${ this.isOutDated ? 'button-primary--positive' : '' } ${ this.state.isLoading ? '' : 'icon-is-hidden' }`} onClick={() => this.generateEvent()}>
                             <span className="button-primary__inner">{ this.props.generateButtonText || 'Generate Riff' }</span>
                             <span className="button-primary__icon">
                                 <span className="spinner" />

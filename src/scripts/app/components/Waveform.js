@@ -4,10 +4,9 @@ import { repeat, compose } from '../utils/tools'
 
 let currentColorIndex = 0;
 const colorScheme = [
-    [27 , 138, 148],
-    [239, 131, 131],
-    [177, 143, 186],
-    [153, 206, 115],
+    [0, 136, 170],
+    [239, 108, 91],
+    [166, 188, 24],
 ]
 
 const incrementBySpeed = (val, targetVal, dist) => val + (dist * (targetVal - val));
@@ -41,7 +40,7 @@ const level = (x, y, w, h, targetColor) => {
     const draw = ctx => {
         if (oldState.y === state.y && oldState.color.filter((val, i) => val === state.color[i]).length === 3) return
         ctx.fillStyle = '#fff';
-        ctx.fillRect(state.x, 0, w, h);
+        ctx.clearRect(state.x, 0, w, h);
         ctx.fillStyle = `rgb(${state.color[0]}, ${state.color[1]}, ${state.color[2]})`;
         ctx.fillRect(state.x, state.y, state.w, state.h)
 
@@ -124,7 +123,9 @@ export default class Waveform extends Component {
 
         if (!this.ctx) this.ctx = this.refs.canvas.getContext('2d');
 
+        console.log('THIS.PROPS.BUFFER', this.props.buffer)
         const data = this.props.buffer.getChannelData(0);
+        console.log('DATA', data)
         this.updateLevels(data);
 
         if (!this.loopIsEnabled) {

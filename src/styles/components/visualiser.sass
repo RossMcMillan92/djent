@@ -1,0 +1,22 @@
+.visualiser
+    position: relative
+    transition: all .25s ease-in-out
+
+    &.is-inactive
+        background-color: #f7f7f7
+
+.visualiser__msg
+    text-align: center
+    color: $palette-shade-gamma
+    position: absolute
+    top: 50%
+    left: 50%
+    transform: translate(-50%, -50%)
+    transition: all .25s ease-in-out
+    opacity: 0
+
+    .visualiser.is-inactive &
+        opacity: 1
+
+.visualiser__canvas
+    display: block

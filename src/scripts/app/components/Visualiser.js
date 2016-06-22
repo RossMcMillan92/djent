@@ -11,8 +11,9 @@ class Visualiser extends Component {
 
     render = () => {
         return (
-            <div ref="container">
+            <div ref="container" className={`visualiser ${!this.props.currentBuffer ? 'is-inactive' : ''}`}>
                 <Waveform
+                    className="visualiser__canvas"
                     isPlaying={this.props.isPlaying}
                     buffer={this.props.currentBuffer}
                     currentSrc={this.props.currentSrc}
@@ -21,6 +22,7 @@ class Visualiser extends Component {
                     color="#1b8a94"
                     amplified={true}
                 />
+                <span className={`visualiser__msg`}>Click 'Generate Riff' below</span>
             </div>
         );
     }

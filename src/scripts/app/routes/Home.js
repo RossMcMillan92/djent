@@ -161,7 +161,7 @@ export default class Home extends Component {
                             }
 
                             <Panel>
-                                <Visualiser />
+                                <Visualiser pretext={ isShareRoute ? "Click 'Load Riff' to begin" : "Click 'Generate Riff' to begin" } />
                             </Panel>
 
                             <Panel theme="dark" sizeY="small">

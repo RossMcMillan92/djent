@@ -5,6 +5,8 @@ const buildCSS   = require('./tools/buildCSS');
 
 const [ node, entryFile, task ] = process.argv;
 
+process.env.NODE_ENV = task === 'build' ? 'production' : 'development';
+
 // Build JS
 const jsSource     = './src/scripts';
 const jsBuild      = './dist';

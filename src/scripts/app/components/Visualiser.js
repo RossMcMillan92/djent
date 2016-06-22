@@ -10,10 +10,17 @@ class Visualiser extends Component {
     }
 
     render = () => {
-        console.log('THIS.PROPS', this.props)
         return (
             <div ref="container">
-                <Waveform buffer={this.props.currentBuffer} currentSrc={this.props.currentSrc} width={this.containerWidth} height={100} color="#1b8a94" amplified={true} />
+                <Waveform
+                    isPlaying={this.props.isPlaying}
+                    buffer={this.props.currentBuffer}
+                    currentSrc={this.props.currentSrc}
+                    width={this.containerWidth}
+                    height={100}
+                    color="#1b8a94"
+                    amplified={true}
+                />
             </div>
         );
     }

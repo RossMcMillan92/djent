@@ -114,7 +114,6 @@ class SoundController extends Component {
     }
 
     generate = (shouldPlay) => {
-        if (this.audioContext) this.audioContext.close();
 
         this.stopEvent(this.props.currentSrc);
 
@@ -129,8 +128,7 @@ class SoundController extends Component {
 
                 if (!buffer) newState.error = 'Error!'
                 this.props.actions.updateCurrentBuffer(buffer);
-                this.audioContext = new AudioContext();
-                if (shouldPlay) this.playEvent(this.audioContext);
+                if (shouldPlay) this.playEvent();
                 this.props.actions.updateCustomPresetInstruments(instruments);
                 this.updateUI(newState);
             });
@@ -147,17 +145,18 @@ class SoundController extends Component {
         }
     }
 
-    playEvent = (context) => {
+    playEvent = () => {
         if (!this.props.currentBuffer || this.state.error) return;
-        this.currentGainNode = context.createGain();
+        if (!this.audioContext) this.audioContext = new AudioContext();
+        this.currentGainNode = this.audioContext.createGain();
 
         stop(this.props.currentSrc);
-        this.props.actions.updateCurrentSrc(this.props.currentBuffer ? play(context, this.props.currentBuffer) : null);
+        this.props.actions.updateCurrentSrc(this.props.currentBuffer ? play(this.audioContext, this.props.currentBuffer) : null);
 
         // Set up volume and fades
         this.props.currentSrc.connect(this.currentGainNode);
         this.currentGainNode.gain.value = 0;
-        this.currentGainNode.connect(context.destination);
+        this.currentGainNode.connect(this.audioContext.destination);
         this.currentGainNode = fadeIn(this.currentGainNode, (this.props.fadeIn ? 5000 : 0));
 
         loop(this.props.currentSrc, this.props.isLooping);

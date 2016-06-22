@@ -5,7 +5,9 @@ import * as soundActions from '../actions/sound';
 import Visualiser from '../components/Visualiser';
 
 const mapStateToProps = (state) => ({
-    ...state.sound,
+    isPlaying: state.sound.isPlaying,
+    currentBuffer: state.sound.currentBuffer,
+    currentSrc: state.sound.currentSrc,
     bpm: state.config.bpm,
 })
 

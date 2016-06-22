@@ -2,12 +2,28 @@ import React, { Component } from 'react';
 
 import { repeat, compose } from '../utils/tools'
 
+let currentColorIndex = 0;
+const colorScheme = [
+    [27 , 138, 148],
+    [239, 131, 131],
+    [177, 143, 186],
+    [153, 206, 115],
+]
+
 const incrementBySpeed = (val, targetVal, dist) => val + (dist * (targetVal - val));
+const calculateColorValue = compose(
+    (a) => Math.min(255, a),
+    (a) => Math.max(0, a),
+    Math.abs,
+    Math.round,
+    incrementBySpeed,
+)
 
 const level = (x, y, w, h, targetColor) => {
     let lastUpdateTime = 0;
-    let vy = 2; // px/s
-    let vc = 5; // px/s
+    let vy = 1.5; // px/s
+    let vc = 10; // px/s
+    let oldState = {};
     let state = {
         x,
         y,
@@ -23,8 +39,14 @@ const level = (x, y, w, h, targetColor) => {
     }
 
     const draw = ctx => {
+        if (oldState.y === state.y && oldState.color.filter((val, i) => val === state.color[i]).length === 3) return
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(state.x, 0, w, h);
         ctx.fillStyle = `rgb(${state.color[0]}, ${state.color[1]}, ${state.color[2]})`;
         ctx.fillRect(state.x, state.y, state.w, state.h)
+
+        oldState.y = state.y;
+        oldState.color = [state.color[0], state.color[1], state.color[2]];
     }
 
     const update = (t) => {
@@ -32,14 +54,13 @@ const level = (x, y, w, h, targetColor) => {
 
         const time = (t - lastUpdateTime) / 1000;
 
-        // if (state.x === 0) console.log('DISTY', state.color)
         const disty = time * vy;
-        state.y = Math.round((state.y + disty * (state.targety - state.y)) * 100) / 100;
+        state.y = Math.min(state.h, Math.round(incrementBySpeed(state.y, state.targety, disty) * 100) / 100);
 
         const distc = time * vc;
-        const r = Math.min(255, Math.max(0, Math.abs(Math.round(state.color[0] + (distc * (state.targetColor[0] - state.color[0]))))))
-        const g = Math.min(255, Math.max(0, Math.abs(Math.round(state.color[1] + (distc * (state.targetColor[1] - state.color[1]))))))
-        const b = Math.min(255, Math.max(0, Math.abs(Math.round(state.color[2] + (distc * (state.targetColor[2] - state.color[2]))))))
+        const r = calculateColorValue(state.color[0], state.targetColor[0], distc);
+        const g = calculateColorValue(state.color[1], state.targetColor[1], distc);
+        const b = calculateColorValue(state.color[2], state.targetColor[2], distc);
         state.color = [r, g, b];
 
 
@@ -70,19 +91,31 @@ const createInitialLevels = (levelAmount, height, resolution) => {
         })
 }
 
-const resolution = 3;
+const resolution = 2;
 export default class Waveform extends Component {
+    startTime = 0;
+    iteration = 0;
     loopIsEnabled = false;
     ctx;
     levels = [];
+    backgroundColor = [150, 150, 150];
+    activeColor = colorScheme[currentColorIndex];
 
-    componentWillUpdate = () => {
+    componentWillUpdate = (nextProps) => {
         const width = this.props.width;
         const height = this.props.height;
         const levelAmount = Math.floor(width / resolution);
 
         if (this.levels.length !== levelAmount) {
             this.levels = createInitialLevels(levelAmount, height, resolution);
+        }
+
+        if (this.props.isPlaying && !nextProps.isPlaying) {
+            this.iteration = 0
+        }
+
+        if (!this.props.isPlaying && nextProps.isPlaying && this.props.currentSrc.context) {
+            this.startTime = this.props.currentSrc.context.currentTime;
         }
     }
 
@@ -92,7 +125,7 @@ export default class Waveform extends Component {
         if (!this.ctx) this.ctx = this.refs.canvas.getContext('2d');
 
         const data = this.props.buffer.getChannelData(0);
-        this.updateLevels(data, this.ctx);
+        this.updateLevels(data);
 
         if (!this.loopIsEnabled) {
             this.loop();
@@ -100,25 +133,36 @@ export default class Waveform extends Component {
         }
     }
 
+    switchColors = () => {
+        this.backgroundColor = this.activeColor;
+        currentColorIndex = currentColorIndex < colorScheme.length - 1 ? currentColorIndex + 1 : 0;
+        this.activeColor = colorScheme[currentColorIndex];
+    }
+
     loop = (t) => {
         const ctx = this.ctx;
-        const currentTime = this.props.currentSrc ? this.props.currentSrc.context.currentTime : false;
-        const duration = this.props.currentSrc ? this.props.currentSrc.buffer.duration : false;
-        const percentPassed = currentTime / duration;
+        const { isPlaying, currentSrc } = this.props;
+        const currentTime = !this.props.isPlaying ? 0 : currentSrc ? currentSrc.context.currentTime - this.startTime : false;
+        const duration = currentSrc ? currentSrc.buffer.duration : false;
+        const iteration = duration === 0 || currentTime === 0 ? 0 : Math.floor(currentTime / duration);
+        const percentPassed = (currentTime - (duration * iteration)) / duration;
         const indexThreshold = Math.ceil(this.levels.length * percentPassed);
 
-        ctx.clearRect(0, 0, this.props.width, this.props.height);
+        if (iteration !== this.iteration) {
+            this.switchColors();
+            this.iteration = iteration;
+        }
+
         this.levels.forEach((level, i) => {
-            if (currentTime && i <= indexThreshold) level.updateState({ targetColor: [0, 0, 0] });
+            if (currentTime && i <= indexThreshold) level.updateState({ targetColor: this.activeColor });
             level.draw(ctx);
             level.update(t);
         })
         requestAnimationFrame(this.loop);
     }
 
-    updateLevels = (data, ctx) => {
+    updateLevels = (data) => {
         const { width, height } = this.props;
-        const levelAmount = this.levels.length;
         const step = Math.ceil(data.length / width) * resolution;
 
         let highestAverage = 0;
@@ -130,7 +174,7 @@ export default class Waveform extends Component {
                 return average;
             }, []);
         const scale = height / highestAverage;
-        const targetColor = [Math.random() * 255, Math.random() * 255, Math.random() * 255];
+        const targetColor = this.backgroundColor;
 
         newData
             .forEach((item, i) => {

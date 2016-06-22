@@ -6,7 +6,6 @@ const events    = require('./events');
 
 const buildJS = (filename, inputJSPath, outputJSPath) => {
     const startTime = events.onStart(filename);
-
     const src = browserify(inputJSPath)
         .transform("babelify",
             {

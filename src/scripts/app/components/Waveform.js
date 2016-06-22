@@ -123,9 +123,8 @@ export default class Waveform extends Component {
 
         if (!this.ctx) this.ctx = this.refs.canvas.getContext('2d');
 
-        console.log('THIS.PROPS.BUFFER', this.props.buffer)
         const data = this.props.buffer.getChannelData(0);
-        console.log('DATA', data)
+
         this.updateLevels(data);
 
         if (!this.loopIsEnabled) {
@@ -149,7 +148,7 @@ export default class Waveform extends Component {
         const percentPassed = (currentTime - (duration * iteration)) / duration;
         const indexThreshold = Math.ceil(this.levels.length * percentPassed);
 
-        if (iteration !== this.iteration) {
+        if (iteration !== this.iteration && this.props.isPlaying) {
             this.switchColors();
             this.iteration = iteration;
         }
@@ -170,7 +169,7 @@ export default class Waveform extends Component {
         const newData = this.levels
             .map((item, i) => {
                 const dataIndex = i * step;
-                const average = data.slice(dataIndex, dataIndex + step).reduce((a, b) => a + Math.abs(b), 0) / step;
+                const average = data.subarray(dataIndex, dataIndex + step).reduce((a, b) => a + Math.abs(b), 0) / step;
                 if (average > highestAverage) highestAverage = average;
                 return average;
             }, []);

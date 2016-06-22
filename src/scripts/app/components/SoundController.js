@@ -115,7 +115,7 @@ class SoundController extends Component {
 
     generate = (shouldPlay) => {
 
-        this.stopEvent(this.props.currentSrc);
+        this.stopEvent();
 
         const { bpm, beats, allowedLengths, hitChance, instruments, usePredefinedSettings } = this.props;
         const generationState = deepClone({ bpm, beats, allowedLengths, hitChance, instruments, usePredefinedSettings });
@@ -150,7 +150,6 @@ class SoundController extends Component {
         if (!this.audioContext) this.audioContext = new AudioContext();
         this.currentGainNode = this.audioContext.createGain();
 
-        stop(this.props.currentSrc);
         this.props.actions.updateCurrentSrc(this.props.currentBuffer ? play(this.audioContext, this.props.currentBuffer) : null);
 
         // Set up volume and fades
@@ -171,9 +170,11 @@ class SoundController extends Component {
     }
 
     stopEvent = () => {
-        if (this.props.currentSrc) this.props.currentSrc.removeEventListener('ended', this.onEnded)
-        stop(this.props.currentSrc)
-        this.props.actions.updateIsPlaying(false);
+        if (this.props.currentSrc && this.props.isPlaying) {
+            this.props.currentSrc.removeEventListener('ended', this.onEnded)
+            stop(this.props.currentSrc)
+            this.props.actions.updateIsPlaying(false);
+        }
     }
 
     generateEvent = () => {

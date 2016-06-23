@@ -27,13 +27,13 @@ const preset = {
         beats: [
             {
                 id    : 'total',
-                bars  : 4,
+                bars  : 8,
                 beats : 4,
             },
             {
                 id    : 'groove',
                 bars  : 1,
-                beats : 7,
+                beats : 7.5,
             },
         ],
         instruments: [

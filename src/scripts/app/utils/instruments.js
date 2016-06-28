@@ -65,9 +65,8 @@ const getActiveSoundsFromHitTypes = (hitTypes) =>
         }, [])
         .map(hit => ({ id: hit, enabled: true }));
 
-const renderInstrumentSoundsAtTempo = (instruments, totalBeats, bpmMultiplier) => {
+const renderInstrumentSoundsAtTempo = (instruments, totalBeats, bpmMultiplier, offlineCtx) => {
     const timeLength = totalBeats * bpmMultiplier;
-    const offlineCtx = new OfflineAudioContext(2, 44100 * timeLength, 44100);
 
     instruments.forEach((instrument) => {
         let startTimes = [];
@@ -84,10 +83,18 @@ const renderInstrumentSoundsAtTempo = (instruments, totalBeats, bpmMultiplier) =
             return [ ...sources, source ];
         }, []);
     })
+    console.log('INSTRUMENTS', instruments)
     return new Promise((res, rej) => {
-        offlineCtx.oncomplete = ev => res(ev.renderedBuffer);
+        offlineCtx.oncomplete = ev => {
+            console.log('onclompltet')
+            return res(ev.renderedBuffer)
+        };
+        offlineCtx.onstatechange = ev => {
+            console.log('onstatechange', ev)
+            // return res(ev.renderedBuffer)
+        };
         offlineCtx.onerror    = ev => rej(ev.renderedBuffer);
-        offlineCtx.startRendering();
+        offlineCtx.startRendering()
     })
 }
 

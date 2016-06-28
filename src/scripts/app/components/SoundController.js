@@ -44,7 +44,7 @@ const getSequences = (grooveTotalBeats, allowedLengths, hitChance) => {
     return sequences;
 }
 
-const generateNewBuffer = ({ bpm, beats, allowedLengths, hitChance, instruments, usePredefinedSettings }) => {
+const generateNewBuffer = ({ bpm, beats, allowedLengths, hitChance, instruments, usePredefinedSettings, offlineCtx }) => {
     if (!allowedLengths.filter(length => length.amount).length) return Promise.reject('There are no allowed lengths given');
 
     const totalBeats              = beats.find(beat => beat.id === 'total');
@@ -53,7 +53,7 @@ const generateNewBuffer = ({ bpm, beats, allowedLengths, hitChance, instruments,
     const totalBeatsProduct       = totalBeats.beats * totalBeats.bars;
     const sequences               = getSequences(grooveTotalBeatsProduct, convertAllowedLengthsToArray(allowedLengths), hitChance);
 
-    return generateRiff({ bpm, totalBeatsProduct, allowedLengths, sequences, instruments, usePredefinedSettings })
+    return generateRiff({ bpm, totalBeatsProduct, allowedLengths, sequences, instruments, usePredefinedSettings, offlineCtx: offlineCtx })
 }
 
 const loop             = (src, isLooping) => { if (src) { src.loop = isLooping } };
@@ -80,6 +80,41 @@ const fadeIn = (gainNode, duration) => {
     return gainNode;
 }
 
+// document.body.addEventListener('click', () => {
+//     const audioContext = new AudioContext();
+//     var bufferSize = 4096;
+// var whiteNoise = audioContext.createScriptProcessor(bufferSize, 1, 1);
+// whiteNoise.onaudioprocess = function(e) {
+//     var output = e.outputBuffer.getChannelData(0);
+//     for (var i = 0; i < bufferSize; i++) {
+//         output[i] = Math.random() * 2 - 1;
+//     }
+// }
+//
+// whiteNoise.connect(audioContext.destination);
+// })
+
+var ios = function (el, ac, cb) {
+  function handleIOS(e) {
+    var buffer = ac.createBuffer(1, 1, 22050)
+    var source = ac.createBufferSource()
+    source.buffer = buffer
+    source.connect(ac.destination)
+    source.start(ac.currentTime)
+    setTimeout(function() {
+      el.removeEventListener('mousedown', handleIOS, false)
+      el.removeEventListener('touchend', handleIOS, false)
+
+      console.log('SOURCE.PLAYBACKSTATE', source.playbackState)
+      cb(source.playbackState === source.PLAYING_STATE || source.playbackState === source.FINISHED_STATE)
+  }, 1000)
+  }
+  el.addEventListener('mousedown', handleIOS, false)
+  el.addEventListener('touchend', handleIOS, false)
+}
+
+
+
 class SoundController extends Component {
     currentGainNode;
     audioContext = '';
@@ -88,9 +123,17 @@ class SoundController extends Component {
         isLoading  : false,
         error      : '',
     }
+    isUnlocked = false;
 
     updateUI = (newState) => {
         requestAnimationFrame(() => this.setState(newState));
+    }
+
+    componentWillMount = () => {
+        if (!this.audioContext) this.audioContext = new AudioContext();
+        if (!this.offlineCtx) this.offlineCtx = new OfflineAudioContext(2, 44100 * 20, 44100);
+        ios(document.body, this.audioContext,  (unlocked) => { this.isUnlocked = unlocked; console.log('unlocked', unlocked) })
+        ios(document.body, this.offlineCtx,  (unlocked) => { this.isUnlocked = unlocked; console.log('unlocked', unlocked) })
     }
 
     componentWillUpdate = (nextProps, nextState) => {
@@ -122,8 +165,10 @@ class SoundController extends Component {
 
         this.props.actions.updateGenerationState(generationState);
 
-        generateNewBuffer({ ...generationState, instruments })
+        console.log('budder us coming!')
+        generateNewBuffer({ ...generationState, instruments, offlineCtx: this.offlineCtx })
             .then(({ buffer, instruments }) => {
+                console.log('budder us gere!')
                 const newState = { isLoading: false, error: '' };
 
                 if (!buffer) newState.error = 'Error!'
@@ -147,7 +192,6 @@ class SoundController extends Component {
 
     playEvent = () => {
         if (!this.props.currentBuffer || this.state.error) return;
-        if (!this.audioContext) this.audioContext = new AudioContext();
         this.currentGainNode = this.audioContext.createGain();
 
         this.props.actions.updateCurrentSrc(this.props.currentBuffer ? play(this.audioContext, this.props.currentBuffer) : null);
@@ -178,7 +222,7 @@ class SoundController extends Component {
     }
 
     generateEvent = () => {
-        if (!this.state.isLoading) this.generate(true);
+        if (!this.state.isLoading && this.isUnlocked) this.generate(true);
     }
 
     render () {

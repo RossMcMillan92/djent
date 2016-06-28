@@ -81,18 +81,9 @@ const BufferLoader = (context) => {
     }
 }
 
-
 const loadInstrumentBuffers = (context, instruments) => {
     return BufferLoader(context)
         .load(instruments);
-}
-
-const renderSoundsToBuffer = (buffers) => {
-    const offlineCtx = new OfflineAudioContext(2,44100*40,44100);
-
-    buffers.forEach(buffer => playSound());
-
-    return newBuffer;
 }
 
 const playSound = (context, buffer, time, duration, volume) => {
@@ -114,6 +105,5 @@ const playSound = (context, buffer, time, duration, volume) => {
 
 export {
     loadInstrumentBuffers,
-    renderSoundsToBuffer,
     playSound
 }

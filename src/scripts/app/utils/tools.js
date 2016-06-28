@@ -98,7 +98,9 @@ const randomFromArray = (arr) => arr[randFromTo(0, arr.length-1)];
 
 const capitalize = (string) => string[0].toUpperCase() + string.substring(1);
 
-const coinFlip = () => !!(Math.random() > 0.5)
+const coinFlip = () => !!(Math.random() > 0.5);
+
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
 export {
 	arraySelector,
@@ -108,6 +110,7 @@ export {
 	deepClone,
 	extendObjectArrayByID,
 	getHashQueryParam,
+	isIOS,
 	loadScript,
 	parseQueryString,
 	repeat,

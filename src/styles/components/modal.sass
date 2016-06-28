@@ -29,12 +29,16 @@
     max-width: 100%
     padding: $base-spacing-unit / 2
     opacity: 0
+    will-change: transform
     transform: translate3d(-50%, -30%, 0)
     transition: all 0.75s ease-in-out
 
     .modal.is-active &
         opacity: 1
         transform: translate3d(-50%, -50%, 0)
+
+    .modal--wide &
+        width: 100%
 
 .modal__box
     background: #fff

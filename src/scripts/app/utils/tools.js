@@ -100,7 +100,7 @@ const capitalize = (string) => string[0].toUpperCase() + string.substring(1);
 
 const coinFlip = () => !!(Math.random() > 0.5);
 
-const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
 export {
 	arraySelector,

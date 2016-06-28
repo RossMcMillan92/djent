@@ -2,7 +2,7 @@ import React from 'react';
 
 const ShareBox = (props) => (
     <div>
-        <p className="title-primary u-mb05">Share this URL:</p>
+        <h2 className="title-primary">Share this URL:</h2>
         <input className="input-base input-base--large" type="text" value={props.url} onClick={e => e.target.select()} readOnly />
     </div>
 );

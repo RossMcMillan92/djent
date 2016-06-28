@@ -40,7 +40,7 @@ const level = (x, y, w, h, targetColor) => {
     const draw = ctx => {
         if (oldState.y === state.y && oldState.color.filter((val, i) => val === state.color[i]).length === 3) return
         ctx.fillStyle = '#fff';
-        ctx.clearRect(state.x, 0, w, h);
+        ctx.fillRect(state.x, 0, w, h);
         ctx.fillStyle = `rgb(${state.color[0]}, ${state.color[1]}, ${state.color[2]})`;
         ctx.fillRect(state.x, state.y, state.w, state.h)
 
@@ -61,7 +61,6 @@ const level = (x, y, w, h, targetColor) => {
         const g = calculateColorValue(state.color[1], state.targetColor[1], distc);
         const b = calculateColorValue(state.color[2], state.targetColor[2], distc);
         state.color = [r, g, b];
-
 
         lastUpdateTime = t;
     }
@@ -100,6 +99,10 @@ export default class Waveform extends Component {
     backgroundColor = [150, 150, 150];
     activeColor = colorScheme[currentColorIndex];
 
+    componentDidMount = () => {
+        this.fixCanvasScale();
+    }
+
     componentWillUpdate = (nextProps) => {
         const width = this.props.width;
         const height = this.props.height;
@@ -118,11 +121,10 @@ export default class Waveform extends Component {
         }
     }
 
-    componentDidUpdate = () => {
+    componentDidUpdate = (prevProps) => {
         if (!this.props.buffer) return;
 
-        if (!this.ctx) this.ctx = this.refs.canvas.getContext('2d');
-
+        if (prevProps.width !== this.props.width) this.fixCanvasScale();
         const data = this.props.buffer.getChannelData(0);
 
         this.updateLevels(data);
@@ -131,6 +133,22 @@ export default class Waveform extends Component {
             this.loop();
             this.loopIsEnabled = true;
         }
+    }
+
+    fixCanvasScale = () => {
+        const canvas = this.refs.canvas;
+        if (!this.ctx) this.ctx = canvas.getContext('2d');
+
+        const devicePixelRatio = window.devicePixelRatio || 1;
+        const backingStoreRatio = this.ctx.webkitBackingStorePixelRatio ||
+                                  this.ctx.backingStorePixelRatio || 1;
+        const canvasRatio = devicePixelRatio / backingStoreRatio;
+        const width = this.props.width * canvasRatio;
+        const height = this.props.height * canvasRatio;
+
+        canvas.width = width;
+        canvas.height = height;
+        this.ctx.scale(canvasRatio, canvasRatio);
     }
 
     switchColors = () => {
@@ -186,12 +204,16 @@ export default class Waveform extends Component {
             });
     }
 
-    render = () => (
-        <canvas
-            ref="canvas"
-            className={`${this.props.className}`}
-            width={this.props.width}
-            height={this.props.height}
-        ></canvas>
-    )
+    render = () => {
+        return (
+            <canvas
+                ref="canvas"
+                className={`${this.props.className}`}
+                style={{
+                    width: this.props.width,
+                    height: this.props.height,
+                }}
+            ></canvas>
+        );
+    }
 }

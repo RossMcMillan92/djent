@@ -4,6 +4,7 @@ const initialState =  {
     isActive: false,
     content: '',
     isCloseable: true,
+    className: '',
 }
 
 export default function beats(state = initialState, action) {
@@ -16,6 +17,7 @@ export default function beats(state = initialState, action) {
                 isActive: true,
                 content: payload.content,
                 isCloseable: payload.isCloseable,
+                className: payload.className,
             }
 
         case 'DISABLE_MODAL':

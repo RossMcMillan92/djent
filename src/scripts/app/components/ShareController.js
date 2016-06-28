@@ -62,9 +62,10 @@ class ShareController extends Component {
     }
 
     render = () => {
+        const isDisabled = !this.props.googleAPIHasLoaded || !this.props.currentBuffer
         return (
             <div className="">
-                <button className={`button-primary u-flex-row ${ this.state.isLoading ? '' : 'icon-is-hidden' }`} onClick={this.onClick} disabled={!this.props.googleAPIHasLoaded}>
+                <button className={`button-primary u-flex-row ${ this.state.isLoading ? '' : 'icon-is-hidden' }`} onClick={this.onClick} disabled={isDisabled}>
                     <span className="button-primary__inner">Share Riff</span>
                     <span className="button-primary__icon">
                         <span className="spinner" />

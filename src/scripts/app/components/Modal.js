@@ -13,7 +13,7 @@ class Modal extends Component {
 
     render = () => {
         return (
-            <div className={`modal ${this.props.isActive ? 'is-active' : ''}`}>
+            <div className={`modal ${ this.props.isActive ? 'is-active' : '' } ${ this.props.className ? this.props.className : '' }`}>
                 <div className="modal__bg" onClick={this.closeModal}></div>
                 <div className="modal__box-container">
                     <div className="modal__box">

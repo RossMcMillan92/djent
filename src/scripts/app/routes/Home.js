@@ -123,10 +123,7 @@ export default class Home extends Component {
         const totalBeat = this.props.beats.find(beat => beat.id === 'total');
         const beats = this.props.beats
             .filter(beat => beat.id !== 'total')
-            .map((beat, i) => (
-                    <BeatPanel beat={ beat } key={i} />
-                )
-            );
+            .map((beat, i) => <BeatPanel beat={ beat } key={i} /> );
         const usePredefinedSettings = isShareRoute;
         const generateButtonText = isShareRoute ? 'Load riff' : 'Generate Riff';
 
@@ -208,13 +205,13 @@ export default class Home extends Component {
                             ? null
                             : (
                                 <Expandable
-                                    title="Advanced Settings"
+                                    title="Settings..."
                                     titleClassName="u-curp u-mb1 u-txt-light"
                                     enableStateSave={true}
                                 >
                                 <div>
                                     <Panel>
-                                        <h2 className="title-primary u-mt05">Main Settings</h2>
+                                        <h2 className="title-primary">Main Settings</h2>
 
                                         <div className="grid grid--wide grid--middle">
                                             <div className="grid__item one-half alpha--one-whole">

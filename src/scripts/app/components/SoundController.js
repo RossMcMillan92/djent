@@ -19,11 +19,13 @@ import {
     capitalize,
     compose,
     deepClone,
+    isIOS,
 } from '../utils/tools';
 
+import IOSWarning from './IOSWarning';
+import LoopController from './LoopController';
 import SVG from './SVG';
 import Waveform from './Waveform';
-import LoopController from './LoopController';
 
 const getSequences = (grooveTotalBeats, allowedLengths, hitChance) => {
     const mainBeat       = generateSequence({ totalBeats: grooveTotalBeats, allowedLengths, hitChance });
@@ -56,9 +58,9 @@ const generateNewBuffer = ({ bpm, beats, allowedLengths, hitChance, instruments,
     return generateRiff({ bpm, totalBeatsProduct, allowedLengths, sequences, instruments, usePredefinedSettings })
 }
 
-const loop             = (src, isLooping) => { if (src) { src.loop = isLooping } };
+const play             = (audioContext, buffer) => playSound(audioContext, buffer, audioContext.currentTime, buffer.duration, 1);
 const stop             = (src) => { if (src) { src.onended = () => {}; src.stop(0); } };
-const play             = (audioContext, buffer) => playSound(audioContext, buffer, audioContext.currentTime, buffer.duration, 1, true);
+const loop             = (src, isLooping) => { if (src) { src.loop = isLooping } };
 
 const fadeIn = (gainNode, duration) => {
     if (!duration) return gainNode
@@ -114,7 +116,10 @@ class SoundController extends Component {
     }
 
     generate = (shouldPlay) => {
-
+        if (isIOS()) {
+            const content = <IOSWarning onButtonPress={this.props.actions.disableModal} />
+            this.props.actions.enableModal({ content, isCloseable: true, className: 'modal--wide' });
+        }
         this.stopEvent();
 
         const { bpm, beats, allowedLengths, hitChance, instruments, usePredefinedSettings } = this.props;
@@ -125,8 +130,8 @@ class SoundController extends Component {
         generateNewBuffer({ ...generationState, instruments })
             .then(({ buffer, instruments }) => {
                 const newState = { isLoading: false, error: '' };
-
                 if (!buffer) newState.error = 'Error!'
+
                 this.props.actions.updateCurrentBuffer(buffer);
                 if (shouldPlay) this.playEvent();
                 this.props.actions.updateCustomPresetInstruments(instruments);

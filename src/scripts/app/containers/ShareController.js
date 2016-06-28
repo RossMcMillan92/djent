@@ -13,7 +13,7 @@ function mapStateToProps(state) {
         activePresetID: state.config.activePresetID,
         hitChance: state.config.hitChance,
         instruments: state.instruments,
-        customPreset: state.customPreset,
+        currentBuffer: state.sound.currentBuffer,
     }
 }
 

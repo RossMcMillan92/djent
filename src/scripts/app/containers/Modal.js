@@ -10,6 +10,7 @@ const mapStateToProps = (state) => ({
     isActive: state.modal.isActive,
     content: state.modal.content,
     isCloseable: state.modal.isCloseable,
+    className: state.modal.className,
 })
 
 const mapDispatchToProps = (dispatch) => {

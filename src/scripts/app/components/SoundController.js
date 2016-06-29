@@ -117,7 +117,7 @@ class SoundController extends Component {
 
     generate = (shouldPlay) => {
         if (isIOS()) {
-            const content = <IOSWarning onButtonPress={this.props.actions.disableModal} />
+            const content = <IOSWarning onButtonClick={this.props.actions.disableModal} />
             this.props.actions.enableModal({ content, isCloseable: true, className: 'modal--wide' });
         }
         this.stopEvent();

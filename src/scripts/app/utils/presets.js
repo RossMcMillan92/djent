@@ -12,8 +12,8 @@ const presets = [
     // greenDay,
     blacktongue,
     swornIn,
-    thallBuster,
     thallBuster2,
+    thallBuster,
     thallTriplets,
     tesseract,
 ];

@@ -1,6 +1,6 @@
 const preset = {
     id: 'tb2',
-    description: 'Thall - Buster 2',
+    description: 'Thall',
     settings: {
         config: {
             bpm       : 87,

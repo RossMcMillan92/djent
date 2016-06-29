@@ -35,7 +35,7 @@ const allowedLengths = [
 
 const initialState = {
     allowedLengths,
-    activePresetID       : 'tb',
+    activePresetID       : 'adtr',
     bpm                  : 50,
     fadeIn               : false,
     hitChance            : 1,

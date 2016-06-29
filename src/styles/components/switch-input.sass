@@ -1,6 +1,6 @@
 $switch-input__handle-colour        : $palette-shade-alpha
 $switch-input__track-colour         : $palette-shade-delta
-$switch-input__track-colour--active : $palette-alpha
+$switch-input__track-colour--active : $palette-gamma
 $switch-input__height               : 30px
 $switch-input__width                : 60px
 $switch-input__spacing              : 8px
@@ -44,7 +44,7 @@ $switch-input__handle-size          : $switch-input__height - $switch-input__spa
 
     &.is-active
         background: $switch-input__track-colour--active
-        border-color: darken($palette-alpha, 5%)
+        border-color: darken($switch-input__track-colour--active, 5%)
 
         &::before
             transform: translate($switch-input__width - $switch-input__handle-size - $switch-input__spacing / 1.5, 0)

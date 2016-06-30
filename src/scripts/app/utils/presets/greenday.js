@@ -1,5 +1,5 @@
 const preset = {
-    id: 'gd',
+    id: 'greenday',
     description: 'American Idiot',
     settings: {
         config: {

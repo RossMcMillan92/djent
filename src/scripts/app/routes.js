@@ -9,6 +9,7 @@ export default (
     <Route path="/" component={App}>
         <IndexRoute component={Home} />
         <Route path="share/:shareID" component={Home} id="share" />
+        <Route path="preset/:presetID" component={Home} id="preset" />
         <Route status={404} path="*" component={Home} />
     </Route>
 );

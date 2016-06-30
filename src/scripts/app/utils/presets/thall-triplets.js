@@ -1,5 +1,5 @@
 const preset = {
-    id: 'tt',
+    id: 'thall-triplets',
     description: 'Thall - Triplets',
     settings: {
         config: {

@@ -6,13 +6,13 @@ const fs       = require('fs');
 const events   = require('./events');
 const atImport = require('postcss-import')
 
-const buildCSS = (filename, inputCSSPath, outputCSSPath) => {
+const buildCSS = (filename, inputCSSPath, outputCSSPath, isMinified) => {
     const startTime = events.onStart(filename);
 
     sass.render({
         file        : inputCSSPath,
         outFile     : outputCSSPath,
-        outputStyle : 'nested',
+        outputStyle : isMinified ? 'compressed' : 'nested',
     }, (error, result) => {
             if(!error){
                 // No errors during the compilation, write this result on the disk

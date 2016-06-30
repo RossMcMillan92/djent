@@ -1,5 +1,5 @@
 const preset = {
-    id: 'si',
+    id: 'sworn-in',
     description: 'Sworn In',
     settings: {
         config: {

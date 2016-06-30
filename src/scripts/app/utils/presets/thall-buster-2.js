@@ -1,5 +1,5 @@
 const preset = {
-    id: 'tb2',
+    id: 'thall',
     description: 'Thall',
     settings: {
         config: {

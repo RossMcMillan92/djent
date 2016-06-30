@@ -1,5 +1,5 @@
 const preset = {
-    id: 'tb',
+    id: 'thall-buster',
     description: 'Thall - Buster',
     settings: {
         config: {

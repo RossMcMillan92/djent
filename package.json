@@ -53,6 +53,7 @@
     "redux": "^3.5.1",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.0.1",
+    "uglifyify": "^3.0.2",
     "vinyl-source-stream": "^1.1.0"
   },
   "scripts": {

@@ -52,7 +52,11 @@ export default class Home extends Component {
                 this.setState({ googleAPIHasLoaded: true })
             });
 
-        if (!this.props.params.shareID) return this.props.actions.applyPreset({ ...presets.find(preset => preset.id === this.props.activePresetID) });
+        if (!this.props.params.shareID) {
+            const presetID = this.props.params.presetID || this.props.activePresetID;
+            const preset = presets.find(preset => preset.id === presetID) || presets.find(preset => preset.id === this.props.activePresetID);
+            return this.props.actions.applyPreset(preset);
+        }
 
         this.props.actions.enableModal({
             content: (<Spinner subtext="Loading..." />),

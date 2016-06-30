@@ -28,7 +28,7 @@ const googleAPIKey = 'AIzaSyCUN26hzVNf0P_ED_oALvsVx3ffmyzliOI';
 const metaData = {
     title: 'Djeneration Station',
     description: 'A random metal riff generator. Thall.',
-    canonical: 'http://djenerationstation.com',
+    canonical: 'http://djen.co',
     meta: {
         charset: 'utf-8',
         name: {

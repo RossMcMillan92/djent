@@ -10,7 +10,7 @@ import tesseract from './presets/tesseract';
 const presets = [
     adtrBreakdown,
     // greenDay,
-    blacktongue,
+    // blacktongue,
     swornIn,
     thallBuster2,
     thallBuster,

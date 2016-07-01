@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 export default class App extends Component {
     render() {
         return (
-            <div>
-                <section>
+            <div className="site">
+                <section className="site__content">
                     {this.props.children}
                 </section>
                 <footer className="footer">

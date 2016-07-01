@@ -210,7 +210,7 @@ export default class Home extends Component {
                             : (
                                 <Expandable
                                     title="Settings"
-                                    titleClassName="u-curp u-mb1 link-base u-dib u-txt-light"
+                                    titleClassName="u-curp u-mb1 title-primary dropdown-icon-after dropdown-icon-after--light u-dib u-txt-light u-txt-large"
                                     enableStateSave={true}
                                 >
                                 <div>

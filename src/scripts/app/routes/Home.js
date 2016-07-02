@@ -138,10 +138,13 @@ export default class Home extends Component {
                 <div className="group-capped-x group-centered">
 
                     <div className="group-spacing-x">
-                        <div className="group-spacing-y-large">
+                        <div className="group-spacing-y-large u-flex-row u-flex-justify">
                             <h1 className="title-primary u-txt-light">
                                 Djenerator
                             </h1>
+                            <a className="" href="https://www.facebook.com/djenerationstation/" target="_blank">
+                                <img className="social-icon" src="/assets/images/F_icon.svg" width="39" height="39" />
+                            </a>
                         </div>
                     </div>
 

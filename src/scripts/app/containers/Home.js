@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 
-import Home from '../routes/Home';
+import Home from '../routes/Main';
 
 import * as configActions from '../actions/config';
 import * as instrumentsActions from '../actions/instruments';

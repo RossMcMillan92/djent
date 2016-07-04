@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { compress, decompress } from 'lzutf8';
 import { deepClone } from '../utils/tools';
 
-import ShareBox from './ShareBox.js'
+import ShareBox from './ShareBox.js';
+
+const domain = `${window.location.protocol}//${window.location.host}`;
 
 class ShareController extends Component {
     state = {
@@ -34,9 +36,9 @@ class ShareController extends Component {
         this.getShareableURL(preset)
             .then((url) => {
                 if (url) {
-                    const shareableURL = `${window.location.href.split('#')[0]}#share/${url.split('/').pop()}`;
+                    const shareableURL = `${domain}/share/${url.split('/').pop()}`;
                     const content = (<ShareBox url={shareableURL} />);
-                    this.props.actions.enableModal({ content, isCloseable: true })
+                    this.props.actions.enableModal({ content, isCloseable: true });
                 }
                 this.setState({ isLoading: false })
             });
@@ -49,11 +51,11 @@ class ShareController extends Component {
 
     getShareableURL = (preset) => {
         const compressedPreset = compress(JSON.stringify(preset), {outputEncoding: "Base64" });
-        const shareableURL = `${window.location.href.split('#')[0]}#share=${compressedPreset}`;
+        const shareableURL = `${domain}/#share=${compressedPreset}`;
 
         if (shareableURL.length > 3000) alert('No can do');
 
-        return this.getShortURL(shareableURL)
+        return this.getShortURL(shareableURL);
     }
 
     getShortURL = url => {

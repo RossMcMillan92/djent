@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import DocumentMeta from 'react-document-meta';
-import { compress, decompress } from 'lzutf8';
 
 import BeatsController from '../components/BeatsController';
 import Expandable from '../components/Expandable';
@@ -20,24 +18,11 @@ import SoundController from '../containers/SoundController';
 import Visualiser from '../containers/Visualiser';
 
 import presets from '../utils/presets';
-import { getAllowedLengthsFromSequence } from '../utils/sequences';
 import { getActiveSoundsFromHitTypes } from '../utils/instruments';
-import { getHashQueryParam, loadScript } from '../utils/tools';
+import { getPresetData, getPresetFromData, handleGoogleAPI } from '../utils/short-urls';
+import { getAllowedLengthsFromSequence } from '../utils/sequences';
 
-const googleAPIKey = 'AIzaSyCUN26hzVNf0P_ED_oALvsVx3ffmyzliOI';
-const metaData = {
-    title: 'Djeneration Station',
-    description: 'A random metal riff generator. Thall.',
-    canonical: 'http://djen.co',
-    meta: {
-        charset: 'utf-8',
-        name: {
-            keywords: 'djeneration, station, react, redux, metal, riff, generator, thall, djent',
-        },
-    },
-};
-
-export default class Home extends Component {
+export default class Main extends Component {
     static contextTypes = {
         router: React.PropTypes.object.isRequired
     }
@@ -46,13 +31,16 @@ export default class Home extends Component {
     }
 
     componentWillMount = () => {
-        this.handleGoogleAPI()
-            .then(() => {
-                this.checkForShareData(this.props.params.shareID);
-                this.setState({ googleAPIHasLoaded: true })
-            });
+        const shareID = this.props.params.shareID;
 
-        if (!this.props.params.shareID) {
+        handleGoogleAPI()
+            .then(() => {
+                this.checkForShareData(shareID);
+                this.setState({ googleAPIHasLoaded: true })
+            })
+            .catch(e => console.log(e));
+
+        if (!shareID) {
             const presetID = this.props.params.presetID || this.props.activePresetID;
             const preset = presets.find(preset => preset.id === presetID) || presets.find(preset => preset.id === this.props.activePresetID);
             return this.props.actions.applyPreset(preset);
@@ -62,6 +50,7 @@ export default class Home extends Component {
             content: (<Spinner subtext="Loading..." />),
             isCloseable: false,
         });
+
     }
 
     componentWillUpdate = (nextProps) => {
@@ -70,60 +59,28 @@ export default class Home extends Component {
         }
     }
 
-    handleGoogleAPI = () => {
-        return new Promise((res, rej) => {
-            loadScript('https://apis.google.com/js/client.js?onload=handleClientLoad')
-            const handleClientLoad = () => {
-                gapi.client.setApiKey(googleAPIKey);
-                gapi.client.load('urlshortener', 'v1')
-                    .then(res);
-            }
-            window.handleClientLoad = handleClientLoad
-        })
-    }
-
     checkForShareData = (shareID) => {
-        if (shareID) {
-            this.getPresetData(shareID)
-                .then(this.handlePreset);
-        }
+        if (shareID) getPresetData(shareID)
+            .then(this.applySharedPreset);
     }
 
-    getPresetData = (shareID) => {
-        return gapi.client.urlshortener.url.get({
-              'shortUrl': `http://goo.gl/${shareID}`
-            })
-            .then((response) => {
-                return getHashQueryParam('share',response.result.longUrl)
-            }, (reason) => {
-                (console.error || console.log).call(console, reason)
-            })
-    }
+    applySharedPreset = (data) => {
+        const sharedPreset = getPresetFromData(data);
 
-    handlePreset = (data) => {
-        if (!data) return;
-
-        const decompressedData = data
-                              && data.length % 4 === 0
-                              && decompress(data, {inputEncoding: 'Base64'});
-        const preset = /[A-Za-z0-9+/=]/.test(decompressedData) ? JSON.parse(decompressedData) : false;
-
-        if (!preset) {
-            this.props.actions.applyPreset({ ...presets.find(preset => preset.id === this.props.activePresetID) });
-            this.props.actions.disableModal();
-            return;
+        if (sharedPreset) {
+            sharedPreset.settings.config.allowedLengths = getAllowedLengthsFromSequence(sharedPreset.settings.instruments.find(i => i.id === 'g').predefinedSequence, this.props.allowedLengths)
+            sharedPreset.settings.instruments = sharedPreset.settings.instruments
+                .map(i => ({ ...i, sounds: getActiveSoundsFromHitTypes(i.predefinedHitTypes) }));
         }
 
-        preset.settings.config.allowedLengths = getAllowedLengthsFromSequence(preset.settings.instruments.find(i => i.id === 'g').predefinedSequence, this.props.allowedLengths)
-        preset.settings.instruments = preset.settings.instruments
-            .map(i => ({ ...i, sounds: getActiveSoundsFromHitTypes(i.predefinedHitTypes) }))
+        const preset = sharedPreset;
 
         this.props.actions.applyPreset(preset);
         this.props.actions.disableModal();
     }
 
     render = () => {
-        const isShareRoute = this.props.route.id === 'share'
+        const isShareRoute = this.props.route.id === 'share';
         const totalBeat = this.props.beats.find(beat => beat.id === 'total');
         const beats = this.props.beats
             .filter(beat => beat.id !== 'total')
@@ -133,7 +90,6 @@ export default class Home extends Component {
 
         return (
             <section>
-                <DocumentMeta { ...metaData } />
                 <Modal />
                 <div className="group-capped-x group-centered">
 

@@ -59,12 +59,10 @@ export default function instruments(state = initialState, action) {
                     const i = payload.instruments
                         .find(i => i.id === instrument.id);
 
-                    if (!i) return { ...instrument };
-
                     return {
                         ...instrument,
-                        hitTypes: [ ...i.hitTypes ],
-                        sequence: deepClone(i.sequence),
+                        hitTypes: i ? [ ...i.hitTypes ] : [],
+                        sequence: i ? deepClone(i.sequence) : [],
                     }
                 });
 

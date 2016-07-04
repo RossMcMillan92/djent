@@ -26,6 +26,7 @@ import IOSWarning from './IOSWarning';
 import LoopController from './LoopController';
 import SVG from './SVG';
 import Waveform from './Waveform';
+import ContinuousGenerationController from './ContinuousGenerationController';
 
 const getSequences = (grooveTotalBeats, allowedLengths, hitChance) => {
     const mainBeat       = generateSequence({ totalBeats: grooveTotalBeats, allowedLengths, hitChance });
@@ -83,9 +84,12 @@ const fadeIn = (gainNode, duration) => {
 }
 
 class SoundController extends Component {
+    queuedBuffer;
+    queuedInstruments;
     currentGainNode;
     audioContext = '';
     isOutDated = true;
+    renewalTimeout;
     state = {
         isLoading  : false,
         error      : '',
@@ -115,63 +119,61 @@ class SoundController extends Component {
         }
     }
 
-    generate = (shouldPlay) => {
-        if (isIOS()) {
-            const content = <IOSWarning onButtonClick={this.props.actions.disableModal} />
-            this.props.actions.enableModal({ content, isCloseable: true, className: 'modal--wide' });
-        }
-        this.stopEvent();
-
+    generate = () => {
         const { bpm, beats, allowedLengths, hitChance, instruments, usePredefinedSettings } = this.props;
         const generationState = deepClone({ bpm, beats, allowedLengths, hitChance, instruments, usePredefinedSettings });
 
         this.props.actions.updateGenerationState(generationState);
 
-        generateNewBuffer({ ...generationState, instruments })
+        this.isOutDated = false;
+        this.updateUI({ isLoading: true });
+
+        return generateNewBuffer({ ...generationState, instruments })
             .then(({ buffer, instruments }) => {
                 const newState = { isLoading: false, error: '' };
                 if (!buffer) newState.error = 'Error!'
 
-                this.props.actions.updateCurrentBuffer(buffer);
-                if (shouldPlay) this.playEvent();
-                this.props.actions.updateCustomPresetInstruments(instruments);
                 this.updateUI(newState);
+                return {buffer, instruments};
             });
-
-        this.isOutDated = false;
-        this.updateUI({ isLoading: true });
     }
 
     togglePlay = () => {
         if (this.props.isPlaying) {
             this.stopEvent();
         } else {
-            this.playEvent();
+            this.playEvent(this.props.currentBuffer);
         }
     }
 
-    playEvent = () => {
-        if (!this.props.currentBuffer || this.state.error) return;
+    playEvent = (currentBuffer) => {
+        if (!currentBuffer || this.state.error) return;
         if (!this.audioContext) this.audioContext = new AudioContext();
         this.currentGainNode = this.audioContext.createGain();
 
-        this.props.actions.updateCurrentSrc(this.props.currentBuffer ? play(this.audioContext, this.props.currentBuffer) : null);
+        const currentSrc = currentBuffer ? play(this.audioContext, currentBuffer) : null;
+
+        this.props.actions.updateCurrentBuffer(currentBuffer);
+        this.props.actions.updateCurrentSrc(currentSrc);
 
         // Set up volume and fades
-        this.props.currentSrc.connect(this.currentGainNode);
+        currentSrc.connect(this.currentGainNode);
         this.currentGainNode.gain.value = 0;
         this.currentGainNode.connect(this.audioContext.destination);
         this.currentGainNode = fadeIn(this.currentGainNode, (this.props.fadeIn ? 5000 : 0));
 
-        loop(this.props.currentSrc, this.props.isLooping);
+        loop(currentSrc, this.props.isLooping);
         this.props.actions.updateIsPlaying(true);
 
-        this.props.currentSrc.addEventListener('ended', this.onEnded);
-    }
+        this.renewalTimeout = setTimeout(() => {
+            this.generate()
+                .then(({buffer, instruments}) => {
+                    this.queuedBuffer = buffer;
+                    this.queuedInstruments = instruments;
+                });
+        }, Math.round((currentBuffer.duration * 1000) * .90));
 
-    onEnded = () => {
-        if (this.props.continuousGeneration) this.generate(true);
-        else this.stopEvent();
+        currentSrc.addEventListener('ended', this.onEnded);
     }
 
     stopEvent = () => {
@@ -183,7 +185,30 @@ class SoundController extends Component {
     }
 
     generateEvent = () => {
-        if (!this.state.isLoading) this.generate(true);
+        if (!this.state.isLoading) {
+            if (isIOS()) {
+                const content = <IOSWarning onButtonClick={this.props.actions.disableModal} />
+                this.props.actions.enableModal({ content, isCloseable: true, className: 'modal--wide' });
+            }
+            this.stopEvent();
+
+            this.generate()
+                .then(({buffer, instruments}) => this.updateInstrumentsAndPlay(buffer, instruments));
+        }
+    }
+
+    onEnded = () => {
+        if (this.props.continuousGeneration && this.queuedBuffer) {
+            this.updateInstrumentsAndPlay(this.queuedBuffer, this.queuedInstruments)
+            this.queuedInstruments = undefined;
+            this.queuedBuffer = undefined;
+        }
+        else this.stopEvent();
+    }
+
+    updateInstrumentsAndPlay = (buffer, instruments) => {
+        this.playEvent(buffer);
+        this.props.actions.updateCustomPresetInstruments(instruments);
     }
 
     render () {
@@ -213,6 +238,15 @@ class SoundController extends Component {
                             isLooping={this.props.isLooping}
                             actions={{
                                 updateIsLooping: (newVal) => this.props.actions.updateIsLooping(newVal)
+                            }}
+                        />
+                    </div>
+
+                    <div className="group-spacing-y-small u-mr1">
+                        <ContinuousGenerationController
+                            continuousGeneration={this.props.continuousGeneration}
+                            actions={{
+                                updateContinuousGeneration: (newVal) => this.props.actions.updateContinuousGeneration(newVal)
                             }}
                         />
                     </div>

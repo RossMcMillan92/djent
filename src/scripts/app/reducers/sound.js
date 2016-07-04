@@ -2,7 +2,7 @@ import { extendObjectArrayByID, updateObjByID } from '../utils/tools';
 
 const initialState =  {
     isPlaying       : false,
-    isLooping       : true,
+    isLooping       : false,
     generationState : {},
     currentBuffer   : undefined,
     currentSrc      : undefined,
@@ -17,6 +17,12 @@ export default function sound(state = initialState, action) {
                 ...state,
                 isPlaying: payload.isPlaying
             }
+
+        case 'UPDATE_CONTINUOUS_GENERATION':
+            return {
+                ...state,
+                isLooping: payload.continuousGeneration ? false : payload.isLooping
+            };
 
         case 'UPDATE_IS_LOOOPING':
             return {

@@ -116,8 +116,9 @@ export default class Waveform extends Component {
             this.iteration = 0
         }
 
-        if (!this.props.isPlaying && nextProps.isPlaying && this.props.currentSrc.context) {
-            this.startTime = this.props.currentSrc.context.currentTime;
+        if (this.props.currentSrc && this.props.currentSrc !== nextProps.currentSrc && this.props.currentSrc.context) {
+            this.startTime = nextProps.currentSrc.context.currentTime;
+            this.switchColors();
         }
     }
 

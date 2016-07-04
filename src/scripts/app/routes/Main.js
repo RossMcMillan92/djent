@@ -9,7 +9,6 @@ import Spinner from '../components/Spinner';
 import BeatPanel from '../containers/BeatPanel';
 import BPMController from '../containers/BPMController';
 import BPMTapper from '../containers/BPMTapper';
-import ContinuousGenerationController from '../containers/ContinuousGenerationController';
 import FadeController from '../containers/FadeController';
 import Modal from '../containers/Modal';
 import ShareController from '../containers/ShareController';
@@ -148,11 +147,7 @@ export default class Main extends Component {
                                         )
                                     }
 
-                                    {/*<div className="grid__item w-auto">
-                                        <div className="group-spacing-y-small">
-                                            <ContinuousGenerationController />
-                                        </div>
-                                    </div>
+                                    {/*
 
                                     <div className="grid__item w-auto">
                                         <div className="group-spacing-y-small">

@@ -218,7 +218,10 @@ export default class Main extends Component {
                                             <h2 className="title-primary">Sounds</h2>
 
                                             <InstrumentList
-                                                actions={{ updateInstrumentSound: this.props.actions.updateInstrumentSound }}
+                                                actions={{
+                                                    updateInstrumentSound: this.props.actions.updateInstrumentSound,
+                                                    updateInstrumentDetune: this.props.actions.updateInstrumentDetune,
+                                                }}
                                                 instruments={this.props.instruments}
                                             />
                                         </Panel>

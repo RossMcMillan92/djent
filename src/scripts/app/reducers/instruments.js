@@ -1,4 +1,4 @@
-import { extendObjectArrayByID, deepClone } from '../utils/tools';
+import { extendObjectArrayByID, deepClone, updateObjByID } from '../utils/tools';
 import defaultInstruments from '../utils/default-instruments';
 
 const initialState = defaultInstruments;
@@ -29,6 +29,9 @@ export default function instruments(state = initialState, action) {
     switch (type) {
         case 'UPDATE_INSTRUMENT_SOUND_PROP':
             return updateInstrumentSoundByID({ ...payload, instruments: state })
+
+        case 'UPDATE_INSTRUMENT_DETUNE_PROP':
+            return updateObjByID()
 
         case 'APPLY_PRESET':
             const { preset } = payload;

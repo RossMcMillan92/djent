@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { capitalize } from '../utils/tools';
 
 import Expandable from './Expandable';
+import DetuneController from './DetuneController';
 
 export default class InstrumentList extends Component {
 
@@ -54,6 +55,9 @@ export default class InstrumentList extends Component {
                 return (
                     <div className="u-mb2" key={index}>
                         <h3 className="title-secondary">{instrument.description || instrument.id}</h3>
+                        <div className="u-dib">
+                            <DetuneController detune={instrument.detune} actions={{ updateInstrumentDetune: this.props.actions.updateInstrumentDetune }} />
+                        </div>
                         {categories}
                     </div>
                 );

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 
-import Home from '../routes/Main';
+import Main from '../routes/Main';
 
 import * as configActions from '../actions/config';
 import * as instrumentsActions from '../actions/instruments';
@@ -33,4 +33,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Main);

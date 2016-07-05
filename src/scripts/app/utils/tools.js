@@ -92,6 +92,8 @@ const loadScript = (path) => {
 	document.body.appendChild(script);
 }
 
+const confineToRange = (value, min, max) => Math.min(max, Math.max(min, value));
+
 const randFromTo = (from,to) => Math.floor(Math.random()*(to-from+1)+from);
 
 const randomFromArray = (arr) => arr[randFromTo(0, arr.length-1)];
@@ -105,8 +107,9 @@ const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSSt
 export {
 	arraySelector,
 	capitalize,
-	compose,
 	coinFlip,
+	compose,
+	confineToRange,
 	deepClone,
 	extendObjectArrayByID,
 	getHashQueryParam,

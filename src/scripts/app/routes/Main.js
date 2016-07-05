@@ -219,8 +219,10 @@ export default class Main extends Component {
 
                                             <InstrumentList
                                                 actions={{
+                                                    disableModal: this.props.actions.disableModal,
+                                                    enableModal: this.props.actions.enableModal,
                                                     updateInstrumentSound: this.props.actions.updateInstrumentSound,
-                                                    updateInstrumentDetune: this.props.actions.updateInstrumentDetune,
+                                                    updateInstrumentPitch: this.props.actions.updateInstrumentPitch,
                                                 }}
                                                 instruments={this.props.instruments}
                                             />

@@ -86,27 +86,27 @@ const loadInstrumentBuffers = (context, instruments) => {
         .load(instruments);
 }
 
-const getDetunePlaybackRatio = (detuneAmount) => {
-    const detuneIsPositive = detuneAmount > 0;
-    const negAmount = detuneIsPositive ? detuneAmount * -1 : detuneAmount;
+const getPitchPlaybackRatio = (pitchAmount) => {
+    const pitchIsPositive = pitchAmount > 0;
+    const negAmount = pitchIsPositive ? pitchAmount * -1 : pitchAmount;
     const val = 1 / Math.abs((negAmount / 1200) - 1);
 
-    return detuneIsPositive ? 1 / val : val;
+    return pitchIsPositive ? 1 / val : val;
 }
 
-const playSound = (context, buffer, time, duration, volume, detuneAmount = 0) => {
+const playSound = (context, buffer, time, duration, volume, pitchAmount = 0) => {
     if (!buffer) return;
 
     const source = context.createBufferSource();
     const gainNode = context.createGain();
-    const durationMultiplier = getDetunePlaybackRatio(detuneAmount);
+    const durationMultiplier = getPitchPlaybackRatio(pitchAmount);
 
     source.connect(gainNode);
 
     gainNode.connect(context.destination);
     gainNode.gain.value = volume;
 
-    // source.detune.value = detuneAmount;
+    // source.pitch.value = pitchAmount;
     source.playbackRate.value = durationMultiplier;
     source.buffer = buffer;
     source.start(time, 0, duration * durationMultiplier);

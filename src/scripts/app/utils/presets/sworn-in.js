@@ -35,6 +35,7 @@ const preset = {
         instruments: [
             {
                 id: 'g',
+                detune: -100,
                 sounds: [
                     {
                         id: 'sixth-0-muted',

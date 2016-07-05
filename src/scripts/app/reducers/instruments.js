@@ -51,6 +51,7 @@ export default function instruments(state = initialState, action) {
                 };
             });
 
+            console.log('NEWSTATE', newState)
             return newState;
 
         case 'UPDATE_CUSTOM_PRESET_INSTRUMENTS':

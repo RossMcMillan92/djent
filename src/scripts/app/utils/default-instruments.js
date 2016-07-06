@@ -2,6 +2,7 @@ const defaultInstruments = [
     {
         id: 'g',
         description: 'Guitar/Bass (Drop G#)',
+        pitch: 0,
         sounds: [
             {
                 id: 'sixth-0-open',

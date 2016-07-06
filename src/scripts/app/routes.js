@@ -3,14 +3,14 @@ import { Route, IndexRoute, Redirect } from 'react-router';
 
 /* containers */
 import App from './containers/App';
-import Home from './containers/Home';
+import Main from './containers/Main';
 
 export default (
     <Route path="/" component={App}>
-        <IndexRoute component={Home} />
+        <IndexRoute component={Main} />
         <Redirect from='/**/share/:shareID' to='share/:shareID' />
-        <Route path="share/:shareID" component={Home} id="share" />
-        <Route path="preset/:presetID" component={Home} id="preset" />
-        <Route status={404} path="*" component={Home} />
+        <Route path="share/:shareID" component={Main} id="share" />
+        <Route path="preset/:presetID" component={Main} id="preset" />
+        <Route status={404} path="*" component={Main} />
     </Route>
 );

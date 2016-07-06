@@ -73,10 +73,11 @@ const renderInstrumentSoundsAtTempo = (instruments, totalBeats, bpmMultiplier) =
         let startTimes = [];
         let durations  = [];
         const sources = instrument.timeMap.reduce((sources, time, i) => {
-            const instrumentSound = instrument.buffers[instrument.hitTypes[i]];
-            const startTime       = offlineCtx.currentTime + (time * bpmMultiplier);
-            const duration        = instrument.ringout ? instrumentSound.duration : (1 / instrument.sequence[i].beat) * bpmMultiplier;
-            const source          = playSound(offlineCtx, instrumentSound, startTime, duration, instrument.sequence[i].volume, 0);
+            const pitchAmount       = instrument.pitch || 0;
+            const instrumentSound    = instrument.buffers[instrument.hitTypes[i]];
+            const startTime          = offlineCtx.currentTime + (time * bpmMultiplier);
+            const duration           = instrument.ringout ? instrumentSound.duration : ((1 / instrument.sequence[i].beat) * bpmMultiplier);
+            const source             = playSound(offlineCtx, instrumentSound, startTime, duration, instrument.sequence[i].volume, pitchAmount);
 
             startTimes[i] = startTime;
             durations[i]   = duration;

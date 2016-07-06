@@ -8,6 +8,7 @@ import presets from '../utils/presets';
 
 const mapStateToProps = (state) => ({
     isActive: state.modal.isActive,
+    title: state.modal.title,
     content: state.modal.content,
     isCloseable: state.modal.isCloseable,
     className: state.modal.className,

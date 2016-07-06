@@ -48,6 +48,7 @@ export default class Main extends Component {
         this.props.actions.enableModal({
             content: (<Spinner subtext="Loading..." />),
             isCloseable: false,
+            className: 'modal--auto-width',
         });
 
     }
@@ -213,7 +214,12 @@ export default class Main extends Component {
                                             <h2 className="title-primary">Sounds</h2>
 
                                             <InstrumentList
-                                                actions={{ updateInstrumentSound: this.props.actions.updateInstrumentSound }}
+                                                actions={{
+                                                    disableModal: this.props.actions.disableModal,
+                                                    enableModal: this.props.actions.enableModal,
+                                                    updateInstrumentSound: this.props.actions.updateInstrumentSound,
+                                                    updateInstrumentPitch: this.props.actions.updateInstrumentPitch,
+                                                }}
                                                 instruments={this.props.instruments}
                                             />
                                         </Panel>

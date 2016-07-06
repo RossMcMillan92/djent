@@ -49,6 +49,7 @@ export default class Main extends Component {
         this.props.actions.enableModal({
             content: (<Spinner subtext="Loading..." />),
             isCloseable: false,
+            className: 'modal--auto-width',
         });
 
     }

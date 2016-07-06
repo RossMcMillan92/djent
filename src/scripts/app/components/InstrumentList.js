@@ -22,7 +22,7 @@ export default class InstrumentList extends Component {
             disableModal: this.props.actions.disableModal,
             updateInstrumentPitch: this.props.actions.updateInstrumentPitch,
         }} />
-        this.props.actions.enableModal({ content, isCloseable: true });
+        this.props.actions.enableModal({ content, isCloseable: true, title: `${ instrument.description || instrument.id } Settings` });
     }
 
     render = () => {
@@ -85,7 +85,6 @@ class InstrumentSettingsPane extends Component {
         const { instrument } = this.props;
         return (
             <div>
-                <h2 className="title-primary">{ instrument.description || instrument.id } Settings</h2>
                 <div className="u-mb1">
                     <PitchController pitch={instrument.pitch} id={instrument.id} actions={{ updateInstrumentPitch: this.props.actions.updateInstrumentPitch }} />
                 </div>

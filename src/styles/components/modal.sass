@@ -26,7 +26,8 @@
     position: absolute
     left: 50%
     top: 50%
-    max-width: 100%
+    width: 100%
+    max-width: 500px
     padding: $base-spacing-unit / 2
     opacity: 0
     will-change: transform
@@ -37,13 +38,8 @@
         opacity: 1
         transform: translate3d(-50%, -50%, 0)
 
-    .modal--wide &
-        width: 100%
-
-.modal__box
-    background: #fff
-    padding: $base-spacing-unit
-    border-radius: 3px
+    .modal--auto-width &
+        width: auto
 
 .modal__close-button
     position: absolute

@@ -31,7 +31,6 @@ export default function instruments(state = initialState, action) {
             return updateInstrumentSoundByID({ ...payload, instruments: state })
 
         case 'UPDATE_INSTRUMENT_DETUNE_PROP':
-        console.log(payload.instrumentID, payload.value)
             return updateObjByID({ objs: state, id: payload.instrumentID, prop: 'pitch', value: payload.value })
 
         case 'APPLY_PRESET':
@@ -55,7 +54,6 @@ export default function instruments(state = initialState, action) {
                 };
             });
 
-            console.log('NEWSTATE', newState)
             return newState;
 
         case 'UPDATE_CUSTOM_PRESET_INSTRUMENTS':

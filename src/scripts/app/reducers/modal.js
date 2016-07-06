@@ -2,6 +2,7 @@ import { extendObjectArrayByID, updateObjByID } from '../utils/tools';
 
 const initialState =  {
     isActive: false,
+    title: '',
     content: '',
     isCloseable: true,
     className: '',
@@ -15,6 +16,7 @@ export default function beats(state = initialState, action) {
             return {
                 ...state,
                 isActive: true,
+                title: payload.title,
                 content: payload.content,
                 isCloseable: payload.isCloseable,
                 className: payload.className,

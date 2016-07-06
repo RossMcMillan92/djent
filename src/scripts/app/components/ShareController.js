@@ -26,6 +26,7 @@ class ShareController extends Component {
                     .map(instrument => {
                         return {
                             id: instrument.id,
+                            pitch: instrument.pitch,
                             predefinedHitTypes: instrument.hitTypes,
                             predefinedSequence: instrument.sequence,
                         }
@@ -38,7 +39,7 @@ class ShareController extends Component {
                 if (url) {
                     const shareableURL = `${domain}/share/${url.split('/').pop()}`;
                     const content = (<ShareBox url={shareableURL} />);
-                    this.props.actions.enableModal({ content, isCloseable: true });
+                    this.props.actions.enableModal({ content, isCloseable: true, className: 'modal--auto-width' });
                 }
                 this.setState({ isLoading: false })
             });

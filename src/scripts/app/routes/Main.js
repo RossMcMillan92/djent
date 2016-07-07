@@ -129,6 +129,7 @@ export default class Main extends Component {
                                     <SoundController
                                         usePredefinedSettings={ usePredefinedSettings }
                                         generateButtonText={ generateButtonText }
+                                        enableContinuousGenerationControl={ !isShareRoute }
                                     />
 
                                     {
@@ -147,14 +148,6 @@ export default class Main extends Component {
                                             </div>
                                         )
                                     }
-
-                                    {/*
-
-                                    <div className="grid__item w-auto">
-                                        <div className="group-spacing-y-small">
-                                            <FadeController />
-                                        </div>
-                                    </div>*/}
                                 </div>
                             </Panel>
                         </div>

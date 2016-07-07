@@ -52,7 +52,7 @@ class ShareController extends Component {
 
     getShareableURL = (preset) => {
         const compressedPreset = compress(JSON.stringify(preset), {outputEncoding: "Base64" });
-        const shareableURL = `${domain}/#share=${compressedPreset}`;
+        const shareableURL = `djen.co/#share=${compressedPreset}`;
 
         if (shareableURL.length > 3000) alert('No can do');
 

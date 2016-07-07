@@ -1,26 +1,29 @@
 const preset = {
-    id: 'bt',
-    description: 'Black Tongue',
+    id: 'heavy-groove',
+    description: 'Heavy Groove',
     settings: {
         config: {
-            bpm            : 50,
+            bpm            : 75,
             hitChance      : 1,
             allowedLengths : [
                     {
                         id: "0.25",
-                        amount:1,
-                    },
-                    {
-                        id: "0.5",
-                        amount:1,
-                    },
-                    {
-                        id: "1",
                         amount: 1,
                     },
                     {
+                        id: "0.5",
+                        amount: 1,
+                        isTriplet: true,
+                    },
+                    {
+                        id: "1",
+                        amount: 4,
+                        isTriplet: true,
+                    },
+                    {
                         id: "2",
-                        amount: 5,
+                        amount: 6,
+                        isTriplet: true,
                     },
             ],
         },
@@ -32,20 +35,37 @@ const preset = {
             },
             {
                 id    : 'groove',
-                bars  : 2,
+                bars  : 4,
                 beats : 4,
             },
         ],
         instruments: [
             {
                 id: 'g',
+                pitch: -300,
                 sounds: [
                     {
                         id: 'sixth-0-open',
                         enabled: true,
                     },
                     {
+                        id: 'sixth-1-open',
+                        enabled: true,
+                    },
+                    {
+                        id: 'sixth-4-open',
+                        enabled: true,
+                    },
+                    {
                         id: 'sixth-0-muted',
+                        enabled: true,
+                    },
+                    {
+                        id: 'sixth-1-muted',
+                        enabled: true,
+                    },
+                    {
+                        id: 'fifth-6-open',
                         enabled: true,
                     },
                 ],
@@ -84,15 +104,6 @@ const preset = {
                         id: 'china-left',
                         enabled: true,
                     }
-                ],
-            },
-            {
-                id: 'd',
-                sounds: [
-                    {
-                        id: 'drone-high',
-                        enabled: false,
-                    },
                 ],
             },
         ]

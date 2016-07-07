@@ -213,6 +213,16 @@ class SoundController extends Component {
 
     render () {
         const eventName = this.props.isPlaying ? 'stop' : 'play';
+        const continuousGeneration = this.props.enableContinuousGenerationControl ? (
+            <div className="group-spacing-y-small u-mr1">
+                <ContinuousGenerationController
+                    continuousGeneration={this.props.continuousGeneration}
+                    actions={{
+                        updateContinuousGeneration: (newVal) => this.props.actions.updateContinuousGeneration(newVal)
+                    }}
+                />
+            </div>
+        ) : null;
 
         return (
             <div>
@@ -242,14 +252,7 @@ class SoundController extends Component {
                         />
                     </div>
 
-                    <div className="group-spacing-y-small u-mr1">
-                        <ContinuousGenerationController
-                            continuousGeneration={this.props.continuousGeneration}
-                            actions={{
-                                updateContinuousGeneration: (newVal) => this.props.actions.updateContinuousGeneration(newVal)
-                            }}
-                        />
-                    </div>
+                    { continuousGeneration }
                 </div>
             </div>
         );

@@ -105,13 +105,6 @@ class SoundController extends Component {
         if (!this.props.generationState) return;
 
         // Check against the generation state to see if we're out of date
-        console.log('NEXTPROPS.BPM !== THIS.PROPS.GENERATIONSTATE.BPM', nextProps.bpm !== this.props.generationState.bpm)
-        console.log('NEXTPROPS.HITCHANCE !== THIS.PROPS.GENERATIONSTATE.HITCHANCE', nextProps.hitChance !== this.props.generationState.hitChance)
-        console.log('!DEEPEQUAL(NEXTPROPS.BEATS, THIS.PROPS.GENERATIONSTATE.BEATS)', !deepEqual(nextProps.beats, this.props.generationState.beats))
-        console.log('!DEEPEQUAL(NEXTPROPS.ALLOWEDLENGTHS, THIS.PROPS.GENERATIONSTATE.ALLOWEDLENGTHS)', !deepEqual(nextProps.allowedLengths, this.props.generationState.allowedLengths))
-        console.log('THIS.PROPS.GENERATIONSTATE', this.props.generationState)
-
-
         if (   nextProps.bpm !== this.props.generationState.bpm
             || nextProps.hitChance !== this.props.generationState.hitChance
             || !deepEqual(nextProps.beats, this.props.generationState.beats)

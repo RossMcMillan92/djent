@@ -1,6 +1,6 @@
 const preset = {
-    id: 'heavy-groove',
-    description: 'Heavy Groove',
+    id: 'meshuggah',
+    description: 'Meshuggah',
     settings: {
         config: {
             bpm            : 75,
@@ -12,17 +12,17 @@ const preset = {
                     },
                     {
                         id: "0.5",
-                        amount: 1,
+                        amount: 2,
                         isTriplet: true,
                     },
                     {
                         id: "1",
-                        amount: 4,
+                        amount: 5,
                         isTriplet: true,
                     },
                     {
                         id: "2",
-                        amount: 6,
+                        amount: 7,
                         isTriplet: true,
                     },
             ],

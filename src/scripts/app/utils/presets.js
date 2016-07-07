@@ -1,4 +1,4 @@
-import heavyGroove from './presets/heavy-groove';
+import meshuggah from './presets/meshuggah';
 import adtrBreakdown from './presets/adtr-breakdown';
 import greenDay from './presets/greenday';
 import swornIn from './presets/sworn-in';
@@ -10,7 +10,7 @@ import tesseract from './presets/tesseract';
 const presets = [
     adtrBreakdown,
     // greenDay,
-    heavyGroove,
+    meshuggah,
     swornIn,
     thallBuster2,
     thallBuster,

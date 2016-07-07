@@ -102,9 +102,16 @@ class SoundController extends Component {
 
     componentWillUpdate = (nextProps, nextState) => {
         if (nextProps.isLooping !== this.props.isLooping) loop(this.props.currentSrc, nextProps.isLooping);
-        if (typeof this.props.generationState === "undefined") return;
+        if (!this.props.generationState) return;
 
         // Check against the generation state to see if we're out of date
+        console.log('NEXTPROPS.BPM !== THIS.PROPS.GENERATIONSTATE.BPM', nextProps.bpm !== this.props.generationState.bpm)
+        console.log('NEXTPROPS.HITCHANCE !== THIS.PROPS.GENERATIONSTATE.HITCHANCE', nextProps.hitChance !== this.props.generationState.hitChance)
+        console.log('!DEEPEQUAL(NEXTPROPS.BEATS, THIS.PROPS.GENERATIONSTATE.BEATS)', !deepEqual(nextProps.beats, this.props.generationState.beats))
+        console.log('!DEEPEQUAL(NEXTPROPS.ALLOWEDLENGTHS, THIS.PROPS.GENERATIONSTATE.ALLOWEDLENGTHS)', !deepEqual(nextProps.allowedLengths, this.props.generationState.allowedLengths))
+        console.log('THIS.PROPS.GENERATIONSTATE', this.props.generationState)
+
+
         if (   nextProps.bpm !== this.props.generationState.bpm
             || nextProps.hitChance !== this.props.generationState.hitChance
             || !deepEqual(nextProps.beats, this.props.generationState.beats)
@@ -222,7 +229,7 @@ class SoundController extends Component {
 
     render () {
         const eventName = this.props.isPlaying ? 'stop' : 'play';
-        const continuousGeneration = this.props.enableContinuousGenerationControl ? (
+        const continuousGeneration = document.location.hash === '#beta' && this.props.enableContinuousGenerationControl ? (
             <div className="group-spacing-y-small u-mr1">
                 <ContinuousGenerationController
                     continuousGeneration={this.props.continuousGeneration}

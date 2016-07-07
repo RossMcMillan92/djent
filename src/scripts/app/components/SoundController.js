@@ -90,6 +90,7 @@ class SoundController extends Component {
     audioContext = '';
     isOutDated = true;
     renewalTimeout;
+    renewalPoint = .80;
     state = {
         isLoading  : false,
         error      : '',
@@ -120,6 +121,7 @@ class SoundController extends Component {
     }
 
     generate = () => {
+        console.log('GENERATE')
         const { bpm, beats, allowedLengths, hitChance, instruments, usePredefinedSettings } = this.props;
         const generationState = deepClone({ bpm, beats, allowedLengths, hitChance, instruments, usePredefinedSettings });
 
@@ -165,21 +167,17 @@ class SoundController extends Component {
         loop(currentSrc, this.props.isLooping);
         this.props.actions.updateIsPlaying(true);
 
-        this.renewalTimeout = setTimeout(() => {
-            this.generate()
-                .then(({buffer, instruments}) => {
-                    this.queuedBuffer = buffer;
-                    this.queuedInstruments = instruments;
-                });
-        }, Math.round((currentBuffer.duration * 1000) * .90));
+        const renewalTimeoutTime = Math.round((currentBuffer.duration * 1000) * this.renewalPoint);
+        this.renewalTimeout = setTimeout(this.generateAndQueue, renewalTimeoutTime);
 
         currentSrc.addEventListener('ended', this.onEnded);
     }
 
     stopEvent = () => {
         if (this.props.currentSrc && this.props.isPlaying) {
-            this.props.currentSrc.removeEventListener('ended', this.onEnded)
-            stop(this.props.currentSrc)
+            this.props.currentSrc.removeEventListener('ended', this.onEnded);
+            stop(this.props.currentSrc);
+            if (this.renewalTimeout) clearTimeout(this.renewalTimeout);
             this.props.actions.updateIsPlaying(false);
         }
     }
@@ -197,8 +195,19 @@ class SoundController extends Component {
         }
     }
 
+    generateAndQueue = () => {
+        this.generate()
+            .then(({buffer, instruments}) => {
+                if (!this.props.isPlaying) return this.updateInstrumentsAndPlay(buffer, instruments);
+
+                this.queuedBuffer = buffer;
+                this.queuedInstruments = instruments;
+            });
+    }
+
     onEnded = () => {
-        if (this.props.continuousGeneration && this.queuedBuffer) {
+        const { isPlaying, continuousGeneration } = this.props;
+        if (isPlaying && continuousGeneration && this.queuedBuffer) {
             this.updateInstrumentsAndPlay(this.queuedBuffer, this.queuedInstruments)
             this.queuedInstruments = undefined;
             this.queuedBuffer = undefined;

@@ -6,7 +6,6 @@ class Visualiser extends Component {
     containerWidth = 0;
 
     componentDidUpdate = (nextProps) => {
-        console.log('NEXTPROPS', this.props)
         this.containerWidth = this.refs.container.offsetWidth;
     }
 

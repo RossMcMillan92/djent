@@ -39,7 +39,7 @@ const initialState = {
     bpm                  : 50,
     fadeIn               : false,
     hitChance            : 1,
-    continuousGeneration : true,
+    continuousGeneration : false,
 };
 
 const getInitialState = () => {

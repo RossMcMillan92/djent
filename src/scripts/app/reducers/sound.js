@@ -2,8 +2,8 @@ import { extendObjectArrayByID, updateObjByID } from '../utils/tools';
 
 const initialState =  {
     isPlaying       : false,
-    isLooping       : false,
-    generationState : {},
+    isLooping       : true,
+    generationState : undefined,
     currentBuffer   : undefined,
     currentSrc      : undefined,
 }

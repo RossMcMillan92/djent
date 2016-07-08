@@ -104,6 +104,8 @@ class SoundController extends Component {
         if (nextProps.isLooping !== this.props.isLooping) loop(this.props.currentSrc, nextProps.isLooping);
         if (!this.props.generationState) return;
 
+        const generationStateInstruments = this.props.generationState.instruments;
+
         // Check against the generation state to see if we're out of date
         if (   nextProps.bpm !== this.props.generationState.bpm
             || nextProps.hitChance !== this.props.generationState.hitChance
@@ -111,7 +113,8 @@ class SoundController extends Component {
             || !deepEqual(nextProps.allowedLengths, this.props.generationState.allowedLengths)
             || nextProps.instruments
                 .filter((instrument, i) =>
-                    !deepEqual(instrument.sounds, this.props.generationState.instruments[i].sounds)
+                    instrument.sounds
+                        .filter((sound, index) => sound.enabled !== generationStateInstruments[i].sounds[index].enabled ).length
                 ).length
         ) {
             this.isOutDated = true;
@@ -121,7 +124,6 @@ class SoundController extends Component {
     }
 
     generate = () => {
-        console.log('GENERATE')
         const { bpm, beats, allowedLengths, hitChance, instruments, usePredefinedSettings } = this.props;
         const generationState = deepClone({ bpm, beats, allowedLengths, hitChance, instruments, usePredefinedSettings });
 
@@ -167,8 +169,10 @@ class SoundController extends Component {
         loop(currentSrc, this.props.isLooping);
         this.props.actions.updateIsPlaying(true);
 
-        const renewalTimeoutTime = Math.round((currentBuffer.duration * 1000) * this.renewalPoint);
-        this.renewalTimeout = setTimeout(this.generateAndQueue, renewalTimeoutTime);
+        if (this.props.continuousGeneration) {
+            const renewalTimeoutTime = Math.round((currentBuffer.duration * 1000) * this.renewalPoint);
+            this.renewalTimeout = setTimeout(this.generateAndQueue, renewalTimeoutTime);
+        }
 
         currentSrc.addEventListener('ended', this.onEnded);
     }

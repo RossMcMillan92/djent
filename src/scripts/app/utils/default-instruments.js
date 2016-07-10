@@ -437,7 +437,7 @@ const defaultInstruments = [
                 category: 'Misc',
                 midi: {
                     pitch: [ getMidiNote('G#', 0), getMidiNote('D#', 1), getMidiNote('G#', 1) ],
-                    duration: .25,
+                    duration: .125,
                     muted: true,
                 },
                 tabConfig: {
@@ -506,6 +506,7 @@ const defaultInstruments = [
                 category: 'Crash',
                 midi: {
                     pitch: [ crash1MidiNote ],
+                    duration: .125,
                 },
             },
             {
@@ -516,6 +517,7 @@ const defaultInstruments = [
                 category: 'Crash',
                 midi: {
                     pitch: [ crash2MidiNote ],
+                    duration: .125,
                 },
             },
             {
@@ -526,6 +528,7 @@ const defaultInstruments = [
                 category: 'China',
                 midi: {
                     pitch: [ chinaMidiNote ],
+                    duration: .125,
                 },
             }
         ],

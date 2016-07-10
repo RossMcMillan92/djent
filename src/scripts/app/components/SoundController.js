@@ -16,6 +16,7 @@ import {
 } from '../utils/riffs';
 
 import {
+    buildMidiBase64FromInstruments,
     combineMultipleTracks,
     combineTwoTracks,
     getBase64FromTracks,
@@ -233,25 +234,9 @@ class SoundController extends Component {
     }
 
     doMIDI = () => {
-        const kickInstrument   = this.props.instruments.find(i => i.id === 'k')
-        const kickTrack        = getTrackFromInstrument(kickInstrument, 10);
-        const snareInstrument  = this.props.instruments.find(i => i.id === 's')
-        const snareTrack       = getTrackFromInstrument(snareInstrument, 10);
-        const hihatInstrument  = this.props.instruments.find(i => i.id === 'h')
-        const hihatTrack       = getTrackFromInstrument(hihatInstrument, 10);
-        const cymbalInstrument = this.props.instruments.find(i => i.id === 'c')
-        const cymbalTrack      = getTrackFromInstrument(cymbalInstrument, 10);
+        const midiBase64 = buildMidiBase64FromInstruments(this.props.instruments, this.props.bpm);
 
-        const drumsTrack     = combineMultipleTracks(snareTrack, hihatTrack, kickTrack, cymbalTrack);
-        const drumsMidiTrack = getMidiTrack('Drums', this.props.bpm, drumsTrack);
-
-        const guitarInstrument = this.props.instruments.find(i => i.id === 'g');
-        const guitarTrack      = getTrackFromInstrument(guitarInstrument, 0);
-        const guitarMidiTrack  = getMidiTrack('Guitar', this.props.bpm, guitarTrack, 30);
-
-
-        const base64 = getBase64FromTracks([ drumsMidiTrack, guitarMidiTrack ]);
-        document.location.href = 'data:audio/midi;base64,' + base64;
+        document.location.href = 'data:audio/midi;base64,' + midiBase64;
     }
 
     render () {

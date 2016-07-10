@@ -7,7 +7,7 @@ import {
 
 import { initialState as configInitialState } from '../reducers/config';
 
-import { roundToXPlaces } from './tools';
+import { compose, roundToXPlaces } from './tools';
 
 const convertBPMtoMidi = (bpm) => (bpm / 60) * 250;
 
@@ -17,60 +17,43 @@ const convertBeatLengthToMidiDuration = (beatLength) => 4 / (beatLength * 4);
 
 const removeXDecimalPlaceWithoutRounding = (value, x) => value.toString().split('.')[1] ? parseFloat(value.toString().slice(0, -x)) : value;
 
-const getTrackFromInstrument = (instrument, channel) => {
-    if (!instrument.hitTypes) throw Error('No hitTypes were given');
-    const midiData = getMidiDataFromHitTypes(instrument.sounds, instrument.hitTypes);
-    const durations = instrument.sequence.map((beat, i) => convertBeatLengthToMidiDuration(beat.beat));
+const getTrackFromInstrument = (midiData, sequence, channel) => {
+    const durations = sequence.map((beat, i) => convertBeatLengthToMidiDuration(beat.beat));
 
-    let tripletCount = {};
     let currentWaitTime = 0;
-    const midiNotes = durations.reduce((newArr, duration, i) => {
-        const durationName = duration.toString();
-        const isTriplet = duration % 0.25 !== 0;
-        const volume = instrument.sequence[i].volume * (midiData[i].muted ? .75 : 1);
+    return durations
+        .reduce((newArr, duration, i) => {
+            const volume = sequence[i].volume * (midiData[i].muted ? .75 : 1);
 
-        if (volume === 0) {
-            currentWaitTime += duration;
-            return newArr;
-        }
+            // If there's no note to play, add the duration onto the next notes wait time
+            if (volume === 0) {
+                currentWaitTime += duration;
+                return newArr;
+            }
 
-        // this section evens out every third triplet
-        // if (isTriplet) {
-        //     tripletCount[durationName] = tripletCount[durationName] ? tripletCount[durationName] + 1 : 1;
-        //     duration = duration;
-        //     if (tripletCount[durationName] === 3) {
-        //         tripletCount[durationName] = 0;
-        //         const targetAmount = duration * 3;
-        //         duration = duration + targetAmount;
-        //     }
-        //
-        //     // duration -= .0001;
-        // }
+            const result = {
+                pitch: midiData[i].pitch,
+                velocity: volume * 100,
+                channel,
+                duration
+            };
 
-        const result = {
-            pitch: midiData[i].pitch,
-            velocity: volume * 100,
-            channel,
-            duration
-        };
+            if (currentWaitTime !== 0) {
+                result.wait = currentWaitTime;
+                currentWaitTime = 0;
+            }
 
-        if (currentWaitTime !== 0) {
-            result.wait = currentWaitTime;
-            currentWaitTime = 0;
-        }
+            // take account of samples which are sharp in duration
+            if (midiData[i].duration && midiData[i].duration < result.duration) {
+                currentWaitTime = result.duration - midiData[i].duration;
+                result.duration = midiData[i].duration;
+            }
 
-        if (midiData[i].duration && midiData[i].duration < result.duration) {
-            currentWaitTime = result.duration - midiData[i].duration;
-            result.duration = midiData[i].duration;
-        }
-
-        return [
-            ...newArr,
-            result
-        ];
-    }, []);
-
-    return midiNotes
+            return [
+                ...newArr,
+                result
+            ];
+        }, []);
 }
 
 const getTimemapFromTrack = track => {
@@ -78,29 +61,10 @@ const getTimemapFromTrack = track => {
     return track
         .reduce((newArr, note, i, notes) => {
             const previousNote = notes[i-1];
-            // tNeed to do a lot of rounding so timing isn't off when using triplets
-            let newAccumulatedTime = accumulatedTime + (note.wait || 0) + (previousNote ? previousNote.duration : 0);
-            // switch (roundToXPlaces(newAccumulatedTime - Math.floor(newAccumulatedTime), 4)) {
-            //     case 0.001:
-            //     case 0.668:
-            //     case 0.334:
-            //         newAccumulatedTime -= 0.001
-            //         break;
-            //     case 0.666:
-            //     case 0.999:
-            //         newAccumulatedTime += 0.001
-            //         break;
-            // }
-            //
-            // console.log('roundToXPlaces(newAccumulatedTime, 4)', roundToXPlaces(newAccumulatedTime, 4))
-            accumulatedTime = newAccumulatedTime;
-            let timestamp = accumulatedTime;
-            // if (Math.abs(roundToXPlaces(timestamp, 1) - timestamp) < 0.001) timestamp = roundToXPlaces(timestamp, 1)
-            console.log('ACCUMULATEDTIME', accumulatedTime, timestamp)
-            accumulatedTime = timestamp;
+            accumulatedTime = accumulatedTime + (note.wait || 0) + (previousNote ? previousNote.duration : 0);
             return [
                 ...newArr,
-                { ...note, timestamp }
+                { ...note, timestamp: accumulatedTime }
             ]
         }, [])
 }
@@ -157,7 +121,31 @@ const getBase64FromTracks = (tracks) => {
     return new Writer(tracks).base64();
 }
 
+const getInstrumentTrack = (instruments, instrumentID, channel) => {
+    const instrument   = instruments.find(i => i.id === instrumentID);
+    const midiData     = getMidiDataFromHitTypes(instrument.sounds, instrument.hitTypes);
+    const track        = getTrackFromInstrument(midiData, instrument.sequence, channel);
+
+    return track;
+}
+
+const buildMidiBase64FromInstruments = (instruments, bpm) => {
+    const kickTrack        = getInstrumentTrack(instruments, 'k', 10);
+    const snareTrack       = getInstrumentTrack(instruments, 's', 10);
+    const hihatTrack       = getInstrumentTrack(instruments, 'h', 10);
+    const cymbalTrack      = getInstrumentTrack(instruments, 'c', 10);
+    const guitarTrack      = getInstrumentTrack(instruments, 'g', 0);
+
+    const drumsTrack       = combineMultipleTracks(snareTrack, hihatTrack, kickTrack, cymbalTrack);
+    const drumsMidiTrack   = getMidiTrack('Drums', bpm, drumsTrack);
+    const guitarMidiTrack  = getMidiTrack('Guitar', bpm, guitarTrack, 30);
+
+    const base64 = getBase64FromTracks([ drumsMidiTrack, guitarMidiTrack ]);
+    return base64;
+}
+
 export {
+    buildMidiBase64FromInstruments,
     combineMultipleTracks,
     convertBeatLengthToMidiDuration,
     convertBPMtoMidi,

@@ -18,6 +18,4 @@ const presets = [
     tesseract,
 ];
 
-if (window.location.href.includes('godmode=1')) presets.push(greenDay)
-
 export default presets;

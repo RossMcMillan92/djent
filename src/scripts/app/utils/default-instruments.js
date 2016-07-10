@@ -1,3 +1,15 @@
+const rootOctave = 1;
+const getMidiNote = (note, octave) => {
+    return note + (rootOctave + octave);
+}
+
+const kickMidiNote = 'C2';
+const snareMidiNote = 'D2';
+const hihatMidiNote = 'A#2';
+const crash1MidiNote = 'C#3';
+const crash2MidiNote = 'A3';
+const chinaMidiNote = 'E3';
+
 const defaultInstruments = [
     {
         id: 'g',
@@ -5,26 +17,33 @@ const defaultInstruments = [
         pitch: 0,
         sounds: [
             {
-                id: 'sixth-0-open',
-                description: 'Fret 0',
-                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/sixth-0-open.mp3',
-                enabled: false,
-                category: 'Sixth string [Open]',
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 0 ],
-                },
-            },
-            {
                 id: 'sixth-0-muted',
                 description: 'Fret 0',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/sixth-0-muted.mp3',
                 enabled: false,
                 category: 'Sixth string [Muted]',
+                midi: {
+                    pitch: [ getMidiNote('G#', 0), getMidiNote('D#', 1), getMidiNote('G#', 1) ],
+                    muted: true,
+                },
                 tabConfig: {
                     strings: [ 6 ],
                     frets: [ 0 ],
                     palmMuted: true,
+                },
+            },
+            {
+                id: 'sixth-0-open',
+                description: 'Fret 0',
+                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/sixth-0-open.mp3',
+                enabled: false,
+                category: 'Sixth string [Open]',
+                midi: {
+                    pitch: [ getMidiNote('G#', 0) ],
+                },
+                tabConfig: {
+                    strings: [ 6 ],
+                    frets: [ 0 ],
                 },
             },
             {
@@ -33,6 +52,10 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/sixth-1-muted.mp3',
                 enabled: false,
                 category: 'Sixth string [Muted]',
+                midi: {
+                    pitch: [ getMidiNote('A', 0), getMidiNote('E', 1), getMidiNote('A', 1) ],
+                    muted: true,
+                },
                 tabConfig: {
                     strings: [ 6 ],
                     frets: [ 1 ],
@@ -45,6 +68,9 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/sixth-1-open.mp3',
                 enabled: false,
                 category: 'Sixth string [Open]',
+                midi: {
+                    pitch: [ getMidiNote('A', 0) ],
+                },
                 tabConfig: {
                     strings: [ 6 ],
                     frets: [ 1 ],
@@ -56,6 +82,10 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/sixth-2-muted.mp3',
                 enabled: false,
                 category: 'Sixth string [Muted]',
+                midi: {
+                    pitch: [ getMidiNote('A#', 0), getMidiNote('F', 1), getMidiNote('A#', 1) ],
+                    muted: true,
+                },
                 tabConfig: {
                     strings: [ 6 ],
                     frets: [ 2 ],
@@ -68,6 +98,9 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/sixth-2-open.mp3',
                 enabled: false,
                 category: 'Sixth string [Open]',
+                midi: {
+                    pitch: [ getMidiNote('A#', 0) ],
+                },
                 tabConfig: {
                     strings: [ 6 ],
                     frets: [ 2 ],
@@ -79,6 +112,10 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/sixth-3-muted.mp3',
                 enabled: false,
                 category: 'Sixth string [Muted]',
+                midi: {
+                    pitch: [ getMidiNote('B', 0), getMidiNote('F#', 1), getMidiNote('B', 1) ],
+                    muted: true,
+                },
                 tabConfig: {
                     strings: [ 6 ],
                     frets: [ 3 ],
@@ -91,6 +128,9 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/sixth-3-open.mp3',
                 enabled: false,
                 category: 'Sixth string [Open]',
+                midi: {
+                    pitch: [ getMidiNote('B', 0) ],
+                },
                 tabConfig: {
                     strings: [ 6 ],
                     frets: [ 3 ],
@@ -102,6 +142,10 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/sixth-4-muted.mp3',
                 enabled: false,
                 category: 'Sixth string [Muted]',
+                midi: {
+                    pitch: [ getMidiNote('C', 1), getMidiNote('G', 1), getMidiNote('C', 2) ],
+                    muted: true,
+                },
                 tabConfig: {
                     strings: [ 6 ],
                     frets: [ 4 ],
@@ -114,6 +158,9 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/sixth-4-open.mp3',
                 enabled: false,
                 category: 'Sixth string [Open]',
+                midi: {
+                    pitch: [ getMidiNote('C', 1) ],
+                },
                 tabConfig: {
                     strings: [ 6 ],
                     frets: [ 4 ],
@@ -125,6 +172,10 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/sixth-8-muted.mp3',
                 enabled: false,
                 category: 'Sixth string [Muted]',
+                midi: {
+                    pitch: [ getMidiNote('E', 1), getMidiNote('B', 1), getMidiNote('E', 2) ],
+                    muted: true,
+                },
                 tabConfig: {
                     strings: [ 6 ],
                     frets: [ 8 ],
@@ -137,6 +188,9 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/sixth-8-open.mp3',
                 enabled: false,
                 category: 'Sixth string [Open]',
+                midi: {
+                    pitch: [ getMidiNote('E', 1) ],
+                },
                 tabConfig: {
                     strings: [ 6 ],
                     frets: [ 8 ],
@@ -149,6 +203,9 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/fifth-5-open.mp3',
                 enabled: false,
                 category: 'Fifth string [Open]',
+                midi: {
+                    pitch: [ getMidiNote('G#', 1) ],
+                },
                 tabConfig: {
                     strings: [ 5 ],
                     frets: [ 6 ],
@@ -161,6 +218,9 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/fifth-6-open.mp3',
                 enabled: false,
                 category: 'Fifth string [Open]',
+                midi: {
+                    pitch: [ getMidiNote('A', 1) ],
+                },
                 tabConfig: {
                     strings: [ 5 ],
                     frets: [ 6 ],
@@ -172,6 +232,9 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/fifth-7-open.mp3',
                 enabled: false,
                 category: 'Fifth string [Open]',
+                midi: {
+                    pitch: [ getMidiNote('A#', 1) ],
+                },
                 tabConfig: {
                     strings: [ 5 ],
                     frets: [ 7 ],
@@ -183,6 +246,9 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/fifth-8-open.mp3',
                 enabled: false,
                 category: 'Fifth string [Open]',
+                midi: {
+                    pitch: [ getMidiNote('B', 1) ],
+                },
                 tabConfig: {
                     strings: [ 5 ],
                     frets: [ 8 ],
@@ -194,6 +260,9 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/fifth-9-open.mp3',
                 enabled: false,
                 category: 'Fifth string [Open]',
+                midi: {
+                    pitch: [ getMidiNote('C', 2) ],
+                },
                 tabConfig: {
                     strings: [ 5 ],
                     frets: [ 9 ],
@@ -205,6 +274,9 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/fifth-10-open.mp3',
                 enabled: false,
                 category: 'Fifth string [Open]',
+                midi: {
+                    pitch: [ getMidiNote('Db', 2) ],
+                },
                 tabConfig: {
                     strings: [ 5 ],
                     frets: [ 10 ],
@@ -216,6 +288,9 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/fifth-11-open.mp3',
                 enabled: false,
                 category: 'Fifth string [Open]',
+                midi: {
+                    pitch: [ getMidiNote('D', 2) ],
+                },
                 tabConfig: {
                     strings: [ 5 ],
                     frets: [ 11 ],
@@ -227,6 +302,9 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/fifth-12-open.mp3',
                 enabled: false,
                 category: 'Fifth string [Open]',
+                midi: {
+                    pitch: [ getMidiNote('Eb', 2) ],
+                },
                 tabConfig: {
                     strings: [ 5 ],
                     frets: [ 12 ],
@@ -239,6 +317,9 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/third-7-open.mp3',
                 enabled: false,
                 category: 'Third string [Open]',
+                midi: {
+                    pitch: [ getMidiNote('G#', 2) ],
+                },
                 tabConfig: {
                     strings: [ 3 ],
                     frets: [ 7 ],
@@ -250,6 +331,9 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/third-8-open.mp3',
                 enabled: false,
                 category: 'Third string [Open]',
+                midi: {
+                    pitch: [ getMidiNote('A', 2) ],
+                },
                 tabConfig: {
                     strings: [ 3 ],
                     frets: [ 8 ],
@@ -261,6 +345,9 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/third-9-open.mp3',
                 enabled: false,
                 category: 'Third string [Open]',
+                midi: {
+                    pitch: [ getMidiNote('A#', 2) ],
+                },
                 tabConfig: {
                     strings: [ 3 ],
                     frets: [ 9 ],
@@ -272,6 +359,9 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/third-10-open.mp3',
                 enabled: false,
                 category: 'Third string [Open]',
+                midi: {
+                    pitch: [ getMidiNote('B', 2) ],
+                },
                 tabConfig: {
                     strings: [ 3 ],
                     frets: [ 10 ],
@@ -284,6 +374,9 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/third-7-bend.mp3',
                 enabled: false,
                 category: 'Third string [Bend]',
+                midi: {
+                    pitch: [ getMidiNote('G#', 2) ],
+                },
                 tabConfig: {
                     strings: [ 3 ],
                     frets: [ 7 ],
@@ -296,6 +389,9 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/third-8-bend.mp3',
                 enabled: false,
                 category: 'Third string [Bend]',
+                midi: {
+                    pitch: [ getMidiNote('A', 2) ],
+                },
                 tabConfig: {
                     strings: [ 3 ],
                     frets: [ 8 ],
@@ -309,6 +405,10 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/dissonance-10.mp3',
                 enabled: false,
                 category: 'Misc',
+                midi: {
+                    pitch: [ getMidiNote('G#', 3), getMidiNote('G', 3) ],
+                    muted: true,
+                },
                 tabConfig: {
                     strings: [ 1, 2 ],
                     frets: [ 10, 14 ],
@@ -320,6 +420,10 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/dissonance-16.mp3',
                 enabled: false,
                 category: 'Misc',
+                midi: {
+                    pitch: [ getMidiNote('D#', 3), getMidiNote('D', 3) ],
+                    muted: true,
+                },
                 tabConfig: {
                     strings: [ 1, 2 ],
                     frets: [ 16, 20 ],
@@ -331,6 +435,11 @@ const defaultInstruments = [
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/guitar/scratch.mp3',
                 enabled: false,
                 category: 'Misc',
+                midi: {
+                    pitch: [ getMidiNote('G#', 0), getMidiNote('D#', 1), getMidiNote('G#', 1) ],
+                    duration: .25,
+                    muted: true,
+                },
                 tabConfig: {
                     strings: [ 4, 5, 6 ],
                     frets: [ 'x', 'x', 'x' ],
@@ -348,6 +457,9 @@ const defaultInstruments = [
                 description: 'Basic kick',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/kick.wav',
                 enabled: false,
+                midi: {
+                    pitch: [ kickMidiNote ],
+                },
             }
         ],
     },
@@ -360,6 +472,9 @@ const defaultInstruments = [
                 description: 'Basic snare',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/snare.wav',
                 enabled: false,
+                midi: {
+                    pitch: [ snareMidiNote ],
+                },
             }
         ],
     },
@@ -372,6 +487,9 @@ const defaultInstruments = [
                 description: 'Basic hihat',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/hihat.wav',
                 enabled: false,
+                midi: {
+                    pitch: [ hihatMidiNote ],
+                },
             }
         ],
     },
@@ -385,21 +503,30 @@ const defaultInstruments = [
                 description: 'Crash left',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/crash-left.wav',
                 enabled: false,
-                category: 'Crash'
+                category: 'Crash',
+                midi: {
+                    pitch: [ crash1MidiNote ],
+                },
             },
             {
                 id: 'crash-right',
                 description: 'Crash right',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/crash-right.wav',
                 enabled: false,
-                category: 'Crash'
+                category: 'Crash',
+                midi: {
+                    pitch: [ crash2MidiNote ],
+                },
             },
             {
                 id: 'china-left',
                 description: 'China left',
                 path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/china-left.wav',
                 enabled: false,
-                category: 'China'
+                category: 'China',
+                midi: {
+                    pitch: [ chinaMidiNote ],
+                },
             }
         ],
     },

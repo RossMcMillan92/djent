@@ -16,6 +16,15 @@ import {
 } from '../utils/riffs';
 
 import {
+    combineMultipleTracks,
+    combineTwoTracks,
+    getBase64FromTracks,
+    getMidiTrack,
+    getTimemapFromTrack,
+    getTrackFromInstrument,
+} from '../utils/midi';
+
+import {
     capitalize,
     compose,
     deepClone,
@@ -193,7 +202,6 @@ class SoundController extends Component {
                 this.props.actions.enableModal({ content, isCloseable: true, className: 'modal--wide' });
             }
             this.stopEvent();
-
             this.generate()
                 .then(({buffer, instruments}) => this.updateInstrumentsAndPlay(buffer, instruments));
         }
@@ -222,6 +230,28 @@ class SoundController extends Component {
     updateInstrumentsAndPlay = (buffer, instruments) => {
         this.playEvent(buffer);
         this.props.actions.updateCustomPresetInstruments(instruments);
+    }
+
+    doMIDI = () => {
+        const kickInstrument   = this.props.instruments.find(i => i.id === 'k')
+        const kickTrack        = getTrackFromInstrument(kickInstrument, 10);
+        const snareInstrument  = this.props.instruments.find(i => i.id === 's')
+        const snareTrack       = getTrackFromInstrument(snareInstrument, 10);
+        const hihatInstrument  = this.props.instruments.find(i => i.id === 'h')
+        const hihatTrack       = getTrackFromInstrument(hihatInstrument, 10);
+        const cymbalInstrument = this.props.instruments.find(i => i.id === 'c')
+        const cymbalTrack      = getTrackFromInstrument(cymbalInstrument, 10);
+
+        const drumsTrack     = combineMultipleTracks(snareTrack, hihatTrack, kickTrack, cymbalTrack);
+        const drumsMidiTrack = getMidiTrack('Drums', this.props.bpm, drumsTrack);
+
+        const guitarInstrument = this.props.instruments.find(i => i.id === 'g');
+        const guitarTrack      = getTrackFromInstrument(guitarInstrument, 0);
+        const guitarMidiTrack  = getMidiTrack('Guitar', this.props.bpm, guitarTrack, 30);
+
+
+        const base64 = getBase64FromTracks([ drumsMidiTrack, guitarMidiTrack ]);
+        document.location.href = 'data:audio/midi;base64,' + base64;
     }
 
     render () {
@@ -263,6 +293,12 @@ class SoundController extends Component {
                                 updateIsLooping: (newVal) => this.props.actions.updateIsLooping(newVal)
                             }}
                         />
+                    </div>
+
+                    <div className="group-spacing-y-small u-mr05">
+                        <button className="button-primary" onClick={this.doMIDI} disabled={!this.props.currentBuffer}>
+                            MIDI
+                        </button>
                     </div>
 
                     { continuousGeneration }

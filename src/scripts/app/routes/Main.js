@@ -133,8 +133,8 @@ export default class Main extends Component {
                                         enableContinuousGenerationControl={ !isShareRoute }
                                     />
 
-                                    <div className="u-flex-row u-flex-wrap">
-                                        <div className="group-spacing-y-small u-mr05 u-mb0">
+                                    <div className={`u-flex-row u-flex-wrap u-flex-${ isShareRoute ? 'center' : 'start' }`}>
+                                        <div className={`group-spacing-y-small u-mr05 ${ isShareRoute ? '' : 'u-mb0' }`}>
                                             <ExportController
                                                 instruments={ this.props.instruments }
                                                 bpm={ this.props.bpm }

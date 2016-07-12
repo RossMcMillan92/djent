@@ -144,18 +144,6 @@ const buildMidiDataURIFromInstruments = (instruments, bpm) => {
     return base64;
 }
 
-const saveAsMIDIFile = (() => {
-    const a = document.createElement("a");
-    a.style = "display: none";
-    document.body.appendChild(a);
-
-    return (url) => {
-        a.href = url;
-        a.download = 'djen.mid';
-        a.click();
-    };
-})();
-
 export {
     buildMidiDataURIFromInstruments,
     combineMultipleTracks,
@@ -166,5 +154,4 @@ export {
     getMidiDataFromHitTypes,
     getTimemapFromTrack,
     getTrackFromInstrument,
-    saveAsMIDIFile,
 }

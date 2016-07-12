@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 
-import InputBox from './InputBox';
-import presets from '../utils/presets';
-
-import { saveAsWAVFile } from '../utils/audio';
-import { buildMidiDataURIFromInstruments, saveAsMIDIFile } from '../utils/midi';
+import { saveAsWAVFile, saveAsMIDIFile } from '../utils/save';
+import { buildMidiDataURIFromInstruments } from '../utils/midi';
 
 const ExportModal = ({ actions }) => (
     <div className="u-flex-row u-flex-wrap">

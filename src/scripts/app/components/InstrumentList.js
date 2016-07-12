@@ -80,16 +80,11 @@ export default class InstrumentList extends Component {
     }
 }
 
-class InstrumentSettingsPane extends Component {
-    render = () => {
-        const { instrument } = this.props;
-        return (
-            <div>
-                <div className="u-mb1">
-                    <PitchController pitch={instrument.pitch} id={instrument.id} actions={{ updateInstrumentPitch: this.props.actions.updateInstrumentPitch }} />
-                </div>
-                <button className="button-primary button-primary--small button-primary--positive" onClick={this.props.actions.disableModal} >Continue</button>
-            </div>
-        );
-    }
-}
+const InstrumentSettingsPane = ({ instrument, actions }) => (
+    <div>
+        <div className="u-mb1">
+            <PitchController pitch={instrument.pitch} id={instrument.id} actions={{ updateInstrumentPitch: actions.updateInstrumentPitch }} />
+        </div>
+        <button className="button-primary button-primary--small button-primary--positive" onClick={ actions.disableModal } >Continue</button>
+    </div>
+);

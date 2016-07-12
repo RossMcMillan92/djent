@@ -16,16 +16,6 @@ import {
 } from '../utils/riffs';
 
 import {
-    buildMidiBase64FromInstruments,
-    combineMultipleTracks,
-    combineTwoTracks,
-    getBase64FromTracks,
-    getMidiTrack,
-    getTimemapFromTrack,
-    getTrackFromInstrument,
-} from '../utils/midi';
-
-import {
     capitalize,
     compose,
     deepClone,
@@ -233,12 +223,6 @@ class SoundController extends Component {
         this.props.actions.updateCustomPresetInstruments(instruments);
     }
 
-    doMIDI = () => {
-        const midiBase64 = buildMidiBase64FromInstruments(this.props.instruments, this.props.bpm);
-
-        document.location.href = 'data:audio/midi;base64,' + midiBase64;
-    }
-
     render () {
         const eventName = this.props.isPlaying ? 'stop' : 'play';
         const continuousGeneration = document.location.hash === '#beta' && this.props.enableContinuousGenerationControl ? (
@@ -256,7 +240,7 @@ class SoundController extends Component {
             <div>
                 { this.state.error ? <p className="txt-error">{ this.state.error }</p> : null }
                 <div className="u-flex-row u-flex-wrap">
-                    <div className="group-spacing-y-small u-mr05">
+                    <div className="group-spacing-y-small u-mr05 u-mb0">
                         <button className={`button-primary ${ this.isOutDated ? 'button-primary--positive' : '' } ${ this.state.isLoading ? '' : 'icon-is-hidden' }`} onClick={() => this.generateEvent()}>
                             <span className="button-primary__inner">{ this.props.generateButtonText || 'Generate Riff' }</span>
                             <span className="button-primary__icon">
@@ -265,7 +249,7 @@ class SoundController extends Component {
                         </button>
                     </div>
 
-                    <div className="group-spacing-y-small u-mr1">
+                    <div className="group-spacing-y-small u-mr1 u-mb0">
                         <button className="button-primary" title={ capitalize(eventName) } onClick={this.togglePlay} disabled={!this.props.currentBuffer}>
                             <SVG icon={ eventName } className="button-primary__svg-icon" />
                         </button>
@@ -278,12 +262,6 @@ class SoundController extends Component {
                                 updateIsLooping: (newVal) => this.props.actions.updateIsLooping(newVal)
                             }}
                         />
-                    </div>
-
-                    <div className="group-spacing-y-small u-mr05">
-                        <button className="button-primary" onClick={this.doMIDI} disabled={!this.props.currentBuffer}>
-                            MIDI
-                        </button>
                     </div>
 
                     { continuousGeneration }

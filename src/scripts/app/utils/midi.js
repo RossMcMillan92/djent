@@ -117,8 +117,8 @@ const getMidiTrack = (name, bpm, track, instrumentNumber) => {
         );
 }
 
-const getBase64FromTracks = (tracks) => {
-    return new Writer(tracks).base64();
+const getMidiDataURIFromInstruments = (tracks) => {
+    return new Writer(tracks).dataUri();
 }
 
 const getInstrumentTrack = (instruments, instrumentID, channel) => {
@@ -129,7 +129,7 @@ const getInstrumentTrack = (instruments, instrumentID, channel) => {
     return track;
 }
 
-const buildMidiBase64FromInstruments = (instruments, bpm) => {
+const buildMidiDataURIFromInstruments = (instruments, bpm) => {
     const kickTrack        = getInstrumentTrack(instruments, 'k', 10);
     const snareTrack       = getInstrumentTrack(instruments, 's', 10);
     const hihatTrack       = getInstrumentTrack(instruments, 'h', 10);
@@ -140,18 +140,31 @@ const buildMidiBase64FromInstruments = (instruments, bpm) => {
     const drumsMidiTrack   = getMidiTrack('Drums', bpm, drumsTrack);
     const guitarMidiTrack  = getMidiTrack('Guitar', bpm, guitarTrack, 30);
 
-    const base64 = getBase64FromTracks([ drumsMidiTrack, guitarMidiTrack ]);
+    const base64 = getMidiDataURIFromInstruments([ drumsMidiTrack, guitarMidiTrack ]);
     return base64;
 }
 
+const saveAsMIDIFile = (() => {
+    const a = document.createElement("a");
+    a.style = "display: none";
+    document.body.appendChild(a);
+
+    return (url) => {
+        a.href = url;
+        a.download = 'djen.mid';
+        a.click();
+    };
+})();
+
 export {
-    buildMidiBase64FromInstruments,
+    buildMidiDataURIFromInstruments,
     combineMultipleTracks,
     convertBeatLengthToMidiDuration,
     convertBPMtoMidi,
-    getBase64FromTracks,
+    getMidiDataURIFromInstruments,
     getMidiTrack,
     getMidiDataFromHitTypes,
     getTimemapFromTrack,
     getTrackFromInstrument,
+    saveAsMIDIFile,
 }

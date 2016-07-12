@@ -11,10 +11,12 @@ import { updateBeats } from '../actions/beats';
 
 function mapStateToProps(state) {
     return {
-        instruments      : state.instruments,
-        activePresetID   : state.config.activePresetID,
-        allowedLengths   : state.config.allowedLengths,
-        beats            : state.beats,
+        activePresetID : state.config.activePresetID,
+        allowedLengths : state.config.allowedLengths,
+        bpm            : state.config.bpm,
+        beats          : state.beats,
+        currentBuffer  : state.sound.currentSrc ? state.sound.currentSrc.buffer : undefined,
+        instruments    : state.instruments,
     }
 }
 

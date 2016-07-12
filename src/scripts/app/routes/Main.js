@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import BeatsController from '../components/BeatsController';
 import Expandable from '../components/Expandable';
+import ExportController from '../components/ExportController';
 import InstrumentList from '../components/InstrumentList';
 import Panel from '../components/Panel';
 import Spinner from '../components/Spinner';
@@ -132,22 +133,37 @@ export default class Main extends Component {
                                         enableContinuousGenerationControl={ !isShareRoute }
                                     />
 
-                                    {
-                                        isShareRoute
-                                        ? (
-                                            <div className="group-spacing-y-small">
-                                                <span className="u-mr05">or</span>
-                                                <a className="link-base" onClick={e => this.context.router.push('/')}>
-                                                    Generate new riff
-                                                </a>
-                                            </div>
-                                        )
-                                        : (
-                                            <div className="group-spacing-y-small">
-                                                <ShareController googleAPIHasLoaded={this.state.googleAPIHasLoaded} />
-                                            </div>
-                                        )
-                                    }
+                                    <div className="u-flex-row u-flex-wrap">
+                                        <div className="group-spacing-y-small u-mr05 u-mb0">
+                                            <ExportController
+                                                instruments={ this.props.instruments }
+                                                bpm={ this.props.bpm }
+                                                currentBuffer={ this.props.currentBuffer }
+                                                actions={{
+                                                    disableModal: this.props.actions.disableModal,
+                                                    enableModal: this.props.actions.enableModal,
+                                                }}
+                                            />
+                                        </div>
+
+                                        {
+                                            isShareRoute
+                                            ? (
+                                                <div className="group-spacing-y-small">
+                                                    <span className="u-mr05">or</span>
+                                                    <a className="link-base" onClick={e => this.context.router.push('/')}>
+                                                        Generate new riff
+                                                    </a>
+                                                </div>
+                                            )
+                                            : (
+                                                <div className="group-spacing-y-small">
+                                                    <ShareController googleAPIHasLoaded={this.state.googleAPIHasLoaded} />
+                                                </div>
+                                            )
+                                        }
+                                    </div>
+
                                 </div>
                             </Panel>
                         </div>

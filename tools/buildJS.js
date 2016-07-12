@@ -13,12 +13,12 @@ const buildJS = (filename, inputJSPath, outputJSPath) => {
                 plugins: ["transform-runtime"],
             }
         )
-        // .transform('uglifyify',
-        //     {
-        //         dead_code: true,
-        //         global: true
-        //     }
-        // )
+        .transform('uglifyify',
+            {
+                dead_code: true,
+                global: true
+            }
+        )
         .bundle()
         .addListener('error', err => events.onError(err, src))
         .pipe(fs.createWriteStream(outputJSPath))

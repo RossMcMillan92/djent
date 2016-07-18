@@ -4,21 +4,6 @@ const preset = {
     settings: {
         config: {
             bpm            : 90,
-            hitChance      : .8,
-            allowedLengths : [
-                    {
-                        id: "1",
-                        amount:1,
-                    },
-                    {
-                        id: "2",
-                        amount: 1,
-                    },
-                    {
-                        id: "4",
-                        amount: 2,
-                    },
-            ],
         },
         beats: [
             {
@@ -27,9 +12,24 @@ const preset = {
                 beats : 4,
             },
             {
-                id    : 'groove',
-                bars  : 2,
-                beats : 4,
+                id        : 'RAND_BEAT_1',
+                bars      : 2,
+                beats     : 4,
+                hitChance : .8,
+                allowedLengths : [
+                        {
+                            id: "1",
+                            amount:1,
+                        },
+                        {
+                            id: "2",
+                            amount: 1,
+                        },
+                        {
+                            id: "4",
+                            amount: 2,
+                        },
+                ],
             },
         ],
         instruments: [

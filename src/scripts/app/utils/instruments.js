@@ -11,30 +11,10 @@ import {
 
 import { playSound } from './audio';
 
-const getInstrumentsSequences = ({ instruments, sequences, totalBeats, usePredefinedSettings }) =>
-    Object.keys(sequences)
-        .map(instrumentId => {
-            const instrument = instruments.find(i => i.id === instrumentId);
-            const predefinedSequence = instrument.predefinedSequence;
-            const newSequence = usePredefinedSettings && predefinedSequence
-                              ? predefinedSequence
-                              : sequences[instrumentId];
-
-            return {
-                ...instrument,
-                sequence: deepClone(newSequence)
-            }
-        });
-
-
-const generateInstrumentTimeMap = (instrument) => {
-    const timeMap = generateTimeMap(instrument.sequence);
-
-    return {
-        ...instrument,
-        timeMap
-    }
-}
+const generateInstrumentTimeMap = (instrument) => ({
+    ...instrument,
+    timeMap: generateTimeMap(instrument.sequence)
+})
 
 const generateInstrumentHitTypes = (instrument, usePredefinedSettings) => {
     const predefinedHitTypes = instrument.predefinedHitTypes;
@@ -112,7 +92,6 @@ const repeatSequence = (instrument, beats) => {
 
 
 export {
-    getInstrumentsSequences,
     generateInstrumentTimeMap,
     generateInstrumentHitTypes,
     getActiveSoundsFromHitTypes,

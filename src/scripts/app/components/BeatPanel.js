@@ -5,9 +5,12 @@ import BeatsController          from './BeatsController';
 import HitChanceController      from './HitChanceController';
 
 class BeatPanel extends Component {
-    onHitChanceChange = (event) => {
-        const hitChance = parseInt(event.target.value);
-        this.props.beat.actions.updateHitChance(hitChance);
+    onHitChanceChange = (hitChance) => {
+        this.props.actions.updateBeats(this.props.beat.id, 'hitChance', hitChance);
+    }
+
+    onAllowedLengthsChange = (allowedLengths) => {
+        this.props.actions.updateBeats(this.props.beat.id, 'allowedLengths', allowedLengths);
     }
 
     render = () => {
@@ -17,8 +20,8 @@ class BeatPanel extends Component {
 
                 <div className="group-spacing-y u-mb0">
                     <AllowedLengthsController
-                        actions={{ updateAllowedLengths: this.props.actions.updateAllowedLengths }}
-                        allowedLengths={this.props.allowedLengths}
+                        actions={{ updateAllowedLengths: this.onAllowedLengthsChange }}
+                        allowedLengths={this.props.beat.allowedLengths}
                     />
                 </div>
 
@@ -26,8 +29,8 @@ class BeatPanel extends Component {
                     <div className="grid__item one-half alpha--one-whole u-mb1@alpha">
                         <HitChanceController
                             beatID={ this.props.beat.id }
-                            hitChance={ this.props.hitChance }
-                            actions={{ updateHitChance: this.props.actions.updateHitChance }}
+                            hitChance={ this.props.beat.hitChance }
+                            actions={{ updateHitChance: this.onHitChanceChange }}
                         />
                     </div>
 

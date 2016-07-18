@@ -4,7 +4,7 @@ const browserify = require('browserify');
 const fs         = require('fs');
 const events    = require('./events');
 
-const buildJS = (filename, inputJSPath, outputJSPath) => {
+const buildJS = (filename, inputJSPath, outputJSPath, isBuild) => {
     const startTime = events.onStart(filename);
     const src = browserify(inputJSPath)
         .transform("babelify",
@@ -12,13 +12,19 @@ const buildJS = (filename, inputJSPath, outputJSPath) => {
                 presets: ["es2015", "stage-0"],
                 plugins: ["transform-runtime"],
             }
-        )
-        .transform('uglifyify',
-            {
-                dead_code: true,
-                global: true
-            }
-        )
+        );
+
+    if (isBuild) {
+        src
+            .transform('uglifyify',
+                {
+                    dead_code: true,
+                    global: true
+                }
+            );
+    }
+
+    src
         .bundle()
         .addListener('error', err => events.onError(err, src))
         .pipe(fs.createWriteStream(outputJSPath))

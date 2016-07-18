@@ -1,3 +1,5 @@
+import { predefinedSequences } from './sequences';
+
 const rootOctave = 1;
 const getMidiNote = (note, octave) => {
     return note + (rootOctave + octave);
@@ -15,6 +17,9 @@ const defaultInstruments = [
         id: 'g',
         description: 'Guitar/Bass (Drop G#)',
         pitch: 0,
+        sequences: [
+            'RAND_BEAT_1',
+        ],
         sounds: [
             {
                 id: 'sixth-0-muted',
@@ -451,6 +456,9 @@ const defaultInstruments = [
     {
         id: 'k',
         description: 'Kick',
+        sequences: [
+            'RAND_BEAT_1',
+        ],
         sounds: [
             {
                 id: 'k',
@@ -466,6 +474,9 @@ const defaultInstruments = [
     {
         id: 's',
         description: 'Snare',
+        sequences: [
+            predefinedSequences.middleBeat.sequence,
+        ],
         sounds: [
             {
                 id: 's',
@@ -481,6 +492,10 @@ const defaultInstruments = [
     {
         id: 'h',
         description: 'Hihat',
+        sequences: [
+            predefinedSequences.steadyHalfs.sequence,
+            predefinedSequences.steadyQuarters.sequence,
+        ],
         sounds: [
             {
                 id: 'h',
@@ -497,6 +512,10 @@ const defaultInstruments = [
         id: 'c',
         description: 'Cymbal',
         ringout: true,
+        sequences: [
+            predefinedSequences.steadyHalfs.sequence,
+            predefinedSequences.steadyQuarters.sequence,
+        ],
         sounds: [
             {
                 id: 'crash-left',
@@ -536,6 +555,9 @@ const defaultInstruments = [
     {
         id: 'd',
         description: 'Drone',
+        sequences: [
+            predefinedSequences.drone.sequence,
+        ],
         sounds: [
             {
                 id: 'drone-medium',

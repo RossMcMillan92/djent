@@ -52,27 +52,6 @@ const predefinedSequences = {
     }
 }
 
-const instrumentSequences = {
-    hihat: [
-        predefinedSequences.steadyHalfs.sequence,
-        predefinedSequences.steadyQuarters.sequence,
-    ],
-    cymbal: [
-        // predefinedSequences.steadyWholes.sequence,
-        predefinedSequences.steadyHalfs.sequence,
-        predefinedSequences.steadyQuarters.sequence,
-    ],
-    snare: [
-        // predefinedSequences.offBeat.sequence,
-        predefinedSequences.middleBeat.sequence,
-    ],
-    drone: [
-        predefinedSequences.drone.sequence,
-    ],
-}
-
-const getSequenceForInstrument = (instrument) => randomFromArray(instrumentSequences[instrument]);
-
 const convertAllowedLengthsToArray = (objs) => {
     return objs.reduce((newArr, obj) => {
         if (obj.amount) {
@@ -158,8 +137,8 @@ const generateTimeMap = sequence => {
 export {
     convertAllowedLengthsToArray,
     generateSequence,
-    getSequenceForInstrument,
     getAllowedLengthsFromSequence,
     loopSequence,
-    generateTimeMap
+    generateTimeMap,
+    predefinedSequences
 }

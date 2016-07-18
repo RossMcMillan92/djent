@@ -17,10 +17,11 @@ import PresetController from '../containers/PresetController';
 import SoundController from '../containers/SoundController';
 import Visualiser from '../containers/Visualiser';
 
-import presets from '../utils/presets';
+import { defaultAllowedLengths } from '../reducers/beats';
+
+import presets, { backwardsCompatibility } from '../utils/presets';
 import { getActiveSoundsFromHitTypes } from '../utils/instruments';
 import { getPresetData, getPresetFromData, handleGoogleAPI } from '../utils/short-urls';
-import { getAllowedLengthsFromSequence } from '../utils/sequences';
 
 export default class Main extends Component {
     static contextTypes = {
@@ -66,17 +67,16 @@ export default class Main extends Component {
     }
 
     applySharedPreset = (data) => {
-        const sharedPreset = getPresetFromData(data);
+        let sharedPreset = getPresetFromData(data);
 
         if (sharedPreset) {
-            sharedPreset.settings.config.allowedLengths = getAllowedLengthsFromSequence(sharedPreset.settings.instruments.find(i => i.id === 'g').predefinedSequence, this.props.allowedLengths)
+            sharedPreset = backwardsCompatibility(sharedPreset, defaultAllowedLengths);
             sharedPreset.settings.instruments = sharedPreset.settings.instruments
                 .map(i => ({ ...i, sounds: getActiveSoundsFromHitTypes(i.predefinedHitTypes) }));
+
+            this.props.actions.applyPreset(sharedPreset);
         }
 
-        const preset = sharedPreset;
-
-        this.props.actions.applyPreset(preset);
         this.props.actions.disableModal();
     }
 

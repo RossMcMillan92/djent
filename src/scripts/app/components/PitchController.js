@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import InputBox from './InputBox';
 
-class HitChanceController extends Component {
+class PitchController extends Component {
     shouldComponentUpdate = (nextProps) => nextProps.pitch !== this.props.pitch;
 
     onChange = (event) => {
@@ -27,4 +27,4 @@ class HitChanceController extends Component {
     }
 }
 
-export default HitChanceController;
+export default PitchController;

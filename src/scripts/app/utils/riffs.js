@@ -15,13 +15,12 @@ import {
     compose,
 } from './tools';
 
-const generateRiff = ({ bpm, totalBeatsProduct, allowedLengths, sequences, instruments, usePredefinedSettings }) => {
+const generateRiff = ({ bpm, totalBeatsProduct, instruments, usePredefinedSettings }) => {
     const bpmMultiplier  = 60 / bpm;
     const context        = new AudioContext();
-    const instrumentPack = getInstrumentsSequences({ sequences, instruments, usePredefinedSettings, totalBeats: totalBeatsProduct });
 
-    return loadInstrumentBuffers(context, instrumentPack)
-        .then((instrumentPack) => initiateInstruments({ context, instrumentPack, totalBeatsProduct, bpmMultiplier, usePredefinedSettings }))
+    return loadInstrumentBuffers(context, instruments)
+        .then((instruments) => initiateInstruments({ context, instruments, totalBeatsProduct, bpmMultiplier, usePredefinedSettings }))
         .then(({ buffer, instruments }) => {
             if (context.close) context.close();
             return Promise.resolve({ buffer, instruments })
@@ -29,7 +28,7 @@ const generateRiff = ({ bpm, totalBeatsProduct, allowedLengths, sequences, instr
         .catch(e => { (console.error || console.log).call(console, e); });
 }
 
-const initiateInstruments = ({ context, instrumentPack, totalBeatsProduct, bpmMultiplier, usePredefinedSettings }) => {
+const initiateInstruments = ({ context, instruments, totalBeatsProduct, bpmMultiplier, usePredefinedSettings }) => {
     const createSoundMaps = instrument => compose(
         generateInstrumentTimeMap,
         repeatHits,
@@ -37,11 +36,11 @@ const initiateInstruments = ({ context, instrumentPack, totalBeatsProduct, bpmMu
         generateInstrumentHitTypes
     )(instrument, usePredefinedSettings);
 
-    const instruments = instrumentPack
+    const instrumentsWithSoundMaps = instruments
         .map(createSoundMaps);
 
-    return renderInstrumentSoundsAtTempo(instruments, totalBeatsProduct, bpmMultiplier)
-        .then(buffer => Promise.resolve({ buffer, instruments }));
+    return renderInstrumentSoundsAtTempo(instrumentsWithSoundMaps, totalBeatsProduct, bpmMultiplier)
+        .then(buffer => Promise.resolve({ buffer, instruments: instrumentsWithSoundMaps }));
 }
 
 export {

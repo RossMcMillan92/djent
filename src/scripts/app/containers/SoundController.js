@@ -13,8 +13,6 @@ const mapStateToProps = (state) => ({
     continuousGeneration: state.config.continuousGeneration,
     bpm: state.config.bpm,
     beats: state.beats,
-    allowedLengths: state.config.allowedLengths,
-    hitChance: state.config.hitChance,
     instruments: state.instruments,
 })
 

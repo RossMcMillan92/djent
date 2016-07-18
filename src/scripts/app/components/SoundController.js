@@ -8,7 +8,6 @@ import {
 import {
     convertAllowedLengthsToArray,
     generateSequence,
-    getSequenceForInstrument,
 } from '../utils/sequences';
 
 import {
@@ -20,6 +19,7 @@ import {
     compose,
     deepClone,
     isIOS,
+    randomFromArray,
 } from '../utils/tools';
 
 import IOSWarning from './IOSWarning';
@@ -28,35 +28,45 @@ import SVG from './SVG';
 import Waveform from './Waveform';
 import ContinuousGenerationController from './ContinuousGenerationController';
 
-const getSequences = (grooveTotalBeats, allowedLengths, hitChance) => {
-    const mainBeat       = generateSequence({ totalBeats: grooveTotalBeats, allowedLengths, hitChance });
-    const cymbalSequence = getSequenceForInstrument('cymbal');
-    const hihatSequence  = getSequenceForInstrument('hihat');
-    const snareSequence  = getSequenceForInstrument('snare');
-    const droneSequence  = getSequenceForInstrument('drone');
+const getSequence = ({ beats, generatedSequences, usePredefinedSettings }) => (instrument) => {
+    console.log('BEATS 2', beats)
+    const { predefinedSequence, sequences } = instrument;
 
-    const sequences     = {
-        c : cymbalSequence,
-        h : hihatSequence,
-        k : mainBeat,
-        g : mainBeat,
-        s : snareSequence,
-        d : droneSequence,
-    };
+    if (usePredefinedSettings && predefinedSequence) return {
+        ...instrument,
+        sequence: predefinedSequence,
+    }
 
-    return sequences;
+    let sequence = randomFromArray(sequences);
+
+    if (typeof sequence === "string") {
+        if (generatedSequences[sequence]) {
+            sequence = generatedSequences[sequence];
+        } else {
+            const instrumentBeats        = beats.find(beat => beat.id === sequence);
+            const instrumentBeatsProduct = instrumentBeats.beats * instrumentBeats.bars;
+            const allowedLengths         = convertAllowedLengthsToArray(instrumentBeats.allowedLengths);
+            const hitChance              = instrumentBeats.hitChance;
+            sequence = generatedSequences[sequence] = generateSequence({ totalBeats: instrumentBeatsProduct, allowedLengths, hitChance });
+        }
+    }
+
+    return {
+        ...instrument,
+        sequence,
+    }
 }
 
-const generateNewBuffer = ({ bpm, beats, allowedLengths, hitChance, instruments, usePredefinedSettings }) => {
-    if (!allowedLengths.filter(length => length.amount).length) return Promise.reject('There are no allowed lengths given');
+const generateNewBuffer = ({ bpm, beats, instruments, usePredefinedSettings }) => {
+    const totalBeats               = beats.find(beat => beat.id === 'total');
+    const totalBeatsProduct        = totalBeats.beats * totalBeats.bars;
 
-    const totalBeats              = beats.find(beat => beat.id === 'total');
-    const grooveTotalBeats        = beats.find(beat => beat.id === 'groove');
-    const grooveTotalBeatsProduct = grooveTotalBeats.beats * grooveTotalBeats.bars;
-    const totalBeatsProduct       = totalBeats.beats * totalBeats.bars;
-    const sequences               = getSequences(grooveTotalBeatsProduct, convertAllowedLengthsToArray(allowedLengths), hitChance);
+    let generatedSequences = {};
+    const getInstrumentSequence = getSequence({ beats, generatedSequences, usePredefinedSettings });
+    const instrumentsWithSequences = instruments
+        .map(getInstrumentSequence);
 
-    return generateRiff({ bpm, totalBeatsProduct, allowedLengths, sequences, instruments, usePredefinedSettings })
+    return generateRiff({ bpm, totalBeatsProduct, instruments: instrumentsWithSequences, usePredefinedSettings })
 }
 
 const play             = (audioContext, buffer) => playSound(audioContext, buffer, audioContext.currentTime, buffer.duration, 1);
@@ -108,9 +118,7 @@ class SoundController extends Component {
 
         // Check against the generation state to see if we're out of date
         if (   nextProps.bpm !== this.props.generationState.bpm
-            || nextProps.hitChance !== this.props.generationState.hitChance
             || !deepEqual(nextProps.beats, this.props.generationState.beats)
-            || !deepEqual(nextProps.allowedLengths, this.props.generationState.allowedLengths)
             || nextProps.instruments
                 .filter((instrument, i) =>
                     instrument.sounds
@@ -124,8 +132,8 @@ class SoundController extends Component {
     }
 
     generate = () => {
-        const { bpm, beats, allowedLengths, hitChance, instruments, usePredefinedSettings } = this.props;
-        const generationState = deepClone({ bpm, beats, allowedLengths, hitChance, instruments, usePredefinedSettings });
+        const { bpm, beats, instruments, usePredefinedSettings } = this.props;
+        const generationState = deepClone({ bpm, beats, instruments, usePredefinedSettings });
 
         this.props.actions.updateGenerationState(generationState);
 

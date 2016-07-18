@@ -16,7 +16,7 @@ class BeatPanel extends Component {
     render = () => {
         return (
             <div>
-                <h2 className="title-primary">Randomised beat settings</h2>
+                <h2 className="title-primary">{ this.props.beat.description || this.props.beat.id }</h2>
 
                 <div className="group-spacing-y u-mb0">
                     <AllowedLengthsController

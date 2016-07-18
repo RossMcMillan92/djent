@@ -37,21 +37,18 @@ const preset = {
             },
             {
                 id    : 'RAND_BEAT_2',
+                description: 'Cymbal Beat',
                 bars  : 1,
-                beats : 7.5,
-                hitChance : .5,
+                beats : 6,
+                hitChance : 1,
                 allowedLengths: [
+                        {
+                            id: "0.5",
+                            amount: 1,
+                        },
                         {
                             id: "1",
                             amount: 1,
-                        },
-                        {
-                            id: "2",
-                            amount: 1,
-                        },
-                        {
-                            id: "4",
-                            amount:1,
                         },
                 ],
             },

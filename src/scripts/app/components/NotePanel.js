@@ -13,9 +13,8 @@ class NotePanel extends Component {
         this.updateAllowedLengthsByID(id, 'amount', newAmount);
     }
 
-    onIsTripletChange = (event) => {
-        const [ id, value ] = [event.target.getAttribute('data-id'), event.target.checked];
-        this.updateAllowedLengthsByID(id, 'isTriplet', value);
+    onIsTripletClick = () => {
+        this.updateAllowedLengthsByID(this.props.length.id, 'isTriplet', !this.props.length.isTriplet);
     }
 
     updateAllowedLengthsByID = (id, prop, value) => {
@@ -45,8 +44,7 @@ class NotePanel extends Component {
                     </div>
                 </div>
                 <div className="note-panel__checkbox-container">
-                    <label className="note-panel__label" htmlFor={`${length.id}-triplet`}>Triplet: </label>
-                    <input className="note-panel__checkbox" id={`${length.id}-triplet`} data-id={length.id} type="checkbox" checked={length.isTriplet} onChange={this.onIsTripletChange} />
+                    <span className={`toggle-input u-txt-small ${ length.isTriplet ? 'is-enabled' : '' }`} htmlFor={`${length.id}-triplet`} onClick={this.onIsTripletClick} >Triplet</span>
                 </div>
 
             </div>

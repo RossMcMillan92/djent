@@ -460,7 +460,6 @@ const defaultInstruments = [
         sequences: [
             'RAND_BEAT_1',
             // predefinedSequences.steadySixteenths.sequence.map(b => ({ ...b, volume: .7})),
-            predefinedSequences.steadyWholes.sequence,
         ],
         sounds: [
             {

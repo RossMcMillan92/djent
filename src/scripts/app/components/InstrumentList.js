@@ -23,7 +23,7 @@ export default class InstrumentList extends Component {
             .filter(b => b.id !== 'total')
             .reduce((newObj, b) => ({
                 ...newObj,
-                [b.id]: { description: b.id }
+                [b.id]: { description: b.description, id: b.id }
             }), {});
         const content = (
             <InstrumentSettingsPane
@@ -68,9 +68,9 @@ export default class InstrumentList extends Component {
                                 isExpanded={isExpanded}
                                 key={index}
                             >
-                                <ul className="sound-list">
+                                <ul className="cleanlist">
                                     {sounds.map((sound, i) => (
-                                        <li id={sound.id} data-parent-id={instrument.id} onClick={this.onSoundToggle} className={`sound-list__item ${sound.enabled ? 'is-enabled' : ''}`} key={i} >{sound.description || sound.id}</li>
+                                        <li id={sound.id} data-parent-id={instrument.id} onClick={this.onSoundToggle} className={`toggle-input ${sound.enabled ? 'is-enabled' : ''}`} key={i} >{sound.description || sound.id}</li>
                                     ))}
                                 </ul>
                             </Expandable>

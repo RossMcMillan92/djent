@@ -2,18 +2,18 @@ import React from 'react';
 
 const SequenceController = (props) => (
     <div>
-        <h2 className="title-primary">Sequences:</h2>
-        <ul className="sound-list">
+        <h2 className="input-label">Sequences:</h2>
+        <ul className="cleanlist">
             {
                 Object.keys(props.sequences)
                     .map((sequenceID, i) => {
                         const sequence = props.sequences[sequenceID];
                         const isEnabled =
                             props.instrumentSequences.includes(sequence.sequence)
-                         || props.instrumentSequences.includes(sequence.description);
+                         || props.instrumentSequences.includes(sequence.id);
 
                         return (
-                            <li className={`sound-list__item ${ isEnabled ? 'is-enabled' : '' }`} key={i}>{sequence.description}</li>
+                            <li className={`toggle-input ${ isEnabled ? 'is-enabled' : '' }`} key={i}>{ sequence.description || sequence.id }</li>
                         );
                     })
             }

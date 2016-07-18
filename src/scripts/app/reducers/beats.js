@@ -41,6 +41,7 @@ const allowedLengths = [
 
 const initialCustomBeat = {
     id    : 'RAND_BEAT_1',
+    description: 'Custom Beat',
     bars  : 1,
     beats : 12,
     allowedLengths,

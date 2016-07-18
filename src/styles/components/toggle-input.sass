@@ -1,0 +1,33 @@
+$toggle-input__icon-size      : 6px
+$toggle-input__icon-spacing   : $base-spacing-unit / 3
+$toggle-input__enabled-color  : $palette-gamma
+$toggle-input__disabled-color : $palette-shade-gamma
+
+.toggle-input
+    position: relative
+    padding-left: $toggle-input__icon-spacing
+    color: #555
+    font-size: rem(14px)
+    line-height: 1.4
+    cursor: pointer
+    user-select: none
+
+    &:not(:last-of-type)
+        margin-bottom: $base-spacing-unit / 4
+
+    &::before
+        content: ""
+        display: inline-block
+        position: relative
+        vertical-align: middle
+        left: -$toggle-input__icon-spacing
+        width: $toggle-input__icon-size
+        height: $toggle-input__icon-size
+        border-radius: $toggle-input__icon-size
+        background-color: $toggle-input__disabled-color
+
+    &.is-enabled
+        color: #222
+
+        &::before
+            background-color: $toggle-input__enabled-color

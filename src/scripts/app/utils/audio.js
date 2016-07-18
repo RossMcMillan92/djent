@@ -1,3 +1,5 @@
+import { roundToXPlaces } from '../utils/tools';
+
 const bufferCache = {};
 const BufferLoader = (context) => {
     let newInstrumentPack = [];
@@ -92,7 +94,7 @@ const getPitchPlaybackRatio = (pitchAmount) => {
     return pitchIsPositive ? 1 / val : val;
 }
 
-const playSound = (context, buffer, time, duration, volume, pitchAmount = 0) => {
+const playSound = (context, buffer, time, duration, volume, pitchAmount = 0, fadeInDuration = 0, fadeOutDuration = 0) => {
     if (!buffer) return;
 
     const source = context.createBufferSource();
@@ -100,13 +102,12 @@ const playSound = (context, buffer, time, duration, volume, pitchAmount = 0) => 
     const durationMultiplier = getPitchPlaybackRatio(pitchAmount);
 
     source.connect(gainNode);
-
     gainNode.connect(context.destination);
     gainNode.gain.value = volume;
 
-    // source.pitch.value = pitchAmount;
     source.playbackRate.value = durationMultiplier;
     source.buffer = buffer;
+
     source.start(time, 0, duration * durationMultiplier);
 
     return source;

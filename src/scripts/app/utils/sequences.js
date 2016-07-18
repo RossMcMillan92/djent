@@ -5,31 +5,42 @@ import {
 
 const predefinedSequences = {
     steadyWholes: {
+        description: 'Steady Wholes',
         sequence: [
-            { beat: .25, volume: 1 },
             { beat: .25, volume: 1 },
         ]
     },
 
     steadyHalfs: {
+        description: 'Steady Halfs',
         sequence: [
-            { beat: .5, volume: 1 },
-            { beat: .5, volume: 1 },
-            { beat: .5, volume: 1 },
             { beat: .5, volume: 1 },
         ],
     },
 
     steadyQuarters: {
+        description: 'Steady Quarters',
         sequence: [
-            { beat: 1, volume: 1 },
-            { beat: 1, volume: 1 },
-            { beat: 1, volume: 1 },
             { beat: 1, volume: 1 },
         ]
     },
 
+    steadyEighths: {
+        description: 'Steady Eighths',
+        sequence: [
+            { beat: 2, volume: 1 },
+        ]
+    },
+
+    steadySixteenths: {
+        description: 'Steady Sixteenths',
+        sequence: [
+            { beat: 4, volume: 1 },
+        ]
+    },
+
     middleBeat: {
+        description: 'Middle Beat',
         sequence: [
             { beat: 1, volume: 0 },
             { beat: 1, volume: 0 },
@@ -39,6 +50,7 @@ const predefinedSequences = {
     },
 
     offBeat: {
+        description: 'Off Beat',
         sequence: [
             { beat: 1, volume: 0 },
             { beat: 1, volume: 1 },
@@ -46,6 +58,7 @@ const predefinedSequences = {
     },
 
     drone: {
+        description: 'Drone',
         sequence: [
             { beat: 0.125, volume: 1 },
         ]

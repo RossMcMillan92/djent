@@ -17,6 +17,7 @@ const defaultInstruments = [
         id: 'g',
         description: 'Guitar/Bass (Drop G#)',
         pitch: 0,
+        fadeOutDuration: .004,
         sequences: [
             'RAND_BEAT_1',
         ],
@@ -458,6 +459,8 @@ const defaultInstruments = [
         description: 'Kick',
         sequences: [
             'RAND_BEAT_1',
+            // predefinedSequences.steadySixteenths.sequence.map(b => ({ ...b, volume: .7})),
+            predefinedSequences.steadyWholes.sequence,
         ],
         sounds: [
             {

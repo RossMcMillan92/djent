@@ -44,13 +44,19 @@ export default function instruments(state = initialState, action) {
 
                 let sounds = instrument.sounds;
                 if (newInstrument.sounds) {
-                    sounds = extendObjectArrayByID(instrument.sounds, newInstrument.sounds)
+                    sounds = extendObjectArrayByID(instrument.sounds, newInstrument.sounds);
+                }
+
+                let sequences = instrument.sequences;
+                if (newInstrument.sequences) {
+                    sequences = [ ...newInstrument.sequences ];
                 }
 
                 return {
                     ...instrument,
                     ...newInstrument,
-                    sounds
+                    sounds,
+                    sequences
                 };
             });
 

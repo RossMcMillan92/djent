@@ -1,3 +1,5 @@
+import deepExtend from 'deep-extend';
+
 import {
     deepClone,
     extendObjectArrayByID,
@@ -37,19 +39,21 @@ const allowedLengths = [
     },
 ];
 
+const initialCustomBeat = {
+    id    : 'RAND_BEAT_1',
+    bars  : 1,
+    beats : 12,
+    allowedLengths,
+    hitChance: 1
+};
+
 const initialState =  [
     {
         id    : 'total',
         bars  : 8,
         beats : 4,
     },
-    {
-        id    : 'RAND_BEAT_1',
-        bars  : 1,
-        beats : 12,
-        allowedLengths,
-        hitChance: .25
-    },
+    initialCustomBeat
 ];
 
 const getInitialState = () => deepClone(initialState)
@@ -68,16 +72,14 @@ export default function beats(state = getInitialState(), action) {
             const newState = getInitialState();
             const newBeats = preset.settings.beats
                 .map(beat => {
-                    const allowedLengths = beat.allowedLengths;
+                    const oldBeat = newState.find(oldBeat => oldBeat.id === beat.id) || deepClone(initialCustomBeat);
+                    if (beat.allowedLengths && oldBeat.allowedLengths) beat.allowedLengths = extendObjectArrayByID(oldBeat.allowedLengths, [ ...beat.allowedLengths ])
+                    const newBeat = deepExtend(oldBeat, beat);
 
-                    if (allowedLengths) {
-                        beat.allowedLengths = extendObjectArrayByID(newState.find(oldBeat => oldBeat.id === beat.id).allowedLengths, [ ...allowedLengths ])
-                    }
-
-                    return beat;
+                    return newBeat;
                 });
 
-            if (newBeats) return extendObjectArrayByID(newState, newBeats);
+            if (newBeats) return newBeats;
             return state;
 
         default:

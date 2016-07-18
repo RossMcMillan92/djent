@@ -31,6 +31,7 @@ import ContinuousGenerationController from './ContinuousGenerationController';
 const getSequence = ({ beats, generatedSequences, usePredefinedSettings }) => (instrument) => {
     console.log('BEATS 2', beats)
     const { predefinedSequence, sequences } = instrument;
+    console.log('INSTRUMENT', instrument)
 
     if (usePredefinedSettings && predefinedSequence) return {
         ...instrument,
@@ -44,6 +45,8 @@ const getSequence = ({ beats, generatedSequences, usePredefinedSettings }) => (i
             sequence = generatedSequences[sequence];
         } else {
             const instrumentBeats        = beats.find(beat => beat.id === sequence);
+            console.log('BEATS', beats)
+            console.log('SEQUENCE', sequence)
             const instrumentBeatsProduct = instrumentBeats.beats * instrumentBeats.bars;
             const allowedLengths         = convertAllowedLengthsToArray(instrumentBeats.allowedLengths);
             const hitChance              = instrumentBeats.hitChance;

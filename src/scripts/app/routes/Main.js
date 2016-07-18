@@ -85,7 +85,7 @@ export default class Main extends Component {
         const totalBeat = this.props.beats.find(beat => beat.id === 'total');
         const beats = this.props.beats
             .filter(beat => beat.id !== 'total')
-            .map((beat, i) => <BeatPanel beat={ beat } key={i} /> );
+            .map((beat, i) => <Panel key={i}><BeatPanel beat={ beat }/></Panel> );
         const usePredefinedSettings = isShareRoute;
         const generateButtonText = isShareRoute ? 'Load riff' : 'Generate Riff';
 
@@ -213,9 +213,8 @@ export default class Main extends Component {
                                         </div>
                                     </Panel>
 
-                                    <Panel>
-                                        { beats }
-                                    </Panel>
+                                    { beats }
+
                                 </div>
 
                                     <div className="group-spacing-y">
@@ -229,6 +228,7 @@ export default class Main extends Component {
                                                     updateInstrumentSound: this.props.actions.updateInstrumentSound,
                                                     updateInstrumentPitch: this.props.actions.updateInstrumentPitch,
                                                 }}
+                                                beats={this.props.beats}
                                                 instruments={this.props.instruments}
                                             />
                                         </Panel>

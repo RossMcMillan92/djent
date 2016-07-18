@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { capitalize } from '../utils/tools';
+import { predefinedSequences } from '../utils/sequences';
 
 import Expandable from './Expandable';
 import PitchController from './PitchController';
+import SequenceController from './SequenceController';
 import SVG from './SVG';
 
 export default class InstrumentList extends Component {
-
     onSoundToggle = (event) => {
         const soundID = event.target.getAttribute('id');
         const parentID = event.target.getAttribute('data-parent-id');
@@ -18,10 +19,25 @@ export default class InstrumentList extends Component {
     }
 
     launchSettings = instrument => {
-        const content = <InstrumentSettingsPane instrument={instrument} actions={{
-            disableModal: this.props.actions.disableModal,
-            updateInstrumentPitch: this.props.actions.updateInstrumentPitch,
-        }} />
+        const customBeats = this.props.beats
+            .filter(b => b.id !== 'total')
+            .reduce((newObj, b) => ({
+                ...newObj,
+                [b.id]: { description: b.id }
+            }), {});
+        const content = (
+            <InstrumentSettingsPane
+                instrument={instrument}
+                sequences={{ ...customBeats, ...predefinedSequences }}
+                actions={
+                    {
+                        disableModal: this.props.actions.disableModal,
+                        updateInstrumentSequences: this.props.actions.updateInstrumentSequences,
+                        updateInstrumentPitch: this.props.actions.updateInstrumentPitch,
+                    }
+                }
+            />
+        );
         this.props.actions.enableModal({ content, isCloseable: true, title: `${ instrument.description || instrument.id } Settings` });
     }
 
@@ -80,8 +96,16 @@ export default class InstrumentList extends Component {
     }
 }
 
-const InstrumentSettingsPane = ({ instrument, actions }) => (
+const InstrumentSettingsPane = ({ instrument, actions, sequences }) => (
     <div>
+        <div className="u-mb1">
+            <SequenceController
+                instrumentID={instrument.id}
+                instrumentSequences={instrument.sequences}
+                sequences={sequences}
+                actions={{ updateInstrumentSequences: actions.updateInstrumentSequences }}
+            />
+        </div>
         <div className="u-mb1">
             <PitchController pitch={instrument.pitch} id={instrument.id} actions={{ updateInstrumentPitch: actions.updateInstrumentPitch }} />
         </div>

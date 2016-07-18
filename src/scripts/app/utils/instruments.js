@@ -57,7 +57,10 @@ const renderInstrumentSoundsAtTempo = (instruments, totalBeats, bpmMultiplier) =
             const instrumentSound    = instrument.buffers[instrument.hitTypes[i]];
             const startTime          = offlineCtx.currentTime + (time * bpmMultiplier);
             const duration           = instrument.ringout ? instrumentSound.duration : ((1 / instrument.sequence[i].beat) * bpmMultiplier);
-            const source             = playSound(offlineCtx, instrumentSound, startTime, duration, instrument.sequence[i].volume, pitchAmount);
+            const prevNoteExisted    = i && instrument.sequence[i-1].volume
+            const fadeOutDuration    = Math.min(instrument.fadeOutDuration, (duration * .2)) || 0;
+            const fadeInDuration     = prevNoteExisted ? fadeOutDuration || 0 : 0;
+            const source             = playSound(offlineCtx, instrumentSound, startTime, duration, instrument.sequence[i].volume, pitchAmount, fadeInDuration, fadeOutDuration);
 
             startTimes[i] = startTime;
             durations[i]   = duration;

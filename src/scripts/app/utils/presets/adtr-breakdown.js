@@ -17,24 +17,25 @@ const preset = {
                 beats     : 4,
                 hitChance : .8,
                 allowedLengths : [
-                        {
-                            id: "1",
-                            amount:1,
-                        },
-                        {
-                            id: "2",
-                            amount: 1,
-                        },
-                        {
-                            id: "4",
-                            amount: 2,
-                        },
+                    {
+                        id: "1",
+                        amount:1,
+                    },
+                    {
+                        id: "2",
+                        amount: 1,
+                    },
+                    {
+                        id: "4",
+                        amount: 2,
+                    },
                 ],
             },
         ],
         instruments: [
             {
                 id: 'g',
+                repeatHitTypeForXBeat: 2,
                 sounds: [
                     {
                         id: 'sixth-3-muted',

@@ -1,7 +1,7 @@
 import { extendObjectArrayByID } from '../utils/tools';
 
 const initialState = {
-    activePresetID       : 'tesseract',
+    activePresetID       : 'black-dahlia',
     bpm                  : 50,
     fadeIn               : false,
     continuousGeneration : false,

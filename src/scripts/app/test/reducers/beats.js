@@ -1,0 +1,135 @@
+import { expect, assert } from 'chai';
+import beats, { initialState } from '../../reducers/beats';
+
+describe('Beats reducer:', () => {
+    it('should return the initial state', () => {
+        expect(beats(initialState, {}))
+            .to.deep.equal(initialState);
+    });
+
+    describe('Action type: APPLY_PRESET', () => {
+        it('should update allowedLengths', () => {
+            const initialState = [
+                {
+                    id: 'RAND_BEAT_1',
+                    allowedLengths: [
+                        {
+                            id: "0.25",
+                            name: 'whole',
+                            amount: 0,
+                            isTriplet: false
+                        },
+                        {
+                            id: "0.5",
+                            name: 'half',
+                            amount: 0,
+                            isTriplet: false
+                        },
+                        {
+                            id: "1",
+                            name: 'quarter',
+                            amount: 0,
+                            isTriplet: false
+                        },
+                        {
+                            id: "2",
+                            name: 'eighth',
+                            amount: 0,
+                            isTriplet: true
+                        },
+                        {
+                            id: "4",
+                            name: 'sixteenth',
+                            amount: 0,
+                            isTriplet: false
+                        },
+                    ]
+                }
+            ];
+
+            const stateAfterAdd = [
+                {
+                    id: 'CUSTOM_BEAT_TEST',
+                    bars: 4,
+                    beats: 4,
+                    description: "Custom Beat",
+                    hitChance: 1,
+                    allowedLengths: [
+                        {
+                            id: "0.25",
+                            name: 'whole',
+                            amount: 1,
+                            isTriplet: false
+                        },
+                        {
+                            id: "0.5",
+                            name: 'half',
+                            amount: 0,
+                            isTriplet: false
+                        },
+                        {
+                            id: "1",
+                            name: 'quarter',
+                            amount: 2,
+                            isTriplet: false
+                        },
+                        {
+                            id: "2",
+                            name: 'eighth',
+                            amount: 0,
+                            isTriplet: true
+                        },
+                        {
+                            id: "4",
+                            name: 'sixteenth',
+                            amount: 0,
+                            isTriplet: false
+                        },
+                    ]
+                }
+            ];
+
+            const payload = {
+                preset: {
+                    id: 'newpreset',
+                    settings: {
+                        beats: [
+                            {
+                                id: 'CUSTOM_BEAT_TEST',
+                                allowedLengths: [
+                                        {
+                                            id: "0.25",
+                                            name: 'whole',
+                                            amount: 1,
+                                            isTriplet: false
+                                        },
+
+                                        {
+                                            id: "1",
+                                            name: 'quarter',
+                                            amount: 2,
+                                            isTriplet: false
+                                        },
+                                        {
+                                            id: "2",
+                                            name: 'eighth',
+                                            amount: 0,
+                                            isTriplet: true
+                                        },
+                                ]
+                            }
+                        ]
+                    }
+                }
+            };
+            const action = {
+                type: 'APPLY_PRESET',
+                payload,
+            };
+
+            expect(beats(initialState, action))
+                .to.deep.equal(stateAfterAdd);
+        });
+    });
+
+});

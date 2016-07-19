@@ -40,12 +40,12 @@ const allowedLengths = [
 ];
 
 const initialCustomBeat = {
-    id    : 'RAND_BEAT_1',
-    description: 'Custom Beat',
-    bars  : 1,
-    beats : 12,
+    id          : 'RAND_BEAT_1',
+    description : 'Custom Beat',
+    bars        : 4,
+    beats       : 4,
+    hitChance   : 1,
     allowedLengths,
-    hitChance: 1
 };
 
 const initialState =  [
@@ -90,5 +90,6 @@ export default function beats(state = getInitialState(), action) {
 
 const defaultAllowedLengths = deepClone(allowedLengths);
 export {
-    defaultAllowedLengths
+    defaultAllowedLengths,
+    initialState
 }

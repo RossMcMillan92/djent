@@ -1,6 +1,8 @@
-import meshuggah from './presets/meshuggah';
 import adtrBreakdown from './presets/adtr-breakdown';
+import blackDahlia from './presets/black-dahlia';
+import deftones from './presets/deftones';
 import greenDay from './presets/greenday';
+import meshuggah from './presets/meshuggah';
 import swornIn from './presets/sworn-in';
 import thallBuster from './presets/thall-buster';
 import thallBuster2 from './presets/thall-buster-2';
@@ -11,6 +13,8 @@ import { getAllowedLengthsFromSequence } from './sequences';
 
 const presets = [
     adtrBreakdown,
+    blackDahlia,
+    deftones,
     // greenDay,
     meshuggah,
     swornIn,

@@ -230,7 +230,6 @@ import { roundToXPlaces } from '../utils/tools';
 	MidiWriter.Track.prototype.polyModeOn = function() {
 		var event = new MidiWriter.NoteOnEvent({data: [0x00, 0xB0, 0x7E, 0x00]});
 		this.addEvent(event);
-		console.log(event);
 	};
 
 

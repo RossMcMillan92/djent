@@ -108,7 +108,17 @@ const playSound = (context, buffer, time, duration, volume, pitchAmount = 0, fad
     source.playbackRate.value = durationMultiplier;
     source.buffer = buffer;
 
-    source.start(time, 0, duration * durationMultiplier);
+    if (volume && fadeInDuration) {
+        gainNode.gain.setValueAtTime(0, time);
+        gainNode.gain.linearRampToValueAtTime(1, time + fadeInDuration);
+    }
+
+    if (volume && fadeOutDuration) {
+        gainNode.gain.setValueAtTime(1, time + duration);
+        gainNode.gain.linearRampToValueAtTime(0, time + duration + fadeOutDuration);
+    }
+
+    source.start(time, 0, (duration + fadeOutDuration) * durationMultiplier);
 
     return source;
 }

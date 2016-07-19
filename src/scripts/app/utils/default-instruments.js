@@ -17,7 +17,8 @@ const defaultInstruments = [
         id: 'g',
         description: 'Guitar/Bass (Drop G#)',
         pitch: 0,
-        fadeOutDuration: .004,
+        fadeOutDuration: .025,
+        repeatHitTypeForXBeat: 0,
         sequences: [
             'RAND_BEAT_1',
         ],
@@ -457,6 +458,7 @@ const defaultInstruments = [
     {
         id: 'k',
         description: 'Kick',
+        repeatHitTypeForXBeat: 0,
         sequences: [
             'RAND_BEAT_1',
             // predefinedSequences.steadySixteenths.sequence.map(b => ({ ...b, volume: .7})),
@@ -476,6 +478,7 @@ const defaultInstruments = [
     {
         id: 's',
         description: 'Snare',
+        repeatHitTypeForXBeat: 0,
         sequences: [
             predefinedSequences.middleBeat.sequence,
         ],
@@ -494,6 +497,7 @@ const defaultInstruments = [
     {
         id: 'h',
         description: 'Hihat',
+        repeatHitTypeForXBeat: 0,
         sequences: [
             predefinedSequences.steadyHalfs.sequence,
             predefinedSequences.steadyQuarters.sequence,
@@ -501,8 +505,17 @@ const defaultInstruments = [
         sounds: [
             {
                 id: 'h',
-                description: 'Basic hihat',
-                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/hihat.wav',
+                description: 'Open hihat',
+                path: '/assets/audio/mastered/hihat-open.wav',
+                enabled: false,
+                midi: {
+                    pitch: [ hihatMidiNote ],
+                },
+            },
+            {
+                id: 'hc',
+                description: 'Closed hihat',
+                path: '/assets/audio/mastered/hihat-closed.wav',
                 enabled: false,
                 midi: {
                     pitch: [ hihatMidiNote ],
@@ -514,6 +527,7 @@ const defaultInstruments = [
         id: 'c',
         description: 'Cymbal',
         ringout: true,
+        repeatHitTypeForXBeat: 0,
         sequences: [
             predefinedSequences.steadyHalfs.sequence,
             predefinedSequences.steadyQuarters.sequence,
@@ -557,6 +571,7 @@ const defaultInstruments = [
     {
         id: 'd',
         description: 'Drone',
+        repeatHitTypeForXBeat: 0,
         sequences: [
             predefinedSequences.drone.sequence,
         ],

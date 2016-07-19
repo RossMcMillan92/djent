@@ -27,9 +27,20 @@ const generateInstrumentHitTypes = (instrument, usePredefinedSettings) => {
     const activeSounds = instrument.sounds.reduce((newArr, sound, i) => sound.enabled ? [ ...newArr, { ...sound } ] : newArr, []);
     let hitTypes = [];
 
+    instrument.repeatHitTypeForXBeat > 0 && console.log('lmao')
     if (activeSounds.length) {
-        hitTypes = instrument.sequence.map((hit) => {
-            return activeSounds[randFromTo(0, activeSounds.length-1)].id});
+        let beatCount = 0;
+        let currentHitType = false;
+        hitTypes = instrument.sequence.map((beat, i) => {
+            const shouldRandomise = beatCount === 0 || beatCount >= instrument.repeatHitTypeForXBeat;
+            currentHitType = shouldRandomise
+                           ? randFromTo(0, activeSounds.length-1)
+                           : currentHitType;
+
+            instrument.repeatHitTypeForXBeat > 0 && console.log('BEATCOUNT', activeSounds[currentHitType].id, beatCount, shouldRandomise, instrument.repeatHitTypeForXBeat)
+            beatCount = beatCount < instrument.repeatHitTypeForXBeat ? beatCount + (1 / beat.beat) : beatCount - instrument.repeatHitTypeForXBeat + (1 / beat.beat)
+            return activeSounds[currentHitType].id
+        });
     }
 
     return {
@@ -58,7 +69,7 @@ const renderInstrumentSoundsAtTempo = (instruments, totalBeats, bpmMultiplier) =
             const startTime          = offlineCtx.currentTime + (time * bpmMultiplier);
             const duration           = instrument.ringout ? instrumentSound.duration : ((1 / instrument.sequence[i].beat) * bpmMultiplier);
             const prevNoteExisted    = i && instrument.sequence[i-1].volume
-            const fadeOutDuration    = Math.min(instrument.fadeOutDuration, (duration * .2)) || 0;
+            const fadeOutDuration    = Math.min(instrument.fadeOutDuration, duration) || 0;
             const fadeInDuration     = prevNoteExisted ? fadeOutDuration || 0 : 0;
             const source             = playSound(offlineCtx, instrumentSound, startTime, duration, instrument.sequence[i].volume, pitchAmount, fadeInDuration, fadeOutDuration);
 

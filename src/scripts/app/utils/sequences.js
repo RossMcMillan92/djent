@@ -147,11 +147,42 @@ const generateTimeMap = sequence => {
     return [0, ...times.slice(0, times.length-1)];
 }
 
+const getSequence = ({ beats, generatedSequences, usePredefinedSettings }) => (instrument) => {
+    const { predefinedSequence, sequences } = instrument;
+
+    if (usePredefinedSettings && predefinedSequence) return {
+        ...instrument,
+        sequence: predefinedSequence,
+    }
+
+    let sequence = randomFromArray(sequences);
+
+    if (typeof sequence === "string") {
+        if (predefinedSequences[sequence]) {
+            sequence = predefinedSequences[sequence].sequence;
+        } else if (generatedSequences[sequence]) {
+            sequence = generatedSequences[sequence];
+        } else {
+            const instrumentBeats        = beats.find(beat => beat.id === sequence);
+            const instrumentBeatsProduct = instrumentBeats.beats * instrumentBeats.bars;
+            const allowedLengths         = convertAllowedLengthsToArray(instrumentBeats.allowedLengths);
+            const hitChance              = instrumentBeats.hitChance;
+            sequence = generatedSequences[sequence] = generateSequence({ totalBeats: instrumentBeatsProduct, allowedLengths, hitChance });
+        }
+    }
+console.log('sequence', sequence)
+    return {
+        ...instrument,
+        sequence,
+    }
+}
+
 export {
     convertAllowedLengthsToArray,
     generateSequence,
     getAllowedLengthsFromSequence,
     loopSequence,
     generateTimeMap,
+    getSequence,
     predefinedSequences
 }

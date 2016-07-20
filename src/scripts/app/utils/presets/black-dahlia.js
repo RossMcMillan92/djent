@@ -24,6 +24,27 @@ const preset = {
                     },
                 ],
             },
+            {
+                id          : 'RAND_BEAT_2',
+                description : 'Bass drum',
+                bars        : 1,
+                beats       : 4,
+                hitChance   : .5,
+                allowedLengths : [
+                    {
+                        id: "1",
+                        amount: 4,
+                    },
+                    {
+                        id: "2",
+                        amount: 2,
+                    },
+                    {
+                        id: "4",
+                        amount: 1,
+                    },
+                ],
+            },
         ],
         instruments: [
             {
@@ -97,9 +118,7 @@ const preset = {
             {
                 id: 'c',
                 sequences: [
-                    [
-                       { beat: .25, volume: 1 },
-                   ]
+                    'drone',
                 ],
                 sounds: [
                     {

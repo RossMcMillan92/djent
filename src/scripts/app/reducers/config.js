@@ -4,7 +4,7 @@ const initialState = {
     activePresetID       : 'black-dahlia',
     bpm                  : 50,
     fadeIn               : false,
-    continuousGeneration : false,
+    continuousGeneration : true,
 };
 
 export default function config(state = { ...initialState }, action) {

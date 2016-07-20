@@ -1,5 +1,3 @@
-import { predefinedSequences } from './sequences';
-
 const rootOctave = 1;
 const getMidiNote = (note, octave) => {
     return note + (rootOctave + octave);
@@ -461,7 +459,7 @@ const defaultInstruments = [
         repeatHitTypeForXBeat: 0,
         sequences: [
             'RAND_BEAT_1',
-            // predefinedSequences.steadySixteenths.sequence.map(b => ({ ...b, volume: .7})),
+            // 'steadySixteenths'.map(b => ({ ...b, volume: .7})),
         ],
         sounds: [
             {
@@ -480,7 +478,7 @@ const defaultInstruments = [
         description: 'Snare',
         repeatHitTypeForXBeat: 0,
         sequences: [
-            predefinedSequences.middleBeat.sequence,
+            'middleBeat',
         ],
         sounds: [
             {
@@ -499,8 +497,8 @@ const defaultInstruments = [
         description: 'Hihat',
         repeatHitTypeForXBeat: 0,
         sequences: [
-            predefinedSequences.steadyHalfs.sequence,
-            predefinedSequences.steadyQuarters.sequence,
+            'steadyHalfs',
+            'steadyQuarters',
         ],
         sounds: [
             {
@@ -529,8 +527,8 @@ const defaultInstruments = [
         ringout: true,
         repeatHitTypeForXBeat: 0,
         sequences: [
-            predefinedSequences.steadyHalfs.sequence,
-            predefinedSequences.steadyQuarters.sequence,
+            'steadyHalfs',
+            'steadyQuarters',
         ],
         sounds: [
             {
@@ -573,7 +571,7 @@ const defaultInstruments = [
         description: 'Drone',
         repeatHitTypeForXBeat: 0,
         sequences: [
-            predefinedSequences.drone.sequence,
+            'drone',
         ],
         sounds: [
             {

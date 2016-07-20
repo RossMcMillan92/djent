@@ -2,7 +2,7 @@ import { extendObjectArrayByID, updateObjByID } from '../utils/tools';
 
 const initialState =  {
     isPlaying       : false,
-    isLooping       : true,
+    isLooping       : false,
     generationState : undefined,
     currentBuffer   : undefined,
     currentSrc      : undefined,

@@ -8,6 +8,7 @@ import {
 import {
     convertAllowedLengthsToArray,
     generateSequence,
+    getSequence,
 } from '../utils/sequences';
 
 import {
@@ -27,34 +28,6 @@ import LoopController from './LoopController';
 import SVG from './SVG';
 import Waveform from './Waveform';
 import ContinuousGenerationController from './ContinuousGenerationController';
-
-const getSequence = ({ beats, generatedSequences, usePredefinedSettings }) => (instrument) => {
-    const { predefinedSequence, sequences } = instrument;
-
-    if (usePredefinedSettings && predefinedSequence) return {
-        ...instrument,
-        sequence: predefinedSequence,
-    }
-
-    let sequence = randomFromArray(sequences);
-
-    if (typeof sequence === "string") {
-        if (generatedSequences[sequence]) {
-            sequence = generatedSequences[sequence];
-        } else {
-            const instrumentBeats        = beats.find(beat => beat.id === sequence);
-            const instrumentBeatsProduct = instrumentBeats.beats * instrumentBeats.bars;
-            const allowedLengths         = convertAllowedLengthsToArray(instrumentBeats.allowedLengths);
-            const hitChance              = instrumentBeats.hitChance;
-            sequence = generatedSequences[sequence] = generateSequence({ totalBeats: instrumentBeatsProduct, allowedLengths, hitChance });
-        }
-    }
-
-    return {
-        ...instrument,
-        sequence,
-    }
-}
 
 const generateNewBuffer = ({ bpm, beats, instruments, usePredefinedSettings }) => {
     const totalBeats               = beats.find(beat => beat.id === 'total');

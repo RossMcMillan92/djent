@@ -10,6 +10,7 @@
     "deep-equal": "^1.0.1",
     "deep-extend": "^0.4.1",
     "lzutf8": "^0.3.4",
+    "ramda": "^0.21.0",
     "react-addons-shallow-compare": "^15.1.0"
   },
   "devDependencies": {

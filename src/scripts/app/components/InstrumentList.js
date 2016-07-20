@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { capitalize } from '../utils/tools';
-import { predefinedSequences } from '../utils/sequences';
 
 import Expandable from './Expandable';
 import PitchController from './PitchController';
 import SequenceController from './SequenceController';
+import Tabgroup, { Tabpane } from './Tabgroup';
 import SVG from './SVG';
 
 export default class InstrumentList extends Component {
@@ -18,27 +18,23 @@ export default class InstrumentList extends Component {
         this.props.actions.updateInstrumentSound({ soundID, parentID, prop, value });
     }
 
-    launchSettings = instrument => {
-        const customBeats = this.props.beats
+    renderSequences = instrument => {
+        const randomisedSequences = this.props.beats
             .filter(b => b.id !== 'total')
             .reduce((newObj, b) => ({
                 ...newObj,
                 [b.id]: { description: b.description, id: b.id }
             }), {});
         const content = (
-            <InstrumentSettingsPane
-                instrument={instrument}
-                sequences={{ ...customBeats, ...predefinedSequences }}
-                actions={
-                    {
-                        disableModal: this.props.actions.disableModal,
-                        updateInstrumentSequences: this.props.actions.updateInstrumentSequences,
-                        updateInstrumentPitch: this.props.actions.updateInstrumentPitch,
-                    }
-                }
+            <SequenceController
+                instrumentID={ instrument.id }
+                instrumentSequences={ instrument.sequences }
+                randomisedSequences={ randomisedSequences }
+                actions={{ updateInstrumentSequences: this.props.actions.updateInstrumentSequences }}
             />
         );
-        this.props.actions.enableModal({ content, isCloseable: true, title: `${ instrument.description || instrument.id } Settings` });
+
+        return content;
     }
 
     render = () => {
@@ -54,7 +50,7 @@ export default class InstrumentList extends Component {
                         }
                         return cats;
                     }, [])
-                    .map((id, index) => {
+                    .map((id, index, arr) => {
                         const sounds = instrument.sounds
                             .filter(sound => sound.category === id);
                         const isExpanded = !!sounds.find(sound => sound.enabled);
@@ -62,7 +58,7 @@ export default class InstrumentList extends Component {
                         return (
                             <Expandable
                                 title={ id || `${(instrument.description || capitalize(instrument.id))}` }
-                                className="expandable-list u-mb05"
+                                className={`expandable-list ${ index !== arr.length-1 ? 'u-mb05' : '' }`}
                                 titleClassName="expandable-list__title"
                                 bodyClassName="expandable-list__body"
                                 isExpanded={isExpanded}
@@ -79,11 +75,19 @@ export default class InstrumentList extends Component {
 
                 return (
                     <div className="u-mb2" key={index}>
-                        <div className="u-flex-row" key={index}>
-                            <span onClick={e => this.launchSettings(instrument)}><SVG icon="gear" className="icon-inline u-mr025 u-curp u-txt-dark" /></span>
-                            <h3 className="title-secondary u-mb05">{instrument.description || instrument.id}</h3>
-                        </div>
-                        {categories}
+                        <h3 className="title-secondary u-mb05">{instrument.description || instrument.id}</h3>
+                        <Tabgroup>
+                            <Tabpane title="Sounds">
+                                { categories }
+                            </Tabpane>
+                            <Tabpane title="Sequences">
+                                { this.renderSequences(instrument) }
+                            </Tabpane>
+                            <Tabpane title="Pitch">
+                                <PitchController pitch={instrument.pitch} id={instrument.id} actions={{ updateInstrumentPitch: this.props.actions.updateInstrumentPitch }} />
+                            </Tabpane>
+                        </Tabgroup>
+
                     </div>
                 );
             });
@@ -99,16 +103,9 @@ export default class InstrumentList extends Component {
 const InstrumentSettingsPane = ({ instrument, actions, sequences }) => (
     <div>
         <div className="u-mb1">
-            <SequenceController
-                instrumentID={instrument.id}
-                instrumentSequences={instrument.sequences}
-                sequences={sequences}
-                actions={{ updateInstrumentSequences: actions.updateInstrumentSequences }}
-            />
         </div>
         <div className="u-mb1">
             <PitchController pitch={instrument.pitch} id={instrument.id} actions={{ updateInstrumentPitch: actions.updateInstrumentPitch }} />
         </div>
-        <button className="button-primary button-primary--small button-primary--positive" onClick={ actions.disableModal } >Continue</button>
     </div>
 );

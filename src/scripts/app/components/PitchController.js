@@ -14,10 +14,12 @@ class PitchController extends Component {
         const props = {
             label: 'Pitch (-12 - 12)',
             id: 'pitch',
-            type: 'number',
+            type: 'range',
             defaultValue: this.props.pitch ? this.props.pitch / 100 : 0,
             onChange: this.onChange,
             step: 1,
+            min: -12,
+            max: 12,
             className: 'input-base',
             labelClassName: 'input-label',
         }

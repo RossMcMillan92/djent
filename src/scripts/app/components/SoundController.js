@@ -6,7 +6,7 @@ import {
 } from '../utils/audio';
 
 import {
-    renderInstrumentSoundsAtTempo,
+    renderRiffTemplateAtTempo,
 } from '../utils/instruments';
 
 import {
@@ -67,16 +67,21 @@ const fadeIn = (gainNode, duration) => {
 }
 
 class SoundController extends Component {
-    queuedBuffer;
-    queuedInstruments;
+    queuedInstruments = [];
+    queuedRiffTemplates = [];
     currentGainNode;
     audioContext = '';
     isOutDated = true;
     renewalTimeout;
     renewalPoint = .80;
+    loopTimeout;
     state = {
         isLoading  : false,
         error      : '',
+    }
+
+    componentWillMount = () => {
+        this.audioContext = new AudioContext();
     }
 
     updateUI = (newState) => {
@@ -120,14 +125,14 @@ class SoundController extends Component {
         return generateNewRiff({ ...generationState, instruments, totalBeatsProduct })
             .then((instruments) => {
                 newInstruments = instruments;
-                return renderInstrumentSoundsAtTempo(instruments, totalBeatsProduct, bpmMultiplier)
+                return renderRiffTemplateAtTempo(instruments, totalBeatsProduct, bpmMultiplier)
             })
-            .then((buffer) => {
+            .then((riffTemplate) => {
                 const newState = { isLoading: false, error: '' };
-                if (!buffer) newState.error = 'Error!'
+                if (!riffTemplate) newState.error = 'Error!'
 
                 this.updateUI(newState);
-                return { buffer, instruments: newInstruments };
+                return { riffTemplate, instruments: newInstruments };
             });
     }
 
@@ -140,9 +145,7 @@ class SoundController extends Component {
     }
 
     playEvent = (currentBuffer) => {
-        if (!currentBuffer || this.state.error) return;
-        if (!this.audioContext) this.audioContext = new AudioContext();
-        this.currentGainNode = this.audioContext.createGain();
+        if (this.state.error) return;
 
         const currentSrc = currentBuffer ? play(this.audioContext, currentBuffer) : null;
 
@@ -183,33 +186,73 @@ class SoundController extends Component {
             }
             this.stopEvent();
             this.generate()
-                .then(({ buffer, instruments }) => this.updateInstrumentsAndPlay(buffer, instruments));
+                .then(({ riffTemplate, instruments }) => this.updateInstrumentsAndPlay(riffTemplate, instruments));
         }
     }
 
     generateAndQueue = () => {
         this.generate()
-            .then(({ buffer, instruments }) => {
-                if (!this.props.isPlaying) return this.updateInstrumentsAndPlay(buffer, instruments);
+            .then(({ riffTemplate, instruments }) => {
+                if (!this.props.isPlaying) return this.updateInstrumentsAndPlay(riffTemplate, instruments);
 
-                this.queuedBuffer = buffer;
-                this.queuedInstruments = instruments;
+                this.queuedRiffTemplates.push(buffer);
+                this.queuedInstruments.push(instruments);
             });
     }
 
     onEnded = () => {
         const { isPlaying, continuousGeneration } = this.props;
-        if (isPlaying && continuousGeneration && this.queuedBuffer) {
-            this.updateInstrumentsAndPlay(this.queuedBuffer, this.queuedInstruments)
+        if (isPlaying && continuousGeneration && this.queuedRiffTemplates) {
+            this.updateInstrumentsAndPlay(this.queuedRiffTemplates, this.queuedInstruments)
             this.queuedInstruments = undefined;
-            this.queuedBuffer = undefined;
+            this.queuedRiffTemplates = undefined;
         }
         else this.stopEvent();
     }
 
-    updateInstrumentsAndPlay = (buffer, instruments) => {
-        this.playEvent(buffer);
+    updateInstrumentsAndPlay = (riffTemplate, instruments) => {
+        console.log('RIFFTEMPLATE', riffTemplate)
+        this.queuedRiffTemplates = [ ...this.queuedRiffTemplates, riffTemplate ];
+        this.audioStartTime = this.audioContext.currentTime;
+        if (!this.loopTimeout) this.loop(riffTemplate);
         this.props.actions.updateCustomPresetInstruments(instruments);
+    }
+
+    loop = (riffTemplate) => {
+        const currentTime   = this.audioContext.currentTime - this.audioStartTime;
+        const upcomingNotes = riffTemplate
+            .filter(hit => hit.startTime >= currentTime && hit.startTime <= currentTime + .1)
+            .map(({
+                    instrumentID,
+                    buffer,
+                    startTime,
+                    duration,
+                    volume,
+                    pitchAmount,
+                    fadeInDuration,
+                    fadeOutDuration,
+                }) => {
+                    const instrument = this.props.instruments.find(i => i.id === instrumentID);
+                    return playSound(this.audioContext, buffer, this.audioStartTime + startTime, duration, volume, instrument.pitch || 0, fadeInDuration, fadeOutDuration)
+                }
+            );
+
+            console.log('UPCOMINGNOTES', upcomingNotes)
+
+        const newRiffTemplate = riffTemplate.slice(upcomingNotes.length, riffTemplate.length);
+        if (newRiffTemplate.length) {
+            this.loopTimeout = setTimeout(() => this.loop(newRiffTemplate), 50);
+        } else {
+            if (this.props.isLooping || this.props.continuousGeneration) {
+                const lastNoteDuration = upcomingNotes
+                    .reduce((lastNote, note) => !lastNote || note.startTime + note.duration > lastNote.startTime + lastNote.duration ? note : lastNote )
+                    .duration
+
+                this.audioStartTime = this.audioContext.currentTime + 5;
+                this.loop(this.queuedRiffTemplates[0]);
+            }
+            this.loopTimeout = undefined;
+        }
     }
 
     render () {

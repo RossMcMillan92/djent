@@ -86,6 +86,48 @@ const renderInstrumentSoundsAtTempo = (instruments, totalBeats, bpmMultiplier) =
     })
 }
 
+const renderBufferTemplateAtTempo = (instruments, totalBeats, bpmMultiplier) => {
+    const timeLength = totalBeats * bpmMultiplier;
+
+    return instruments.reduce((newArr, instrument) => {
+        let startTimes = [];
+        let durations  = [];
+        const hits = instrument.timeMap
+            .reduce((hits, time, i) => {
+                const pitchAmount     = instrument.pitch || 0;
+                const buffer          = instrument.buffers[instrument.hitTypes[i]];
+                const startTime       = time * bpmMultiplier;
+                const duration        = instrument.ringout ? buffer.duration   : ((1 / instrument.sequence[i].beat) * bpmMultiplier);
+                const prevNoteExisted = i && instrument.sequence[i-1].volume
+                const fadeOutDuration = Math.min(instrument.fadeOutDuration, duration) || 0;
+                const fadeInDuration  = prevNoteExisted ? fadeOutDuration || 0 : 0;
+                const source          = playSound(offlineCtx, buffer, startTime, duration, instrument.sequence[i].volume, pitchAmount, fadeInDuration, fadeOutDuration);
+                const volume          = instrument.sequence[i].volume;
+
+                startTimes[i] = startTime;
+                durations[i]   = duration;
+
+                return [
+                    ...hits,
+                    {
+                        buffer,
+                        startTime,
+                        duration,
+                        volume,
+                        pitchAmount,
+                        fadeInDuration,
+                        fadeOutDuration,
+                    }
+                ];
+            }, []);
+
+        return [
+            ...newArr,
+            ...hits
+        ]
+    }, []);
+}
+
 const repeatHits = instrument => {
     const hitTypes = repeatArray(instrument.hitTypes, instrument.sequence.length);
 
@@ -109,6 +151,7 @@ export {
     generateInstrumentTimeMap,
     generateInstrumentHitTypes,
     getActiveSoundsFromHitTypes,
+    renderBufferTemplateAtTempo,
     renderInstrumentSoundsAtTempo,
     repeatHits,
     repeatSequence,

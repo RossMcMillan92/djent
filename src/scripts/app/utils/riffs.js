@@ -8,27 +8,27 @@ import {
     getInstrumentsSequences,
     repeatHits,
     repeatSequence,
-    renderInstrumentSoundsAtTempo
+    renderBufferTemplateAtTempo,
+    renderInstrumentSoundsAtTempo,
 } from './instruments';
 
 import {
     compose,
 } from './tools';
 
-const generateRiff = ({ bpm, totalBeatsProduct, instruments, usePredefinedSettings }) => {
-    const bpmMultiplier  = 60 / bpm;
-    const context        = new AudioContext();
+const generateRiff = ({ totalBeatsProduct, instruments, usePredefinedSettings }) => {
+    const context = new AudioContext();
 
     return loadInstrumentBuffers(context, instruments)
-        .then((instruments) => initiateInstruments({ context, instruments, totalBeatsProduct, bpmMultiplier, usePredefinedSettings }))
-        .then(({ buffer, instruments }) => {
+        .then((instruments) => initiateInstruments({ instruments, totalBeatsProduct, usePredefinedSettings }))
+        .then((instruments) => {
             if (context.close) context.close();
-            return Promise.resolve({ buffer, instruments })
+            return Promise.resolve(instruments)
         })
         .catch(e => { (console.error || console.log).call(console, e); });
 }
 
-const initiateInstruments = ({ context, instruments, totalBeatsProduct, bpmMultiplier, usePredefinedSettings }) => {
+const initiateInstruments = ({ instruments, totalBeatsProduct, usePredefinedSettings }) => {
     const createSoundMaps = instrument => compose(
         generateInstrumentTimeMap,
         repeatHits,
@@ -39,8 +39,7 @@ const initiateInstruments = ({ context, instruments, totalBeatsProduct, bpmMulti
     const instrumentsWithSoundMaps = instruments
         .map(createSoundMaps);
 
-    return renderInstrumentSoundsAtTempo(instrumentsWithSoundMaps, totalBeatsProduct, bpmMultiplier)
-        .then(buffer => Promise.resolve({ buffer, instruments: instrumentsWithSoundMaps }));
+    return Promise.resolve(instrumentsWithSoundMaps)
 }
 
 export {

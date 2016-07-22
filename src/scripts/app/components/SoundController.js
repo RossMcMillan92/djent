@@ -6,14 +6,18 @@ import {
 } from '../utils/audio';
 
 import {
-    convertAllowedLengthsToArray,
-    generateSequence,
-    getSequence,
-} from '../utils/sequences';
+    renderInstrumentSoundsAtTempo,
+} from '../utils/instruments';
 
 import {
     generateRiff,
 } from '../utils/riffs';
+
+import {
+    convertAllowedLengthsToArray,
+    generateSequence,
+    getSequence,
+} from '../utils/sequences';
 
 import {
     capitalize,
@@ -29,16 +33,13 @@ import SVG from './SVG';
 import Waveform from './Waveform';
 import ContinuousGenerationController from './ContinuousGenerationController';
 
-const generateNewBuffer = ({ bpm, beats, instruments, usePredefinedSettings }) => {
-    const totalBeats               = beats.find(beat => beat.id === 'total');
-    const totalBeatsProduct        = totalBeats.beats * totalBeats.bars;
-
-    let generatedSequences = {};
-    const getInstrumentSequence = getSequence({ beats, generatedSequences, usePredefinedSettings });
+const generateNewRiff = ({ bpm, beats, usePredefinedSettings, instruments, totalBeatsProduct }) => {
+    let generatedSequences         = {};
+    const getInstrumentSequence    = getSequence({ beats, generatedSequences, usePredefinedSettings });
     const instrumentsWithSequences = instruments
         .map(getInstrumentSequence);
 
-    return generateRiff({ bpm, totalBeatsProduct, instruments: instrumentsWithSequences, usePredefinedSettings })
+    return generateRiff({ totalBeatsProduct, instruments: instrumentsWithSequences, usePredefinedSettings })
 }
 
 const play             = (audioContext, buffer) => playSound(audioContext, buffer, audioContext.currentTime, buffer.duration, 1);
@@ -112,13 +113,21 @@ class SoundController extends Component {
         this.isOutDated = false;
         this.updateUI({ isLoading: true });
 
-        return generateNewBuffer({ ...generationState, instruments })
-            .then(({ buffer, instruments }) => {
+        const bpmMultiplier     = 60 / bpm;
+        const totalBeats        = beats.find(beat => beat.id === 'total');
+        const totalBeatsProduct = totalBeats.beats * totalBeats.bars;
+        let newInstruments;
+        return generateNewRiff({ ...generationState, instruments, totalBeatsProduct })
+            .then((instruments) => {
+                newInstruments = instruments;
+                return renderInstrumentSoundsAtTempo(instruments, totalBeatsProduct, bpmMultiplier)
+            })
+            .then((buffer) => {
                 const newState = { isLoading: false, error: '' };
                 if (!buffer) newState.error = 'Error!'
 
                 this.updateUI(newState);
-                return {buffer, instruments};
+                return { buffer, instruments: newInstruments };
             });
     }
 
@@ -174,13 +183,13 @@ class SoundController extends Component {
             }
             this.stopEvent();
             this.generate()
-                .then(({buffer, instruments}) => this.updateInstrumentsAndPlay(buffer, instruments));
+                .then(({ buffer, instruments }) => this.updateInstrumentsAndPlay(buffer, instruments));
         }
     }
 
     generateAndQueue = () => {
         this.generate()
-            .then(({buffer, instruments}) => {
+            .then(({ buffer, instruments }) => {
                 if (!this.props.isPlaying) return this.updateInstrumentsAndPlay(buffer, instruments);
 
                 this.queuedBuffer = buffer;

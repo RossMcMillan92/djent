@@ -170,7 +170,7 @@ const getSequence = ({ beats, generatedSequences, usePredefinedSettings }) => (i
             sequence = generatedSequences[sequence] = generateSequence({ totalBeats: instrumentBeatsProduct, allowedLengths, hitChance });
         }
     }
-console.log('sequence', sequence)
+
     return {
         ...instrument,
         sequence,

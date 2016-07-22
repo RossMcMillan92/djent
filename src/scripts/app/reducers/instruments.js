@@ -33,6 +33,10 @@ export default function instruments(state = initialState, action) {
         case 'UPDATE_INSTRUMENT_DETUNE_PROP':
             return updateObjByID({ objs: state, id: payload.instrumentID, prop: 'pitch', value: payload.value })
 
+        case 'UPDATE_INSTRUMENT_SEQUENCES':
+            return state
+                .map(i => i.id === payload.instrumentID ? { ...i, sequences: payload.sequences } : i);
+
         case 'APPLY_PRESET':
             const { preset } = payload;
             const instruments = preset.settings.instruments;

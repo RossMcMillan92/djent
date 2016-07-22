@@ -20,3 +20,10 @@ export function updateCustomPresetInstruments(instruments) {
         payload: { instruments },
     };
 }
+
+export function updateInstrumentSequences(instrumentID, sequences) {
+    return {
+        type: 'UPDATE_INSTRUMENT_SEQUENCES',
+        payload: { instrumentID, sequences },
+    };
+}

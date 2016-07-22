@@ -18,7 +18,7 @@ export default class InstrumentList extends Component {
         this.props.actions.updateInstrumentSound({ soundID, parentID, prop, value });
     }
 
-    renderSequences = instrument => {
+    renderSequenceController = instrument => {
         const randomisedSequences = this.props.beats
             .filter(b => b.id !== 'total')
             .reduce((newObj, b) => ({
@@ -81,9 +81,9 @@ export default class InstrumentList extends Component {
                                 { categories }
                             </Tabpane>
                             <Tabpane title="Sequences">
-                                { this.renderSequences(instrument) }
+                                { this.renderSequenceController(instrument) }
                             </Tabpane>
-                            <Tabpane title="Pitch">
+                            <Tabpane title="Mixer">
                                 <PitchController pitch={instrument.pitch} id={instrument.id} actions={{ updateInstrumentPitch: this.props.actions.updateInstrumentPitch }} />
                             </Tabpane>
                         </Tabgroup>

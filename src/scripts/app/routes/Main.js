@@ -227,6 +227,7 @@ export default class Main extends Component {
                                                     enableModal: this.props.actions.enableModal,
                                                     updateInstrumentSound: this.props.actions.updateInstrumentSound,
                                                     updateInstrumentPitch: this.props.actions.updateInstrumentPitch,
+                                                    updateInstrumentSequences: this.props.actions.updateInstrumentSequences,
                                                 }}
                                                 beats={this.props.beats}
                                                 instruments={this.props.instruments}

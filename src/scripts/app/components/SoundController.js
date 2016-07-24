@@ -25,6 +25,7 @@ import {
     deepClone,
     isIOS,
     randomFromArray,
+    splice,
 } from '../utils/tools';
 
 import IOSWarning from './IOSWarning';
@@ -32,6 +33,14 @@ import LoopController from './LoopController';
 import SVG from './SVG';
 import Waveform from './Waveform';
 import ContinuousGenerationController from './ContinuousGenerationController';
+
+const getTotalTimeLength = (beats, bpm) => getTotalBeatsLength(beats) * (60 / bpm);
+
+const getTotalBeatsLength = (beats, bpmMultiplier) => {
+    const totalBeats       = beats.find(beat => beat.id === 'total');
+    const totalBeatsLength = totalBeats.bars * totalBeats.beats;
+    return totalBeatsLength
+}
 
 const generateNewRiff = ({ bpm, beats, usePredefinedSettings, instruments, totalBeatsProduct }) => {
     let generatedSequences         = {};
@@ -67,8 +76,10 @@ const fadeIn = (gainNode, duration) => {
 }
 
 class SoundController extends Component {
-    queuedInstruments = [];
-    queuedRiffTemplates = [];
+    currentlyPlayingNotes = [];
+    currentRiffTemplate;
+    queuedInstruments;
+    queuedRiffTemplate;
     currentGainNode;
     audioContext = '';
     isOutDated = true;
@@ -89,7 +100,7 @@ class SoundController extends Component {
     }
 
     componentWillUpdate = (nextProps, nextState) => {
-        if (nextProps.isLooping !== this.props.isLooping) loop(this.props.currentSrc, nextProps.isLooping);
+        // if (nextProps.isLooping !== this.props.isLooping) loop(this.props.currentSrc, nextProps.isLooping);
         if (!this.props.generationState) return;
 
         const generationStateInstruments = this.props.generationState.instruments;
@@ -119,13 +130,12 @@ class SoundController extends Component {
         this.updateUI({ isLoading: true });
 
         const bpmMultiplier     = 60 / bpm;
-        const totalBeats        = beats.find(beat => beat.id === 'total');
-        const totalBeatsProduct = totalBeats.beats * totalBeats.bars;
+        const totalBeatsProduct = getTotalBeatsLength(beats);
         let newInstruments;
         return generateNewRiff({ ...generationState, instruments, totalBeatsProduct })
             .then((instruments) => {
                 newInstruments = instruments;
-                return renderRiffTemplateAtTempo(instruments, totalBeatsProduct, bpmMultiplier)
+                return renderRiffTemplateAtTempo(instruments, bpmMultiplier)
             })
             .then((riffTemplate) => {
                 const newState = { isLoading: false, error: '' };
@@ -140,39 +150,39 @@ class SoundController extends Component {
         if (this.props.isPlaying) {
             this.stopEvent();
         } else {
-            this.playEvent(this.props.currentBuffer);
+            this.playEvent(this.currentRiffTemplate);
         }
     }
 
-    playEvent = (currentBuffer) => {
-        if (this.state.error) return;
+    playEvent = (riffTemplate, audioStartTime = this.audioContext.currentTime) => {
+        if (this.state.error || !riffTemplate) return;
 
-        const currentSrc = currentBuffer ? play(this.audioContext, currentBuffer) : null;
+        this.audioStartTime = audioStartTime;
+        this.currentRiffTemplate = riffTemplate;
+        if (!this.loopTimeout) this.loop(riffTemplate);
 
-        this.props.actions.updateCurrentBuffer(currentBuffer);
-        this.props.actions.updateCurrentSrc(currentSrc);
+        // this.props.actions.updateCurrentBuffer(currentBuffer);
+        // this.props.actions.updateCurrentSrc(currentSrc);
 
-        // Set up volume and fades
-        currentSrc.connect(this.currentGainNode);
-        this.currentGainNode.gain.value = 0;
-        this.currentGainNode.connect(this.audioContext.destination);
-        this.currentGainNode = fadeIn(this.currentGainNode, (this.props.fadeIn ? 5000 : 0));
-
-        loop(currentSrc, this.props.isLooping);
-        this.props.actions.updateIsPlaying(true);
+        if (!this.props.isPlaying) this.props.actions.updateIsPlaying(true);
 
         if (this.props.continuousGeneration) {
-            const renewalTimeoutTime = Math.round((currentBuffer.duration * 1000) * this.renewalPoint);
+            const renewalTimeoutTime = Math.round(getTotalTimeLength(this.props.generationState.beats, this.props.generationState.bpm) * this.renewalPoint);
             this.renewalTimeout = setTimeout(this.generateAndQueue, renewalTimeoutTime);
         }
-
-        currentSrc.addEventListener('ended', this.onEnded);
     }
 
     stopEvent = () => {
-        if (this.props.currentSrc && this.props.isPlaying) {
-            this.props.currentSrc.removeEventListener('ended', this.onEnded);
-            stop(this.props.currentSrc);
+        if (this.props.isPlaying) {
+            this.currentlyPlayingNotes
+                .map(src => stop(src));
+
+            this.currentlyPlayingNotes = [];
+
+            if (this.loopTimeout) {
+                clearTimeout(this.loopTimeout);
+                this.loopTimeout = undefined;
+            }
             if (this.renewalTimeout) clearTimeout(this.renewalTimeout);
             this.props.actions.updateIsPlaying(false);
         }
@@ -195,27 +205,18 @@ class SoundController extends Component {
             .then(({ riffTemplate, instruments }) => {
                 if (!this.props.isPlaying) return this.updateInstrumentsAndPlay(riffTemplate, instruments);
 
-                this.queuedRiffTemplates.push(buffer);
-                this.queuedInstruments.push(instruments);
+                this.queuedRiffTemplate = riffTemplate;
+                this.queuedInstruments = instruments;
             });
     }
 
-    onEnded = () => {
-        const { isPlaying, continuousGeneration } = this.props;
-        if (isPlaying && continuousGeneration && this.queuedRiffTemplates) {
-            this.updateInstrumentsAndPlay(this.queuedRiffTemplates, this.queuedInstruments)
-            this.queuedInstruments = undefined;
-            this.queuedRiffTemplates = undefined;
-        }
-        else this.stopEvent();
+    updateInstrumentsAndPlay = (riffTemplate, instruments) => {
+        this.playEvent(riffTemplate)
+        this.props.actions.updateCustomPresetInstruments(instruments);
     }
 
-    updateInstrumentsAndPlay = (riffTemplate, instruments) => {
-        console.log('RIFFTEMPLATE', riffTemplate)
-        this.queuedRiffTemplates = [ ...this.queuedRiffTemplates, riffTemplate ];
-        this.audioStartTime = this.audioContext.currentTime;
-        if (!this.loopTimeout) this.loop(riffTemplate);
-        this.props.actions.updateCustomPresetInstruments(instruments);
+    onSourceEnd = (source) => {
+        this.currentlyPlayingNotes = splice(this.currentlyPlayingNotes.indexOf(source), 1, this.currentlyPlayingNotes);
     }
 
     loop = (riffTemplate) => {
@@ -233,25 +234,37 @@ class SoundController extends Component {
                     fadeOutDuration,
                 }) => {
                     const instrument = this.props.instruments.find(i => i.id === instrumentID);
-                    return playSound(this.audioContext, buffer, this.audioStartTime + startTime, duration, volume, instrument.pitch || 0, fadeInDuration, fadeOutDuration)
+                    const source = playSound(this.audioContext, buffer, this.audioStartTime + startTime, duration, volume, instrument.pitch || 0, fadeInDuration, fadeOutDuration)
+                    source.onended = () => this.onSourceEnd(source);
+                    return source;
                 }
-            );
+            )
 
-            console.log('UPCOMINGNOTES', upcomingNotes)
+        this.currentlyPlayingNotes = [ ...this.currentlyPlayingNotes, ...upcomingNotes ];
 
         const newRiffTemplate = riffTemplate.slice(upcomingNotes.length, riffTemplate.length);
         if (newRiffTemplate.length) {
+            /* RIFF IS STILL PLAYING */
             this.loopTimeout = setTimeout(() => this.loop(newRiffTemplate), 50);
         } else {
-            if (this.props.isLooping || this.props.continuousGeneration) {
-                const lastNoteDuration = upcomingNotes
-                    .reduce((lastNote, note) => !lastNote || note.startTime + note.duration > lastNote.startTime + lastNote.duration ? note : lastNote )
-                    .duration
-
-                this.audioStartTime = this.audioContext.currentTime + 5;
-                this.loop(this.queuedRiffTemplates[0]);
-            }
+            /* RIFF IS FINISHED */
             this.loopTimeout = undefined;
+
+            if (this.props.isLooping || this.props.continuousGeneration) {
+                const bpmMultiplier    = 60 / this.props.generationState.bpm;
+                const totalLength      = getTotalBeatsLength(this.props.generationState.beats) * bpmMultiplier;
+                const endTime          = this.audioStartTime + (totalLength);
+                const nextRiffTemplate = this.props.continuousGeneration
+                                       ? this.queuedRiffTemplate
+                                       : this.currentRiffTemplate;
+
+                if (this.props.continuousGeneration) {
+                    this.currentRiffTemplate = this.queuedRiffTemplate;
+                    this.queuedRiffTemplate  = undefined;
+                }
+
+                this.playEvent(nextRiffTemplate, endTime)
+            }
         }
     }
 
@@ -274,7 +287,7 @@ class SoundController extends Component {
                 <div className="u-flex-row u-flex-wrap">
                     <div className="group-spacing-y-small u-mr05 u-mb0">
                         <button className={`button-primary ${ this.isOutDated ? 'button-primary--positive' : '' } ${ this.state.isLoading ? '' : 'icon-is-hidden' }`} onClick={() => this.generateEvent()}>
-                            <span className="button-primary__inner">{ this.props.generateButtonText || 'Generate Riff' }</span>
+                            <span className="button-primary__inner">{ this.props.generateButtonText || 'Generate' }</span>
                             <span className="button-primary__icon">
                                 <span className="spinner" />
                             </span>
@@ -282,7 +295,7 @@ class SoundController extends Component {
                     </div>
 
                     <div className="group-spacing-y-small u-mr1 u-mb0">
-                        <button className="button-primary" title={ capitalize(eventName) } onClick={this.togglePlay} disabled={!this.props.currentBuffer}>
+                        <button className="button-primary" title={ capitalize(eventName) } onClick={this.togglePlay} disabled={!this.currentRiffTemplate}>
                             <SVG icon={ eventName } className="button-primary__svg-icon" />
                         </button>
                     </div>

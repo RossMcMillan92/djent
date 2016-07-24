@@ -1,0 +1,13 @@
+.swipeable
+    overflow-x: hidden
+
+.swipeable__container
+    display: flex
+    will-change: transform
+    transition: transform .25s ease-in-out
+
+.swipeable__slide
+    height: $content-height
+    width: 100%
+    flex-shrink: 0
+    overflow: auto

@@ -27,12 +27,12 @@ class ExportController extends Component {
             saveMIDI: this.saveMIDI,
             saveWAV: this.saveWAV,
         }} />
-        this.props.actions.enableModal({ content, isCloseable: true, title: 'Export Riff' });
+        this.props.actions.enableModal({ content, isCloseable: true, title: 'Export' });
     }
 
     render = () => (
         <button className="button-primary" onClick={this.launchExportModal} disabled={!this.props.currentBuffer}>
-            Save Riff
+            Save
         </button>
     )
 }

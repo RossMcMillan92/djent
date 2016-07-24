@@ -126,11 +126,6 @@ const preset = {
             },
             {
                 id: 'c',
-                sequences: [
-                    [
-                       { beat: .25, volume: 1 },
-                   ]
-                ],
                 sounds: [
                     {
                         id: 'crash-left',

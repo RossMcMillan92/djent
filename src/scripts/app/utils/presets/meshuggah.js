@@ -8,7 +8,7 @@ const preset = {
         beats: [
             {
                 id    : 'total',
-                bars  : 8,
+                bars  : 1,
                 beats : 4,
             },
             {

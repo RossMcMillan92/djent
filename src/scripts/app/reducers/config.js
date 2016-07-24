@@ -1,7 +1,7 @@
 import { extendObjectArrayByID } from '../utils/tools';
 
 const initialState = {
-    activePresetID       : 'trap',
+    activePresetID       : 'meshuggah',
     bpm                  : 50,
     fadeIn               : false,
     continuousGeneration : true,

@@ -3,7 +3,8 @@ $button-primary__total-line-height: 18px
 $button-primary__line-height: 1.4
 $button-primary__font-size: round($button-primary__total-line-height / $button-primary__line-height)
 $button-primary__svg-icon-size: $button-primary__total-line-height
-$button-primary__default-bg-color: #dfdfdf
+$button-primary__default-color: #292929
+$button-primary__default-bg-color: #cacaca
 
 .button-primary
     position: relative
@@ -12,8 +13,9 @@ $button-primary__default-bg-color: #dfdfdf
     text-transform: uppercase
     line-height: $button-primary__line-height
     font-size: $button-primary__font-size
-    border: solid 1px $palette-base-ui
+    border: none
     cursor: pointer
+    color: $button-primary__default-color
     background-color: $button-primary__default-bg-color
     white-space: nowrap
     transition: all .2s ease-in-out
@@ -21,7 +23,7 @@ $button-primary__default-bg-color: #dfdfdf
 
     &:hover,
     &:focus
-        background-color: lighten($button-primary__default-bg-color, 5%)
+        background-color: lighten($button-primary__default-bg-color, 10%)
         box-shadow: 0 7px 5px -3px rgba(0, 0, 0, .07)
         outline: none
 
@@ -42,12 +44,10 @@ $button-primary__default-bg-color: #dfdfdf
     transition: all .25s ease-in-out
     transform: scale(.8)
     opacity: .1
-    // margin-right: $base-spacing-unit / 2
 
     .icon-is-hidden &
         opacity: 1
         transform: scale(1)
-        // transform: translate(($button-primary__total-line-height + ($base-spacing-unit / 2)) / 2, 0)
 
 .button-primary__icon
     position: absolute
@@ -63,7 +63,6 @@ $button-primary__default-bg-color: #dfdfdf
 .button-primary--positive
     background-color: $palette-alpha
     color: #fff
-    border-color: darken($palette-alpha, 5%)
     box-shadow: 0 5px 5px -3px rgba(0, 0, 0, .05)
 
     &:hover,

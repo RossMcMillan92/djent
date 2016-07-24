@@ -56,8 +56,7 @@ const getActiveSoundsFromHitTypes = (hitTypes) =>
         }, [])
         .map(hit => ({ id: hit, enabled: true }));
 
-const renderInstrumentSoundsAtTempo = (instruments, totalBeats, bpmMultiplier) => {
-    const timeLength = totalBeats * bpmMultiplier;
+const renderInstrumentSoundsAtTempo = (instruments, timeLength, bpmMultiplier) => {
     const offlineCtx = new OfflineAudioContext(2, 44100 * timeLength, 44100);
 
     instruments.forEach((instrument) => {
@@ -80,7 +79,7 @@ const renderInstrumentSoundsAtTempo = (instruments, totalBeats, bpmMultiplier) =
     })
 }
 
-const renderRiffTemplateAtTempo = (instruments, totalBeats, bpmMultiplier) => {
+const renderRiffTemplateAtTempo = (instruments, bpmMultiplier) => {
     return instruments
         .reduce((newArr, instrument) => {
             const hits = instrument.timeMap

@@ -4,7 +4,10 @@
 	<meta charset="UTF-8">
 	<title>Djenerator</title>
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,600' rel='stylesheet' type='text/css' async>
-	<link rel="stylesheet" href="/dist/app.css?v9">
+	<link rel="stylesheet" href="/dist/app.css">
+	<link rel="manifest" href="manifest.json">
+	<meta name="theme-color" content="#fff">
+
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
 	<meta name="description" content="A random metal breakdown/riff generator.">
 	<meta name="keywords" content="djeneration, station, react, redux, metal, riff, generator, thall, djent">
@@ -30,7 +33,16 @@
 </head>
 <body class="preload">
 	<div id="root"></div>
-	<script src="/dist/app.min.js?v9"></script>
+
+	<script>
+		if ('serviceWorker' in navigator) {
+			navigator.serviceWorker.register('https://localhost:3000/sw.js')
+				.then(function (d) { console.log('sw.js registered') })
+				.catch(function (e) { console.log(e, 'sw.js NOT registered') });
+		}
+	</script>
+
+	<script src="/dist/app.min.js"></script>
 
 	<script>
 		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

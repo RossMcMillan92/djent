@@ -44,7 +44,7 @@ class NotePanel extends Component {
                     </div>
                 </div>
                 <div className="note-panel__checkbox-container">
-                    <span className={`toggle-input u-txt-small ${ length.isTriplet ? 'is-enabled' : '' }`} htmlFor={`${length.id}-triplet`} onClick={this.onIsTripletClick} >Triplet</span>
+                    <span className={`toggle-input u-txt-small ${ length.isTriplet ? 'is-enabled' : '' }`} onClick={this.onIsTripletClick} >Triplet</span>
                 </div>
 
             </div>

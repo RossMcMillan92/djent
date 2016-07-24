@@ -5,13 +5,14 @@ import Expandable from './Expandable';
 import PitchController from './PitchController';
 import SequenceController from './SequenceController';
 import Tabgroup, { Tabpane } from './Tabgroup';
-import SVG from './SVG';
 
 export default class InstrumentList extends Component {
     onSoundToggle = (event) => {
         const soundID = event.target.getAttribute('id');
         const parentID = event.target.getAttribute('data-parent-id');
-        const currentValue = this.props.instruments.find(i => i.id === parentID).sounds.find(s => s.id === soundID).enabled;
+        const currentValue = this.props.instruments
+            .find(i => i.id === parentID).sounds
+            .find(s => s.id === soundID).enabled;
         const prop = 'enabled';
         const value = !currentValue;
 
@@ -30,7 +31,9 @@ export default class InstrumentList extends Component {
                 instrumentID={ instrument.id }
                 instrumentSequences={ instrument.sequences }
                 randomisedSequences={ randomisedSequences }
-                actions={{ updateInstrumentSequences: this.props.actions.updateInstrumentSequences }}
+                actions={{
+                    updateInstrumentSequences: this.props.actions.updateInstrumentSequences
+                }}
             />
         );
 
@@ -39,34 +42,49 @@ export default class InstrumentList extends Component {
 
     render = () => {
         const instrumentViews = this.props.instruments
-            .map((instrument, index) => {
+            .map((instrument, index, instArr) => {
                 let categories = instrument.sounds
                     .reduce((cats, sound) => {
                         if (!cats.includes(sound.category)) {
                             return [
                                 ...cats,
                                 sound.category
-                            ]
+                            ];
                         }
                         return cats;
                     }, [])
-                    .map((id, index, arr) => {
+                    .map((id, catIndex, arr) => {
                         const sounds = instrument.sounds
                             .filter(sound => sound.category === id);
                         const isExpanded = !!sounds.find(sound => sound.enabled);
 
                         return (
                             <Expandable
-                                title={ id || `${(instrument.description || capitalize(instrument.id))}` }
-                                className={`expandable-list ${ index !== arr.length-1 ? 'u-mb05' : '' }`}
+                                title={ id
+                                        || `${(instrument.description
+                                        || capitalize(instrument.id))}`
+                                }
+                                className={`
+                                    expandable-list
+                                    ${catIndex !== arr.length - 1 ? 'u-mb05' : ''}
+                                `}
                                 titleClassName="expandable-list__title"
                                 bodyClassName="expandable-list__body"
                                 isExpanded={isExpanded}
-                                key={index}
+                                key={catIndex}
                             >
                                 <ul className="cleanlist">
                                     {sounds.map((sound, i) => (
-                                        <li id={sound.id} data-parent-id={instrument.id} onClick={this.onSoundToggle} className={`toggle-input ${sound.enabled ? 'is-enabled' : ''}`} key={i} >{sound.description || sound.id}</li>
+                                        <li
+                                            id={sound.id}
+                                            data-parent-id={instrument.id}
+                                            onClick={this.onSoundToggle}
+                                            className={`
+                                                toggle-input
+                                                ${sound.enabled ? 'is-enabled' : ''}`
+                                            }
+                                            key={i}
+                                        >{sound.description || sound.id}</li>
                                     ))}
                                 </ul>
                             </Expandable>
@@ -74,8 +92,10 @@ export default class InstrumentList extends Component {
                     });
 
                 return (
-                    <div className="u-mb2" key={index}>
-                        <h3 className="title-secondary u-mb05">{instrument.description || instrument.id}</h3>
+                    <div className={`${index < instArr.length - 1 ? 'u-mb2' : ''}`} key={index}>
+                        <h3 className="title-secondary u-mb05">
+                            {instrument.description || instrument.id}
+                            </h3>
                         <Tabgroup>
                             <Tabpane title="Sounds">
                                 { categories }
@@ -84,7 +104,14 @@ export default class InstrumentList extends Component {
                                 { this.renderSequenceController(instrument) }
                             </Tabpane>
                             <Tabpane title="Mixer">
-                                <PitchController pitch={instrument.pitch} id={instrument.id} actions={{ updateInstrumentPitch: this.props.actions.updateInstrumentPitch }} />
+                                <PitchController
+                                    pitch={instrument.pitch}
+                                    id={instrument.id}
+                                    actions={{
+                                        updateInstrumentPitch:
+                                            this.props.actions.updateInstrumentPitch
+                                    }}
+                                />
                             </Tabpane>
                         </Tabgroup>
 
@@ -99,13 +126,3 @@ export default class InstrumentList extends Component {
         );
     }
 }
-
-const InstrumentSettingsPane = ({ instrument, actions, sequences }) => (
-    <div>
-        <div className="u-mb1">
-        </div>
-        <div className="u-mb1">
-            <PitchController pitch={instrument.pitch} id={instrument.id} actions={{ updateInstrumentPitch: actions.updateInstrumentPitch }} />
-        </div>
-    </div>
-);

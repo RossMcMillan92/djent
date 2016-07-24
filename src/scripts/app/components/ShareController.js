@@ -69,7 +69,7 @@ class ShareController extends Component {
         return (
             <div className="">
                 <button className={`button-primary u-flex-row ${ this.state.isLoading ? '' : 'icon-is-hidden' }`} onClick={this.onClick} disabled={isDisabled}>
-                    <span className="button-primary__inner">Share Riff</span>
+                    <span className="button-primary__inner">Share</span>
                     <span className="button-primary__icon">
                         <span className="spinner" />
                     </span>

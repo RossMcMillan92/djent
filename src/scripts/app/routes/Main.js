@@ -89,6 +89,8 @@ export default class Main extends Component {
                     { tabName }
                 </div>
             ));
+        const isMobile = window.outerWidth < 680;
+        const Container = isMobile ? SwipeableViews : 'div';
 
         return (
             <section>
@@ -115,7 +117,7 @@ export default class Main extends Component {
                             </div>
                         </div>
 
-                        <SwipeableViews
+                        <Container
                             viewHeight={true}
                             resistance={true}
                             index={this.state.activePageIndex}
@@ -127,14 +129,20 @@ export default class Main extends Component {
                             />
                             <Sequences route={this.props.route} />
                             <Instruments route={this.props.route} />
-                        </SwipeableViews>
+                        </Container>
                     </div>
 
-                    <div className="site__fixed">
-                        <div className="u-flex-row u-flex-justify-around">
-                            { tabs }
-                        </div>
-                    </div>
+                    {
+                        isMobile
+                      ? (
+                          <div className="site__fixed">
+                              <div className="u-flex-row u-flex-justify-around">
+                                  { tabs }
+                              </div>
+                          </div>
+                        )
+                      : null
+                    }
                 </div>
             </section>
         );

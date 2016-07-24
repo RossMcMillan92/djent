@@ -36,7 +36,7 @@
 
 	<script>
 		if ('serviceWorker' in navigator) {
-			navigator.serviceWorker.register('https://localhost:3000/sw.js')
+			navigator.serviceWorker.register('/sw.js')
 				.then(function (d) { console.log('sw.js registered') })
 				.catch(function (e) { console.log(e, 'sw.js NOT registered') });
 		}

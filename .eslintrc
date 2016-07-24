@@ -26,5 +26,6 @@
         "array-bracket-spacing": 0,
         "no-confusing-arrow": 0,
         "no-nested-ternary": 0,
+        "key-spacing": 0,
     }
 }

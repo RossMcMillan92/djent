@@ -95,7 +95,7 @@ export default class InstrumentList extends Component {
                     <div className={`${index < instArr.length - 1 ? 'u-mb2' : ''}`} key={index}>
                         <h3 className="title-secondary u-mb05">
                             {instrument.description || instrument.id}
-                            </h3>
+                        </h3>
                         <Tabgroup>
                             <Tabpane title="Sounds">
                                 { categories }

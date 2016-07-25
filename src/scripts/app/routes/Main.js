@@ -86,7 +86,9 @@ export default class Main extends Component {
                     className={`nav-tab ${i === this.state.activePageIndex ? 'is-active' : ''}`}
                     onClick={() => this.changeActivePageIdnex(i)}
                 >
-                    { tabName }
+                    <div className="nav-tab__inner">
+                        { tabName }
+                    </div>
                 </div>
             ));
         const isMobile = window.innerWidth < 680;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
-import { compose } from '../utils/tools';
+import { compose, roundToXPlaces } from '../utils/tools';
 
 const RESISTANCE_COEF = 0.4;
 const UNCERTAINTY_THRESHOLD = 3; // px
@@ -117,11 +117,11 @@ class SwipeableViews extends Component {
                            : 'round';
 
         const distanceTravelled = (this.startWidth * Math.abs(this.currentIndex - this.index));
-        const time = Math.abs((this.startWidth - distanceTravelled) / this.vx) * 2;
+        const time = Math.abs((this.startWidth - distanceTravelled) / this.vx) * 5;
 
         const index  = getFinalIndex(roundingType, this.props.children.length - 1, this.index);
-        const pixels = Math.round(index * -this.startWidth);
-        this.updateTranslation(pixels);
+        const percent = roundToXPlaces(index * -100, 2);
+        this.updateTranslation(percent);
 
         if (pastSpeedThreshold && index !== this.currentIndex) {
             this.containerEl.style.transitionDuration = `${time}ms`;
@@ -135,8 +135,8 @@ class SwipeableViews extends Component {
 
     loop = () => {
         if (this.started) {
-            const pixels = Math.round(this.index * -this.startWidth);
-            this.updateTranslation(pixels);
+            const percent = roundToXPlaces(this.index * -100, 2);
+            this.updateTranslation(percent);
             requestAnimationFrame(this.loop);
         }
     }
@@ -153,8 +153,8 @@ class SwipeableViews extends Component {
             </div>
         ))
 
-    updateTranslation = (pixels) => {
-        this.containerEl.style.transform = `translate3d(${pixels}px, 0, 0)`;
+    updateTranslation = (percent) => {
+        this.containerEl.style.transform = `translate3d(${percent}%, 0, 0)`;
     }
 
     render = () => (
@@ -166,7 +166,7 @@ class SwipeableViews extends Component {
                 onTouchEnd={this.onTouchEnd}
                 ref="container"
                 style={{
-                    transform: `translate3d(${this.currentIndex * -100}%, 0, 0)`
+                    transform: `translate3d(${Math.round(this.currentIndex * -100)}%, 0, 0)`
                 }}
             >
                 { this.renderChildren(this.props.children) }

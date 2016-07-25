@@ -84,14 +84,13 @@ class SoundController extends Component {
 
     componentWillMount = () => {
         this.audioContext = audioContext;
-        console.log('AUDIOCONTEXT', this.audioContext, this.audioContext.state)
     }
 
     updateUI = (newState) => {
         requestAnimationFrame(() => this.setState(newState));
     }
 
-    componentWillUpdate = (nextProps, nextState) => {
+    componentWillUpdate = (nextProps) => {
         if (!this.props.generationState) return;
 
         const generationStateInstruments = this.props.generationState.instruments;
@@ -114,7 +113,6 @@ class SoundController extends Component {
     }
 
     generate = () => {
-        console.log('AUDIOCONTEXT', this.audioContext, this.audioContext.state)
         const { bpm, beats, instruments, usePredefinedSettings } = this.props;
         const generationState = deepClone({ bpm, beats, instruments, usePredefinedSettings });
 

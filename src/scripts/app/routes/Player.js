@@ -3,19 +3,12 @@ import React, { Component } from 'react';
 import BeatsController from '../components/BeatsController';
 import ExportController from '../components/ExportController';
 import Panel from '../components/Panel';
-import Spinner from '../components/Spinner';
 
 import BPMController from '../containers/BPMController';
 import BPMTapper from '../containers/BPMTapper';
 import ShareController from '../containers/ShareController';
 import PresetController from '../containers/PresetController';
 import SoundController from '../containers/SoundController';
-
-import { defaultAllowedLengths } from '../reducers/beats';
-
-import presets, { backwardsCompatibility } from '../utils/presets';
-import { getActiveSoundsFromHitTypes } from '../utils/instruments';
-import { getPresetData, getPresetFromData, handleGoogleAPI } from '../utils/short-urls';
 
 export default class Player extends Component {
     static contextTypes = {
@@ -93,8 +86,8 @@ export default class Player extends Component {
                             enableContinuousGenerationControl={ !isShareRoute }
                         />
 
-                        <div className={`u-flex-row u-flex-wrap u-flex-${ isShareRoute ? 'center' : 'start' }`}>
-                            <div className={`group-spacing-y-small u-mr05 ${ isShareRoute ? '' : 'u-mb0' }`}>
+                        <div className={`u-flex-row u-flex-wrap u-flex-${isShareRoute ? 'center' : 'start'}`}>
+                            <div className={`group-spacing-y-small u-mr05 ${isShareRoute ? '' : 'u-mb0'}`}>
                                 <ExportController
                                     instruments={ this.props.instruments }
                                     bpm={ this.props.bpm }
@@ -111,7 +104,7 @@ export default class Player extends Component {
                                 ? (
                                     <div className="group-spacing-y-small">
                                         <span className="u-mr05">or</span>
-                                        <a className="link-base" onClick={e => this.context.router.push('/')}>
+                                        <a className="link-base" onClick={() => this.context.router.push('/')}>
                                             Generate new
                                         </a>
                                     </div>

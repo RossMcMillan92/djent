@@ -13,37 +13,33 @@ class BeatPanel extends Component {
         this.props.actions.updateBeats(this.props.beat.id, 'allowedLengths', allowedLengths);
     }
 
-    render = () => {
-        return (
-            <div>
-                <h2 className="title-primary">{ this.props.beat.description || this.props.beat.id }</h2>
+    render = () => (
+        <div>
+            <h3 className="title-secondary u-mb05">{ this.props.beat.description || this.props.beat.id }</h3>
 
-                <div className="group-spacing-y u-mb0">
-                    <AllowedLengthsController
-                        actions={{ updateAllowedLengths: this.onAllowedLengthsChange }}
-                        allowedLengths={this.props.beat.allowedLengths}
+            <AllowedLengthsController
+                actions={{ updateAllowedLengths: this.onAllowedLengthsChange }}
+                allowedLengths={this.props.beat.allowedLengths}
+            />
+
+            <div className="grid grid--wide grid--middle">
+                <div className="grid__item one-half alpha--one-whole u-mb1@alpha">
+                    <HitChanceController
+                        beatID={ this.props.beat.id }
+                        hitChance={ this.props.beat.hitChance }
+                        actions={{ updateHitChance: this.onHitChanceChange }}
                     />
                 </div>
 
-                <div className="grid grid--wide grid--middle">
-                    <div className="grid__item one-half alpha--one-whole u-mb1@alpha">
-                        <HitChanceController
-                            beatID={ this.props.beat.id }
-                            hitChance={ this.props.beat.hitChance }
-                            actions={{ updateHitChance: this.onHitChanceChange }}
-                        />
-                    </div>
-
-                    <div className="grid__item one-half alpha--one-whole">
-                        <BeatsController
-                            beat={ this.props.beat }
-                            actions={{ updateBeats: this.props.actions.updateBeats }}
-                        />
-                    </div>
+                <div className="grid__item one-half alpha--one-whole">
+                    <BeatsController
+                        beat={ this.props.beat }
+                        actions={{ updateBeats: this.props.actions.updateBeats }}
+                    />
                 </div>
             </div>
-        );
-    }
+        </div>
+    );
 }
 
 export default BeatPanel;

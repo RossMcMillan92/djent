@@ -2,7 +2,7 @@ import audioBufferToWav from 'audiobuffer-to-wav';
 
 const saveAsWAVFile = (() => {
     const a = document.createElement("a");
-    a.style = "display: none";
+    a.style.display = "none";
     document.body.appendChild(a);
 
     return (audioBuffer) => {
@@ -22,7 +22,7 @@ const saveAsWAVFile = (() => {
 
 const saveAsMIDIFile = (() => {
     const a = document.createElement("a");
-    a.style = "display: none";
+    a.style.display = "none";
     document.body.appendChild(a);
 
     return (url) => {

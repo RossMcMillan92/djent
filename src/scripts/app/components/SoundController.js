@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
 import deepEqual from 'deep-equal';
 
+import LoopController from './LoopController';
+import SVG from './SVG';
+import ContinuousGenerationController from './ContinuousGenerationController';
+
 import {
     playSound,
 } from '../utils/audio';
+
+import audioContext from '../utils/audioContext';
 
 import {
     renderRiffTemplateAtTempo,
@@ -23,9 +29,6 @@ import {
     splice,
 } from '../utils/tools';
 
-import LoopController from './LoopController';
-import SVG from './SVG';
-import ContinuousGenerationController from './ContinuousGenerationController';
 
 const getTotalTimeLength = (beats, bpm) => getTotalBeatsLength(beats) * (60 / bpm);
 
@@ -35,7 +38,7 @@ const getTotalBeatsLength = (beats) => {
     return totalBeatsLength;
 };
 
-const generateNewRiff = ({ beats, usePredefinedSettings, instruments, totalBeatsProduct }) => {
+const generateNewRiff = ({ context, beats, usePredefinedSettings, instruments, totalBeatsProduct }) => {
     const generatedSequences       = {};
     const getInstrumentSequence    = getSequence({
         beats,
@@ -46,6 +49,7 @@ const generateNewRiff = ({ beats, usePredefinedSettings, instruments, totalBeats
         .map(getInstrumentSequence);
 
     return generateRiff({
+        context,
         totalBeatsProduct,
         instruments:
         instrumentsWithSequences,
@@ -79,7 +83,8 @@ class SoundController extends Component {
     }
 
     componentWillMount = () => {
-        this.audioContext = new AudioContext();
+        this.audioContext = audioContext;
+        console.log('AUDIOCONTEXT', this.audioContext, this.audioContext.state)
     }
 
     updateUI = (newState) => {
@@ -109,6 +114,7 @@ class SoundController extends Component {
     }
 
     generate = () => {
+        console.log('AUDIOCONTEXT', this.audioContext, this.audioContext.state)
         const { bpm, beats, instruments, usePredefinedSettings } = this.props;
         const generationState = deepClone({ bpm, beats, instruments, usePredefinedSettings });
 
@@ -119,8 +125,9 @@ class SoundController extends Component {
 
         const bpmMultiplier     = 60 / bpm;
         const totalBeatsProduct = getTotalBeatsLength(beats);
+        const context           = this.audioContext;
         let newInstruments;
-        return generateNewRiff({ ...generationState, instruments, totalBeatsProduct })
+        return generateNewRiff({ ...generationState, instruments, totalBeatsProduct, context })
             .then((instrumentss) => {
                 newInstruments = instrumentss;
                 return renderRiffTemplateAtTempo(instrumentss, bpmMultiplier);

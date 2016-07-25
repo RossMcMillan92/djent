@@ -49,12 +49,11 @@ class SwipeableViews extends Component {
         this.started = true;
 
         this.containerEl.style.transition = 'none';
-        console.log('THIS.INDEX', this.index)
         this.loop();
     }
 
     onTouchMove = (event) => {
-        if (!this.started) return this.handleTouchStart(event);
+        if (!this.started) return this.onTouchStart(event);
 
         const touch = event.touches[0];
 
@@ -158,26 +157,22 @@ class SwipeableViews extends Component {
         this.containerEl.style.transform = `translate3d(${pixels}px, 0, 0)`;
     }
 
-    render = () => {
-        console.log(this.props.index);
-
-        return (
-            <div className="swipeable">
-                <div
-                    className="swipeable__container"
-                    onTouchStart={this.onTouchStart}
-                    onTouchMove={this.onTouchMove}
-                    onTouchEnd={this.onTouchEnd}
-                    ref="container"
-                    style={{
-                        transform: `translate3d(${this.currentIndex * -100}%, 0, 0)`
-                    }}
-                >
-                    { this.renderChildren(this.props.children) }
-                </div>
+    render = () => (
+        <div className="swipeable">
+            <div
+                className="swipeable__container"
+                onTouchStart={this.onTouchStart}
+                onTouchMove={this.onTouchMove}
+                onTouchEnd={this.onTouchEnd}
+                ref="container"
+                style={{
+                    transform: `translate3d(${this.currentIndex * -100}%, 0, 0)`
+                }}
+            >
+                { this.renderChildren(this.props.children) }
             </div>
-        );
-    }
+        </div>
+    );
 }
 
 export default SwipeableViews;

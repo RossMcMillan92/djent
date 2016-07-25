@@ -69,35 +69,37 @@ Licensed under the MIT license
     Proto.createScriptProcessor = Proto.createJavaScriptNode;
   }
 
-  // // Black magic for iOS
-  // var is_iOS = (navigator.userAgent.indexOf('like Mac OS X') !== -1);
-  // if (is_iOS) {
-  //   var OriginalAudioContext = AudioContext;
-  //   window.AudioContext = function AudioContext() {
-  //     var iOSCtx = new OriginalAudioContext();
-  //
-  //     var body = document.body;
-  //     var tmpBuf = iOSCtx.createBufferSource();
-  //     var tmpProc = iOSCtx.createScriptProcessor(256, 1, 1);
-  //
-  //     body.addEventListener('touchend', instantProcess, false);
-  //
-  //     function instantProcess() {
-  //       tmpBuf.start(0);
-  //       tmpBuf.connect(tmpProc);
-  //       tmpProc.connect(iOSCtx.destination);
-  //     }
-  //
-  //     // This function will be called once and for all.
-  //     tmpProc.onaudioprocess = function() {
-  //       tmpBuf.disconnect();
-  //       tmpProc.disconnect();
-  //       body.removeEventListener('touchend', instantProcess, false);
-  //       tmpProc.onaudioprocess = null;
-  //       console.log('TMPPROC.ONAUDIOPROCESS', tmpProc.onaudioprocess)
-  //     };
-  //
-  //     return iOSCtx;
-  //   };
-  // }
+  if (tmpctx.close) tmpctx.close()
+
+  // Black magic for iOS
+  var is_iOS = (navigator.userAgent.indexOf('like Mac OS X') !== -1);
+  if (is_iOS) {
+    var OriginalAudioContext = AudioContext;
+    window.AudioContext = function AudioContext() {
+      var iOSCtx = new OriginalAudioContext();
+
+      var body = document.body;
+      var tmpBuf = iOSCtx.createBufferSource();
+      var tmpProc = iOSCtx.createScriptProcessor(256, 1, 1);
+
+      body.addEventListener('touchend', instantProcess, false);
+
+      function instantProcess() {
+        tmpBuf.start(0);
+        tmpBuf.connect(tmpProc);
+        tmpProc.connect(iOSCtx.destination);
+      }
+
+      // This function will be called once and for all.
+      tmpProc.onaudioprocess = function() {
+        tmpBuf.disconnect();
+        tmpProc.disconnect();
+        body.removeEventListener('touchend', instantProcess, false);
+        tmpProc.onaudioprocess = null;
+        console.log('TMPPROC.ONAUDIOPROCESS', tmpProc.onaudioprocess)
+      };
+
+      return iOSCtx;
+    };
+  }
 }(window));

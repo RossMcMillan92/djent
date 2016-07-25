@@ -16,13 +16,10 @@ import {
     compose,
 } from './tools';
 
-const generateRiff = ({ totalBeatsProduct, instruments, usePredefinedSettings }) => {
-    const context = new AudioContext();
-
+const generateRiff = ({ context, totalBeatsProduct, instruments, usePredefinedSettings }) => {
     return loadInstrumentBuffers(context, instruments)
         .then((instruments) => initiateInstruments({ instruments, totalBeatsProduct, usePredefinedSettings }))
         .then((instruments) => {
-            if (context.close) context.close();
             return Promise.resolve(instruments)
         })
         .catch(e => { (console.error || console.log).call(console, e); });

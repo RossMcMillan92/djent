@@ -89,7 +89,7 @@ export default class Main extends Component {
                     { tabName }
                 </div>
             ));
-        const isMobile = window.outerWidth < 680;
+        const isMobile = window.innerWidth < 680;
         const Container = isMobile ? SwipeableViews : 'div';
 
         return (

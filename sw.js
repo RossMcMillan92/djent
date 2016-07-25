@@ -1,5 +1,7 @@
 /* eslint no-undef: 0 */
-importScripts('/node_modules/sw-toolbox/sw-toolbox.js');
+console.log('IMPORTSCRIPTS', importScripts)
+importScripts('/node_modules/sw-toolbox/sw-toolbox.js')
+    .catch(e => console.log(e));
 
 // toolbox.options.debug = true;
 

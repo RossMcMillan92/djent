@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import { compose } from '../utils/tools';
 
-const RESISTANCE_COEF = 0.7;
+const RESISTANCE_COEF = 0.4;
 const UNCERTAINTY_THRESHOLD = 3; // px
 
 const getFinalIndex = (roundingType, maxIndex, index) => compose(
@@ -18,12 +18,12 @@ class SwipeableViews extends Component {
         resistance: false,
     }
 
-    indexCurrent;
+    currentIndex;
     containerEl;
     rootEl;
 
     componentWillMount = () => {
-        this.indexCurrent = this.props.index;
+        this.currentIndex = this.props.index;
     }
 
     componentDidMount = () => {
@@ -32,14 +32,15 @@ class SwipeableViews extends Component {
     }
 
     componentWillUpdate = (nextProps) => {
-        if (this.indexCurrent !== nextProps.index) {
-            this.indexCurrent = nextProps.index;
+        if (this.currentIndex !== nextProps.index) {
+            this.currentIndex = nextProps.index;
         }
     }
 
     onTouchStart = (event) => {
         const touch = event.touches[0];
         this.startWidth = this.rootEl.getBoundingClientRect().width;
+        this.index = this.currentIndex;
         this.startX = touch.pageX;
         this.lastX = touch.pageX;
         this.vx = 0;
@@ -48,6 +49,8 @@ class SwipeableViews extends Component {
         this.started = true;
 
         this.containerEl.style.transition = 'none';
+        console.log('THIS.INDEX', this.index)
+        this.loop();
     }
 
     onTouchMove = (event) => {
@@ -73,7 +76,8 @@ class SwipeableViews extends Component {
         }
 
         if (this.isSwiping !== true) {
-          return;
+            this.started = false;
+            return;
         }
 
         // Prevent native scrolling
@@ -82,9 +86,9 @@ class SwipeableViews extends Component {
         this.vx = this.vx * 0.5 + (touch.pageX - this.lastX) * 0.5;
         this.lastX = touch.pageX;
 
-        const indexMax = this.props.children.length;
+        const indexMax = this.props.children.length - 1;
 
-        let index = this.indexCurrent + (this.startX - touch.pageX) / this.startWidth;
+        let index = this.currentIndex + (this.startX - touch.pageX) / this.startWidth;
 
         if (!this.props.resistance) {
             index = compose((v) => Math.min(indexMax, v), (v) => Math.max(0, v))(index);
@@ -97,39 +101,49 @@ class SwipeableViews extends Component {
             }
         }
 
-        this.containerEl.style.transform = `translate3d(${index * -100}%, 0, 0)`;
         this.index = index;
     }
 
     onTouchEnd = () => {
-        if (!this.started || this.isSwiping !== true) return;
         this.containerEl.style.transition = '';
+        if (!this.started && this.isSwiping !== true) {
+            return;
+        }
         this.started = false;
+        this.isSwiping = false;
 
         const pastSpeedThreshold = (Math.abs(this.vx) > this.props.threshold);
         const roundingType = pastSpeedThreshold
                            ? (this.vx > 0) ? 'floor' : 'ceil'
                            : 'round';
 
-        const distanceTravelled = (this.startWidth * Math.abs(this.indexCurrent - this.index));
-        const time = Math.abs((this.startWidth - distanceTravelled) / this.vx);
-        console.log('TIME', time)
+        const distanceTravelled = (this.startWidth * Math.abs(this.currentIndex - this.index));
+        const time = Math.abs((this.startWidth - distanceTravelled) / this.vx) * 2;
 
-        const index = getFinalIndex(roundingType, this.props.children.length - 1, this.index);
-        this.containerEl.style.transform = `translate3d(${index * -100}%, 0, 0)`;
+        const index  = getFinalIndex(roundingType, this.props.children.length - 1, this.index);
+        const pixels = Math.round(index * -this.startWidth);
+        this.updateTranslation(pixels);
 
-        if (pastSpeedThreshold && index !== this.indexCurrent) {
+        if (pastSpeedThreshold && index !== this.currentIndex) {
             this.containerEl.style.transitionDuration = `${time}ms`;
             setTimeout(() => {
                 this.containerEl.style.transitionDuration = '';
-            }, time)
+            }, time);
         }
 
-        this.changeIndex(index);
+        this.updateCurrentIndex(index);
     }
 
-    changeIndex = (index) => {
-        this.indexCurrent = index;
+    loop = () => {
+        if (this.started) {
+            const pixels = Math.round(this.index * -this.startWidth);
+            this.updateTranslation(pixels);
+            requestAnimationFrame(this.loop);
+        }
+    }
+
+    updateCurrentIndex = (index) => {
+        this.currentIndex = index;
         if (this.props.onChangeIndex) this.props.onChangeIndex(index);
     }
 
@@ -140,22 +154,30 @@ class SwipeableViews extends Component {
             </div>
         ))
 
-    render = () => (
-        <div className="swipeable">
-            <div
-                className="swipeable__container"
-                onTouchStart={this.onTouchStart}
-                onTouchMove={this.onTouchMove}
-                onTouchEnd={this.onTouchEnd}
-                ref="container"
-                style={{
-                    transform: `translate3d(${this.indexCurrent * -100}%, 0, 0)`
-                }}
-            >
-                { this.renderChildren(this.props.children) }
+    updateTranslation = (pixels) => {
+        this.containerEl.style.transform = `translate3d(${pixels}px, 0, 0)`;
+    }
+
+    render = () => {
+        console.log(this.props.index);
+
+        return (
+            <div className="swipeable">
+                <div
+                    className="swipeable__container"
+                    onTouchStart={this.onTouchStart}
+                    onTouchMove={this.onTouchMove}
+                    onTouchEnd={this.onTouchEnd}
+                    ref="container"
+                    style={{
+                        transform: `translate3d(${this.currentIndex * -100}%, 0, 0)`
+                    }}
+                >
+                    { this.renderChildren(this.props.children) }
+                </div>
             </div>
-        </div>
-    )
+        );
+    }
 }
 
 export default SwipeableViews;

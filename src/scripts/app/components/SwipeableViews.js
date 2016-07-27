@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import { compose, roundToXPlaces } from '../utils/tools';
+import M from '../libraries/Modernizr';
 
 const RESISTANCE_COEF = 0.4;
 const UNCERTAINTY_THRESHOLD = 3; // px
@@ -10,6 +11,8 @@ const getFinalIndex = (roundingType, maxIndex, index) => compose(
     (v) => Math.min(maxIndex, v),
     Math[roundingType]
 )(index);
+
+const transformProp = M.prefixed('transform');
 
 class SwipeableViews extends Component {
     static defaultProps = {
@@ -122,14 +125,6 @@ class SwipeableViews extends Component {
         const index  = getFinalIndex(roundingType, this.props.children.length - 1, this.index);
         const percent = roundToXPlaces(index * -100, 2);
         this.updateTranslation(percent);
-
-        if (pastSpeedThreshold && index !== this.currentIndex) {
-            this.containerEl.style.transitionDuration = `${time}ms`;
-            setTimeout(() => {
-                this.containerEl.style.transitionDuration = '';
-            }, time);
-        }
-
         this.updateCurrentIndex(index);
     }
 
@@ -154,7 +149,7 @@ class SwipeableViews extends Component {
         ))
 
     updateTranslation = (percent) => {
-        this.containerEl.style.transform = `translate3d(${percent}%, 0, 0)`;
+        this.containerEl.style[transformProp] = `translate3d(${percent}%, 0, 0)`;
     }
 
     render = () => (
@@ -166,7 +161,7 @@ class SwipeableViews extends Component {
                 onTouchEnd={this.onTouchEnd}
                 ref="container"
                 style={{
-                    transform: `translate3d(${Math.round(this.currentIndex * -100)}%, 0, 0)`
+                    [transformProp]: `translate3d(${Math.round(this.currentIndex * -100)}%, 0, 0)`
                 }}
             >
                 { this.renderChildren(this.props.children) }

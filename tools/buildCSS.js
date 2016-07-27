@@ -24,8 +24,8 @@ const buildCSS = (filename, inputCSSPath, outputCSSPath, isMinified) => {
     );
 
     const startPostCSS = (cssString) => {
-        const src = postcss([ require('postcss-cssnext') ])
-            .process(cssString, { from: inputCSSPath, to: outputCSSPath })
+        const src = postcss([ require('postcss-cssnext')({ browsers: 'last 2 versions, iOS 8' }) ])
+            .process(cssString, { from: inputCSSPath, to: outputCSSPath, browsers: 'last 2 versions, iOS 8' })
             .then(function (result) {
                 fs.writeFileSync(outputCSSPath, result.css);
                 if ( result.map ) fs.writeFileSync('app.css.map', result.map);

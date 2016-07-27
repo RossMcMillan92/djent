@@ -12,6 +12,7 @@
     "lzutf8": "^0.3.4",
     "ramda": "^0.21.0",
     "react-addons-shallow-compare": "^15.1.0",
+    "react-fastclick": "^2.1.2",
     "react-motion": "^0.4.4",
     "react-swipeable-views": "^0.6.4",
     "sw-toolbox": "^3.2.1"

@@ -1,3 +1,4 @@
+import 'react-fastclick';
 import './polyfills/array.includes';
 import './polyfills/array.reduce';
 import './polyfills/array.values';

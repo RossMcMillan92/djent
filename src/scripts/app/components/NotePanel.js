@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import deepEqual from 'deep-equal';
 
 import { capitalize } from '../utils/tools';
 
@@ -34,7 +33,7 @@ class NotePanel extends Component {
         const isOn = length.amount > 0;
 
         return (
-            <div className={`note-panel ${ isOn ? '' : 'note-panel--disabled' }`}>
+            <div className={`note-panel ${isOn ? '' : 'note-panel--disabled'}`}>
                 <img className="note-panel__svg" src={`/assets/images/notes/${length.name}.svg`} alt={noteName} title={noteName} />
                 <div className="note-panel__amount-container">
                     <span className="note-panel__amount" title="Chance">{percentage}%</span>
@@ -44,7 +43,7 @@ class NotePanel extends Component {
                     </div>
                 </div>
                 <div className="note-panel__checkbox-container">
-                    <span className={`toggle-input u-txt-small ${ length.isTriplet ? 'is-enabled' : '' }`} onClick={this.onIsTripletClick} >Triplet</span>
+                    <span className={`toggle-input u-txt-small u-txt-light ${length.isTriplet ? 'is-enabled' : ''}`} onClick={this.onIsTripletClick} >Triplet</span>
                 </div>
 
             </div>

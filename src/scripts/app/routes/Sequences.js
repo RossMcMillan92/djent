@@ -8,8 +8,8 @@ export default class Sequences extends Component {
         const beats = this.props.beats
             .filter(beat => beat.id !== 'total')
             .map((beat, i, arr) => (
-                <div className={`group-padding-y ${i !== arr.length - 1 ? 'u-bdr-b' : ''}`}>
-                    <BeatPanel key={i} beat={ beat }/>
+                <div key={i} className={`group-padding-y ${i !== arr.length - 1 ? 'u-bdr-b' : ''}`}>
+                    <BeatPanel beat={ beat }/>
                 </div>
             ));
 

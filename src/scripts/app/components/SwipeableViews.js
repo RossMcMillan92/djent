@@ -13,6 +13,7 @@ const getFinalIndex = (roundingType, maxIndex, index) => compose(
 )(index);
 
 const transformProp = M.prefixed('transform');
+const transformTimingFunctionProp = M.prefixed('transition-timing-function');
 
 class SwipeableViews extends Component {
     static defaultProps = {
@@ -125,6 +126,14 @@ class SwipeableViews extends Component {
         const index  = getFinalIndex(roundingType, this.props.children.length - 1, this.index);
         const percent = roundToXPlaces(index * -100, 2);
         this.updateTranslation(percent);
+
+        if (pastSpeedThreshold && index !== this.currentIndex) {
+             this.containerEl.style[transformTimingFunctionProp] = 'ease-out';
+             setTimeout(() => {
+                 this.containerEl.style[transformTimingFunctionProp] = '';
+             }, time);
+         }
+
         this.updateCurrentIndex(index);
     }
 

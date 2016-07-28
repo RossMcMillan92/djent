@@ -1,8 +1,6 @@
-import { roundToXPlaces } from '../utils/tools';
-
 const bufferCache = {};
 const BufferLoader = (context) => {
-    let newInstrumentPack = [];
+    const newInstrumentPack = [];
 
     const loadBuffer = (instrument, index) => {
         const newInstrument = Object.assign({}, instrument);
@@ -12,22 +10,22 @@ const BufferLoader = (context) => {
         newInstrument.buffers = {};
 
         const loadingSound = new Promise((res, rej) => {
-            enabledSounds.forEach((sound, i) => {
+            enabledSounds.forEach((sound) => {
                 const url = sound.path;
                 if (bufferCache[url]) {
                     newInstrument.buffers[sound.id] = bufferCache[url];
                     newInstrumentPack[index] = newInstrument;
                     bufferCount++;
-                    if(bufferCount === bufferAmount) {
+                    if (bufferCount === bufferAmount) {
                         res();
                     }
                     return;
-                };
+                }
 
                 // Load buffer asynchronously
                 const request = new XMLHttpRequest();
-                request.open("GET", url, true);
-                request.responseType = "arraybuffer";
+                request.open('GET', url, true);
+                request.responseType = 'arraybuffer';
 
                 request.onload = () => {
                     // Asynchronously decode the audio file data in request.response
@@ -35,14 +33,14 @@ const BufferLoader = (context) => {
                         request.response,
                         (buffer) => {
                             if (!buffer) {
-                                alert('error decoding file data: ' + url);
+                                // console.log('error decoding file data: ' + url);
                                 return;
                             }
                             newInstrument.buffers[sound.id] = buffer;
                             bufferCache[url] = buffer;
                             newInstrumentPack[index] = newInstrument;
                             bufferCount++;
-                            if(bufferCount === bufferAmount) {
+                            if (bufferCount === bufferAmount) {
                                 res();
                             }
                         },
@@ -50,41 +48,36 @@ const BufferLoader = (context) => {
                             rej(error);
                         }
                     );
-                }
+                };
 
                 request.onerror = (error) => {
                     rej(error);
-                    alert('BufferLoader: XHR error');
-                }
+                };
 
                 request.send();
-            })
-
+            });
         });
 
         return loadingSound;
-
-    }
+    };
 
     const load = (instruments) => {
         const loadingSounds = instruments
             .filter(instrument => instrument.sounds.filter(sound => sound.enabled).length)
-            .map(loadBuffer)
+            .map(loadBuffer);
 
         return Promise.all(loadingSounds)
                 .then(() => newInstrumentPack)
-                .catch(e => (console.error || console.log).call(console, e))
-    }
+                .catch(e => (console.error || console.log).call(console, e));
+    };
 
     return {
         load
-    }
-}
+    };
+};
 
-const loadInstrumentBuffers = (context, instruments) => {
-    return BufferLoader(context)
-        .load(instruments);
-}
+const loadInstrumentBuffers = (context, instruments) => BufferLoader(context)
+    .load(instruments);
 
 const getPitchPlaybackRatio = (pitchAmount) => {
     const pitchIsPositive = pitchAmount > 0;
@@ -92,7 +85,7 @@ const getPitchPlaybackRatio = (pitchAmount) => {
     const val = 1 / Math.abs((negAmount / 1200) - 1);
 
     return pitchIsPositive ? 1 / val : val;
-}
+};
 
 const playSound = (context, buffer, time, duration, volume, pitchAmount = 0, fadeInDuration = 0, fadeOutDuration = 0) => {
     if (!buffer) return;
@@ -121,9 +114,9 @@ const playSound = (context, buffer, time, duration, volume, pitchAmount = 0, fad
     source.start(time, 0, (duration + fadeOutDuration) * durationMultiplier);
 
     return source;
-}
+};
 
 export {
     loadInstrumentBuffers,
     playSound,
-}
+};

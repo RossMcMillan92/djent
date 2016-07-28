@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 
-import { repeat, compose } from '../utils/tools'
+import { compose } from '../utils/tools';
 
 let currentColorIndex = 0;
 const colorScheme = [
     [0, 136, 170],
     [239, 108, 91],
     [166, 188, 24],
-]
+];
 
 const incrementBySpeed = (val, targetVal, dist) => val + (dist * (targetVal - val));
 const calculateColorValue = compose(
@@ -16,37 +16,37 @@ const calculateColorValue = compose(
     Math.abs,
     Math.round,
     incrementBySpeed,
-)
+);
 
-const level = (x, y, w, h, targetColor) => {
+const Level = (x, y, w, h, targetColor) => {
     let lastUpdateTime = 0;
-    let vy = 1.5; // px/s
-    let vc = 10; // px/s
-    let oldState = {};
+    const vy = 1.5; // px/s
+    const vc = 10; // px/s
+    const oldState = {};
     let state = {
         x,
         y,
         w,
         h,
         color: [255, 255, 255],
-        targetColor: targetColor,
+        targetColor,
         targety: 0,
-    }
+    };
 
     const updateState = (args) => {
         state = Object.assign({}, state, args);
-    }
+    };
 
     const draw = ctx => {
-        if (oldState.y === state.y && oldState.color.filter((val, i) => val === state.color[i]).length === 3) return
+        if (oldState.y === state.y && oldState.color.filter((val, i) => val === state.color[i]).length === 3) return;
         ctx.fillStyle = '#fff';
         ctx.fillRect(state.x, 0, w, h);
         ctx.fillStyle = `rgb(${state.color[0]}, ${state.color[1]}, ${state.color[2]})`;
-        ctx.fillRect(state.x, state.y, state.w, state.h)
+        ctx.fillRect(state.x, state.y, state.w, state.h);
 
         oldState.y = state.y;
         oldState.color = [state.color[0], state.color[1], state.color[2]];
-    }
+    };
 
     const update = (t) => {
         if (!t) return;
@@ -63,7 +63,7 @@ const level = (x, y, w, h, targetColor) => {
         state.color = [r, g, b];
 
         lastUpdateTime = t;
-    }
+    };
 
     return {
         x: state.x,
@@ -73,21 +73,18 @@ const level = (x, y, w, h, targetColor) => {
         update,
         updateState,
         draw,
-    }
-}
+    };
+};
 
-const createInitialLevels = (levelAmount, height, resolution) => {
-    return Array(levelAmount)
-        .fill()
-        .map((xxx, i) => {
-            const x  = i * resolution;
-            const y  = 0;
-            const w  = resolution === 1 ? 1 : resolution - 1;
-            const h  = height;
-            const targetColor = [255, 0, 0];
-            return level(x, y, w, h, targetColor);
-        })
-}
+const createInitialLevels = (levelAmount, height, resolution) => Array(levelAmount).fill()
+    .map((xxx, i) => {
+        const x  = i * resolution;
+        const y  = 0;
+        const w  = resolution === 1 ? 1 : resolution - 1;
+        const h  = height;
+        const targetColor = [255, 0, 0];
+        return Level(x, y, w, h, targetColor);
+    });
 
 const resolution = 2;
 export default class Waveform extends Component {
@@ -113,12 +110,12 @@ export default class Waveform extends Component {
         }
 
         if (this.props.isPlaying && !nextProps.isPlaying) {
-            this.iteration = 0
+            this.iteration = 0;
         }
 
-        if (this.props.currentSrc && this.props.currentSrc !== nextProps.currentSrc && this.props.currentSrc.context) {
-            this.startTime = nextProps.currentSrc.context.currentTime;
-            this.switchColors();
+        if (this.props.audioContext && this.props.buffer !== nextProps.buffer) {
+            this.startTime = nextProps.audioContext.currentTime;
+            // this.switchColors();
         }
     }
 
@@ -160,15 +157,15 @@ export default class Waveform extends Component {
 
     loop = (t) => {
         const ctx = this.ctx;
-        const { isPlaying, currentSrc } = this.props;
-        const currentTime = !this.props.isPlaying ? 0 : currentSrc ? currentSrc.context.currentTime - this.startTime : false;
-        const duration = currentSrc ? currentSrc.buffer.duration : false;
+        const { isPlaying, audioContext } = this.props;
+        const currentTime = !isPlaying ? 0 : audioContext ? audioContext.currentTime - this.startTime : false;
+        const duration = this.props.timeLength;
         const iteration = duration === 0 || currentTime === 0 ? 0 : Math.floor(currentTime / duration);
         const percentPassed = (currentTime - (duration * iteration)) / duration;
         const indexThreshold = Math.ceil(this.levels.length * percentPassed);
 
-        if (iteration !== this.iteration && this.props.isPlaying) {
-            this.switchColors();
+        if (iteration !== this.iteration && isPlaying) {
+            // this.switchColors();
             this.iteration = iteration;
         }
 
@@ -176,7 +173,7 @@ export default class Waveform extends Component {
             if (currentTime && i <= indexThreshold) level.updateState({ targetColor: this.activeColor });
             level.draw(ctx);
             level.update(t);
-        })
+        });
         requestAnimationFrame(this.loop);
     }
 
@@ -205,16 +202,14 @@ export default class Waveform extends Component {
             });
     }
 
-    render = () => {
-        return (
-            <canvas
-                ref="canvas"
-                className={`${this.props.className}`}
-                style={{
-                    width: this.props.width,
-                    height: this.props.height,
-                }}
-            ></canvas>
-        );
-    }
+    render = () => (
+        <canvas
+            ref="canvas"
+            className={`${this.props.className}`}
+            style={{
+                width: this.props.width,
+                height: this.props.height,
+            }}
+        ></canvas>
+    );
 }

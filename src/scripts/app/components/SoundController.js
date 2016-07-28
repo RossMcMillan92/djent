@@ -21,6 +21,8 @@ import {
 
 import {
     getSequence,
+    getTotalBeatsLength,
+    getTotalTimeLength,
 } from '../utils/sequences';
 
 import {
@@ -28,15 +30,6 @@ import {
     deepClone,
     splice,
 } from '../utils/tools';
-
-
-const getTotalTimeLength = (beats, bpm) => getTotalBeatsLength(beats) * (60 / bpm);
-
-const getTotalBeatsLength = (beats) => {
-    const totalBeats       = beats.find(beat => beat.id === 'total');
-    const totalBeatsLength = totalBeats.bars * totalBeats.beats;
-    return totalBeatsLength;
-};
 
 const generateNewRiff = ({ context, beats, usePredefinedSettings, instruments, totalBeatsProduct }) => {
     const generatedSequences       = {};
@@ -67,6 +60,7 @@ const stop = (src) => {
 };
 
 class SoundController extends Component {
+    generationCount = -1
     currentlyPlayingNotes = [];
     currentRiffTemplate;
     queuedInstruments;
@@ -130,12 +124,13 @@ class SoundController extends Component {
                 newInstruments = instrumentss;
                 return renderRiffTemplateAtTempo(instrumentss, bpmMultiplier);
             })
-            .then((riffTemplate) => {
+            .then((audioTemplate) => {
                 const newState = { isLoading: false, error: '' };
-                if (!riffTemplate) newState.error = 'Error!';
+                if (!audioTemplate) newState.error = 'Error!';
 
                 this.updateUI(newState);
-                return { riffTemplate, instruments: newInstruments };
+                this.generationCount = this.generationCount + 1;
+                return { audioTemplate, instruments: newInstruments };
             });
     }
 
@@ -147,15 +142,17 @@ class SoundController extends Component {
         }
     }
 
-    playEvent = (riffTemplate, audioStartTime = this.audioContext.currentTime) => {
-        if (this.state.error || !riffTemplate) return;
+    playEvent = (audioTemplate, audioStartTime = this.audioContext.currentTime) => {
+        if (this.state.error || !audioTemplate) return;
 
         this.audioStartTime = audioStartTime;
-        this.currentRiffTemplate = riffTemplate;
-        if (!this.loopTimeout) this.loop(riffTemplate);
+        this.currentRiffTemplate = audioTemplate;
+        if (!this.loopTimeout) this.loop(audioTemplate);
 
-        // this.props.actions.updateCurrentBuffer(currentBuffer);
-        // this.props.actions.updateCurrentSrc(currentSrc);
+        this.props.actions.updateCurrentAudioTemplate({
+            id: this.generationCount,
+            audioTemplate
+        });
 
         if (!this.props.isPlaying) this.props.actions.updateIsPlaying(true);
 
@@ -185,22 +182,22 @@ class SoundController extends Component {
         if (!this.state.isLoading) {
             this.stopEvent();
             this.generate()
-                .then(({ riffTemplate, instruments }) => this.updateInstrumentsAndPlay(riffTemplate, instruments));
+                .then(({ audioTemplate, instruments }) => this.updateInstrumentsAndPlay(audioTemplate, instruments));
         }
     }
 
     generateAndQueue = () => {
         this.generate()
-            .then(({ riffTemplate, instruments }) => {
-                if (!this.props.isPlaying) return this.updateInstrumentsAndPlay(riffTemplate, instruments);
+            .then(({ audioTemplate, instruments }) => {
+                if (!this.props.isPlaying) return this.updateInstrumentsAndPlay(audioTemplate, instruments);
 
-                this.queuedRiffTemplate = riffTemplate;
+                this.queuedRiffTemplate = audioTemplate;
                 this.queuedInstruments = instruments;
             });
     }
 
-    updateInstrumentsAndPlay = (riffTemplate, instruments) => {
-        this.playEvent(riffTemplate);
+    updateInstrumentsAndPlay = (audioTemplate, instruments) => {
+        this.playEvent(audioTemplate);
         this.props.actions.updateCustomPresetInstruments(instruments);
     }
 
@@ -208,9 +205,9 @@ class SoundController extends Component {
         this.currentlyPlayingNotes = splice(this.currentlyPlayingNotes.indexOf(source), 1, this.currentlyPlayingNotes);
     }
 
-    loop = (riffTemplate) => {
+    loop = (audioTemplate) => {
         const currentTime   = this.audioContext.currentTime - this.audioStartTime;
-        const upcomingNotes = riffTemplate
+        const upcomingNotes = audioTemplate
             .filter(hit => hit.startTime >= currentTime && hit.startTime <= currentTime + 0.1)
             .map(({
                     buffer,
@@ -221,7 +218,7 @@ class SoundController extends Component {
                     fadeInDuration,
                     fadeOutDuration,
                 }) => {
-                    const source = playSound(this.audioContext, buffer, this.audioStartTime + startTime, duration, volume, pitchAmount, fadeInDuration, fadeOutDuration)
+                    const source = playSound(this.audioContext, buffer, this.audioStartTime + startTime, duration, volume, pitchAmount, fadeInDuration, fadeOutDuration);
                     source.onended = () => this.onSourceEnd(source);
                     return source;
                 }
@@ -229,7 +226,7 @@ class SoundController extends Component {
 
         this.currentlyPlayingNotes = [ ...this.currentlyPlayingNotes, ...upcomingNotes ];
 
-        const newRiffTemplate = riffTemplate.slice(upcomingNotes.length, riffTemplate.length);
+        const newRiffTemplate = audioTemplate.slice(upcomingNotes.length, audioTemplate.length);
         if (newRiffTemplate.length) {
             /* RIFF IS STILL PLAYING */
             this.loopTimeout = setTimeout(() => this.loop(newRiffTemplate), 50);
@@ -250,7 +247,7 @@ class SoundController extends Component {
                     this.queuedRiffTemplate  = undefined;
                 }
 
-                this.playEvent(nextRiffTemplate, endTime)
+                this.playEvent(nextRiffTemplate, endTime);
             }
         }
     }
@@ -273,7 +270,7 @@ class SoundController extends Component {
                 { this.state.error ? <p className="txt-error">{ this.state.error }</p> : null }
                 <div className="u-flex-row u-flex-wrap">
                     <div className="group-spacing-y-small u-mr05 u-mb0">
-                        <button className={`button-primary ${ this.isOutDated ? 'button-primary--positive' : '' } ${ this.state.isLoading ? '' : 'icon-is-hidden' }`} onClick={() => this.generateEvent()}>
+                        <button className={`button-primary ${this.isOutDated ? 'button-primary--positive' : ''} ${this.state.isLoading ? '' : 'icon-is-hidden'}`} onClick={() => this.generateEvent()}>
                             <span className="button-primary__inner">{ this.props.generateButtonText || 'Generate' }</span>
                             <span className="button-primary__icon">
                                 <span className="spinner" />

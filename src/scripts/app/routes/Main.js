@@ -7,6 +7,7 @@ import Instruments from '../containers/Instruments';
 import Modal from '../containers/Modal';
 import Player from '../containers/Player';
 import Sequences from '../containers/Sequences';
+import Visualiser from '../containers/Visualiser';
 
 import { defaultAllowedLengths } from '../reducers/beats';
 
@@ -93,18 +94,15 @@ export default class Main extends Component {
             ));
         const isMobile = window.innerWidth < 680;
         const Container = isMobile ? SwipeableViews : 'div';
-
-        return (
-            <section>
-                <Modal />
-                <div className="site">
-                    <div className="site__content" ref="content">
-                        <div className="header" ref="header">
-                            <div className="group-capped-x group-centered">
+        const headerContent = this.props.currentAudioTemplate
+                            && this.props.currentAudioTemplate.audioTemplate.length
+                            ? (
+                                <Visualiser />
+                            ) : (
                                 <div className="group-spacing-x">
                                     <div className="u-flex-row u-flex-justify">
                                         <h1 className="header__title u-mb0">
-                                            Djen.co
+                                            Djen
                                         </h1>
                                         <a className="" href="https://www.facebook.com/djenerationstation/" target="_blank">
                                             <img
@@ -116,6 +114,16 @@ export default class Main extends Component {
                                         </a>
                                     </div>
                                 </div>
+                            );
+
+        return (
+            <section>
+                <Modal />
+                <div className="site">
+                    <div className="site__content" ref="content">
+                        <div className="header" ref="header">
+                            <div className="group-capped-x group-centered">
+                                { headerContent }
                             </div>
                         </div>
 

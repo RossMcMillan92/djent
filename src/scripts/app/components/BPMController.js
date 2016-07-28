@@ -18,11 +18,11 @@ class BPMController extends Component {
             defaultValue: this.props.bpm,
             onChange: this.onBPMChange,
             step: 5,
-            className: 'input-base',
+            className: 'input-base input-base--short',
             labelClassName: 'input-label',
-        }
+        };
 
-        return <InputBox { ...props } />
+        return <InputBox { ...props } />;
     }
 }
 

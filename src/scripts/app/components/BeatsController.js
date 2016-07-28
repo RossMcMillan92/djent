@@ -8,22 +8,21 @@ class BeatsController extends Component {
     shouldComponentUpdate = (nextProps) => !deepEqual(nextProps.beat, this.props.beat);
 
     onChange = (event, type) => {
-        const [ prop, value ] = [event.target.getAttribute('id'), parseFloat(event.target.value)];
+        const prop = type;
+        const value = parseFloat(event.target.value);
         this.props.actions.updateBeats(this.props.beat.id, prop, value);
     }
 
     render = () => {
-        const getProps = (type) => {
-            return {
-                type: 'number',
-                id: type,
-                label: `${capitalize(type)} (1 - 8)`,
-                defaultValue : this.props.beat[type],
-                onChange: (event) => this.onChange(event, type),
-                className: 'input-base',
-                labelClassName: 'input-label',
-            }
-        }
+        const getProps = (type) => ({
+            type: 'number',
+            id: type,
+            label: `${capitalize(type)} (1 - 8)`,
+            defaultValue : this.props.beat[type],
+            onChange: (event) => this.onChange(event, type),
+            className: 'input-base input-base--short',
+            labelClassName: 'input-label',
+        });
 
         return (
             <div className="u-flex-row u-flex-center">

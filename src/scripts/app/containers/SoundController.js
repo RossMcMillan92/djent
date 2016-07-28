@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import { bindActionCreators } from 'redux'
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as configActions from '../actions/config';
 import * as instrumentsActions from '../actions/instruments';
@@ -14,7 +13,7 @@ const mapStateToProps = (state) => ({
     bpm: state.config.bpm,
     beats: state.beats,
     instruments: state.instruments,
-})
+});
 
 const mapDispatchToProps = (dispatch) => {
     const actions = {
@@ -22,12 +21,12 @@ const mapDispatchToProps = (dispatch) => {
         ...instrumentsActions,
         ...modalActions,
         ...soundActions,
-    }
+    };
     return {
         actions: {
             ...bindActionCreators(actions, dispatch)
         }
     };
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(SoundController);

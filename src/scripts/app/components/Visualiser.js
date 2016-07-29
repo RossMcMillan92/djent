@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import deepEqual from 'deep-equal';
 
 import Waveform from './Waveform';
 import audioContext from '../utils/audioContext';
@@ -16,14 +15,19 @@ class Visualiser extends Component {
         buffer: undefined,
     }
 
-    shouldComponentUpdate = (nextProps) => !deepEqual(nextProps.currentAudioTemplate, this.props.currentAudioTemplate);
+    shouldComponentUpdate = (nextProps, nextState) =>
+        nextProps.currentAudioTemplate.id !== this.props.currentAudioTemplate.id
+        || nextState.buffer !== this.state.buffer
+        || nextProps.isPlaying !== this.props.isPlaying;
 
     componentWillMount = () => {
         this.renderBuffer(this.props.beats, this.props.bpm, this.props.currentAudioTemplate.audioTemplate);
     }
 
     componentWillUpdate = (nextProps) => {
-        this.renderBuffer(nextProps.beats, nextProps.bpm, nextProps.currentAudioTemplate.audioTemplate);
+        if (nextProps.currentAudioTemplate.id !== this.props.currentAudioTemplate.id) {
+            this.renderBuffer(nextProps.beats, nextProps.bpm, nextProps.currentAudioTemplate.audioTemplate);
+        }
     }
 
     renderBuffer = (beats, bpm, audioTemplate) => {
@@ -43,10 +47,10 @@ class Visualiser extends Component {
                 isPlaying={this.props.isPlaying}
                 buffer={this.state.buffer}
                 audioContext={audioContext}
+                audioStartTime={this.props.currentAudioTemplate.audioStartTime}
                 timeLength={this.timeLength}
                 width={this.containerWidth}
                 height={40}
-                color="#1b8a94"
                 amplified={true}
             />
             <span className='visualiser__msg'>{ this.props.pretext }</span>

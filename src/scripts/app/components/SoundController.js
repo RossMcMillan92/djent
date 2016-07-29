@@ -151,6 +151,7 @@ class SoundController extends Component {
 
         this.props.actions.updateCurrentAudioTemplate({
             id: this.generationCount,
+            audioStartTime,
             audioTemplate
         });
 

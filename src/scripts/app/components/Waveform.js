@@ -4,7 +4,7 @@ import { compose } from '../utils/tools';
 
 let currentColorIndex = 0;
 const colorScheme = [
-    [0, 136, 170],
+    [255, 255, 255],
     [239, 108, 91],
     [166, 188, 24],
 ];
@@ -39,8 +39,8 @@ const Level = (x, y, w, h, targetColor) => {
 
     const draw = ctx => {
         if (oldState.y === state.y && oldState.color.filter((val, i) => val === state.color[i]).length === 3) return;
-        ctx.fillStyle = '#fff';
-        ctx.fillRect(state.x, 0, w, h);
+        // ctx.fillStyle = '#fff';
+        ctx.clearRect(state.x, 0, w, h);
         ctx.fillStyle = `rgb(${state.color[0]}, ${state.color[1]}, ${state.color[2]})`;
         ctx.fillRect(state.x, state.y, state.w, state.h);
 
@@ -112,11 +112,6 @@ export default class Waveform extends Component {
         if (this.props.isPlaying && !nextProps.isPlaying) {
             this.iteration = 0;
         }
-
-        if (this.props.audioContext && this.props.buffer !== nextProps.buffer) {
-            this.startTime = nextProps.audioContext.currentTime;
-            // this.switchColors();
-        }
     }
 
     componentDidUpdate = (prevProps) => {
@@ -157,8 +152,8 @@ export default class Waveform extends Component {
 
     loop = (t) => {
         const ctx = this.ctx;
-        const { isPlaying, audioContext } = this.props;
-        const currentTime = !isPlaying ? 0 : audioContext ? audioContext.currentTime - this.startTime : false;
+        const { isPlaying, audioContext, audioStartTime } = this.props;
+        const currentTime = !isPlaying ? 0 : audioContext ? audioContext.currentTime - audioStartTime : false;
         const duration = this.props.timeLength;
         const iteration = duration === 0 || currentTime === 0 ? 0 : Math.floor(currentTime / duration);
         const percentPassed = (currentTime - (duration * iteration)) / duration;

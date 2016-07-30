@@ -13,6 +13,7 @@ class Visualiser extends Component {
 
     state = {
         buffer: undefined,
+        audioStartTime: undefined
     }
 
     shouldComponentUpdate = (nextProps, nextState) =>
@@ -21,36 +22,41 @@ class Visualiser extends Component {
         || nextProps.isPlaying !== this.props.isPlaying;
 
     componentWillMount = () => {
-        this.renderBuffer(this.props.beats, this.props.bpm, this.props.currentAudioTemplate.audioTemplate);
+        this.renderBuffer(this.props.beats, this.props.bpm, this.props.currentAudioTemplate.audioTemplate, this.props.currentAudioTemplate.audioStartTime);
     }
 
     componentWillUpdate = (nextProps) => {
         if (nextProps.currentAudioTemplate.id !== this.props.currentAudioTemplate.id) {
-            this.renderBuffer(nextProps.beats, nextProps.bpm, nextProps.currentAudioTemplate.audioTemplate);
+            const timeoutLength = (nextProps.currentAudioTemplate.audioStartTime - audioContext.currentTime) * 1000;
+            this.renderBuffer(nextProps.beats, nextProps.bpm, nextProps.currentAudioTemplate.audioTemplate, nextProps.currentAudioTemplate.audioStartTime, timeoutLength);
         }
     }
 
-    renderBuffer = (beats, bpm, audioTemplate) => {
+    renderBuffer = (beats, bpm, audioTemplate, audioStartTime, timeoutLength = 0) => {
         this.timeLength = getTotalTimeLength(beats, bpm);
         getBufferFromAudioTemplate(audioTemplate, this.timeLength)
-            .then(buffer => this.setState({ buffer }));
+            .then(buffer => {
+                setTimeout(() => this.setState({ buffer, audioStartTime }), timeoutLength);
+            });
     }
 
     componentDidUpdate = () => {
-        this.containerWidth = this.refs.container.offsetWidth;
+        const { container } = this.refs;
+        const padding = 10;
+        this.containerWidth = container.offsetWidth - padding;
     }
 
     render = () => (
-        <div ref="container" className={`visualiser ${!this.state.buffer ? 'is-inactive' : ''}`}>
+        <div ref="container" className={`visualiser ${!this.state.buffer || !this.props.isPlaying ? 'is-inactive' : ''}`}>
             <Waveform
                 className="visualiser__canvas"
                 isPlaying={this.props.isPlaying}
                 buffer={this.state.buffer}
                 audioContext={audioContext}
-                audioStartTime={this.props.currentAudioTemplate.audioStartTime}
+                audioStartTime={this.state.audioStartTime}
                 timeLength={this.timeLength}
                 width={this.containerWidth}
-                height={40}
+                height={50}
                 amplified={true}
             />
             <span className='visualiser__msg'>{ this.props.pretext }</span>

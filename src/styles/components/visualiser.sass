@@ -1,9 +1,17 @@
 .visualiser
-    position: relative
+    position: absolute
+    left: 0
+    top: 0
+    right: 0
+    padding: 5px
+    background-color: $palette-alpha
+    opacity: 1
     transition: all .25s ease-in-out
+    user-select: none
+    pointer-events: none
 
     &.is-inactive
-        background-color: #f7f7f7
+        opacity: 0
 
 .visualiser__msg
     text-align: center
@@ -14,7 +22,6 @@
     transform: translate(-50%, -50%)
     transition: all .25s ease-in-out
     opacity: 0
-    user-select: none
 
     .visualiser.is-inactive &
         opacity: 1

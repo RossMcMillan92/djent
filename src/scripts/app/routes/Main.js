@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import SwipeableViews from '../components/SwipeableViews';
 
+import SwipeableViews from '../components/SwipeableViews';
 import Spinner from '../components/Spinner';
 
 import Instruments from '../containers/Instruments';
@@ -94,25 +94,29 @@ export default class Main extends Component {
             ));
         const isMobile = window.innerWidth < 680;
         const Container = isMobile ? SwipeableViews : 'div';
-        const headerContent = this.props.currentAudioTemplate
-                            && this.props.currentAudioTemplate.audioTemplate.length
-                            ? (
-                                <Visualiser />
-                            ) : (
-                                <div className="group-spacing-x">
-                                    <div className="u-flex-row u-flex-justify">
-                                        <h1 className="header__title u-mb0">
-                                            Djen
-                                        </h1>
-                                        <a className="" href="https://www.facebook.com/djenerationstation/" target="_blank">
-                                            <img
-                                                className="header__icon social-icon"
-                                                src="/assets/images/F_icon.svg"
-                                                width="39"
-                                                height="39"
-                                            />
-                                        </a>
+        const headerContent =  (
+                                <div className="">
+                                    <div className="group-spacing-x">
+                                        <div className="u-flex-row u-flex-justify">
+                                            <h1 className="header__title u-mb0">
+                                                Djen
+                                            </h1>
+                                            <a className="" href="https://www.facebook.com/djenerationstation/" target="_blank">
+                                                <img
+                                                    className="header__icon social-icon"
+                                                    src="/assets/images/F_icon.svg"
+                                                    width="39"
+                                                    height="39"
+                                                />
+                                            </a>
+                                        </div>
                                     </div>
+                                    {
+                                        this.props.currentAudioTemplate
+                                        && this.props.currentAudioTemplate.audioTemplate.length
+                                        ? <Visualiser />
+                                        : null
+                                    }
                                 </div>
                             );
 

@@ -2,11 +2,9 @@ import React, { Component } from 'react';
 
 import { compose } from '../utils/tools';
 
-let currentColorIndex = 0;
 const colorScheme = [
+    [146, 198, 211],
     [255, 255, 255],
-    [239, 108, 91],
-    [166, 188, 24],
 ];
 
 const incrementBySpeed = (val, targetVal, dist) => val + (dist * (targetVal - val));
@@ -39,8 +37,8 @@ const Level = (x, y, w, h, targetColor) => {
 
     const draw = ctx => {
         if (oldState.y === state.y && oldState.color.filter((val, i) => val === state.color[i]).length === 3) return;
-        // ctx.fillStyle = '#fff';
-        ctx.clearRect(state.x, 0, w, h);
+        // ctx.fillStyle = 'transparent';
+        ctx.clearRect(state.x, 0, w + 1, h);
         ctx.fillStyle = `rgb(${state.color[0]}, ${state.color[1]}, ${state.color[2]})`;
         ctx.fillRect(state.x, state.y, state.w, state.h);
 
@@ -82,35 +80,37 @@ const createInitialLevels = (levelAmount, height, resolution) => Array(levelAmou
         const y  = 0;
         const w  = resolution === 1 ? 1 : resolution - 1;
         const h  = height;
-        const targetColor = [255, 0, 0];
+        const targetColor = [255, 255, 255];
         return Level(x, y, w, h, targetColor);
     });
 
-const resolution = 2;
+const RESOLUTION = 3;
 export default class Waveform extends Component {
     startTime = 0;
     iteration = 0;
     loopIsEnabled = false;
     ctx;
     levels = [];
-    backgroundColor = [150, 150, 150];
-    activeColor = colorScheme[currentColorIndex];
+    backgroundColor = colorScheme[0];
+    activeColor = colorScheme[1];
 
     componentDidMount = () => {
         this.fixCanvasScale();
+        this.createInitialLevelsFromWidth(this.props);
     }
 
     componentWillUpdate = (nextProps) => {
-        const width = this.props.width;
-        const height = this.props.height;
-        const levelAmount = Math.floor(width / resolution);
-
-        if (this.levels.length !== levelAmount) {
-            this.levels = createInitialLevels(levelAmount, height, resolution);
-        }
-
+        this.createInitialLevelsFromWidth(nextProps);
         if (this.props.isPlaying && !nextProps.isPlaying) {
             this.iteration = 0;
+        }
+    }
+
+    createInitialLevelsFromWidth = ({ width, height }) => {
+        const levelAmount = Math.floor(width / RESOLUTION);
+
+        if (this.levels.length !== levelAmount) {
+            this.levels = createInitialLevels(levelAmount, height, RESOLUTION);
         }
     }
 
@@ -144,37 +144,34 @@ export default class Waveform extends Component {
         this.ctx.scale(canvasRatio, canvasRatio);
     }
 
-    switchColors = () => {
-        this.backgroundColor = this.activeColor;
-        currentColorIndex = currentColorIndex < colorScheme.length - 1 ? currentColorIndex + 1 : 0;
-        this.activeColor = colorScheme[currentColorIndex];
-    }
-
     loop = (t) => {
         const ctx = this.ctx;
         const { isPlaying, audioContext, audioStartTime } = this.props;
         const currentTime = !isPlaying ? 0 : audioContext ? audioContext.currentTime - audioStartTime : false;
         const duration = this.props.timeLength;
-        const iteration = duration === 0 || currentTime === 0 ? 0 : Math.floor(currentTime / duration);
+        const iteration = duration === 0 || currentTime <= 0 ? 0 : Math.floor(currentTime / duration);
         const percentPassed = (currentTime - (duration * iteration)) / duration;
         const indexThreshold = Math.ceil(this.levels.length * percentPassed);
 
         if (iteration !== this.iteration && isPlaying) {
-            // this.switchColors();
             this.iteration = iteration;
         }
 
         this.levels.forEach((level, i) => {
-            if (currentTime && i <= indexThreshold) level.updateState({ targetColor: this.activeColor });
             level.draw(ctx);
+
+            const levelColor = currentTime && i <= indexThreshold ? this.activeColor : this.backgroundColor;
+            level.updateState({ targetColor: levelColor });
             level.update(t);
         });
-        requestAnimationFrame(this.loop);
+
+        if (isPlaying) requestAnimationFrame(this.loop);
+        else this.loopIsEnabled = false;
     }
 
     updateLevels = (data) => {
         const { width, height } = this.props;
-        const step = Math.ceil(data.length / width) * resolution;
+        const step = Math.ceil(data.length / width) * RESOLUTION;
 
         let highestAverage = 0;
         const newData = this.levels
@@ -191,7 +188,7 @@ export default class Waveform extends Component {
             .forEach((item, i) => {
                 const value = item * (this.props.amplified ? scale : 1);
                 const level = this.levels[i];
-                const y  = height - value;
+                const y  = (height - value);
 
                 level.updateState({ targety: y, targetColor });
             });

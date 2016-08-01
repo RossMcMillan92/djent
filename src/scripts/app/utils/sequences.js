@@ -74,11 +74,11 @@ const convertAllowedLengthsToArray = (objs) => objs
         return [ ...newArr ];
     }, []);
 
-const generateSequence = ({ totalBeats, allowedLengths, hitChance }) => {
-    return (function loop (seq, sum, target) {
+const generateSequence = ({ totalBeats, allowedLengths, hitChance }) =>
+    (function loop(seq, sum, target) {
         let newLength = randomFromArray(allowedLengths);
 
-        if(sum + (1/newLength) > target){
+        if (sum + (1 / newLength) > target) {
             if (!allowedLengths.filter(length => 1 / length < target - sum).length) {
                 newLength = 1 / (target - sum);
             } else {
@@ -86,17 +86,16 @@ const generateSequence = ({ totalBeats, allowedLengths, hitChance }) => {
             }
         }
 
-        if(Math.floor(sum + .001) < target && isFinite(newLength)) {
-            sum += (1/newLength);
+        if (Math.floor(sum + 0.001) < target && isFinite(newLength)) {
+            sum += (1 / newLength);
             const newBeat = {
                 beat: newLength,
                 volume: Math.random() < hitChance ? 1 : 0
             };
-            return loop([ ...seq, newBeat ], sum, target)
+            return loop([ ...seq, newBeat ], sum, target);
         }
-        return seq
-    })([], 0, totalBeats);
-};
+        return seq;
+    }([], 0, totalBeats));
 
 const getAllowedLengthsFromSequence = (sequence, allowedLengths) =>
     allowedLengths.map(length => {
@@ -157,11 +156,16 @@ const getSequence = ({ sequences, generatedSequences, usePredefinedSettings }) =
         } else if (generatedSequences[sequence]) {
             sequence = generatedSequences[sequence];
         } else {
-            const instrumentBeats        = sequences.find(s => s.id === sequence);
-            const instrumentBeatsProduct = instrumentBeats.beats * instrumentBeats.bars;
-            const allowedLengths         = convertAllowedLengthsToArray(instrumentBeats.allowedLengths);
-            const hitChance              = instrumentBeats.hitChance;
-            sequence = generatedSequences[sequence] = generateSequence({ totalBeats: instrumentBeatsProduct, allowedLengths, hitChance });
+            const instrumentSequence     = sequences.find(s => s.id === sequence);
+
+            if (instrumentSequence) {
+                const instrumentBeatsProduct = instrumentSequence.beats * instrumentSequence.bars;
+                const allowedLengths         = convertAllowedLengthsToArray(instrumentSequence.allowedLengths);
+                const hitChance              = instrumentSequence.hitChance;
+                sequence = generatedSequences[sequence] = generateSequence({ totalBeats: instrumentBeatsProduct, allowedLengths, hitChance });
+            } else {
+                sequence = undefined;
+            }
         }
     }
 

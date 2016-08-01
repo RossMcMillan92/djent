@@ -210,7 +210,7 @@ class SoundController extends Component {
     loop = (audioTemplate) => {
         const currentTime   = this.audioContext.currentTime - this.audioStartTime;
         const upcomingNotes = audioTemplate
-            .filter(hit => hit.startTime >= currentTime && hit.startTime <= currentTime + 0.1)
+            .filter(hit => hit.startTime >= currentTime && hit.startTime <= currentTime + 1)
             .map(({
                     buffer,
                     startTime,
@@ -231,7 +231,7 @@ class SoundController extends Component {
         const newRiffTemplate = audioTemplate.slice(upcomingNotes.length, audioTemplate.length);
         if (newRiffTemplate.length) {
             /* RIFF IS STILL PLAYING */
-            this.loopTimeout = setTimeout(() => this.loop(newRiffTemplate), 50);
+            this.loopTimeout = setTimeout(() => this.loop(newRiffTemplate), 500);
         } else {
             /* RIFF IS FINISHED */
             this.loopTimeout = undefined;

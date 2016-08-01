@@ -29,5 +29,6 @@
         "key-spacing": 0,
         "max-len": 0,
         "no-param-reassign": 0,
+        "no-case-declarations": 0,
     }
 }

@@ -5,14 +5,14 @@ const preset = {
         config: {
             bpm            : 212,
         },
-        beats: [
+        sequences: [
             {
                 id    : 'total',
                 bars  : 8,
                 beats : 4,
             },
             {
-                id          : 'RAND_BEAT_1',
+                id          : 'CUSTOM_SEQUENCE_1',
                 description : 'Guitars',
                 bars        : 8,
                 beats       : 4,
@@ -25,7 +25,7 @@ const preset = {
                 ],
             },
             {
-                id          : 'RAND_BEAT_2',
+                id          : 'CUSTOM_SEQUENCE_2',
                 description : 'Bass drum',
                 bars        : 1,
                 beats       : 4,

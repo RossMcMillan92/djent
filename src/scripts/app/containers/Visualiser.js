@@ -4,10 +4,10 @@ import * as soundActions from '../actions/sound';
 import Visualiser from '../components/Visualiser';
 
 const mapStateToProps = (state) => ({
-    isPlaying: state.sound.isPlaying,
+    isPlaying            : state.sound.isPlaying,
     currentAudioTemplate : state.sound.currentAudioTemplate,
-    beats: state.beats,
-    bpm: state.config.bpm,
+    sequences            : state.sequences,
+    bpm                  : state.config.bpm,
 });
 
 const mapDispatchToProps = (dispatch) => {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { compress, decompress } from 'lzutf8';
-import { deepClone } from '../utils/tools';
+import { compress } from 'lzutf8';
+import { deepClone, log } from '../utils/tools';
 
 import ShareBox from './ShareBox.js';
 
@@ -21,16 +21,14 @@ class ShareController extends Component {
                     bpm            : this.props.bpm,
                     hitChance      : this.props.hitChance,
                 },
-                beats: deepClone(this.props.beats),
+                sequences: deepClone(this.props.sequences),
                 instruments: this.props.instruments
-                    .map(instrument => {
-                        return {
-                            id: instrument.id,
-                            pitch: instrument.pitch,
-                            predefinedHitTypes: instrument.hitTypes,
-                            predefinedSequence: instrument.sequence,
-                        }
-                    }),
+                    .map(instrument => ({
+                        id: instrument.id,
+                        pitch: instrument.pitch,
+                        predefinedHitTypes: instrument.hitTypes,
+                        predefinedSequence: instrument.sequence,
+                    })),
             }
         };
 
@@ -41,34 +39,35 @@ class ShareController extends Component {
                     const content = (<ShareBox url={shareableURL} />);
                     this.props.actions.enableModal({ content, isCloseable: true, className: 'modal--auto-width' });
                 }
-                this.setState({ isLoading: false })
+                this.setState({ isLoading: false });
             });
     }
 
-    onClick = e => {
+    onClick = () => {
         this.setState({ isLoading: true });
         this.generatePreset();
     }
 
     getShareableURL = (preset) => {
-        const compressedPreset = compress(JSON.stringify(preset), {outputEncoding: "Base64" });
+        const compressedPreset = compress(JSON.stringify(preset), { outputEncoding: 'Base64' });
         const shareableURL = `djen.co/#share=${compressedPreset}`;
 
-        if (shareableURL.length > 3000) alert('No can do');
+        if (shareableURL.length > 3000) {
+            log('No can do');
+            return;
+        }
 
         return this.getShortURL(shareableURL);
     }
 
-    getShortURL = url => {
-        return gapi.client.urlshortener.url.insert({ 'longUrl': url })
-            .then((response) => response.result.id, (reason) => (console.error || console.log).call(console, reason));
-    }
+    getShortURL = url => window.gapi.client.urlshortener.url.insert({ longUrl: url })
+        .then((response) => response.result.id, (reason) => log(reason));
 
     render = () => {
-        const isDisabled = !this.props.googleAPIHasLoaded || !this.props.currentBuffer
+        const isDisabled = !this.props.googleAPIHasLoaded || !this.props.currentBuffer;
         return (
             <div className="">
-                <button className={`button-primary u-flex-row ${ this.state.isLoading ? '' : 'icon-is-hidden' }`} onClick={this.onClick} disabled={isDisabled}>
+                <button className={`button-primary u-flex-row ${this.state.isLoading ? '' : 'icon-is-hidden'}`} onClick={this.onClick} disabled={isDisabled}>
                     <span className="button-primary__inner">Share</span>
                     <span className="button-primary__icon">
                         <span className="spinner" />

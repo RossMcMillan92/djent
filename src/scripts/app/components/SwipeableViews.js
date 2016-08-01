@@ -7,8 +7,8 @@ const RESISTANCE_COEF = 0.4;
 const UNCERTAINTY_THRESHOLD = 3; // px
 
 const getFinalIndex = (roundingType, maxIndex, index) => compose(
-    (v) => Math.max(0, v),
-    (v) => Math.min(maxIndex, v),
+    v => Math.max(0, v),
+    v => Math.min(maxIndex, v),
     Math[roundingType]
 )(index);
 
@@ -54,14 +54,24 @@ class SwipeableViews extends Component {
 
         this.containerEl.style.transition = 'none';
         this.loop();
+
+        // This prevents clicks from firing this erroneously
+        this.noMoveTimeout = setTimeout(() => {
+            this.containerEl.style.transition = '';
+            this.started = false;
+        }, 1000);
     }
 
     onTouchMove = (event) => {
+        if (this.noMoveTimeout) {
+            clearTimeout(this.noMoveTimeout);
+            this.noMoveTimeout = undefined;
+        }
+
         if (!this.started) return this.onTouchStart(event);
 
         const touch = event.touches[0];
 
-        // We don't know yet.
         if (this.isSwiping === undefined) {
           if (event.defaultPrevented) {
             this.isSwiping = false;
@@ -73,7 +83,7 @@ class SwipeableViews extends Component {
 
             if (isSwiping === true || dx > UNCERTAINTY_THRESHOLD || dy > UNCERTAINTY_THRESHOLD) {
               this.isSwiping = isSwiping;
-              this.startX = touch.pageX; // Shift the starting point.
+              this.startX = touch.pageX;
             }
           }
         }
@@ -94,7 +104,7 @@ class SwipeableViews extends Component {
         let index = this.currentIndex + (this.startX - touch.pageX) / this.startWidth;
 
         if (!this.props.resistance) {
-            index = compose((v) => Math.min(indexMax, v), (v) => Math.max(0, v))(index);
+            index = compose(v => Math.min(indexMax, v), v => Math.max(0, v))(index);
             this.startX = touch.pageX;
         } else {
             if (index < 0) {

@@ -31,15 +31,16 @@ import {
     splice,
 } from '../utils/tools';
 
-const generateNewRiff = ({ context, beats, usePredefinedSettings, instruments, totalBeatsProduct }) => {
-    const generatedSequences       = {};
-    const getInstrumentSequence    = getSequence({
-        beats,
+const generateNewRiff = ({ context, sequences, usePredefinedSettings, instruments, totalBeatsProduct }) => {
+    const generatedSequences    = {};
+    const getInstrumentSequence = getSequence({
+        sequences,
         generatedSequences,
         usePredefinedSettings
     });
     const instrumentsWithSequences = instruments
-        .map(getInstrumentSequence);
+        .map(getInstrumentSequence)
+        .filter(i => i.sequence !== undefined);
 
     return generateRiff({
         context,
@@ -91,7 +92,7 @@ class SoundController extends Component {
 
         // Check against the generation state to see if we're out of date
         if (nextProps.bpm !== this.props.generationState.bpm
-            || !deepEqual(nextProps.beats, this.props.generationState.beats)
+            || !deepEqual(nextProps.sequences, this.props.generationState.sequences)
             || nextProps.instruments
                 .filter((instrument, i) =>
                     instrument.sounds
@@ -107,8 +108,8 @@ class SoundController extends Component {
     }
 
     generate = () => {
-        const { bpm, beats, instruments, usePredefinedSettings } = this.props;
-        const generationState = deepClone({ bpm, beats, instruments, usePredefinedSettings });
+        const { bpm, sequences, instruments, usePredefinedSettings } = this.props;
+        const generationState = deepClone({ bpm, sequences, instruments, usePredefinedSettings });
 
         this.props.actions.updateGenerationState(generationState);
 
@@ -116,7 +117,7 @@ class SoundController extends Component {
         this.updateUI({ isLoading: true });
 
         const bpmMultiplier     = 60 / bpm;
-        const totalBeatsProduct = getTotalBeatsLength(beats);
+        const totalBeatsProduct = getTotalBeatsLength(sequences);
         const context           = this.audioContext;
         let newInstruments;
         return generateNewRiff({ ...generationState, instruments, totalBeatsProduct, context })
@@ -158,7 +159,7 @@ class SoundController extends Component {
         if (!this.props.isPlaying) this.props.actions.updateIsPlaying(true);
 
         if (this.props.continuousGeneration) {
-            const renewalTimeoutTime = Math.round(getTotalTimeLength(this.props.generationState.beats, this.props.generationState.bpm) * this.renewalPoint);
+            const renewalTimeoutTime = Math.round(getTotalTimeLength(this.props.generationState.sequences, this.props.generationState.bpm) * this.renewalPoint);
             this.renewalTimeout = setTimeout(this.generateAndQueue, renewalTimeoutTime);
         }
     }
@@ -183,22 +184,22 @@ class SoundController extends Component {
         if (!this.state.isLoading) {
             this.stopEvent();
             this.generate()
-                .then(({ audioTemplate, instruments }) => this.updateInstrumentsAndPlay(audioTemplate, instruments));
+                .then(({ audioTemplate, instruments }) => this.updateInstrumentsAndPlay(audioTemplate, this.audioContext.currentTime + 0.5, instruments));
         }
     }
 
     generateAndQueue = () => {
         this.generate()
             .then(({ audioTemplate, instruments }) => {
-                if (!this.props.isPlaying) return this.updateInstrumentsAndPlay(audioTemplate, instruments);
+                if (!this.props.isPlaying) return this.updateInstrumentsAndPlay(audioTemplate, this.audioContext.currentTime, instruments);
 
                 this.queuedRiffTemplate = audioTemplate;
                 this.queuedInstruments = instruments;
             });
     }
 
-    updateInstrumentsAndPlay = (audioTemplate, instruments) => {
-        this.playEvent(audioTemplate);
+    updateInstrumentsAndPlay = (audioTemplate, audioStartTime, instruments) => {
+        this.playEvent(audioTemplate, audioStartTime);
         this.props.actions.updateCustomPresetInstruments(instruments);
     }
 
@@ -237,7 +238,7 @@ class SoundController extends Component {
 
             if (this.props.isLooping || this.props.continuousGeneration) {
                 const bpmMultiplier    = 60 / this.props.generationState.bpm;
-                const totalLength      = getTotalBeatsLength(this.props.generationState.beats) * bpmMultiplier;
+                const totalLength      = getTotalBeatsLength(this.props.generationState.sequences) * bpmMultiplier;
                 const endTime          = this.audioStartTime + (totalLength);
                 const nextRiffTemplate = this.props.continuousGeneration
                                        ? this.queuedRiffTemplate

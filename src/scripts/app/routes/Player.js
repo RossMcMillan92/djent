@@ -17,7 +17,7 @@ export default class Player extends Component {
 
     render = () => {
         const isShareRoute = this.props.route.id === 'share';
-        const totalBeat = this.props.beats.find(beat => beat.id === 'total');
+        const totalSequence = this.props.sequences.find(sequence => sequence.id === 'total');
         const usePredefinedSettings = isShareRoute;
         const generateButtonText = isShareRoute ? 'Load' : 'Generate';
 
@@ -64,8 +64,8 @@ export default class Player extends Component {
                                         <div className="grid__item one-half alpha--one-whole">
                                             <div className="group-spacing-y-small">
                                                 <BeatsController
-                                                    beat={ totalBeat }
-                                                    actions={{ updateBeats: this.props.actions.updateBeats }}
+                                                    sequence={ totalSequence }
+                                                    actions={{ updateSequence: this.props.actions.updateSequence }}
                                                 />
                                             </div>
                                         </div>

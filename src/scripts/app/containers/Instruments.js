@@ -9,8 +9,8 @@ import * as modalActions from '../actions/modal';
 
 function mapStateToProps(state) {
     return {
-        beats          : state.beats,
-        instruments    : state.instruments,
+        sequences   : state.sequences,
+        instruments : state.instruments,
     }
 }
 

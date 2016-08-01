@@ -4,34 +4,36 @@ class Tabgroup extends Component {
     state = {
         activeTabIndex: 0,
     }
+    tabs = [];
+
     componentWillMount = () => {
-        const activeTab = this.props.children
+        const children = Array.isArray(this.props.children) ? this.props.children : [this.props.children];
+        this.setActiveTab(children);
+    }
+
+    setActiveTab = (children) => {
+        const activeTab = children
             .find(pane => pane.props.isActive);
-        const activeTabIndex = this.props.children.indexOf(activeTab);
+        const activeTabIndex = children.indexOf(activeTab);
 
         this.setState({
             activeTabIndex: activeTabIndex > -1 ? activeTabIndex : 0
-        })
-    }
-
-    componentDidMount = () => this.checkTabSpace()
-
-    checkTabSpace = () => {
-        console.log('aaa', this.refs.tabs)
+        });
     }
 
     onTabClick = (index) => this.setState({ activeTabIndex: index });
 
     render = () => {
-        const tabpanes = this.props.children
+        const children = Array.isArray(this.props.children) ? this.props.children : [this.props.children];
+        const tabpanes = children
             .map((pane, i) => (
-                <div key={i} className={`tabgroup__pane ${ i === this.state.activeTabIndex ? 'is-active' : '' }`}>
+                <div key={i} className={`tabgroup__pane ${i === this.state.activeTabIndex ? 'is-active' : ''}`}>
                     { pane }
                 </div>
             ));
-        const tabs = this.props.children
+        const tabs = children
             .map((pane, i) => (
-                <div key={i} className={`tabgroup__tab ${ i === this.state.activeTabIndex ? 'is-active' : '' }`} onClick={() => this.onTabClick(i)}>
+                <div key={i} className={`tabgroup__tab ${i === this.state.activeTabIndex ? 'is-active' : ''}`} onClick={() => this.onTabClick(i)}>
                     { pane.props.title }
                 </div>
             ));
@@ -50,17 +52,14 @@ class Tabgroup extends Component {
 }
 
 class Tabpane extends Component {
-    render = () => {
-
-        return (
-            <div className="">
-                { this.props.children }
-            </div>
-        );
-    }
+    render = () => (
+        <div className="">
+            { this.props.children }
+        </div>
+    );
 }
 
 export default Tabgroup;
 export {
     Tabpane
-}
+};

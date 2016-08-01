@@ -5,14 +5,14 @@ const preset = {
         config: {
             bpm            : 120,
         },
-        beats: [
+        sequences: [
             {
                 id    : 'total',
                 bars  : 4,
                 beats : 4,
             },
             {
-                id          : 'RAND_BEAT_1',
+                id          : 'CUSTOM_SEQUENCE_1',
                 description : 'Hits',
                 bars        : 2,
                 beats       : 4,
@@ -29,7 +29,7 @@ const preset = {
                 ],
             },
             {
-                id          : 'RAND_BEAT_2',
+                id          : 'CUSTOM_SEQUENCE_2',
                 description : 'Bass drum',
                 bars        : 1,
                 beats       : 4,
@@ -50,7 +50,7 @@ const preset = {
                 ],
             },
             {
-                id          : 'RAND_BEAT_3',
+                id          : 'CUSTOM_SEQUENCE_3',
                 description : 'Hihat',
                 bars        : 2,
                 beats       : 4,
@@ -104,7 +104,7 @@ const preset = {
                 id: 'k',
                 ringout: false,
                 sequences: [
-                    'RAND_BEAT_2',
+                    'CUSTOM_SEQUENCE_2',
                 ],
                 sounds: [
                     {
@@ -140,7 +140,7 @@ const preset = {
             {
                 id: 'h',
                 sequences: [
-                    'RAND_BEAT_3',
+                    'CUSTOM_SEQUENCE_3',
                 ],
                 sounds: [
                     {

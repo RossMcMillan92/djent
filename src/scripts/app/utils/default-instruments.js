@@ -18,7 +18,7 @@ const defaultInstruments = [
         fadeOutDuration: .025,
         repeatHitTypeForXBeat: 0,
         sequences: [
-            'RAND_BEAT_1',
+            'CUSTOM_SEQUENCE_1',
         ],
         sounds: [
             {
@@ -458,7 +458,7 @@ const defaultInstruments = [
         description: 'Kick',
         repeatHitTypeForXBeat: 0,
         sequences: [
-            'RAND_BEAT_1',
+            'CUSTOM_SEQUENCE_1',
             // 'steadySixteenths'.map(b => ({ ...b, volume: .7})),
         ],
         sounds: [

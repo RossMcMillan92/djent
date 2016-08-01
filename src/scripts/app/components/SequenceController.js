@@ -5,8 +5,8 @@ class SequenceController extends Component {
     onSequenceClick = ({ enabledSequences, sequenceID }) => {
         const index = enabledSequences.indexOf(sequenceID);
         const newInstrumentSequences = index > -1
-                                     ? [ ...enabledSequences.slice(0, index), ...enabledSequences.slice(index+1, enabledSequences.length) ]
-                                     : [ ...enabledSequences, sequenceID ];
+            ? [ ...enabledSequences.slice(0, index), ...enabledSequences.slice(index + 1, enabledSequences.length) ]
+            : [ ...enabledSequences, sequenceID ];
         this.props.actions.updateInstrumentSequences(this.props.instrumentID, newInstrumentSequences);
     }
 
@@ -17,8 +17,8 @@ class SequenceController extends Component {
                 const isEnabled = enabledSequences.includes(sequenceID);
 
                 return (
-                    <div className={`toggle-input ${ isEnabled ? 'is-enabled' : '' }`} onClick={() => this.onSequenceClick({ enabledSequences, sequenceID })} key={i}>
-                        { sequence.description || sequence.id }
+                    <div className={`toggle-input ${isEnabled ? 'is-enabled' : ''}`} onClick={() => this.onSequenceClick({ enabledSequences, sequenceID })} key={i}>
+                        { sequence.description ? unescape(sequence.description) : sequence.id }
                     </div>
                 );
             });

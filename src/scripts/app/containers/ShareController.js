@@ -8,12 +8,12 @@ import * as modalActions from '../actions/modal';
 
 function mapStateToProps(state) {
     return {
-        beats: state.beats,
-        bpm: state.config.bpm,
-        activePresetID: state.config.activePresetID,
-        hitChance: state.config.hitChance,
-        instruments: state.instruments,
-        currentBuffer: state.sound.currentBuffer,
+        sequences      : state.sequences,
+        bpm            : state.config.bpm,
+        activePresetID : state.config.activePresetID,
+        hitChance      : state.config.hitChance,
+        instruments    : state.instruments,
+        currentBuffer  : state.sound.currentBuffer,
     }
 }
 

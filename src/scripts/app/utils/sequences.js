@@ -98,8 +98,8 @@ const generateSequence = ({ totalBeats, allowedLengths, hitChance }) => {
     })([], 0, totalBeats);
 };
 
-const getAllowedLengthsFromSequence = (sequence, allowedLengths) => {
-    return allowedLengths.map(length => {
+const getAllowedLengthsFromSequence = (sequence, allowedLengths) =>
+    allowedLengths.map(length => {
         const amount         = sequence.filter(item => item.beat === parseFloat(length.id)).length;
         const amountTriplets = sequence.filter(item => item.beat === parseFloat(length.id) * 1.5).length;
 
@@ -107,9 +107,8 @@ const getAllowedLengthsFromSequence = (sequence, allowedLengths) => {
             ...length,
             amount    : amount || amountTriplets,
             isTriplet : !!amountTriplets
-        }
-    })
-}
+        };
+    });
 
 const loopSequence = (sequence, totalBeats) => {
     if (!sequence.length) return [];
@@ -120,7 +119,7 @@ const loopSequence = (sequence, totalBeats) => {
     let newSequence = [];
     let newTotalBeatLength = 0;
     let i = 0;
-    while (newTotalBeatLength < totalBeats ) {
+    while (newTotalBeatLength < totalBeats) {
         let newBeat = sequence[i];
 
         if (totalBeats - newTotalBeatLength < 1 / newBeat.beat) {
@@ -133,15 +132,15 @@ const loopSequence = (sequence, totalBeats) => {
     }
 
     return newSequence;
-}
+};
 
 const generateTimeMap = sequence => {
     const times = sequence.map((beat, i, seq) => seq.slice(0, i + 1).reduce((prev, cur) => (prev + (1 / cur.beat)), 0));
     return [0, ...times.slice(0, times.length - 1)];
 };
 
-const getSequence = ({ beats, generatedSequences, usePredefinedSettings }) => (instrument) => {
-    const { predefinedSequence, sequences } = instrument;
+const getSequence = ({ sequences, generatedSequences, usePredefinedSettings }) => (instrument) => {
+    const { predefinedSequence, sequences: instrumentSequences } = instrument;
 
     if (usePredefinedSettings && predefinedSequence) {
         return {
@@ -150,7 +149,7 @@ const getSequence = ({ beats, generatedSequences, usePredefinedSettings }) => (i
         };
     }
 
-    let sequence = randomFromArray(sequences);
+    let sequence = randomFromArray(instrumentSequences);
 
     if (typeof sequence === 'string') {
         if (predefinedSequences[sequence]) {
@@ -158,7 +157,7 @@ const getSequence = ({ beats, generatedSequences, usePredefinedSettings }) => (i
         } else if (generatedSequences[sequence]) {
             sequence = generatedSequences[sequence];
         } else {
-            const instrumentBeats        = beats.find(beat => beat.id === sequence);
+            const instrumentBeats        = sequences.find(s => s.id === sequence);
             const instrumentBeatsProduct = instrumentBeats.beats * instrumentBeats.bars;
             const allowedLengths         = convertAllowedLengthsToArray(instrumentBeats.allowedLengths);
             const hitChance              = instrumentBeats.hitChance;
@@ -172,10 +171,10 @@ const getSequence = ({ beats, generatedSequences, usePredefinedSettings }) => (i
     };
 };
 
-const getTotalTimeLength = (beats, bpm) => getTotalBeatsLength(beats) * (60 / bpm);
+const getTotalTimeLength = (sequences, bpm) => getTotalBeatsLength(sequences) * (60 / bpm);
 
-const getTotalBeatsLength = (beats) => {
-    const totalBeats       = beats.find(beat => beat.id === 'total');
+const getTotalBeatsLength = (sequences) => {
+    const totalBeats       = sequences.find(s => s.id === 'total');
     const totalBeatsLength = totalBeats.bars * totalBeats.beats;
     return totalBeatsLength;
 };

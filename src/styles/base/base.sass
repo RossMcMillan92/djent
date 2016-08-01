@@ -4,7 +4,9 @@ body, html
     margin: 0
     padding : 0
     height: 100%
-    overflow: hidden
     width: 100%
     background-color: $palette-base-bg
     color: $palette-base-text
+
+    @media screen and (max-width: $mobile-bp)
+        overflow: hidden

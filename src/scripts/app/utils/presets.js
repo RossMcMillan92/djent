@@ -1,7 +1,7 @@
 import adtrBreakdown from './presets/adtr-breakdown';
 import blackDahlia from './presets/black-dahlia';
 import deftones from './presets/deftones';
-import greenDay from './presets/greenday';
+// import greenDay from './presets/greenday';
 import meshuggah from './presets/meshuggah';
 import swornIn from './presets/sworn-in';
 import thallBuster from './presets/thall-buster';
@@ -27,11 +27,15 @@ const presets = [
 ];
 
 const backwardsCompatibility = (preset, allowedLengths) => {
-    if (preset.settings.beats.find(b => b.id === 'groove')) {
-        preset.settings.beats = preset.settings.beats
-            .map((b, i) => {
+    if (preset.settings.beats.length) {
+        preset.settings.sequences = preset.settings.beats;
+    }
+
+    if (preset.settings.sequences.find(b => b.id === 'groove')) {
+        preset.settings.sequences = preset.settings.sequences
+            .map((b) => {
                 if (b.id === 'groove') {
-                    b.id = 'RAND_BEAT_1';
+                    b.id = 'CUSTOM_SEQUENCE_1';
                     b.hitChance = preset.settings.config.hitChance;
                     b.allowedLengths = getAllowedLengthsFromSequence(preset.settings.instruments.find(i => i.id === 'g').predefinedSequence, allowedLengths);
                 }
@@ -40,10 +44,10 @@ const backwardsCompatibility = (preset, allowedLengths) => {
             });
     }
     return preset;
-}
+};
 
 export default presets;
 
 export {
     backwardsCompatibility
-}
+};

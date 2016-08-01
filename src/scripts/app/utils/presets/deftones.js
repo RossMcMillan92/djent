@@ -5,67 +5,67 @@ const preset = {
         config: {
             bpm            : 90,
         },
-        beats: [
+        sequences: [
             {
                 id    : 'total',
                 bars  : 4,
                 beats : 4,
             },
             {
-                id          : 'RAND_BEAT_1',
+                id          : 'CUSTOM_SEQUENCE_1',
                 description : 'Guitars',
                 bars        : 4,
                 beats       : 4,
                 hitChance   : 1,
                 allowedLengths : [
                     {
-                        id: "1",
+                        id: '1',
                         amount: 1,
                     },
                     {
-                        id: "2",
+                        id: '2',
                         amount: 1,
                     },
                 ],
             },
             {
-                id          : 'RAND_BEAT_2',
+                id          : 'CUSTOM_SEQUENCE_2',
                 description : 'Bass drum',
                 bars        : 1,
                 beats       : 4,
-                hitChance   : .5,
+                hitChance   : 0.5,
                 allowedLengths : [
                     {
-                        id: "1",
+                        id: '1',
                         amount: 4,
                     },
                     {
-                        id: "2",
+                        id: '2',
                         amount: 2,
                     },
                     {
-                        id: "4",
+                        id: '4',
                         amount: 1,
                     },
                 ],
             },
             {
-                id          : 'RAND_BEAT_3',
+                id          : 'CUSTOM_SEQUENCE_3',
                 description : 'Hihat',
                 bars        : 2,
                 beats       : 4,
                 hitChance   : 1,
                 allowedLengths : [
                     {
-                        id: "1",
+                        id: '1',
                         amount: 1,
                     },
                     {
-                        id: "2",
+                        id: '2',
                         amount: 8,
                     },
                     {
-                        id: "4",
+                        id: '4',
                         amount: 2,
                     },
                 ],
@@ -89,7 +89,7 @@ const preset = {
             {
                 id: 'k',
                 sequences: [
-                    'RAND_BEAT_2',
+                    'CUSTOM_SEQUENCE_2',
                 ],
                 sounds: [
                     {
@@ -111,7 +111,7 @@ const preset = {
                 id: 'c',
                 sequences: [
                     [
-                       { beat: .25, volume: 1 },
+                       { beat: 0.25, volume: 1 },
                    ]
                 ],
                 sounds: [
@@ -128,7 +128,7 @@ const preset = {
             {
                 id: 'h',
                 sequences: [
-                    'RAND_BEAT_3',
+                    'CUSTOM_SEQUENCE_3',
                 ],
                 sounds: [
                     {
@@ -152,6 +152,6 @@ const preset = {
             },
         ]
     }
-}
+};
 
 export default preset;

@@ -5,14 +5,14 @@ const preset = {
         config: {
             bpm       : 112,
         },
-        beats: [
+        sequences: [
             {
                 id    : 'total',
                 bars  : 8,
                 beats : 4,
             },
             {
-                id    : 'RAND_BEAT_1',
+                id    : 'CUSTOM_SEQUENCE_1',
                 bars  : 1,
                 beats : 7.5,
                 hitChance : .95,
@@ -36,7 +36,7 @@ const preset = {
                 ],
             },
             {
-                id    : 'RAND_BEAT_2',
+                id    : 'CUSTOM_SEQUENCE_2',
                 description: 'Cymbal Beat',
                 bars  : 1,
                 beats : 6,
@@ -96,7 +96,7 @@ const preset = {
             {
                 id: 'c',
                 sequences: [
-                    'RAND_BEAT_2',
+                    'CUSTOM_SEQUENCE_2',
                 ],
                 sounds: [
                     {

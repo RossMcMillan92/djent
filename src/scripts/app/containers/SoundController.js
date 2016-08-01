@@ -8,11 +8,11 @@ import SoundController from '../components/SoundController';
 
 const mapStateToProps = (state) => ({
     ...state.sound,
-    fadeIn: state.config.fadeIn,
-    continuousGeneration: state.config.continuousGeneration,
-    bpm: state.config.bpm,
-    beats: state.beats,
-    instruments: state.instruments,
+    fadeIn               : state.config.fadeIn,
+    continuousGeneration : state.config.continuousGeneration,
+    bpm                  : state.config.bpm,
+    sequences            : state.sequences,
+    instruments          : state.instruments,
 });
 
 const mapDispatchToProps = (dispatch) => {

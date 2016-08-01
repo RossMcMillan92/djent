@@ -4,7 +4,6 @@ import {
 } from './sequences';
 
 import {
-    deepClone,
     randFromTo,
     repeatArray,
 } from './tools';
@@ -81,8 +80,9 @@ const renderRiffTemplateAtTempo = (instruments, bpmMultiplier) => instruments
             .reduce((newHits, time, i) => {
                 const pitchAmount     = instrument.pitch || 0;
                 const buffer          = instrument.buffers[instrument.hitTypes[i]];
+                console.log('INSTRUMENT', instrument)
                 const startTime       = time * bpmMultiplier;
-                const duration        = instrument.ringout ? buffer.duration   : ((1 / instrument.sequence[i].beat) * bpmMultiplier);
+                const duration        = instrument.ringout ? buffer.duration : ((1 / instrument.sequence[i].beat) * bpmMultiplier);
                 const prevNoteExisted = i && instrument.sequence[i - 1].volume;
                 const fadeOutDuration = Math.min(instrument.fadeOutDuration, duration) || 0;
                 const fadeInDuration  = prevNoteExisted ? fadeOutDuration || 0 : 0;
@@ -118,8 +118,8 @@ const repeatHits = instrument => {
     };
 };
 
-const repeatSequence = (instrument, beats) => {
-    const sequence = loopSequence(instrument.sequence, beats);
+const repeatSequence = (instrument, totalBeats) => {
+    const sequence = loopSequence(instrument.sequence, totalBeats);
 
     return {
         ...instrument,

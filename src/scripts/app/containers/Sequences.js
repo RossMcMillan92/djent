@@ -1,23 +1,20 @@
-import React, { Component } from 'react';
-import { bindActionCreators } from 'redux'
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import Sequences from '../routes/Sequences';
 
-import * as configActions from '../actions/config';
-import * as instrumentsActions from '../actions/instruments';
-import * as modalActions from '../actions/modal';
-import { updateBeats } from '../actions/beats';
+import { addSequence } from '../actions/sequences';
 
 function mapStateToProps(state) {
     return {
-        beats          : state.beats,
-    }
+        sequences : state.sequences,
+    };
 }
 
 function mapDispatchToProps(dispatch) {
     const actions = {
-    }
+        addSequence
+    };
 
     return {
         actions: {

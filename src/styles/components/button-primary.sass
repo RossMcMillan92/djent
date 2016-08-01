@@ -3,8 +3,8 @@ $button-primary__total-line-height: 18px
 $button-primary__line-height: 1.4
 $button-primary__font-size: round($button-primary__total-line-height / $button-primary__line-height)
 $button-primary__svg-icon-size: $button-primary__total-line-height
-$button-primary__default-color: #292929
-$button-primary__default-bg-color: #cacaca
+$button-primary__default-color: #444
+$button-primary__default-bg-color: #aaa
 
 .button-primary
     position: relative
@@ -14,22 +14,29 @@ $button-primary__default-bg-color: #cacaca
     line-height: $button-primary__line-height
     font-size: $button-primary__font-size
     border: none
+    border-radius: 3px
     cursor: pointer
     color: $button-primary__default-color
     background-color: $button-primary__default-bg-color
     white-space: nowrap
-    transition: all .2s ease-in-out
+    transition: all .1s ease-in-out
     user-select: none
+    -webkit-tap-highlight-color: transparent
 
-    &:hover,
-    &:focus
+    &:not([disabled]):hover,
+    &:not([disabled]):focus
         background-color: lighten($button-primary__default-bg-color, 10%)
         box-shadow: 0 7px 5px -3px rgba(0, 0, 0, .07)
         outline: none
 
-    &:active
+    &:not([disabled]):active
         box-shadow: 0 2px 2px -1px rgba(0, 0, 0, .05)
         transform: scale(.99)
+
+    &[disabled]
+        background-color: lighten($button-primary__default-bg-color, 5%)
+        color: darken($button-primary__default-bg-color, 10%)
+        cursor: default
 
 .button-primary__svg-icon
     display: block
@@ -59,17 +66,42 @@ $button-primary__default-bg-color: #cacaca
         transform: translateX(-50%) scale(0.7)
         opacity: 0
 
-
+.button-primary--negative,
 .button-primary--positive
-    background-color: $palette-alpha
     color: #fff
     box-shadow: 0 5px 5px -3px rgba(0, 0, 0, .05)
 
-    &:hover,
-    &:focus
+
+.button-primary--positive
+    background-color: $palette-alpha
+
+    &:not([disabled]):hover,
+    &:not([disabled]):focus
         background-color: lighten($palette-alpha, 5%)
+
+
+.button-primary--negative
+    background-color: $palette-beta
+
+    &:not([disabled]):hover,
+    &:not([disabled]):focus
+        background-color: lighten($palette-beta, 5%)
 
 .button-primary--small
     padding: 12px $base-spacing-unit
     font-size: 12px
     line-height: 1.6
+
+.button-primary--full
+    display: block
+    width: 100%
+    max-width: 400px
+    margin: 0 auto
+
+.button-primary--gamma
+    background-color: $palette-gamma
+    color: #fff
+
+    &:not([disabled]):hover,
+    &:not([disabled]):focus
+        background-color: lighten($palette-gamma, 5%)

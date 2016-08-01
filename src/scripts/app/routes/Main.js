@@ -9,13 +9,28 @@ import Player from '../containers/Player';
 import Sequences from '../containers/Sequences';
 import Visualiser from '../containers/Visualiser';
 
-import { defaultAllowedLengths } from '../reducers/beats';
+import { defaultAllowedLengths } from '../reducers/sequences';
 
 import presets, { backwardsCompatibility } from '../utils/presets';
 import { getActiveSoundsFromHitTypes } from '../utils/instruments';
 import { getPresetData, getPresetFromData, handleGoogleAPI } from '../utils/short-urls';
 
-import { log } from '../utils/tools';
+import { log, throttle } from '../utils/tools';
+import { isMobile } from '../utils/mobile';
+
+const getPathFromIndex = (index) => index === 0
+    ? ''
+    : index === 1
+        ? 'sequences'
+        : index === 2
+            ? 'instruments'
+            : '';
+
+const getIndexFromPath = (path) => path === 'sequences'
+    ? 1
+    : path === 'instruments'
+        ? 2
+        : 0;
 
 export default class Main extends Component {
     static contextTypes = {
@@ -26,7 +41,14 @@ export default class Main extends Component {
         googleAPIHasLoaded: false
     }
 
+    refreshOnWindowResize = () => {
+        const throttledFn = throttle(() => this.forceUpdate(), 500);
+        window.addEventListener('resize', throttledFn);
+    }
+
     componentWillMount = () => {
+        this.setupBackButtonController();
+
         const shareID = this.props.params.shareID;
 
         handleGoogleAPI()
@@ -50,10 +72,32 @@ export default class Main extends Component {
         });
     }
 
+    componentDidMount = () => {
+        this.refreshOnWindowResize();
+    }
+
     componentWillUpdate = (nextProps) => {
         if (!this.props.params.shareID && nextProps.params.shareID) {
             this.checkForShareData(nextProps.params.shareID);
         }
+    }
+
+    componentWillUnmount = () => {
+        window.removeEventListener('popstate', this.backToHome);
+    }
+
+    setupBackButtonController = () => {
+        window.addEventListener('popstate', this.backToHome);
+    }
+
+    backToHome = () => {
+        if (document.location.hash !== '#fwd') {
+            this.changeActivePageIdnex(0);
+        }
+    }
+
+    setActivePageIndex = (index) => {
+        if (this.state.activePageIndex !== index) this.setState({ activePageIndex: index });
     }
 
     checkForShareData = (shareID) => {
@@ -77,7 +121,10 @@ export default class Main extends Component {
         this.props.actions.disableModal();
     }
 
-    changeActivePageIdnex = (index) => this.setState({ activePageIndex: index });
+    changeActivePageIdnex = (index) => {
+        this.context.router.push(`${index === 0 ? '' : '#fwd'}`);
+        this.setActivePageIndex(index);
+    };
 
     render = () => {
         const tabs = ['Player', 'Sequences', 'Instruments']
@@ -92,33 +139,61 @@ export default class Main extends Component {
                     </div>
                 </div>
             ));
-        const isMobile = window.innerWidth < 680;
-        const Container = isMobile ? SwipeableViews : 'div';
+        const isMobileView = isMobile();
+        const visualiserView = this.props.currentAudioTemplate
+            && this.props.currentAudioTemplate.audioTemplate.length
+            ? <Visualiser />
+            : null;
         const headerContent =  (
-                                <div className="">
-                                    <div className="group-spacing-x">
-                                        <div className="u-flex-row u-flex-justify">
-                                            <h1 className="header__title u-mb0">
-                                                Djen
-                                            </h1>
-                                            <a className="" href="https://www.facebook.com/djenerationstation/" target="_blank">
-                                                <img
-                                                    className="header__icon social-icon"
-                                                    src="/assets/images/F_icon.svg"
-                                                    width="39"
-                                                    height="39"
-                                                />
-                                            </a>
-                                        </div>
-                                    </div>
-                                    {
-                                        this.props.currentAudioTemplate
-                                        && this.props.currentAudioTemplate.audioTemplate.length
-                                        ? <Visualiser />
-                                        : null
-                                    }
-                                </div>
-                            );
+            <div className="">
+                <div className="group-spacing-x">
+                    <div className="u-flex-row u-flex-justify">
+                        <h1 className="header__title u-mb0">
+                            Djen
+                        </h1>
+                        <a className="" href="https://www.facebook.com/djenerationstation/" target="_blank">
+                            <img
+                                className="header__icon social-icon"
+                                src="/assets/images/F_icon.svg"
+                                width="39"
+                                height="39"
+                            />
+                        </a>
+                    </div>
+                </div>
+                {
+                    isMobileView
+                    ? visualiserView
+                    : null
+                }
+            </div>
+        );
+        const Views = isMobileView
+            ? (
+                <SwipeableViews
+                    viewHeight={true}
+                    resistance={true}
+                    index={this.state.activePageIndex}
+                    onChangeIndex={(i) => this.changeActivePageIdnex(i)}
+                >
+                    <Player
+                        route={this.props.route}
+                        googleAPIHasLoaded={this.state.googleAPIHasLoaded}
+                    />
+                    <Sequences route={this.props.route} />
+                    <Instruments route={this.props.route} />
+                </SwipeableViews>
+            )
+            : (
+                <div>
+                    <Player
+                        route={this.props.route}
+                        googleAPIHasLoaded={this.state.googleAPIHasLoaded}
+                    />
+                    <Sequences route={this.props.route} />
+                    <Instruments route={this.props.route} />
+                </div>
+            );
 
         return (
             <section>
@@ -131,19 +206,7 @@ export default class Main extends Component {
                             </div>
                         </div>
 
-                        <Container
-                            viewHeight={true}
-                            resistance={true}
-                            index={this.state.activePageIndex}
-                            onChangeIndex={(i) => this.changeActivePageIdnex(i)}
-                        >
-                            <Player
-                                route={this.props.route}
-                                googleAPIHasLoaded={this.state.googleAPIHasLoaded}
-                            />
-                            <Sequences route={this.props.route} />
-                            <Instruments route={this.props.route} />
-                        </Container>
+                        { Views }
                     </div>
 
                     {
@@ -151,7 +214,11 @@ export default class Main extends Component {
                       ? (
                           <div className="site__fixed">
                               <div className="u-flex-row u-flex-justify-around">
-                                  { tabs }
+                              {
+                                  isMobileView
+                                  ? tabs
+                                  : null
+                              }
                               </div>
                           </div>
                         )

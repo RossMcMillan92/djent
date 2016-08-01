@@ -20,7 +20,7 @@ export default class InstrumentList extends Component {
     }
 
     renderSequenceController = instrument => {
-        const randomisedSequences = this.props.beats
+        const randomisedSequences = this.props.sequences
             .filter(b => b.id !== 'total')
             .reduce((newObj, b) => ({
                 ...newObj,

@@ -1,12 +1,13 @@
 .note-panel
     background: $palette-shade-delta
     border-top: solid 5px $palette-gamma
-    border-radius: 4px
+    border-radius: 3px
     padding-top: $base-spacing-unit
     overflow: hidden
+    user-select: none
 
 .note-panel--disabled
-    background: $palette-shade-gamma
+    background: rgba($palette-shade-delta, .5)
     border-color: $palette-shade-delta
 
 $note-panel__svg-size: 30px
@@ -61,6 +62,14 @@ $note-panel__svg-size: 30px
     appearance: none
     background: rgba(0, 0, 0, .2)
     cursor: pointer
+
+    &:hover,
+    &:focus
+        background: rgba(0, 0, 0, .3)
+        outline: none
+
+    &:active
+        background: rgba(0, 0, 0, .35)
 
     &:not(:last-of-type)
         margin-bottom: 1px

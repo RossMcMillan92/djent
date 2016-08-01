@@ -22,18 +22,18 @@ class Visualiser extends Component {
         || nextProps.isPlaying !== this.props.isPlaying;
 
     componentWillMount = () => {
-        this.renderBuffer(this.props.beats, this.props.bpm, this.props.currentAudioTemplate.audioTemplate, this.props.currentAudioTemplate.audioStartTime);
+        this.renderBuffer(this.props.sequences, this.props.bpm, this.props.currentAudioTemplate.audioTemplate, this.props.currentAudioTemplate.audioStartTime);
     }
 
     componentWillUpdate = (nextProps) => {
         if (nextProps.currentAudioTemplate.id !== this.props.currentAudioTemplate.id) {
             const timeoutLength = (nextProps.currentAudioTemplate.audioStartTime - audioContext.currentTime) * 1000;
-            this.renderBuffer(nextProps.beats, nextProps.bpm, nextProps.currentAudioTemplate.audioTemplate, nextProps.currentAudioTemplate.audioStartTime, timeoutLength);
+            this.renderBuffer(nextProps.sequences, nextProps.bpm, nextProps.currentAudioTemplate.audioTemplate, nextProps.currentAudioTemplate.audioStartTime, timeoutLength);
         }
     }
 
-    renderBuffer = (beats, bpm, audioTemplate, audioStartTime, timeoutLength = 0) => {
-        this.timeLength = getTotalTimeLength(beats, bpm);
+    renderBuffer = (sequences, bpm, audioTemplate, audioStartTime, timeoutLength = 0) => {
+        this.timeLength = getTotalTimeLength(sequences, bpm);
         getBufferFromAudioTemplate(audioTemplate, this.timeLength)
             .then(buffer => {
                 setTimeout(() => this.setState({ buffer, audioStartTime }), timeoutLength);

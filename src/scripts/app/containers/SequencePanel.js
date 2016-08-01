@@ -1,19 +1,20 @@
-import React, { Component } from 'react';
-import { bindActionCreators } from 'redux'
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import BeatPanel from '../components/BeatPanel';
+import SequencePanel from '../components/SequencePanel';
 
 import * as configActions from '../actions/config';
 import * as instrumentsActions from '../actions/instruments';
-import * as beatsActions from '../actions/beats';
+import * as sequencesActions from '../actions/sequences';
+import * as modalActions from '../actions/modal';
 
 function mapDispatchToProps(dispatch) {
     const actions = {
         ...configActions,
         ...instrumentsActions,
-        ...beatsActions,
-    }
+        ...sequencesActions,
+        ...modalActions,
+    };
 
     return {
         actions: {
@@ -22,4 +23,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(null, mapDispatchToProps)(BeatPanel);
+export default connect(null, mapDispatchToProps)(SequencePanel);

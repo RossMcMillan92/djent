@@ -97,6 +97,25 @@ const loadScript = (path) => {
 const splice = (start, deleteCount, arr) =>
 	[ ...arr.slice(0, start), ...arr.slice(start + deleteCount) ];
 
+const filterOutKeys = (blockedKeys, origObj) => Object.keys(origObj)
+    .reduce((newObj, key) => {
+        if (blockedKeys.includes(key)) return newObj;
+        return {
+            ...newObj,
+            [key]: origObj[key]
+        };
+    }, {});
+
+const throttle = (fn, delay, context = this) => {
+    let timeout;
+    return (...args) => {
+        timeout = timeout || setTimeout(() => {
+            fn.apply(context, args);
+            timeout = undefined;
+        }, delay);
+    };
+};
+
 const roundToXPlaces = (value, decimalPlaces, type = 'round') =>
 	Math[type](value * Math.pow(10, decimalPlaces)) / Math.pow(10, decimalPlaces);
 
@@ -122,6 +141,7 @@ export {
 	confineToRange,
 	deepClone,
 	extendObjectArrayByID,
+	filterOutKeys,
 	getHashQueryParam,
 	isIOS,
 	loadScript,
@@ -133,5 +153,6 @@ export {
 	repeatArray,
 	roundToXPlaces,
 	splice,
+	throttle,
 	updateObjByID,
 };

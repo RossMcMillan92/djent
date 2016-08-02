@@ -4,11 +4,11 @@ const initialState = {
     activePresetID       : 'meshuggah',
     bpm                  : 50,
     fadeIn               : false,
-    continuousGeneration : true,
+    continuousGeneration : false,
 };
 
 export default function config(state = { ...initialState }, action) {
-    let { type, payload } = action;
+    const { type, payload } = action;
 
     switch (type) {
         case 'UPDATE_BPM':
@@ -44,7 +44,7 @@ export default function config(state = { ...initialState }, action) {
             if (fadeIn) newState.fadeIn = fadeIn;
             if (hitChance) newState.hitChance = hitChance;
             if (allowedLengths) {
-                newState.allowedLengths = extendObjectArrayByID(newState.allowedLengths, [ ...allowedLengths ])
+                newState.allowedLengths = extendObjectArrayByID(newState.allowedLengths, [ ...allowedLengths ]);
             }
 
             return {
@@ -59,4 +59,4 @@ export default function config(state = { ...initialState }, action) {
 
 export {
     initialState
-}
+};

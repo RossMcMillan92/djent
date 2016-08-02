@@ -130,7 +130,6 @@ class SoundController extends Component {
                 if (!audioTemplate) newState.error = 'Error!';
 
                 this.updateUI(newState);
-                this.generationCount = this.generationCount + 1;
                 return { audioTemplate, instruments: newInstruments };
             });
     }
@@ -199,6 +198,7 @@ class SoundController extends Component {
     }
 
     updateInstrumentsAndPlay = (audioTemplate, audioStartTime, instruments) => {
+        this.generationCount = this.generationCount + 1;
         this.playEvent(audioTemplate, audioStartTime);
         this.props.actions.updateCustomPresetInstruments(instruments);
     }
@@ -249,6 +249,7 @@ class SoundController extends Component {
                     this.queuedRiffTemplate  = undefined;
                 }
 
+                this.generationCount = this.generationCount + 1;
                 this.playEvent(nextRiffTemplate, endTime);
             }
         }

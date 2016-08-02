@@ -86,7 +86,6 @@ const createInitialLevels = (levelAmount, height, resolution) => Array(levelAmou
 
 const RESOLUTION = 3;
 export default class Waveform extends Component {
-    startTime = 0;
     iteration = 0;
     loopIsEnabled = false;
     ctx;
@@ -156,7 +155,7 @@ export default class Waveform extends Component {
         if (iteration !== this.iteration && isPlaying) {
             this.iteration = iteration;
         }
-
+console.log('loop')
         this.levels.forEach((level, i) => {
             level.draw(ctx);
 

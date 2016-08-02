@@ -80,7 +80,6 @@ const renderRiffTemplateAtTempo = (instruments, bpmMultiplier) => instruments
             .reduce((newHits, time, i) => {
                 const pitchAmount     = instrument.pitch || 0;
                 const buffer          = instrument.buffers[instrument.hitTypes[i]];
-                console.log('INSTRUMENT', instrument)
                 const startTime       = time * bpmMultiplier;
                 const duration        = instrument.ringout ? buffer.duration : ((1 / instrument.sequence[i].beat) * bpmMultiplier);
                 const prevNoteExisted = i && instrument.sequence[i - 1].volume;

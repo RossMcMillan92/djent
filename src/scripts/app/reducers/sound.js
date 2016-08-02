@@ -1,6 +1,6 @@
 const initialState =  {
     isPlaying            : false,
-    isLooping            : false,
+    isLooping            : true,
     generationState      : undefined,
     currentAudioTemplate : undefined,
     currentSrc           : undefined,

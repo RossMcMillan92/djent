@@ -5,6 +5,7 @@ import M from '../libraries/Modernizr';
 
 const RESISTANCE_COEF = 0.4;
 const UNCERTAINTY_THRESHOLD = 3; // px
+const quickSwipeTransitionTime = 125;
 
 const getFinalIndex = (roundingType, maxIndex, index) => compose(
     v => Math.max(0, v),
@@ -14,6 +15,7 @@ const getFinalIndex = (roundingType, maxIndex, index) => compose(
 
 const transformProp = M.prefixed('transform');
 const transformTimingFunctionProp = M.prefixed('transition-timing-function');
+const transformDurationProp = M.prefixed('transition-duration');
 
 class SwipeableViews extends Component {
     static defaultProps = {
@@ -130,18 +132,17 @@ class SwipeableViews extends Component {
                            ? (this.vx > 0) ? 'floor' : 'ceil'
                            : 'round';
 
-        const distanceTravelled = (this.startWidth * Math.abs(this.currentIndex - this.index));
-        const time = Math.abs((this.startWidth - distanceTravelled) / this.vx) * 5;
-
         const index  = getFinalIndex(roundingType, this.props.children.length - 1, this.index);
         const percent = roundToXPlaces(index * -100, 2);
         this.updateTranslation(percent);
 
         if (pastSpeedThreshold && index !== this.currentIndex) {
              this.containerEl.style[transformTimingFunctionProp] = 'ease-out';
+             this.containerEl.style[transformDurationProp] = `${quickSwipeTransitionTime}ms`;
              setTimeout(() => {
                  this.containerEl.style[transformTimingFunctionProp] = '';
-             }, time);
+                 this.containerEl.style[transformDurationProp] = '';
+             }, quickSwipeTransitionTime);
          }
 
         this.updateCurrentIndex(index);

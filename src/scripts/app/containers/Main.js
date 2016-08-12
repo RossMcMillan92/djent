@@ -13,7 +13,6 @@ function mapStateToProps(state) {
         activePresetID       : state.config.activePresetID,
         bpm                  : state.config.bpm,
         sequences            : state.sequences,
-        currentAudioTemplate : state.sound.currentAudioTemplate,
         instruments          : state.instruments,
     };
 }

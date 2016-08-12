@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 
 import BeatsController from '../components/BeatsController';
-import ExportController from '../components/ExportController';
 import Panel from '../components/Panel';
 
 import BPMController from '../containers/BPMController';
 import BPMTapper from '../containers/BPMTapper';
-import ShareController from '../containers/ShareController';
 import PresetController from '../containers/PresetController';
 import SoundController from '../containers/SoundController';
+import Visualiser from '../containers/Visualiser';
 
 export default class Player extends Component {
     static contextTypes = {
@@ -77,46 +76,17 @@ export default class Player extends Component {
                     )
                 }
 
+                <Panel theme="alpha">
+                    <Visualiser />
+                </Panel>
 
-                <Panel theme="dark" sizeY="small">
-                    <div className="u-flex-row u-flex-justify u-flex-center u-flex-wrap">
+                <Panel theme="alpha" sizeY="small">
+                    <div className="u-flex-row u-flex-justify-center u-flex-center u-flex-wrap">
                         <SoundController
                             usePredefinedSettings={ usePredefinedSettings }
                             generateButtonText={ generateButtonText }
                             enableContinuousGenerationControl={ !isShareRoute }
                         />
-
-                        <div className={`u-flex-row u-flex-wrap u-flex-${isShareRoute ? 'center' : 'start'}`}>
-                            <div className={`group-spacing-y-small u-mr05 ${isShareRoute ? '' : 'u-mb0'}`}>
-                                <ExportController
-                                    instruments={ this.props.instruments }
-                                    bpm={ this.props.bpm }
-                                    currentBuffer={ this.props.currentBuffer }
-                                    actions={{
-                                        disableModal: this.props.actions.disableModal,
-                                        enableModal: this.props.actions.enableModal,
-                                    }}
-                                />
-                            </div>
-
-                            {
-                                isShareRoute
-                                ? (
-                                    <div className="group-spacing-y-small">
-                                        <span className="u-mr05">or</span>
-                                        <a className="link-base" onClick={() => this.context.router.push('/')}>
-                                            Generate new
-                                        </a>
-                                    </div>
-                                )
-                                : (
-                                    <div className="group-spacing-y-small">
-                                        <ShareController googleAPIHasLoaded={this.props.googleAPIHasLoaded} />
-                                    </div>
-                                )
-                            }
-                        </div>
-
                     </div>
                 </Panel>
 

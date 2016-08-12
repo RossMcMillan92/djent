@@ -7,7 +7,6 @@ import Instruments from '../containers/Instruments';
 import Modal from '../containers/Modal';
 import Player from '../containers/Player';
 import Sequences from '../containers/Sequences';
-import Visualiser from '../containers/Visualiser';
 
 import { defaultAllowedLengths } from '../reducers/sequences';
 
@@ -17,20 +16,6 @@ import { getPresetData, getPresetFromData, handleGoogleAPI } from '../utils/shor
 
 import { log, throttle } from '../utils/tools';
 import { isMobile } from '../utils/mobile';
-
-const getPathFromIndex = (index) => index === 0
-    ? ''
-    : index === 1
-        ? 'sequences'
-        : index === 2
-            ? 'instruments'
-            : '';
-
-const getIndexFromPath = (path) => path === 'sequences'
-    ? 1
-    : path === 'instruments'
-        ? 2
-        : 0;
 
 export default class Main extends Component {
     static contextTypes = {
@@ -140,10 +125,6 @@ export default class Main extends Component {
                 </div>
             ));
         const isMobileView = isMobile();
-        const visualiserView = this.props.currentAudioTemplate
-            && this.props.currentAudioTemplate.audioTemplate.length
-            ? <Visualiser />
-            : null;
         const headerContent =  (
             <div className="">
                 <div className="group-spacing-x">
@@ -161,11 +142,6 @@ export default class Main extends Component {
                         </a>
                     </div>
                 </div>
-                {
-                    isMobileView
-                    ? visualiserView
-                    : null
-                }
             </div>
         );
         const Views = isMobileView

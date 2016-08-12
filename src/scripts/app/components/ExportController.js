@@ -19,7 +19,7 @@ const ExportModal = ({ actions }) => (
 
 class ExportController extends Component {
     saveMIDI = () => saveAsMIDIFile(buildMidiDataURIFromInstruments(this.props.instruments, this.props.bpm))
-    saveWAV = () => saveAsWAVFile(this.props.currentBuffer);
+    saveWAV = () => saveAsWAVFile(this.props.buffer);
 
     launchExportModal = () => {
         const content = <ExportModal actions={{
@@ -31,7 +31,7 @@ class ExportController extends Component {
     }
 
     render = () => (
-        <button className="button-primary" onClick={this.launchExportModal} disabled={!this.props.currentBuffer}>
+        <button className="button-primary" onClick={this.launchExportModal} disabled={!this.props.buffer}>
             Save
         </button>
     )

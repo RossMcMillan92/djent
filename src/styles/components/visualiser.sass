@@ -1,9 +1,10 @@
+$visualiser__height: 50px
+
 .visualiser
-    position: absolute
+    position: relative
     left: 0
     top: 0
     right: 0
-    padding: 5px
     background-color: $palette-alpha
     opacity: 1
     transition: all .25s ease-in-out
@@ -29,3 +30,11 @@
 
 .visualiser__canvas
     display: block
+    width: 100%
+
+.visualiser__placeholder
+    height: $visualiser__height
+    width: 100%
+    top: 0
+    left: 0
+    z-index: 3

@@ -19,7 +19,6 @@ const calculateColorValue = compose(
 const Level = (x, y, w, h, targetColor) => {
     let lastUpdateTime = 0;
     const vy = 1.5; // px/s
-    const vc = 10; // px/s
     const oldState = {};
     let state = {
         x,
@@ -53,12 +52,7 @@ const Level = (x, y, w, h, targetColor) => {
 
         const disty = time * vy;
         state.y = Math.min(state.h, Math.round(incrementBySpeed(state.y, state.targety, disty) * 100) / 100);
-
-        const distc = time * vc;
-        const r = calculateColorValue(state.color[0], state.targetColor[0], distc);
-        const g = calculateColorValue(state.color[1], state.targetColor[1], distc);
-        const b = calculateColorValue(state.color[2], state.targetColor[2], distc);
-        state.color = [r, g, b];
+        state.color = state.targetColor;
 
         lastUpdateTime = t;
     };
@@ -93,30 +87,23 @@ export default class Waveform extends Component {
     backgroundColor = colorScheme[0];
     activeColor = colorScheme[1];
 
+    shouldComponentUpdate = (nextProps) =>
+    this.props.isPlaying !== nextProps.isPlaying
+    || this.props.buffer !== nextProps.buffer
+
     componentDidMount = () => {
-        this.fixCanvasScale();
-        this.createInitialLevelsFromWidth(this.props);
+        this.initialise(this.props);
     }
 
     componentWillUpdate = (nextProps) => {
-        this.createInitialLevelsFromWidth(nextProps);
-        if (this.props.isPlaying && !nextProps.isPlaying) {
-            this.iteration = 0;
+        if (this.props.width !== nextProps.width) {
+            this.initialise(nextProps);
         }
     }
 
-    createInitialLevelsFromWidth = ({ width, height }) => {
-        const levelAmount = Math.floor(width / RESOLUTION);
-
-        if (this.levels.length !== levelAmount) {
-            this.levels = createInitialLevels(levelAmount, height, RESOLUTION);
-        }
-    }
-
-    componentDidUpdate = (prevProps) => {
+    componentDidUpdate = () => {
         if (!this.props.buffer) return;
 
-        if (prevProps.width !== this.props.width) this.fixCanvasScale();
         const data = this.props.buffer.getChannelData(0);
 
         this.updateLevels(data);
@@ -127,7 +114,21 @@ export default class Waveform extends Component {
         }
     }
 
-    fixCanvasScale = () => {
+    initialise = (props) => {
+        const { width, height } = props;
+        this.fixCanvasScale(width, height);
+        this.createInitialLevelsFromWidth(width, height);
+    }
+
+    createInitialLevelsFromWidth = (width, height) => {
+        const levelAmount = Math.ceil(width / RESOLUTION);
+
+        if (this.levels.length !== levelAmount) {
+            this.levels = createInitialLevels(levelAmount, height, RESOLUTION);
+        }
+    }
+
+    fixCanvasScale = (width, height) => {
         const canvas = this.refs.canvas;
         if (!this.ctx) this.ctx = canvas.getContext('2d');
 
@@ -135,37 +136,31 @@ export default class Waveform extends Component {
         const backingStoreRatio = this.ctx.webkitBackingStorePixelRatio ||
                                   this.ctx.backingStorePixelRatio || 1;
         const canvasRatio = devicePixelRatio / backingStoreRatio;
-        const width = this.props.width * canvasRatio;
-        const height = this.props.height * canvasRatio;
+        const scaledWidth = width * canvasRatio;
+        const scaledHeight = height * canvasRatio;
 
-        canvas.width = width;
-        canvas.height = height;
+        canvas.width = scaledWidth;
+        canvas.height = scaledHeight;
         this.ctx.scale(canvasRatio, canvasRatio);
     }
 
     loop = (t) => {
         const ctx = this.ctx;
-        const { isPlaying, audioContext, audioStartTime } = this.props;
+        const { isPlaying, audioContext, audioStartTime, timeLength } = this.props;
         const currentTime = !isPlaying ? 0 : audioContext ? audioContext.currentTime - audioStartTime : false;
-        const duration = this.props.timeLength;
+        const duration = timeLength;
         const iteration = duration === 0 || currentTime <= 0 ? 0 : Math.floor(currentTime / duration);
         const percentPassed = (currentTime - (duration * iteration)) / duration;
         const indexThreshold = Math.ceil(this.levels.length * percentPassed);
 
-        if (iteration !== this.iteration && isPlaying) {
-            this.iteration = iteration;
-        }
-
         this.levels.forEach((level, i) => {
-            level.draw(ctx);
-
             const levelColor = currentTime && i <= indexThreshold ? this.activeColor : this.backgroundColor;
+            level.draw(ctx);
             level.updateState({ targetColor: levelColor });
             level.update(t);
         });
 
-        if (isPlaying) requestAnimationFrame(this.loop);
-        else this.loopIsEnabled = false;
+        requestAnimationFrame(this.loop);
     }
 
     updateLevels = (data) => {

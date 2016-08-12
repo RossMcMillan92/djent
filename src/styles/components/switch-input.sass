@@ -1,5 +1,5 @@
 $switch-input__handle-colour        : $palette-shade-alpha
-$switch-input__track-colour         : $palette-shade-delta
+$switch-input__track-colour         : rgba(0, 0, 0, .2)
 $switch-input__track-colour--active : $palette-gamma
 $switch-input__height               : 24px
 $switch-input__width                : 50px
@@ -10,6 +10,7 @@ $switch-input__handle-size          : $switch-input__height - $switch-input__spa
 .switch-input
     position: relative
     cursor: pointer
+    -webkit-tap-highlight-color: transparent
 
 .switch-input__input
     position: absolute
@@ -23,6 +24,7 @@ $switch-input__handle-size          : $switch-input__height - $switch-input__spa
     border-radius: $switch-input__height
     height: $switch-input__height
     width: $switch-input__width
+    transition: all .15s ease-in-out
 
     &::before
         position: absolute

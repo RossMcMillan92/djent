@@ -18,6 +18,7 @@ export default class Instruments extends Component {
                     enableModal: this.props.actions.enableModal,
                     updateInstrumentSound: this.props.actions.updateInstrumentSound,
                     updateInstrumentPitch: this.props.actions.updateInstrumentPitch,
+                    updateInstrumentVolume: this.props.actions.updateInstrumentVolume,
                     updateInstrumentSequences: this.props.actions.updateInstrumentSequences,
                 }}
                 sequences={this.props.sequences}

@@ -17,20 +17,22 @@ class BeatsController extends Component {
         const getProps = (type) => ({
             type: 'number',
             id: type,
-            label: `${capitalize(type)} (1 - 8)`,
+            label: capitalize(type),
             defaultValue : this.props.sequence[type],
             onChange: (event) => this.onChange(event, type),
             className: 'input-base input-base--short',
+            minVal: 1,
+            maxVal: 16,
             labelClassName: 'input-label',
         });
 
         return (
             <div className="u-flex-row u-flex-center">
-                <div className="u-flex-grow-1">
+                <div className="">
                     <InputBox { ...getProps('bars') } />
                 </div>
                 <span className="group-spacing-x-small u-mt1">&times;</span>
-                <div className="u-flex-grow-1">
+                <div className="">
                     <InputBox { ...getProps('beats') } />
                 </div>
             </div>

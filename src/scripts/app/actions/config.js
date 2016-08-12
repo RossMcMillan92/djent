@@ -30,7 +30,7 @@ export function updateFateOut(fadeOut) {
   };
 }
 
-export function applyPreset(preset) {;
+export function applyPreset(preset) {
     return {
         type: 'APPLY_PRESET',
         payload: { preset },

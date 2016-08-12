@@ -47,7 +47,7 @@ export default class Player extends Component {
                                 <div className="grid__item one-half alpha--one-whole">
                                     <div className="group-spacing-y-small">
                                         <div className="u-flex-row u-flex-end">
-                                            <div className="u-flex-grow-1 u-mr1">
+                                            <div className="u-mr1">
                                                 <BPMController />
                                             </div>
                                             <div className="">

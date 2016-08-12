@@ -3,6 +3,7 @@ import { capitalize } from '../utils/tools';
 
 import Expandable from './Expandable';
 import PitchController from './PitchController';
+import VolumeController from './VolumeController';
 import SequenceController from './SequenceController';
 import Tabgroup, { Tabpane } from './Tabgroup';
 
@@ -104,14 +105,26 @@ export default class InstrumentList extends Component {
                                 { this.renderSequenceController(instrument) }
                             </Tabpane>
                             <Tabpane title="Mixer">
-                                <PitchController
-                                    pitch={instrument.pitch}
-                                    id={instrument.id}
-                                    actions={{
-                                        updateInstrumentPitch:
-                                            this.props.actions.updateInstrumentPitch
-                                    }}
-                                />
+                                <div className="u-flex-row">
+                                    <div className="u-mr1">
+                                        <VolumeController
+                                            volume={instrument.volume}
+                                            id={instrument.id}
+                                            actions={{
+                                                updateInstrumentVolume:
+                                                    this.props.actions.updateInstrumentVolume
+                                            }}
+                                        />
+                                    </div>
+                                    <PitchController
+                                        pitch={instrument.pitch}
+                                        id={instrument.id}
+                                        actions={{
+                                            updateInstrumentPitch:
+                                                this.props.actions.updateInstrumentPitch
+                                        }}
+                                    />
+                                </div>
                             </Tabpane>
                         </Tabgroup>
 

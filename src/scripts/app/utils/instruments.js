@@ -63,8 +63,9 @@ const getBufferFromAudioTemplate = (audioTemplate, timeLength) => {
         pitchAmount,
         fadeInDuration,
         fadeOutDuration,
+        reverb,
     }) => {
-        playSound(offlineCtx, buffer, startTime, duration, volume, pitchAmount, fadeInDuration, fadeOutDuration);
+        playSound(offlineCtx, buffer, startTime, duration, volume, pitchAmount, fadeInDuration, fadeOutDuration, reverb);
     });
 
     return new Promise((res, rej) => {
@@ -85,7 +86,8 @@ const renderRiffTemplateAtTempo = (instruments, bpmMultiplier) => instruments
                 const prevNoteExisted = i && instrument.sequence[i - 1].volume;
                 const fadeOutDuration = Math.min(instrument.fadeOutDuration, duration) || 0;
                 const fadeInDuration  = prevNoteExisted ? fadeOutDuration || 0 : 0;
-                const volume          = instrument.sequence[i].volume;
+                const reverb          = typeof instrument.reverb !== 'undefined' ? instrument.reverb : false;
+                const volume          = instrument.sequence[i].volume * (instrument.volume ? instrument.volume : 1);
 
                 return [
                     ...newHits,
@@ -97,6 +99,7 @@ const renderRiffTemplateAtTempo = (instruments, bpmMultiplier) => instruments
                         pitchAmount,
                         fadeInDuration,
                         fadeOutDuration,
+                        reverb
                     }
                 ];
             }, []);

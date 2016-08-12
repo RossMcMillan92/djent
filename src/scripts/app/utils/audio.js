@@ -1,3 +1,5 @@
+import { log } from '../utils/audio';
+
 const bufferCache = {};
 const BufferLoader = (context) => {
     const newInstrumentPack = [];
@@ -68,7 +70,7 @@ const BufferLoader = (context) => {
 
         return Promise.all(loadingSounds)
                 .then(() => newInstrumentPack)
-                .catch(e => (console.error || console.log).call(console, e));
+                .catch(e => log(e));
     };
 
     return {
@@ -87,7 +89,7 @@ const getPitchPlaybackRatio = (pitchAmount) => {
     return pitchIsPositive ? 1 / val : val;
 };
 
-const playSound = (context, buffer, time, duration, volume, pitchAmount = 0, fadeInDuration = 0, fadeOutDuration = 0) => {
+const playSound = (context, buffer, time, duration, volume, pitchAmount = 0, fadeInDuration = 0, fadeOutDuration = 0, reverb = false) => {
     if (!buffer) return;
 
     const source = context.createBufferSource();
@@ -103,11 +105,11 @@ const playSound = (context, buffer, time, duration, volume, pitchAmount = 0, fad
 
     if (volume && fadeInDuration) {
         gainNode.gain.setValueAtTime(0, time);
-        gainNode.gain.linearRampToValueAtTime(1, time + fadeInDuration);
+        gainNode.gain.linearRampToValueAtTime(volume, time + fadeInDuration);
     }
 
     if (volume && fadeOutDuration) {
-        gainNode.gain.setValueAtTime(1, time + duration);
+        gainNode.gain.setValueAtTime(volume, time + duration);
         gainNode.gain.linearRampToValueAtTime(0, time + duration + fadeOutDuration);
     }
 

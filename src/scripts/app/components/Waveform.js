@@ -155,7 +155,7 @@ export default class Waveform extends Component {
         if (iteration !== this.iteration && isPlaying) {
             this.iteration = iteration;
         }
-console.log('loop')
+
         this.levels.forEach((level, i) => {
             level.draw(ctx);
 

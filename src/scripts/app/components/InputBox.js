@@ -3,12 +3,16 @@ import { filterOutKeys, throttle } from '../utils/tools';
 
 class InputBox extends Component {
     isFocused = false;
+    state = {
+        isValid: true
+    }
 
     componentWillUpdate = (nextProps) => {
         if (!this.isFocused) this.updateValue(nextProps.defaultValue);
     }
 
     updateValue = (val) => {
+        this.errorCheck(val);
         this.refs.input.value = val;
     }
 
@@ -23,7 +27,23 @@ class InputBox extends Component {
 
     onChange = (e) => {
         e.persist();
-        if (this.throttledOnChange) this.throttledOnChange(e);
+        this.errorCheck(e.target.value);
+        this.throttledOnChange(e);
+    }
+
+    errorCheck = (value) => {
+        if (!value) return;
+
+        const { minVal, maxVal } = this.props;
+
+        if (
+            (typeof minVal !== 'undefined' && value < minVal)
+            || (typeof maxVal !== 'undefined' && value > maxVal)
+        ) {
+            if (this.state.isValid) this.setState({ isValid: false });
+        } else {
+            if (!this.state.isValid) this.setState({ isValid: true });
+        }
     }
 
     throttledOnChange = this.props.onChange ? throttle(this.props.onChange, 100) : undefined;
@@ -41,12 +61,12 @@ class InputBox extends Component {
             ...this.props,
         };
         const { containerClassName, labelClassName, label, id } = defaultProps;
-        const inputProps = filterOutKeys(['containerClassName', 'labelClassName'], defaultProps);
+        const inputProps = filterOutKeys(['containerClassName', 'labelClassName', 'minVal', 'maxVal'], defaultProps);
 
         return (
             <div className={containerClassName}>
                 <label className={ labelClassName } htmlFor={ id }>{ label }:</label>
-                <input ref="input" { ...inputProps } onChange={ this.onChange } onBlur={this.onBlur} onFocus={this.onFocus} />
+                <input ref="input" { ...inputProps } className={`${inputProps.className ? inputProps.className : ''} ${this.state.isValid ? 'is-valid' : 'is-invalid'}`} onChange={ this.onChange } onBlur={this.onBlur} onFocus={this.onFocus} />
             </div>
         );
     }

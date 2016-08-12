@@ -14,6 +14,13 @@ export function updateInstrumentPitch({ instrumentID, value }) {
     };
 }
 
+export function updateInstrumentVolume({ instrumentID, value }) {
+    return {
+        type: 'UPDATE_INSTRUMENT_VOLUME_PROP',
+        payload: { instrumentID, value: confineToRange(value, 0, 1) },
+    };
+}
+
 export function updateCustomPresetInstruments(instruments) {
     return {
         type: 'UPDATE_CUSTOM_PRESET_INSTRUMENTS',

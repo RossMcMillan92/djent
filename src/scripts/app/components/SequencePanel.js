@@ -45,20 +45,15 @@ class SequencePanel extends Component {
                         allowedLengths={this.props.sequence.allowedLengths}
                     />
 
-                    <div className="grid grid--wide grid--middle">
-                        <div className="grid__item one-half alpha--one-whole u-mb1@alpha">
-                            <HitChanceController
-                                hitChance={ this.props.sequence.hitChance }
-                                actions={{ updateHitChance: this.onHitChanceChange }}
-                            />
-                        </div>
-
-                        <div className="grid__item one-half alpha--one-whole">
-                            <BeatsController
-                                sequence={ this.props.sequence }
-                                actions={{ updateSequence: this.props.actions.updateSequence }}
-                            />
-                        </div>
+                    <div className="u-flex-row u-flex-justify">
+                        <BeatsController
+                            sequence={ this.props.sequence }
+                            actions={{ updateSequence: this.props.actions.updateSequence }}
+                        />
+                        <HitChanceController
+                            hitChance={ this.props.sequence.hitChance }
+                            actions={{ updateHitChance: this.onHitChanceChange }}
+                        />
                     </div>
                 </Tabpane>
                 <Tabpane title="Settings">

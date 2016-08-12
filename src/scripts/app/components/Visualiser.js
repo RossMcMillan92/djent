@@ -27,7 +27,6 @@ class Visualiser extends Component {
     }
 
     componentWillUpdate = (nextProps) => {
-        console.log('NEXTPROPS.CURRENTAUDIOTEMPLATE.ID', nextProps.currentAudioTemplate.id)
         if (nextProps.currentAudioTemplate.id !== this.props.currentAudioTemplate.id) {
             const timeoutLength = (nextProps.currentAudioTemplate.audioStartTime - audioContext.currentTime) * 1000;
             this.renderBuffer(nextProps.sequences, nextProps.bpm, nextProps.currentAudioTemplate.audioTemplate, nextProps.currentAudioTemplate.audioStartTime, timeoutLength);

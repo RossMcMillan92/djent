@@ -96,7 +96,6 @@ Licensed under the MIT license
         tmpProc.disconnect();
         body.removeEventListener('touchend', instantProcess, false);
         tmpProc.onaudioprocess = null;
-        console.log('TMPPROC.ONAUDIOPROCESS', tmpProc.onaudioprocess)
       };
 
       return iOSCtx;

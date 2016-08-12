@@ -7,22 +7,22 @@ class PitchController extends Component {
 
     onChange = (event) => {
         const value = Math.round(parseFloat(event.target.value) * 100);
-        if (value) this.props.actions.updateInstrumentPitch({ instrumentID: this.props.id, value });
+        this.props.actions.updateInstrumentPitch({ instrumentID: this.props.id, value });
     }
 
     render = () => {
         const props = {
-            label: 'Pitch (-12 - 12)',
+            label: 'Pitch',
             id: 'pitch',
-            type: 'range',
+            type: 'number',
             defaultValue: this.props.pitch ? this.props.pitch / 100 : 0,
             onChange: this.onChange,
             step: 1,
-            min: -12,
-            max: 12,
-            className: 'input-base',
+            minVal: -12,
+            maxVal: 12,
+            className: 'input-base input-base--short',
             labelClassName: 'input-label',
-        }
+        };
         return (
             <InputBox { ...props } />
         );

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
-import ExportController from './ExportController';
 import Waveform from './Waveform';
 
 import ShareController from '../containers/ShareController';
+import ExportController from '../containers/ExportController';
 
 import audioContext from '../utils/audioContext';
 import { getBufferFromAudioTemplate } from '../utils/instruments';
@@ -41,13 +41,18 @@ class Visualiser extends Component {
         }
     }
 
+    componentWillUnmount = () => {
+        if (this.updateBufferTimeout) clearTimeout(this.updateBufferTimeout);
+    }
+
     renderBuffer = (sequences, bpm, audioTemplate, audioStartTime, timeoutLength = 0) => {
         if (typeof audioTemplate === 'undefined') return;
+        if (this.updateBufferTimeout) clearTimeout(this.updateBufferTimeout);
 
         this.timeLength = getTotalTimeLength(sequences, bpm);
         getBufferFromAudioTemplate(audioTemplate, this.timeLength)
             .then(buffer => {
-                setTimeout(() => this.setState({ buffer, audioStartTime, isRenderingBuffer: false }), timeoutLength);
+                this.updateBufferTimeout = setTimeout(() => this.setState({ buffer, audioStartTime, isRenderingBuffer: false }), timeoutLength);
             });
     }
 
@@ -75,15 +80,7 @@ class Visualiser extends Component {
 
                 <div className="visualiser__button-container">
                     <div className="u-mr05">
-                        <ExportController
-                            instruments={ this.props.instruments }
-                            bpm={ this.props.bpm }
-                            buffer={ this.state.buffer }
-                            actions={{
-                                disableModal: this.props.actions.disableModal,
-                                enableModal: this.props.actions.enableModal,
-                            }}
-                        />
+                        <ExportController buffer={ this.state.buffer } />
                     </div>
 
                     <ShareController googleAPIHasLoaded={this.props.googleAPIHasLoaded} />

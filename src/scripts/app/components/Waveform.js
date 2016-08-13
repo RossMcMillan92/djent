@@ -1,20 +1,12 @@
 import React, { Component } from 'react';
 
-import { compose } from '../utils/tools';
-
+const RESOLUTION = 3;
 const colorScheme = [
     [146, 198, 211],
     [255, 255, 255],
 ];
 
 const incrementBySpeed = (val, targetVal, dist) => val + (dist * (targetVal - val));
-const calculateColorValue = compose(
-    (a) => Math.min(255, a),
-    (a) => Math.max(0, a),
-    Math.abs,
-    Math.round,
-    incrementBySpeed,
-);
 
 const Level = (x, y, w, h, targetColor) => {
     let lastUpdateTime = 0;
@@ -78,7 +70,6 @@ const createInitialLevels = (levelAmount, height, resolution) => Array(levelAmou
         return Level(x, y, w, h, targetColor);
     });
 
-const RESOLUTION = 3;
 export default class Waveform extends Component {
     iteration = 0;
     loopIsEnabled = false;
@@ -148,7 +139,6 @@ export default class Waveform extends Component {
     loop = (t) => {
         const ctx = this.ctx;
         const { isPlaying, audioContext, audioStartTime, timeLength } = this.props;
-        console.log('isPlaying', isPlaying)
         const currentTime = !isPlaying ? 0 : audioContext ? audioContext.currentTime - audioStartTime : false;
         const duration = timeLength;
         const iteration = duration === 0 || currentTime <= 0 ? 0 : Math.floor(currentTime / duration);

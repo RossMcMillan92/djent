@@ -77,14 +77,21 @@ class SoundController extends Component {
 
     componentWillUnmount = () => {
         this.stopEvent();
-
-        if (this.loopTimeout) clearTimeout(this.loopTimeout);
-        if (this.renewalTimeout) clearTimeout(this.renewalTimeout);
-        if (this.updatePlayingTimeout) clearTimeout(this.updatePlayingTimeout);
+        this.clearTimeouts();
     }
 
     updateUI = (newState) => {
         requestAnimationFrame(() => this.setState(newState));
+    }
+
+    clearTimeouts = () => {
+        if (this.loopTimeout) {
+            clearTimeout(this.loopTimeout);
+            this.loopTimeout = undefined;
+        }
+        if (this.renewalTimeout) clearTimeout(this.renewalTimeout);
+        if (this.updatePlayingTimeout) clearTimeout(this.updatePlayingTimeout);
+        if (this.stopTimeout) clearTimeout(this.stopTimeout);
     }
 
     generate = () => {
@@ -151,17 +158,11 @@ class SoundController extends Component {
 
     stopEvent = () => {
         if (this.props.isPlaying) {
+            this.clearTimeouts();
             this.currentlyPlayingNotes
                 .map(src => stop(src));
-
             this.currentlyPlayingNotes = [];
 
-            if (this.loopTimeout) {
-                clearTimeout(this.loopTimeout);
-                this.loopTimeout = undefined;
-            }
-            if (this.renewalTimeout) clearTimeout(this.renewalTimeout);
-            if (this.updatePlayingTimeout) clearTimeout(this.updatePlayingTimeout);
             if (this.props.isPlaying) this.props.actions.updateIsPlaying(false);
         }
     }
@@ -240,7 +241,7 @@ class SoundController extends Component {
                 this.generationCount = this.generationCount + 1;
                 if (this.props.isPlaying) this.playEvent(nextRiffTemplate, endTime);
             } else {
-                setTimeout(this.stopEvent, (endTime - (this.audioStartTime + currentTime)) * 1000);
+                this.stopTimeout = setTimeout(this.stopEvent, (endTime - (this.audioStartTime + currentTime)) * 1000);
             }
         }
     }

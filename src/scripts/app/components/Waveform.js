@@ -89,6 +89,7 @@ export default class Waveform extends Component {
 
     shouldComponentUpdate = (nextProps) =>
     this.props.isPlaying !== nextProps.isPlaying
+    || this.props.isLoading !== nextProps.isLoading
     || this.props.buffer !== nextProps.buffer
 
     componentDidMount = () => {
@@ -147,6 +148,7 @@ export default class Waveform extends Component {
     loop = (t) => {
         const ctx = this.ctx;
         const { isPlaying, audioContext, audioStartTime, timeLength } = this.props;
+        console.log('isPlaying', isPlaying)
         const currentTime = !isPlaying ? 0 : audioContext ? audioContext.currentTime - audioStartTime : false;
         const duration = timeLength;
         const iteration = duration === 0 || currentTime <= 0 ? 0 : Math.floor(currentTime / duration);

@@ -17,24 +17,26 @@ class Visualiser extends Component {
 
     state = {
         buffer: undefined,
-        audioStartTime: undefined
+        audioStartTime: undefined,
+        isRenderingBuffer: false,
     }
 
     componentWillMount = () => {
         if (this.props.currentAudioTemplate) {
+            this.setState({ isRenderingBuffer: true });
             this.renderBuffer(this.props.sequences, this.props.bpm, this.props.currentAudioTemplate.audioTemplate, this.props.currentAudioTemplate.audioStartTime);
         }
     }
 
     componentWillUpdate = (nextProps) => {
         if (!this.props.isPlaying && nextProps.isPlaying) {
-            console.log('restart here')
             this.setState({ audioStartTime: audioContext.currentTime });
         }
         const firstAudioTemplate = nextProps.currentAudioTemplate && !this.props.currentAudioTemplate;
-        const differentAudioTemplate = !firstAudioTemplate && nextProps.currentAudioTemplate.id !== this.props.currentAudioTemplate.id;
+        const differentAudioTemplate = !firstAudioTemplate && nextProps.currentAudioTemplate && nextProps.currentAudioTemplate.id !== this.props.currentAudioTemplate.id;
         if (firstAudioTemplate || differentAudioTemplate) {
             const timeoutLength = (nextProps.currentAudioTemplate.audioStartTime - audioContext.currentTime) * 1000;
+            this.setState({ isRenderingBuffer: true });
             this.renderBuffer(nextProps.sequences, nextProps.bpm, nextProps.currentAudioTemplate.audioTemplate, nextProps.currentAudioTemplate.audioStartTime, timeoutLength);
         }
     }
@@ -45,7 +47,7 @@ class Visualiser extends Component {
         this.timeLength = getTotalTimeLength(sequences, bpm);
         getBufferFromAudioTemplate(audioTemplate, this.timeLength)
             .then(buffer => {
-                setTimeout(() => this.setState({ buffer, audioStartTime }), timeoutLength);
+                setTimeout(() => this.setState({ buffer, audioStartTime, isRenderingBuffer: false }), timeoutLength);
             });
     }
 
@@ -61,6 +63,7 @@ class Visualiser extends Component {
                 <Waveform
                     className="visualiser__canvas"
                     isPlaying={this.props.isPlaying}
+                    isLoading={this.state.isRenderingBuffer}
                     buffer={this.state.buffer}
                     audioContext={audioContext}
                     audioStartTime={this.state.audioStartTime}
@@ -70,19 +73,19 @@ class Visualiser extends Component {
                     amplified={true}
                 />
 
-                <div className="group-spacing-y-small u-mr05 u-mb0">
-                    <ExportController
-                        instruments={ this.props.instruments }
-                        bpm={ this.props.bpm }
-                        buffer={ this.state.buffer }
-                        actions={{
-                            disableModal: this.props.actions.disableModal,
-                            enableModal: this.props.actions.enableModal,
-                        }}
-                    />
-                </div>
+                <div className="visualiser__button-container">
+                    <div className="u-mr05">
+                        <ExportController
+                            instruments={ this.props.instruments }
+                            bpm={ this.props.bpm }
+                            buffer={ this.state.buffer }
+                            actions={{
+                                disableModal: this.props.actions.disableModal,
+                                enableModal: this.props.actions.enableModal,
+                            }}
+                        />
+                    </div>
 
-                <div className="group-spacing-y-small">
                     <ShareController googleAPIHasLoaded={this.props.googleAPIHasLoaded} />
                 </div>
             </div>

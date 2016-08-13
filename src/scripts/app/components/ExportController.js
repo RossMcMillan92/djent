@@ -31,7 +31,7 @@ class ExportController extends Component {
     }
 
     render = () => (
-        <button className="button-primary" onClick={this.launchExportModal} disabled={!this.props.buffer}>
+        <button className="button-primary button-primary--tiny" onClick={this.launchExportModal} disabled={!this.props.buffer}>
             Save
         </button>
     )

@@ -7,3 +7,12 @@ toolbox.precache(['/index.html', 'https://raw.githubusercontent.com/RossMcMillan
 
 toolbox.router.get('/index.html', toolbox.networkFirst);
 toolbox.router.get('https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/*', toolbox.fastest);
+
+toolbox.router.get('/(.*)', toolbox.cacheFirst, {
+    origin: /fonts\.gstatic\.com/,
+    cache: {
+      name: 'static-vendor-cache-v1',
+      maxEntries: 10
+    }
+  }
+);

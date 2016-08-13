@@ -1,15 +1,15 @@
 $visualiser__height: 50px
+$visualiser__bg-color: $palette-alpha
 
 .visualiser
     position: relative
     left: 0
     top: 0
     right: 0
-    background-color: $palette-alpha
+    background-color: $visualiser__bg-color
     opacity: 1
     transition: all .25s ease-in-out
     user-select: none
-    pointer-events: none
 
     &.is-inactive
         transform: translateY(10%)
@@ -29,12 +29,27 @@ $visualiser__height: 50px
         opacity: 1
 
 .visualiser__canvas
+    position: relative
     display: block
     width: 100%
+    z-index: 1
 
 .visualiser__placeholder
+    position: absolute
     height: $visualiser__height
     width: 100%
+    background-color: $visualiser__bg-color
     top: 0
     left: 0
     z-index: 3
+    transition: all .25s ease-in-out
+
+    .visualiser.is-active &
+        opacity: 0
+        z-index: -1
+
+.visualiser__button-container
+    position: absolute
+    right: 0
+    display: flex
+    z-index: 2

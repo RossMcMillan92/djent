@@ -249,7 +249,7 @@ class SoundController extends Component {
     render = () => {
         const eventName = this.props.isPlaying ? 'stop' : 'play';
         const continuousGeneration = document.location.hash === '#beta' && this.props.enableContinuousGenerationControl ? (
-            <div className="group-spacing-y-small u-mr1">
+            <div className="u-mr1">
                 <ContinuousGenerationController
                     continuousGeneration={this.props.continuousGeneration}
                     actions={{
@@ -263,8 +263,8 @@ class SoundController extends Component {
             <div>
                 { this.state.error ? <p className="txt-error">{ this.state.error }</p> : null }
                 <div className="u-flex-row u-flex-wrap">
-                    <div className="group-spacing-y-small u-mr05 u-mb0">
-                        <button className={`button-primary ${this.state.isLoading ? '' : 'icon-is-hidden'}`} onClick={() => this.generateEvent()}>
+                    <div className="visualiser-container__button u-mr05 u-mb0">
+                        <button className={`button-primary button-primary--alpha-dark ${this.state.isLoading ? '' : 'icon-is-hidden'}`} onClick={() => this.generateEvent()}>
                             <span className="button-primary__inner">{ this.props.generateButtonText || 'Generate' }</span>
                             <span className="button-primary__icon">
                                 <span className="spinner" />
@@ -272,13 +272,13 @@ class SoundController extends Component {
                         </button>
                     </div>
 
-                    <div className="group-spacing-y-small u-mr1 u-mb0">
-                        <button className="button-primary" title={ capitalize(eventName) } onClick={this.togglePlay} disabled={!this.currentRiffTemplate}>
+                    <div className="u-mr1 u-mb0">
+                        <button className="button-primary button-primary--alpha-dark" title={ capitalize(eventName) } onClick={this.togglePlay} disabled={!this.currentRiffTemplate}>
                             <SVG icon={ eventName } className="button-primary__svg-icon" />
                         </button>
                     </div>
 
-                    <div className="group-spacing-y-small u-mr1">
+                    <div className="u-mr1">
                         <LoopController
                             isLooping={this.props.isLooping}
                             actions={{

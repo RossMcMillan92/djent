@@ -19,29 +19,8 @@ const preset = {
                 hitChance   : 1,
                 allowedLengths : [
                     {
-                        id: "4",
+                        id: '4',
                         amount:1,
-                    },
-                ],
-            },
-            {
-                id          : 'CUSTOM_SEQUENCE_2',
-                description : 'Bass drum',
-                bars        : 1,
-                beats       : 4,
-                hitChance   : .5,
-                allowedLengths : [
-                    {
-                        id: "1",
-                        amount: 4,
-                    },
-                    {
-                        id: "2",
-                        amount: 2,
-                    },
-                    {
-                        id: "4",
-                        amount: 1,
                     },
                 ],
             },
@@ -82,9 +61,6 @@ const preset = {
                    [
                        { beat: 1, volume: 1 },
                    ],
-                   [
-                       { beat: .5, volume: 1 },
-                   ]
                 ],
                 sounds: [
                     {
@@ -101,12 +77,9 @@ const preset = {
                         { beat: 4, volume: 1 },
                     ],
                     [
-                        { beat: 1, volume: 0 },
-                        { beat: 1, volume: 1 },
-                    ],
-                    [
+                        { beat: 2, volume: 0 },
                         { beat: 2, volume: 1 },
-                    ]
+                    ],
                 ],
                 sounds: [
                     {
@@ -163,6 +136,6 @@ const preset = {
             },
         ]
     }
-}
+};
 
 export default preset;

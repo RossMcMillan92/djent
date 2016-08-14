@@ -3,6 +3,15 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Djenerator</title>
+	
+	<script>
+		if ('serviceWorker' in navigator) {
+			navigator.serviceWorker.register('/sw.js')
+				.then(function (d) { console.log('sw.js registered') })
+				.catch(function (e) { console.log(e, 'sw.js NOT registered') });
+		}
+	</script>
+
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,600' rel='stylesheet' type='text/css' async>
 	<link rel="stylesheet" href="/dist/app.css">
 	<link rel="manifest" href="manifest.json">
@@ -38,13 +47,7 @@
 <body class="preload">
 	<div id="root"></div>
 
-	<script>
-		if ('serviceWorker' in navigator) {
-			navigator.serviceWorker.register('/sw.js')
-				.then(function (d) { console.log('sw.js registered') })
-				.catch(function (e) { console.log(e, 'sw.js NOT registered') });
-		}
-	</script>
+
 
 	<script src="/dist/app.min.js"></script>
 

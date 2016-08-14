@@ -5,7 +5,7 @@ import M from '../libraries/Modernizr';
 
 const RESISTANCE_COEF = 0.4;
 const UNCERTAINTY_THRESHOLD = 3; // px
-const quickSwipeTransitionTime = 125;
+const quickSwipeTransitionTime = 62;
 
 const getFinalIndex = (roundingType, maxIndex, index) => compose(
     v => Math.max(0, v),

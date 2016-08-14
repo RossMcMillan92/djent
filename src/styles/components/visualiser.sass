@@ -1,6 +1,32 @@
 $visualiser__height: 50px
 $visualiser__bg-color: $palette-alpha
 
+.visualiser-container
+    position: relative
+
+.visualiser-container__backdrop
+    position: absolute
+    background-color: $visualiser__bg-color
+    z-index: 1
+    width: 100%
+    height: 100%
+    top: 0
+    left: 0
+    transition: all .5s ease-in-out
+
+    .visualiser-container.is-active &
+        pointer-events: none
+        opacity: 0
+
+.visualiser-container__button
+    position: relative
+    transition: all .5s ease-in-out
+    z-index: 3
+    transform: translate(75%, -75%) scale(1.1)
+
+    .visualiser-container.is-active &
+        transform: translate(0, 0) scale(1)
+
 .visualiser
     position: relative
     left: 0
@@ -15,19 +41,6 @@ $visualiser__bg-color: $palette-alpha
         transform: translateY(10%)
         opacity: 0
 
-.visualiser__msg
-    text-align: center
-    color: $palette-shade-gamma
-    position: absolute
-    top: 50%
-    left: 50%
-    transform: translate(-50%, -50%)
-    transition: all .25s ease-in-out
-    opacity: 0
-
-    .visualiser.is-inactive &
-        opacity: 1
-
 .visualiser__canvas
     position: relative
     display: block
@@ -41,7 +54,7 @@ $visualiser__bg-color: $palette-alpha
     background-color: $visualiser__bg-color
     top: 0
     left: 0
-    z-index: 3
+    z-index: 2
     transition: all .25s ease-in-out
 
     .visualiser.is-active &

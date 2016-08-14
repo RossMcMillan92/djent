@@ -19,11 +19,11 @@ const preset = {
                 hitChance   : 1,
                 allowedLengths : [
                     {
-                        id: '1',
+                        id: '0.25',
                         amount: 1,
                     },
                     {
-                        id: '2',
+                        id: '0.5',
                         amount: 1,
                     },
                 ],
@@ -63,10 +63,6 @@ const preset = {
                     {
                         id: '2',
                         amount: 8,
-                    },
-                    {
-                        id: '4',
-                        amount: 2,
                     },
                 ],
             },

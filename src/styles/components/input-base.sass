@@ -23,12 +23,19 @@
 .input-base--large
     font-size: rem(18px)
     max-width: 100%
-    width: 300px
     padding: 5px
 
 .input-base--short
     max-width: 100%
     width: 90px
+
+.input-base--bare
+    background: none
+    border: none
+    border-bottom: solid 1px $palette-base-ui
+
+    &:focus
+        background-color: #fff
 
 .input-dropdown-icon
     position: absolute

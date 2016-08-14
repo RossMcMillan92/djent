@@ -21,7 +21,7 @@ class HitChanceController extends Component {
             minVal: 0,
             maxVal: 100,
             step: 5,
-            className: 'input-base input-base--short',
+            className: 'input-base input-base--bare input-base--large input-base--short',
             labelClassName: 'input-label',
         }
         return (

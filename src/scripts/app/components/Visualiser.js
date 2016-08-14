@@ -58,8 +58,7 @@ class Visualiser extends Component {
 
     componentDidUpdate = () => {
         const { container } = this.refs;
-        const padding = 10;
-        this.containerWidth = container.offsetWidth - padding;
+        this.containerWidth = container.offsetWidth;
     }
 
     render = () => (

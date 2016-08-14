@@ -4,11 +4,9 @@ import AllowedLengthsController from './AllowedLengthsController';
 import BeatsController          from './BeatsController';
 import HitChanceController      from './HitChanceController';
 import InputBox                 from './InputBox';
-import Tabgroup, { Tabpane } from './Tabgroup';
+import Tabgroup, { Tabpane }    from './Tabgroup';
 
 class SequencePanel extends Component {
-    getDescription = (sequence) => sequence.description ? unescape(sequence.description) : sequence.id;
-
     onHitChanceChange = (hitChance) => {
         this.props.actions.updateSequence(this.props.sequence.id, 'hitChance', hitChance);
     }
@@ -29,15 +27,30 @@ class SequencePanel extends Component {
                 <button className="button-primary button-primary--small" onClick={ actions.disableModal } >Cancel</button>
             </div>
         );
-        const modalTitle = `Are you sure you want to delete '${this.getDescription(sequence)}?'`;
+        const modalTitle = `Are you sure you want to delete '${this.props.description}?'`;
         actions.enableModal({ content, isCloseable: true, title: modalTitle });
     }
 
     render = () => (
         <div>
-            <h3 className="title-secondary u-mb05">
-                { this.getDescription(this.props.sequence) }
-            </h3>
+            <div className="u-flex-row u-flex-justify u-flex-center u-mb05">
+                <div className="u-mr05">
+                    <InputBox
+                        id={`sequence-name-${this.props.sequence.id}`}
+                        type='text'
+                        maxLength="25"
+                        defaultValue={this.props.description}
+                        onChange={e => this.props.actions.updateSequenceDescription(this.props.sequence.id, escape(e.target.value))}
+                        className='input-base input-base--bare input-base--large'
+                        labelClassName='input-label'
+                    />
+                </div>
+                {
+                    this.props.isDeletable
+                    ? <button className="button-primary button-primary--small button-primary--negative" onClick={ this.launchDeleteModal } >Delete</button>
+                    : null
+                }
+            </div>
             <Tabgroup>
                 <Tabpane title="Notes">
                     <AllowedLengthsController
@@ -55,25 +68,6 @@ class SequencePanel extends Component {
                             actions={{ updateHitChance: this.onHitChanceChange }}
                         />
                     </div>
-                </Tabpane>
-                <Tabpane title="Settings">
-                    <div className={`${this.props.isDeletable ? 'u-mb1' : ''}`}>
-                        <InputBox
-                            id={`sequence-name-${this.props.sequence.id}`}
-                            label='Sequence Name'
-                            type='text'
-                            maxLength="25"
-                            defaultValue={this.getDescription(this.props.sequence)}
-                            onChange={e => this.props.actions.updateSequenceDescription(this.props.sequence.id, escape(e.target.value))}
-                            className='input-base'
-                            labelClassName='input-label'
-                        />
-                    </div>
-                    {
-                        this.props.isDeletable
-                        ? <button className="button-primary button-primary--small button-primary--negative" onClick={ this.launchDeleteModal } >Delete Sequence</button>
-                        : null
-                    }
                 </Tabpane>
             </Tabgroup>
         </div>

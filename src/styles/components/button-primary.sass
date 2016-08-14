@@ -103,6 +103,13 @@ $button-primary__default-bg-color: rgba(0, 0, 0, 0.2)
     max-width: 400px
     margin: 0 auto
 
+.button-primary--alpha-dark
+    background-color: $palette-alpha-dark
+
+    &:not([disabled]):hover,
+    &:not([disabled]):focus
+        background-color: darken($palette-alpha-dark, 5%)
+
 .button-primary--gamma
     background-color: $palette-gamma
     color: #fff

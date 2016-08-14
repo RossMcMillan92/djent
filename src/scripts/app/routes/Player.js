@@ -26,7 +26,7 @@ export default class Player extends Component {
                     isShareRoute
                     ? null
                     : (
-                        <Panel>
+                        <Panel theme="dark">
                             <h2 className="title-primary">
                                 Preset
                             </h2>
@@ -77,16 +77,19 @@ export default class Player extends Component {
                 }
 
                 <Panel theme="alpha">
-                    <Visualiser />
-                </Panel>
+                    <div className={`visualiser-container ${this.props.currentAudioTemplate ? 'is-active' : ''}`}>
+                        <div className="visualiser-container__backdrop"></div>
+                        <div className="u-mb1">
+                            <Visualiser />
+                        </div>
 
-                <Panel theme="alpha" sizeY="small">
-                    <div className="u-flex-row u-flex-justify-center u-flex-center u-flex-wrap">
-                        <SoundController
-                            usePredefinedSettings={ usePredefinedSettings }
-                            generateButtonText={ generateButtonText }
-                            enableContinuousGenerationControl={ !isShareRoute }
-                        />
+                        <div className="u-flex-row u-flex-justify-center u-flex-center u-flex-wrap">
+                            <SoundController
+                                usePredefinedSettings={ usePredefinedSettings }
+                                generateButtonText={ generateButtonText }
+                                enableContinuousGenerationControl={ !isShareRoute }
+                            />
+                        </div>
                     </div>
                 </Panel>
 

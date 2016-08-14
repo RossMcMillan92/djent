@@ -20,7 +20,7 @@ class PitchController extends Component {
             step: 1,
             minVal: -12,
             maxVal: 12,
-            className: 'input-base input-base--short',
+            className: 'input-base input-base--bare input-base--large input-base--short',
             labelClassName: 'input-label',
         };
         return (

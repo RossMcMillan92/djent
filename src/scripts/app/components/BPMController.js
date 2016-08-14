@@ -20,7 +20,7 @@ class BPMController extends Component {
             minVal: 50,
             maxVal: 300,
             step: 5,
-            className: 'input-base input-base--short',
+            className: 'input-base input-base--bare input-base--large input-base--short',
             labelClassName: 'input-label',
         };
 

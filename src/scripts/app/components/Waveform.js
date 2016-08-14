@@ -88,7 +88,7 @@ export default class Waveform extends Component {
     }
 
     componentWillUpdate = (nextProps) => {
-        if (this.props.width !== nextProps.width) {
+        if (this.props.width !== nextProps.width || !this.levels.length) {
             this.initialise(nextProps);
         }
     }

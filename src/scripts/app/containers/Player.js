@@ -11,7 +11,6 @@ function mapStateToProps(state) {
         bpm                  : state.config.bpm,
         sequences            : state.sequences,
         currentAudioTemplate : state.sound.currentAudioTemplate,
-        currentBuffer        : state.sound.currentSrc ? state.sound.currentSrc.buffer : undefined,
         instruments          : state.instruments,
     };
 }

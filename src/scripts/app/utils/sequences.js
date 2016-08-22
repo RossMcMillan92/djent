@@ -63,7 +63,7 @@ const predefinedSequences = {
         ]
     },
 
-    offsetEights: {
+    offsetEighths: {
         description: 'Offset Eights',
         sequence: [
             { beat: 4, volume: 0 },
@@ -76,7 +76,14 @@ const predefinedSequences = {
         sequence: [
             { beat: 0.125, volume: 1 },
         ]
-    }
+    },
+
+    none: {
+        description: 'none',
+        sequence: [
+            { beat: 1, volume: 0 },
+        ]
+    },
 };
 
 const convertAllowedLengthsToArray = (objs) => objs

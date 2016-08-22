@@ -27,11 +27,13 @@ export default class Player extends Component {
                     ? null
                     : (
                         <Panel theme="dark">
-                            <h2 className="title-primary">
-                                Preset
-                            </h2>
+                            <div className="u-flex-row u-flex-center">
+                                <h2 className="title-primary u-mr1 u-mb0">
+                                    Preset:
+                                </h2>
 
-                            <PresetController />
+                                <PresetController />
+                            </div>
                         </Panel>
                     )
                 }
@@ -40,13 +42,12 @@ export default class Player extends Component {
                     ? null
                     : (
                         <Panel>
-                            <h2 className="title-primary">Main Settings</h2>
-
                             <div className="grid grid--wide grid--middle">
                                 <div className="grid__item one-half alpha--one-whole">
                                     <div className="group-spacing-y-small">
                                         <div className="u-flex-row u-flex-end">
                                             <div className="u-mr1">
+                                                <h2 className="title-primary">Main Settings</h2>
                                                 <BPMController />
                                             </div>
                                             <div className="">
@@ -62,6 +63,7 @@ export default class Player extends Component {
                                     : (
                                         <div className="grid__item one-half alpha--one-whole">
                                             <div className="group-spacing-y-small">
+                                            <h2 className="title-primary">Length</h2>
                                                 <BeatsController
                                                     sequence={ totalSequence }
                                                     actions={{ updateSequence: this.props.actions.updateSequence }}

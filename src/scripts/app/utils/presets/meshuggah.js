@@ -8,7 +8,7 @@ const preset = {
         sequences: [
             {
                 id    : 'total',
-                bars  : 1,
+                bars  : 4,
                 beats : 4,
             },
             {
@@ -18,21 +18,21 @@ const preset = {
                 hitChance      : 1,
                 allowedLengths : [
                         {
-                            id: "0.25",
+                            id: '0.25',
                             amount: 1,
                         },
                         {
-                            id: "0.5",
+                            id: '0.5',
                             amount: 2,
                             isTriplet: true,
                         },
                         {
-                            id: "1",
+                            id: '1',
                             amount: 5,
                             isTriplet: true,
                         },
                         {
-                            id: "2",
+                            id: '2',
                             amount: 7,
                             isTriplet: true,
                         },
@@ -108,6 +108,6 @@ const preset = {
             },
         ]
     }
-}
+};
 
 export default preset;

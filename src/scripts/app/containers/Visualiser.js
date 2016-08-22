@@ -7,7 +7,7 @@ const mapStateToProps = (state) => ({
     isPlaying            : state.sound.isPlaying,
     currentAudioTemplate : state.sound.currentAudioTemplate,
     sequences            : state.sequences,
-    bpm                  : state.config.bpm,
+    bpm                  : state.sound.generationState ? state.sound.generationState.bpm : 0,
 });
 
 const mapDispatchToProps = (dispatch) => {

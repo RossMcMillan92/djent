@@ -3,6 +3,7 @@ import { capitalize } from '../utils/tools';
 
 import Expandable from './Expandable';
 import PitchController from './PitchController';
+import RepeatingHitsController from './RepeatingHitsController';
 import VolumeController from './VolumeController';
 import SequenceController from './SequenceController';
 import Tabgroup, { Tabpane } from './Tabgroup';
@@ -104,9 +105,9 @@ export default class InstrumentList extends Component {
                             <Tabpane title="Sequences">
                                 { this.renderSequenceController(instrument) }
                             </Tabpane>
-                            <Tabpane title="Mixer">
-                                <div className="u-flex-row">
-                                    <div className="u-mr1">
+                            <Tabpane title="Settings">
+                                <div className="u-flex-row u-flex-wrap">
+                                    <div className="u-mr1 u-mb05">
                                         <VolumeController
                                             volume={instrument.volume}
                                             id={instrument.id}
@@ -116,12 +117,22 @@ export default class InstrumentList extends Component {
                                             }}
                                         />
                                     </div>
-                                    <PitchController
-                                        pitch={instrument.pitch}
+                                    <div className="u-mr1 u-mb05">
+                                        <PitchController
+                                            pitch={instrument.pitch}
+                                            id={instrument.id}
+                                            actions={{
+                                                updateInstrumentPitch:
+                                                    this.props.actions.updateInstrumentPitch
+                                            }}
+                                        />
+                                    </div>
+                                    <RepeatingHitsController
+                                        repeatHitTypeForXBeat={instrument.repeatHitTypeForXBeat}
                                         id={instrument.id}
                                         actions={{
-                                            updateInstrumentPitch:
-                                                this.props.actions.updateInstrumentPitch
+                                            updateInstrumentRepeatingHits:
+                                                this.props.actions.updateInstrumentRepeatingHits
                                         }}
                                     />
                                 </div>

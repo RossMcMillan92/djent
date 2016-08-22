@@ -13,24 +13,25 @@ const preset = {
             },
             {
                 id    : 'CUSTOM_SEQUENCE_1',
+                description: 'Guitars',
                 bars  : 1,
                 beats : 7.5,
-                hitChance : .95,
+                hitChance : 0.95,
                 allowedLengths: [
                         {
-                            id: "0.5",
+                            id: '0.5',
                             amount: 1,
                         },
                         {
-                            id: "1",
+                            id: '1',
                             amount: 1,
                         },
                         {
-                            id: "2",
+                            id: '2',
                             amount: 1,
                         },
                         {
-                            id: "4",
+                            id: '4',
                             amount:1,
                         },
                 ],
@@ -43,11 +44,11 @@ const preset = {
                 hitChance : 1,
                 allowedLengths: [
                         {
-                            id: "0.5",
+                            id: '0.5',
                             amount: 1,
                         },
                         {
-                            id: "1",
+                            id: '1',
                             amount: 1,
                         },
                 ],
@@ -115,6 +116,6 @@ const preset = {
             },
         ]
     }
-}
+};
 
 export default preset;

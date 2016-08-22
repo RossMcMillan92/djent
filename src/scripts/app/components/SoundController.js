@@ -146,9 +146,14 @@ class SoundController extends Component {
             audioTemplate
         });
 
-        this.updatePlayingTimeout = setTimeout(() => {
+        if (audioStartTimeFromNow === 0) {
             if (!this.props.isPlaying) this.props.actions.updateIsPlaying(true);
-        }, audioStartTimeFromNow * 1000);
+        } else {
+            this.updatePlayingTimeout = setTimeout(() => {
+                if (!this.props.isPlaying) this.props.actions.updateIsPlaying(true);
+            }, audioStartTimeFromNow * 1000);
+        }
+
 
         if (this.props.continuousGeneration) {
             const renewalTimeoutTime = Math.round(getTotalTimeLength(this.props.generationState.sequences, this.props.generationState.bpm) * this.renewalPoint);
@@ -197,8 +202,9 @@ class SoundController extends Component {
 
     loop = (audioTemplate) => {
         const currentTime   = audioContext.currentTime - this.audioStartTime;
+        const lookaheadTime = 50;
         const upcomingNotes = audioTemplate
-            .filter(hit => hit.startTime >= currentTime && hit.startTime <= currentTime + 1)
+            .filter(hit => hit.startTime >= currentTime && hit.startTime <= currentTime + lookaheadTime)
             .map(({
                     buffer,
                     startTime,
@@ -219,7 +225,7 @@ class SoundController extends Component {
         const newRiffTemplate = audioTemplate.slice(upcomingNotes.length, audioTemplate.length);
         if (newRiffTemplate.length) {
             /* RIFF IS STILL PLAYING */
-            this.loopTimeout = setTimeout(() => this.loop(newRiffTemplate), 500);
+            this.loopTimeout = setTimeout(() => this.loop(newRiffTemplate), 100);
         } else {
             /* RIFF IS FINISHED */
             this.loopTimeout = undefined;
@@ -236,9 +242,9 @@ class SoundController extends Component {
                 if (this.props.continuousGeneration) {
                     this.currentRiffTemplate = this.queuedRiffTemplate;
                     this.queuedRiffTemplate  = undefined;
+                    this.generationCount = this.generationCount + 1;
                 }
 
-                this.generationCount = this.generationCount + 1;
                 if (this.props.isPlaying) this.playEvent(nextRiffTemplate, endTime);
             } else {
                 this.stopTimeout = setTimeout(this.stopEvent, (endTime - (this.audioStartTime + currentTime)) * 1000);

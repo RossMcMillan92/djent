@@ -60,15 +60,15 @@ class InputBox extends Component {
             labelClassName     : 'input-label-base',
             ...this.props,
         };
-        const { containerClassName, labelClassName, label, id } = defaultProps;
-        const inputProps = filterOutKeys(['containerClassName', 'labelClassName', 'minVal', 'maxVal'], defaultProps);
+        const { containerClassName, labelClassName, label, labelTitle, id } = defaultProps;
+        const inputProps = filterOutKeys(['containerClassName', 'labelClassName', 'labelTitle', 'minVal', 'maxVal'], defaultProps);
 
         return (
             <div className={containerClassName}>
                 {
                     label
                     ? (
-                        <label className={ labelClassName } htmlFor={ id }>{ label }:</label>
+                        <label className={ labelClassName } htmlFor={ id } title={ labelTitle }>{ label }:</label>
                     )
                     : null
                 }

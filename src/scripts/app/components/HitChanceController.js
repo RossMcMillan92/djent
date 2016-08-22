@@ -23,7 +23,8 @@ class HitChanceController extends Component {
             step: 5,
             className: 'input-base input-base--bare input-base--large input-base--short',
             labelClassName: 'input-label',
-        }
+        };
+
         return (
             <InputBox { ...props } />
         );

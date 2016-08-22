@@ -33,7 +33,7 @@ class SequencePanel extends Component {
 
     render = () => (
         <div>
-            <div className="u-flex-row u-flex-justify u-flex-center u-mb05">
+            <div className="u-flex-row u-flex-justify u-flex-end u-mb05">
                 <div className="u-mr05">
                     <InputBox
                         id={`sequence-name-${this.props.sequence.id}`}
@@ -47,7 +47,7 @@ class SequencePanel extends Component {
                 </div>
                 {
                     this.props.isDeletable
-                    ? <button className="button-primary button-primary--small button-primary--negative" onClick={ this.launchDeleteModal } >Delete</button>
+                    ? <button className="button-primary button-primary--tiny button-primary--negative" onClick={ this.launchDeleteModal } >Delete</button>
                     : null
                 }
             </div>
@@ -58,11 +58,13 @@ class SequencePanel extends Component {
                         allowedLengths={this.props.sequence.allowedLengths}
                     />
 
-                    <div className="u-flex-row u-flex-justify">
-                        <BeatsController
-                            sequence={ this.props.sequence }
-                            actions={{ updateSequence: this.props.actions.updateSequence }}
-                        />
+                    <div className="u-flex-row u-flex-row u-flex-wrap u-flex-justify">
+                        <div className="u-mr1 u-mb05">
+                            <BeatsController
+                                sequence={ this.props.sequence }
+                                actions={{ updateSequence: this.props.actions.updateSequence }}
+                            />
+                        </div>
                         <HitChanceController
                             hitChance={ this.props.sequence.hitChance }
                             actions={{ updateHitChance: this.onHitChanceChange }}

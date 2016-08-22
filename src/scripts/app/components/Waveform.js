@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 
 const RESOLUTION = 3;
 const colorScheme = [
-    [146, 198, 211],
-    [255, 255, 255],
+    '#888',
+    '#fff',
 ];
 
 const incrementBySpeed = (val, targetVal, dist) => val + (dist * (targetVal - val));
@@ -27,14 +27,14 @@ const Level = (x, y, w, h, targetColor) => {
     };
 
     const draw = ctx => {
-        if (oldState.y === state.y && oldState.color.filter((val, i) => val === state.color[i]).length === 3) return;
+        if (oldState.y === state.y && oldState.color === state.color) return;
         // ctx.fillStyle = 'transparent';
         ctx.clearRect(state.x, 0, w + 1, h);
-        ctx.fillStyle = `rgb(${state.color[0]}, ${state.color[1]}, ${state.color[2]})`;
+        ctx.fillStyle = `${state.color}`;
         ctx.fillRect(state.x, state.y, state.w, state.h);
 
         oldState.y = state.y;
-        oldState.color = [state.color[0], state.color[1], state.color[2]];
+        oldState.color = state.color;
     };
 
     const update = (t) => {
@@ -174,7 +174,7 @@ export default class Waveform extends Component {
             .forEach((item, i) => {
                 const value = item * (this.props.amplified ? scale : 1);
                 const level = this.levels[i];
-                const y  = (height - value);
+                const y  = this.props.isLoading ? height - 3 : (height - value);
 
                 level.updateState({ targety: y, targetColor });
             });

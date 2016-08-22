@@ -21,6 +21,13 @@ export function updateInstrumentVolume({ instrumentID, value }) {
     };
 }
 
+export function updateInstrumentRepeatingHits({ instrumentID, value }) {
+    return {
+        type: 'UPDATE_INSTRUMENT_REPEATING_HITS',
+        payload: { instrumentID, value: confineToRange(value, 0, 200) },
+    };
+}
+
 export function updateCustomPresetInstruments(instruments) {
     return {
         type: 'UPDATE_CUSTOM_PRESET_INSTRUMENTS',

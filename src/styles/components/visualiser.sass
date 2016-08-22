@@ -1,4 +1,4 @@
-$visualiser__height: 50px
+$visualiser__height: 75px
 $visualiser__bg-color: $palette-alpha
 
 .visualiser-container
@@ -20,9 +20,9 @@ $visualiser__bg-color: $palette-alpha
 
 .visualiser-container__button
     position: relative
-    transition: all .5s ease-in-out
+    transition: all .35s ease-in-out
     z-index: 3
-    transform: translate(75%, -75%) scale(1.1)
+    transform: translate(75%, -100%) scale(1.3)
 
     .visualiser-container.is-active &
         transform: translate(0, 0) scale(1)
@@ -37,7 +37,7 @@ $visualiser__bg-color: $palette-alpha
     transition: all .25s ease-in-out
     user-select: none
 
-    &.is-inactive
+    &:not(.is-active)
         transform: translateY(10%)
         opacity: 0
 
@@ -47,22 +47,9 @@ $visualiser__bg-color: $palette-alpha
     width: 100%
     z-index: 1
 
-.visualiser__placeholder
-    position: absolute
-    height: $visualiser__height
-    width: 100%
-    background-color: $visualiser__bg-color
-    top: 0
-    left: 0
-    z-index: 2
-    transition: all .25s ease-in-out
-
-    .visualiser.is-active &
-        opacity: 0
-        z-index: -1
-
 .visualiser__button-container
     position: absolute
     right: 0
     display: flex
     z-index: 2
+    margin-top: -$base-spacing-unit / 2

@@ -162,11 +162,15 @@ export default class Main extends Component {
             )
             : (
                 <div>
-                    <Player
-                        route={this.props.route}
-                        googleAPIHasLoaded={this.state.googleAPIHasLoaded}
-                    />
-                    <Sequences route={this.props.route} />
+                    <div className="u-mb2">
+                        <Player
+                            route={this.props.route}
+                            googleAPIHasLoaded={this.state.googleAPIHasLoaded}
+                        />
+                    </div>
+                    <div className="u-mb2">
+                        <Sequences route={this.props.route} />
+                    </div>
                     <Instruments route={this.props.route} />
                 </div>
             );

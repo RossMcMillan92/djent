@@ -55,12 +55,7 @@ const preset = {
             {
                 id: 'k',
                 sequences: [
-                    [
-                        { beat: 2, volume: 1 },
-                   ],
-                   [
-                       { beat: 1, volume: 1 },
-                   ],
+                    'steadyEighths',
                 ],
                 sounds: [
                     {
@@ -72,14 +67,7 @@ const preset = {
             {
                 id: 's',
                 sequences: [
-                    [
-                        { beat: 4, volume: 0 },
-                        { beat: 4, volume: 1 },
-                    ],
-                    [
-                        { beat: 2, volume: 0 },
-                        { beat: 2, volume: 1 },
-                    ],
+                    'offsetEighths',
                 ],
                 sounds: [
                     {
@@ -111,12 +99,7 @@ const preset = {
             {
                 id: 'h',
                 sequences: [
-                    [
-                        { beat: 1, volume: 0 },
-                        { beat: 1, volume: 1 },
-                        { beat: 1, volume: 1 },
-                        { beat: 1, volume: 1 },
-                   ]
+                    'steadyQuarters'
                 ],
                 sounds: [
                     {

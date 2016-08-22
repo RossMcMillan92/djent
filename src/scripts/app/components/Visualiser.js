@@ -73,7 +73,7 @@ class Visualiser extends Component {
                     audioStartTime={this.state.audioStartTime}
                     timeLength={this.timeLength}
                     width={this.containerWidth}
-                    height={50}
+                    height={75}
                     amplified={true}
                 />
 
@@ -85,8 +85,6 @@ class Visualiser extends Component {
                     <ShareController googleAPIHasLoaded={this.props.googleAPIHasLoaded} />
                 </div>
             </div>
-
-            <div className="visualiser__placeholder"></div>
         </div>
     );
 }

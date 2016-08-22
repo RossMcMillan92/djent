@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-
-import InputBox from './InputBox';
 import presets from '../utils/presets';
 
 class PresetController extends Component {
@@ -18,13 +16,12 @@ class PresetController extends Component {
                 <option value={preset.id} key={i}>{ preset.description || preset.id }</option>
             ));
 
-        if (!activePreset) presetItems.push(<option value='custom' key={presetItems.length}>Custom</option>)
+        if (!activePreset) presetItems.push(<option value='custom' key={presetItems.length}>Custom</option>);
 
         return (
             <div className="input-container">
                 <select className="input-base input-base--dropdown" onChange={(e) => this.onChange(e)} value={activePreset ? this.props.activePresetID : 'custom'}>
                     { presetItems }
-
                 </select>
                 <div className="input-dropdown-icon"></div>
             </div>

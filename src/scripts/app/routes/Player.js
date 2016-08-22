@@ -42,17 +42,14 @@ export default class Player extends Component {
                     ? null
                     : (
                         <Panel>
-                            <div className="grid grid--wide grid--middle">
-                                <div className="grid__item one-half alpha--one-whole">
-                                    <div className="group-spacing-y-small">
-                                        <div className="u-flex-row u-flex-end">
-                                            <div className="u-mr1">
-                                                <h2 className="title-primary">Main Settings</h2>
-                                                <BPMController />
-                                            </div>
-                                            <div className="">
-                                                <BPMTapper />
-                                            </div>
+                            <div className="u-flex-row u-flex-wrap">
+                                <div className="group-spacing-y-small u-mr1">
+                                    <div className="u-flex-row u-flex-end">
+                                        <div className="u-mr1">
+                                            <BPMController />
+                                        </div>
+                                        <div className="">
+                                            <BPMTapper />
                                         </div>
                                     </div>
                                 </div>
@@ -61,14 +58,12 @@ export default class Player extends Component {
                                     isShareRoute
                                     ? null
                                     : (
-                                        <div className="grid__item one-half alpha--one-whole">
-                                            <div className="group-spacing-y-small">
-                                            <h2 className="title-primary">Length</h2>
-                                                <BeatsController
-                                                    sequence={ totalSequence }
-                                                    actions={{ updateSequence: this.props.actions.updateSequence }}
-                                                />
-                                            </div>
+                                        <div className="group-spacing-y-small">
+                                            <BeatsController
+                                                sequence={ totalSequence }
+                                                actions={{ updateSequence: this.props.actions.updateSequence }}
+                                                labelPrefix='Total '
+                                            />
                                         </div>
                                     )
                                 }

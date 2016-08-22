@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
-import SwipeableViews from '../components/SwipeableViews';
+import Expandable from '../components/Expandable';
 import Spinner from '../components/Spinner';
+import SwipeableViews from '../components/SwipeableViews';
 
 import Instruments from '../containers/Instruments';
 import Modal from '../containers/Modal';
@@ -144,6 +145,7 @@ export default class Main extends Component {
                 </div>
             </div>
         );
+        const expandableTitleClass = 'title-primary u-txt-large dropdown-icon-after group-padding-x group-padding-x-small@mobile group-capped-x group-centered';
         const Views = isMobileView
             ? (
                 <SwipeableViews
@@ -167,11 +169,22 @@ export default class Main extends Component {
                             route={this.props.route}
                             googleAPIHasLoaded={this.state.googleAPIHasLoaded}
                         />
+
                     </div>
                     <div className="u-mb2">
-                        <Sequences route={this.props.route} />
+                        <Expandable
+                            title="Sequences"
+                            titleClassName={expandableTitleClass}
+                        >
+                            <Sequences route={this.props.route} />
+                        </Expandable>
                     </div>
-                    <Instruments route={this.props.route} />
+                    <Expandable
+                        title="Instruments"
+                        titleClassName={expandableTitleClass}
+                    >
+                        <Instruments route={this.props.route} />
+                    </Expandable>
                 </div>
             );
 

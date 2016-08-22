@@ -10,8 +10,6 @@ export default class Instruments extends Component {
 
     render = () => (
         <Panel>
-            <h2 className="title-primary">Instruments</h2>
-
             <InstrumentList
                 actions={{
                     disableModal: this.props.actions.disableModal,

@@ -38,12 +38,7 @@ export default class Sequences extends Component {
 
         return (
             <Panel>
-                <h2 className="title-primary">
-                    Sequences
-                </h2>
-
                 { sequences }
-
                 { addSequenceButton }
             </Panel>
         );

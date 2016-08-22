@@ -7,7 +7,7 @@ import swornIn from './presets/sworn-in';
 import thallBuster from './presets/thall-buster';
 import thallBuster2 from './presets/thall-buster-2';
 import thallTriplets from './presets/thall-triplets';
-import tesseract from './presets/tesseract';
+import polyrythms from './presets/polyrythms';
 
 import { getAllowedLengthsFromSequence } from './sequences';
 
@@ -21,7 +21,7 @@ const presets = [
     thallBuster2,
     thallBuster,
     thallTriplets,
-    tesseract,
+    polyrythms,
 ];
 
 const backwardsCompatibility = (preset, allowedLengths) => {

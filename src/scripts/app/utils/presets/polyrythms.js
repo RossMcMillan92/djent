@@ -1,6 +1,6 @@
 const preset = {
-    id: 'tesseract',
-    description: 'Tesseract',
+    id: 'polyrythms',
+    description: 'Polyrythms',
     settings: {
         config: {
             bpm       : 112,

@@ -17,7 +17,7 @@ class BeatsController extends Component {
         const getProps = (type) => ({
             type: 'number',
             id: type,
-            label: capitalize(type),
+            label: capitalize((this.props.labelPrefix ? this.props.labelPrefix : '') + type),
             defaultValue : this.props.sequence[type],
             onChange: (event) => this.onChange(event, type),
             className: 'input-base input-base--bare input-base--large input-base--short',

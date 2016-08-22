@@ -96,14 +96,11 @@ class SoundController extends Component {
 
     generate = () => {
         const { bpm, sequences, instruments, usePredefinedSettings } = this.props;
-        const generationState = deepClone({ bpm, sequences, instruments, usePredefinedSettings });
-
-        this.props.actions.updateGenerationState(generationState);
-
-        this.updateUI({ isLoading: true });
-
+        const generationState   = deepClone({ bpm, sequences, instruments, usePredefinedSettings });
         const bpmMultiplier     = 60 / bpm;
         const totalBeatsProduct = getTotalBeatsLength(sequences);
+
+        this.props.actions.updateGenerationState(generationState);
         let newInstruments;
         return generateNewRiff({ ...generationState, instruments, totalBeatsProduct, context: audioContext })
             .then((instrumentss) => {
@@ -174,6 +171,7 @@ class SoundController extends Component {
 
     generateEvent = () => {
         if (!this.state.isLoading) {
+            this.updateUI({ isLoading: true });
             this.stopEvent();
             this.generate()
                 .then(({ audioTemplate, instruments }) => this.updateInstrumentsAndPlay(audioTemplate, audioContext.currentTime, instruments));
@@ -202,9 +200,9 @@ class SoundController extends Component {
 
     loop = (audioTemplate) => {
         const currentTime   = audioContext.currentTime - this.audioStartTime;
-        const lookaheadTime = 50;
+        const lookaheadTime = 80;
         const upcomingNotes = audioTemplate
-            .filter(hit => hit.startTime >= currentTime && hit.startTime <= currentTime + lookaheadTime)
+            .filter(hit => hit.startTime >= currentTime && hit.startTime <= currentTime + (lookaheadTime / 1000))
             .map(({
                     buffer,
                     startTime,
@@ -225,7 +223,7 @@ class SoundController extends Component {
         const newRiffTemplate = audioTemplate.slice(upcomingNotes.length, audioTemplate.length);
         if (newRiffTemplate.length) {
             /* RIFF IS STILL PLAYING */
-            this.loopTimeout = setTimeout(() => this.loop(newRiffTemplate), 100);
+            this.loopTimeout = setTimeout(() => this.loop(newRiffTemplate), 50);
         } else {
             /* RIFF IS FINISHED */
             this.loopTimeout = undefined;
@@ -244,7 +242,6 @@ class SoundController extends Component {
                     this.queuedRiffTemplate  = undefined;
                     this.generationCount = this.generationCount + 1;
                 }
-
                 if (this.props.isPlaying) this.playEvent(nextRiffTemplate, endTime);
             } else {
                 this.stopTimeout = setTimeout(this.stopEvent, (endTime - (this.audioStartTime + currentTime)) * 1000);

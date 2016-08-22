@@ -79,6 +79,8 @@ const renderRiffTemplateAtTempo = (instruments, bpmMultiplier) => instruments
     .reduce((newArr, instrument) => {
         const hits = instrument.timeMap
             .reduce((newHits, time, i) => {
+                if (!instrument.sequence[i]) return newHits;
+
                 const pitchAmount     = instrument.pitch || 0;
                 const buffer          = instrument.buffers[instrument.hitTypes[i]];
                 const startTime       = time * bpmMultiplier;

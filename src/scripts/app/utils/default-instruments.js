@@ -481,7 +481,7 @@ const defaultInstruments = [
         id: 's',
         description: 'Snare',
         sequences: [
-            'middleBeat',
+            'offsetWholes',
         ],
         sounds: [
             {
@@ -574,7 +574,7 @@ const defaultInstruments = [
         id: 'd',
         description: 'Drone',
         sequences: [
-            'drone',
+            'twoBars',
         ],
         sounds: [
             {

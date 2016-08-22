@@ -39,26 +39,40 @@ const predefinedSequences = {
         ]
     },
 
-    middleBeat: {
-        description: 'Middle Beat',
+    offsetWholes: {
+        description: 'Offset Wholes',
         sequence: [
-            { beat: 1, volume: 0 },
-            { beat: 1, volume: 0 },
-            { beat: 1, volume: 1 },
-            { beat: 1, volume: 0 },
+            { beat: 0.5, volume: 0 },
+            { beat: 0.5, volume: 1 },
         ]
     },
 
-    offBeat: {
-        description: 'Off Beat',
+    offsetHalfs: {
+        description: 'Offset Halfs',
         sequence: [
             { beat: 1, volume: 0 },
             { beat: 1, volume: 1 },
         ]
     },
 
-    drone: {
-        description: 'Drone',
+    offsetQuarters: {
+        description: 'Offset Quarters',
+        sequence: [
+            { beat: 2, volume: 0 },
+            { beat: 2, volume: 1 },
+        ]
+    },
+
+    offsetEights: {
+        description: 'Offset Eights',
+        sequence: [
+            { beat: 4, volume: 0 },
+            { beat: 4, volume: 1 },
+        ]
+    },
+
+    twoBars: {
+        description: '2 Bars',
         sequence: [
             { beat: 0.125, volume: 1 },
         ]

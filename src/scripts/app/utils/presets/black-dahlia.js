@@ -91,7 +91,7 @@ const preset = {
             {
                 id: 'c',
                 sequences: [
-                    'drone',
+                    'twoBars',
                 ],
                 sounds: [
                     {

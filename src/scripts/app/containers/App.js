@@ -1,6 +1,4 @@
-import React from 'react';
-console.log('REACT', React)
-import { Component } from 'react';
+import React, { Component } from 'react';
 
 export default class App extends Component {
     static contextTypes = {

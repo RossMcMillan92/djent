@@ -19,7 +19,6 @@ class ShareController extends Component {
             settings: {
                 config: {
                     bpm            : this.props.bpm,
-                    hitChance      : this.props.hitChance,
                 },
                 sequences: deepClone(this.props.sequences),
                 instruments: this.props.instruments
@@ -28,6 +27,8 @@ class ShareController extends Component {
                         pitch: instrument.pitch,
                         predefinedHitTypes: instrument.hitTypes,
                         predefinedSequence: instrument.sequence,
+                        volume: instrument.volume,
+                        repeatHitTypeForXBeat: instrument.repeatHitTypeForXBeat,
                     })),
             }
         };

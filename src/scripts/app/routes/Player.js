@@ -77,7 +77,7 @@ export default class Player extends Component {
                     <div className={`visualiser-container ${this.props.currentAudioTemplate ? 'is-active' : ''}`}>
                         <div className="visualiser-container__backdrop"></div>
                         <div className="u-mb1">
-                            <Visualiser />
+                            <Visualiser googleAPIHasLoaded={this.props.googleAPIHasLoaded} />
                         </div>
 
                         <div className="u-flex-row u-flex-justify-center u-flex-center u-flex-wrap">

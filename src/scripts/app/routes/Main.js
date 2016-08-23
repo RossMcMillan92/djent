@@ -146,7 +146,7 @@ export default class Main extends Component {
             </div>
         );
         const expandableTitleClass = 'title-primary u-txt-large dropdown-icon-after group-padding-x group-padding-x-small@mobile group-capped-x group-centered';
-        const Views = isMobileView
+        const views = isMobileView
             ? (
                 <SwipeableViews
                     viewHeight={true}
@@ -199,7 +199,7 @@ export default class Main extends Component {
                             </div>
                         </div>
 
-                        { Views }
+                        { views }
                     </div>
 
                     {

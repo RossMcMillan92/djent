@@ -174,23 +174,25 @@ class SoundController extends Component {
             this.updateUI({ isLoading: true });
             this.stopEvent();
             this.generate()
-                .then(({ audioTemplate, instruments }) => this.updateInstrumentsAndPlay(audioTemplate, audioContext.currentTime, instruments));
+                .then(({ audioTemplate, instruments }) => {
+                    window.requestIdleCallback(() => this.updateInstrumentsAndPlay(audioTemplate, instruments), { timeout: 2000 });
+                });
         }
     }
 
     generateAndQueue = () => {
         this.generate()
             .then(({ audioTemplate, instruments }) => {
-                if (!this.props.isPlaying) return this.updateInstrumentsAndPlay(audioTemplate, audioContext.currentTime, instruments);
+                if (!this.props.isPlaying) return this.updateInstrumentsAndPlay(audioTemplate, instruments);
 
                 this.queuedRiffTemplate = audioTemplate;
                 this.queuedInstruments = instruments;
             });
     }
 
-    updateInstrumentsAndPlay = (audioTemplate, audioStartTime, instruments) => {
+    updateInstrumentsAndPlay = (audioTemplate, instruments) => {
         this.generationCount = this.generationCount + 1;
-        this.playEvent(audioTemplate, audioStartTime);
+        this.playEvent(audioTemplate);
         this.props.actions.updateCustomPresetInstruments(instruments);
     }
 
@@ -200,7 +202,7 @@ class SoundController extends Component {
 
     loop = (audioTemplate) => {
         const currentTime   = audioContext.currentTime - this.audioStartTime;
-        const lookaheadTime = 80;
+        const lookaheadTime = 500;
         const upcomingNotes = audioTemplate
             .filter(hit => hit.startTime >= currentTime && hit.startTime <= currentTime + (lookaheadTime / 1000))
             .map(({
@@ -223,7 +225,7 @@ class SoundController extends Component {
         const newRiffTemplate = audioTemplate.slice(upcomingNotes.length, audioTemplate.length);
         if (newRiffTemplate.length) {
             /* RIFF IS STILL PLAYING */
-            this.loopTimeout = setTimeout(() => this.loop(newRiffTemplate), 50);
+            this.loopTimeout = setTimeout(() => this.loop(newRiffTemplate), 205);
         } else {
             /* RIFF IS FINISHED */
             this.loopTimeout = undefined;

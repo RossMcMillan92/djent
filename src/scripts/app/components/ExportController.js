@@ -5,10 +5,10 @@ import { buildMidiDataURIFromInstruments } from '../utils/midi';
 
 const ExportModal = ({ actions }) => (
     <div className="u-flex-row u-flex-wrap">
-        <div className="group-spacing-y-small u-mr05 u-mb0">
+        <div className="u-mr05">
             <button className="button-primary button-primary--small button-primary--positive" onClick={ () => { actions.saveMIDI(); actions.disableModal(); } } >Save as MIDI</button>
         </div>
-        <div className="group-spacing-y-small u-mb0">
+        <div className="">
             <button className="button-primary button-primary--small button-primary--positive" onClick={ () => { actions.saveWAV(); actions.disableModal(); } } >Save as WAV</button>
         </div>
     </div>

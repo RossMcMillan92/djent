@@ -25,20 +25,20 @@ const presets = [
 ];
 
 const backwardsCompatibility = (preset, allowedLengths) => {
-    if (preset.settings.beats.length) {
+    if (preset.settings.beats && preset.settings.beats.length) {
         preset.settings.sequences = preset.settings.beats;
     }
 
-    if (preset.settings.sequences.find(b => b.id === 'groove')) {
+    if (preset.settings.sequences.find(seq => seq.id === 'groove')) {
         preset.settings.sequences = preset.settings.sequences
-            .map((b) => {
-                if (b.id === 'groove') {
-                    b.id = 'CUSTOM_SEQUENCE_1';
-                    b.hitChance = preset.settings.config.hitChance;
-                    b.allowedLengths = getAllowedLengthsFromSequence(preset.settings.instruments.find(i => i.id === 'g').predefinedSequence, allowedLengths);
+            .map((seq) => {
+                if (seq.id === 'groove') {
+                    seq.id = 'CUSTOM_SEQUENCE_1';
+                    seq.hitChance = preset.settings.config.hitChance;
+                    seq.allowedLengths = getAllowedLengthsFromSequence(preset.settings.instruments.find(i => i.id === 'g').predefinedSequence, allowedLengths);
                 }
 
-                return b;
+                return seq;
             });
     }
     return preset;

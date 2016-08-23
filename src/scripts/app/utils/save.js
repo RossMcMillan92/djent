@@ -16,7 +16,9 @@ const saveAsWAVFile = (() => {
         a.download = 'djen.wav'
         a.click();
 
-        window.URL.revokeObjectURL(url);
+        setTimeout(() => {
+            window.URL.revokeObjectURL(url);
+        }, 0);
     };
 })();
 

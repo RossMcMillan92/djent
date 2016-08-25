@@ -93,14 +93,14 @@ class SoundController extends Component {
     generate = () => {
         const { bpm, sequences, instruments, usePredefinedSettings } = this.props;
         const generationState   = deepClone({ bpm, sequences, instruments, usePredefinedSettings });
-        const totalBeatsProduct = getTotalTimeLength(sequences, bpm);
+        const totalBeatsProduct = getTotalBeatsLength(sequences);
 
         this.props.actions.updateGenerationState(generationState);
         let newInstruments;
         return generateNewRiff({ ...generationState, instruments, totalBeatsProduct, context: audioContext })
             .then((instrumentss) => {
                 newInstruments = instrumentss;
-                const bpmMultiplier = 60 / bpm;
+                const bpmMultiplier     = 60 / bpm;
                 return renderRiffTemplateAtTempo(instrumentss, bpmMultiplier);
             })
             .then((audioTemplate) => {
@@ -166,12 +166,10 @@ class SoundController extends Component {
 
     generateEvent = () => {
         if (!this.state.isLoading) {
-            this.updateUI({ isLoading: true });
+            this.setState({ isLoading: true });
             this.stopEvent();
             this.generate()
-                .then(({ audioTemplate, instruments }) => {
-                    window.requestIdleCallback(() => this.updateInstrumentsAndPlay(audioTemplate, instruments), { timeout: 2000 });
-                });
+                .then(({ audioTemplate, instruments }) => this.updateInstrumentsAndPlay(audioTemplate, instruments));
         }
     }
 
@@ -187,6 +185,7 @@ class SoundController extends Component {
 
     updateInstrumentsAndPlay = (audioTemplate, instruments) => {
         this.generationCount = this.generationCount + 1;
+        this.stopEvent();
         this.playEvent(audioTemplate);
         this.props.actions.updateCustomPresetInstruments(instruments);
     }
@@ -245,7 +244,7 @@ class SoundController extends Component {
             <div>
                 { this.state.error ? <p className="txt-error">{ this.state.error }</p> : null }
                 <div className="u-flex-row u-flex-wrap">
-                    <div className="visualiser-container__button u-mr05 u-mb0">
+                    <div className={`visualiser-container__button visualiser-container__button--${this.props.generateButtonText.toLowerCase()} u-mr05 u-mb0`}>
                         <button className={`button-primary button-primary--alpha-dark ${this.state.isLoading ? '' : 'icon-is-hidden'}`} onClick={() => this.generateEvent()}>
                             <span className="button-primary__inner">{ this.props.generateButtonText || 'Generate' }</span>
                             <span className="button-primary__icon">

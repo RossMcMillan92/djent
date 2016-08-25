@@ -10,6 +10,7 @@ $button-primary__default-bg-color: rgba(0, 0, 0, 0.2)
     position: relative
     appearance: none
     padding: $button-primary__spacing
+    text-decoration: none
     text-transform: uppercase
     line-height: $button-primary__line-height
     font-size: $button-primary__font-size
@@ -58,13 +59,17 @@ $button-primary__default-bg-color: rgba(0, 0, 0, 0.2)
 
 .button-primary__icon
     position: absolute
+    top: 50%
     left: 50%
-    transform:  translateX(-50%)
+    transform:  translate(-50%, -50%)
     transition: all .25s ease-in-out
 
     .icon-is-hidden &
         transform: translateX(-50%) scale(0.7)
         opacity: 0
+
+    .button-primary--tiny &
+        transform: translate(-50%, -50%) scale(0.7)
 
 .button-primary--negative,
 .button-primary--positive

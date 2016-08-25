@@ -137,7 +137,7 @@ class SwipeableViews extends Component {
         this.updateTranslation(percent);
 
         if (pastSpeedThreshold && index !== this.currentIndex) {
-             this.containerEl.style[transformTimingFunctionProp] = 'ease-out';
+             this.containerEl.style[transformTimingFunctionProp] = 'linear';
              this.containerEl.style[transformDurationProp] = `${quickSwipeTransitionTime}ms`;
              setTimeout(() => {
                  this.containerEl.style[transformTimingFunctionProp] = '';

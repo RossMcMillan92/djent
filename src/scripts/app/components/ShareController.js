@@ -18,7 +18,7 @@ class ShareController extends Component {
             id: 'custom',
             settings: {
                 config: {
-                    bpm            : this.props.bpm,
+                    bpm : this.props.bpm,
                 },
                 sequences: deepClone(this.props.sequences),
                 instruments: this.props.instruments

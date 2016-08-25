@@ -90,6 +90,19 @@ export default class Player extends Component {
                     </div>
                 </Panel>
 
+                {
+                    isShareRoute
+                    ? (
+                        <div className="group-padding-y u-tac">
+                            <p>or</p>
+                            <p className="u-mt1">
+                                <a className="button-primary button-primary--gamma" onClick={() => this.context.router.push('/')}>Generate new</a>
+                            </p>
+                        </div>
+                    )
+                    : null
+                }
+
             </div>
 
         );

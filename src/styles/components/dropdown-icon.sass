@@ -11,14 +11,21 @@
     .expandable.is-expanded &
         transform: rotate(180deg)
 
-.dropdown-icon-after
+=dropdown-icon-inline-psuedo
+    +dropdown-icon
+    position: relative
+    content: ""
+    display: inline-block
+    vertical-align: middle
 
+.dropdown-icon-before
+    &::before
+        +dropdown-icon-inline-psuedo
+        margin-right: $base-spacing-unit / 2
+
+.dropdown-icon-after
     &::after
-        +dropdown-icon
-        position: relative
-        content: ""
-        display: inline-block
-        vertical-align: middle
+        +dropdown-icon-inline-psuedo
         margin-left: $base-spacing-unit / 2
 
 .dropdown-icon-after--light::after

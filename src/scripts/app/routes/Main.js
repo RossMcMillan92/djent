@@ -108,7 +108,8 @@ export default class Main extends Component {
     }
 
     changeActivePageIdnex = (index) => {
-        this.context.router.push(`${index === 0 ? '' : '#fwd'}`);
+        if (this.state.activePageIndex === index) return;
+        document.location.hash = index === 0 ? '' : '#fwd';
         this.setActivePageIndex(index);
     };
 
@@ -130,9 +131,7 @@ export default class Main extends Component {
             <div className="">
                 <div className="group-spacing-x">
                     <div className="u-flex-row u-flex-justify">
-                        <h1 className="header__title u-mb0">
-                            Djen
-                        </h1>
+                        <img className="header__logo" src="/assets/images/logo.png" />
                         <a className="" href="https://www.facebook.com/djenerationstation/" target="_blank">
                             <img
                                 className="header__icon social-icon"
@@ -145,7 +144,7 @@ export default class Main extends Component {
                 </div>
             </div>
         );
-        const expandableTitleClass = 'title-primary u-txt-large dropdown-icon-after group-padding-x group-padding-x-small@mobile group-capped-x group-centered';
+        const expandableTitleClass = 'title-primary u-txt-large dropdown-icon-before group-padding-x group-padding-x-small@mobile group-capped-x group-centered';
         const views = isMobileView
             ? (
                 <SwipeableViews
@@ -164,14 +163,11 @@ export default class Main extends Component {
             )
             : (
                 <div>
-                    <div className="u-mb2">
-                        <Player
-                            route={this.props.route}
-                            googleAPIHasLoaded={this.state.googleAPIHasLoaded}
-                        />
-
-                    </div>
-                    <div className="u-mb2">
+                    <Player
+                        route={this.props.route}
+                        googleAPIHasLoaded={this.state.googleAPIHasLoaded}
+                    />
+                    <div className="group-padding-y u-bdrb">
                         <Expandable
                             title="Sequences"
                             titleClassName={expandableTitleClass}
@@ -179,12 +175,14 @@ export default class Main extends Component {
                             <Sequences route={this.props.route} />
                         </Expandable>
                     </div>
-                    <Expandable
-                        title="Instruments"
-                        titleClassName={expandableTitleClass}
-                    >
-                        <Instruments route={this.props.route} />
-                    </Expandable>
+                    <div className="group-padding-y u-bdrb">
+                        <Expandable
+                            title="Instruments"
+                            titleClassName={expandableTitleClass}
+                        >
+                            <Instruments route={this.props.route} />
+                        </Expandable>
+                    </div>
                 </div>
             );
 

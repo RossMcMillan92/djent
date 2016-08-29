@@ -1,6 +1,7 @@
 /* eslint no-undef: 0 */
 importScripts('/node_modules/sw-toolbox/sw-toolbox.js');
-toolbox.debug = false;
+toolbox.options.debug = false;
+console.log('TOOLBOX', toolbox)
 
 toolbox.precache([
     '/index.html',
@@ -8,9 +9,9 @@ toolbox.precache([
     'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/*',
 ]);
 
-toolbox.router.get('/index.html', toolbox.networkPreferred);
+toolbox.router.get('/index.html', toolbox.networkFirst);
 toolbox.router.get('/assets/(.*)', toolbox.fastest);
-toolbox.router.get('/dist/(.*)', toolbox.networkPreferred);
+toolbox.router.get('/dist/(.*)', toolbox.networkFirst);
 toolbox.router.get('https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/(.*)', toolbox.fastest);
 
 toolbox.router.get('/css(.*)', self.toolbox.fastest, {

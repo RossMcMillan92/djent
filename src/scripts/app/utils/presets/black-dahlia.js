@@ -54,6 +54,7 @@ const preset = {
             },
             {
                 id: 'k',
+                volume: .8,
                 sequences: [
                     'steadyEighths',
                 ],
@@ -66,6 +67,7 @@ const preset = {
             },
             {
                 id: 's',
+                volume: .7,
                 sequences: [
                     'offsetEighths',
                 ],

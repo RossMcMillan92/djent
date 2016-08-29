@@ -1,10 +1,10 @@
 /* eslint no-undef: 0 */
 importScripts('/node_modules/sw-toolbox/sw-toolbox.js');
+toolbox.debug = false;
 
 toolbox.precache([
     '/index.html',
-    '/css(.*)',
-    '/dist/(.*)',
+    '/dist/*',
     'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/*',
 ]);
 

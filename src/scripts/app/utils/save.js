@@ -8,8 +8,8 @@ const saveAsWAVFile = (() => {
     return (audioBuffer) => {
         const wav = audioBufferToWav(audioBuffer);
         const blob = new window.Blob([ new DataView(wav) ], {
-          type: 'audio/wav'
-      });
+            type: 'audio/wav'
+        });
         const url = window.URL.createObjectURL(blob);
 
         a.href = url;
@@ -18,7 +18,7 @@ const saveAsWAVFile = (() => {
 
         setTimeout(() => {
             window.URL.revokeObjectURL(url);
-        });
+        }, 0);
     };
 })();
 

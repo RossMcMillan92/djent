@@ -4,19 +4,19 @@ class Modal extends Component {
     shouldComponentUpdate = (nextProps) => nextProps.isActive !== this.props.isActive;
 
     closeModal = () => {
-        this.props.isCloseable && this.props.actions.disableModal();
+        if (this.props.isCloseable) this.props.actions.disableModal();
     }
 
     render = () => {
         const title = this.props.title
         ? (
             <div className="panel panel--dark">
-                <div className="group-padding-x group-padding-y">
+                <div className="group-padding-x group-padding-y-small">
                     { this.props.title }
                 </div>
             </div>
         )
-        : null
+        : null;
 
         const closeButton = this.props.isCloseable
         ? (
@@ -24,10 +24,10 @@ class Modal extends Component {
                 &times;
             </div>
         )
-        : null
+        : null;
 
         return (
-            <div className={`modal ${ this.props.isActive ? 'is-active' : '' } ${ this.props.className ? this.props.className : '' }`}>
+            <div className={`modal ${this.props.isActive ? 'is-active' : ''} ${this.props.className ? this.props.className : ''}`}>
                 <div className="modal__bg" onClick={this.closeModal}></div>
                 <div className="modal__box-container">
                     { title }

@@ -144,7 +144,7 @@ export default class Main extends Component {
                 </div>
             </div>
         );
-        const expandableTitleClass = 'title-primary u-txt-large dropdown-icon-before group-padding-x group-padding-x-small@mobile group-capped-x group-centered';
+        const expandableTitleClass = 'title-primary u-txt-large dropdown-icon-before group-padding-x group-padding-x-small@mobile group-capped-x group-centered u-curp';
         const views = isMobileView
             ? (
                 <SwipeableViews

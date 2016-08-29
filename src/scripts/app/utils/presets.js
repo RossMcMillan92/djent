@@ -3,11 +3,11 @@ import blackDahlia from './presets/black-dahlia';
 // import deftones from './presets/deftones'; // not ready for prime time
 // import greenDay from './presets/greenday';
 import meshuggah from './presets/meshuggah';
+import polyrythms from './presets/polyrythms';
 import swornIn from './presets/sworn-in';
 import thallBuster from './presets/thall-buster';
 import thallBuster2 from './presets/thall-buster-2';
 import thallTriplets from './presets/thall-triplets';
-import polyrythms from './presets/polyrythms';
 
 import { getAllowedLengthsFromSequence } from './sequences';
 
@@ -17,11 +17,11 @@ const presets = [
     // deftones,
     // greenDay,
     meshuggah,
+    polyrythms,
     swornIn,
     thallBuster2,
     thallBuster,
     thallTriplets,
-    polyrythms,
 ];
 
 const backwardsCompatibility = (preset, allowedLengths) => {

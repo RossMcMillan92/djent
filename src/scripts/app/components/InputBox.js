@@ -46,7 +46,7 @@ class InputBox extends Component {
         }
     }
 
-    throttledOnChange = this.props.onChange ? throttle(this.props.onChange, 100) : undefined;
+    throttledOnChange = this.props.onChange ? throttle(this.props.onChange, 100) : () => {};
 
     render = () => {
         const defaultProps   = {

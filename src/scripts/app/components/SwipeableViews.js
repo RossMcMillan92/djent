@@ -91,7 +91,6 @@ class SwipeableViews extends Component {
         }
 
         if (this.isSwiping !== true) {
-            this.started = false;
             return;
         }
 

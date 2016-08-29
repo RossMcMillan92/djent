@@ -79,9 +79,9 @@ export default class Waveform extends Component {
     activeColor = colorScheme[1];
 
     shouldComponentUpdate = (nextProps) =>
-    this.props.isPlaying !== nextProps.isPlaying
-    || this.props.isLoading !== nextProps.isLoading
-    || this.props.buffer !== nextProps.buffer
+        this.props.isPlaying !== nextProps.isPlaying
+        || this.props.isLoading !== nextProps.isLoading
+        || this.props.buffer !== nextProps.buffer
 
     componentDidMount = () => {
         this.initialise(this.props);
@@ -174,7 +174,7 @@ export default class Waveform extends Component {
             .forEach((item, i) => {
                 const value = item * (this.props.amplified ? scale : 1);
                 const level = this.levels[i];
-                const y  = this.props.isLoading ? height - 3 : (height - value);
+                const y  = this.props.isLoading ? height - 10 : (height - value);
 
                 level.updateState({ targety: y, targetColor });
             });

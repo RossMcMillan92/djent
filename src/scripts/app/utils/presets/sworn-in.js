@@ -4,32 +4,32 @@ const preset = {
     settings: {
         config: {
             bpm            : 90,
-            hitChance      : .9,
-            allowedLengths : [
-                    {
-                        id: "0.25",
-                        amount: 1,
-                    },
-                    {
-                        id: "2",
-                        amount: 2,
-                    },
-                    {
-                        id: "4",
-                        amount: 3,
-                    },
-            ],
         },
-        beats: [
+        sequences: [
             {
                 id    : 'total',
                 bars  : 4,
                 beats : 4,
             },
             {
-                id    : 'groove',
+                id    : 'CUSTOM_SEQUENCE_1',
                 bars  : 4,
                 beats : 4,
+                hitChance      : .9,
+                allowedLengths : [
+                        {
+                            id: "0.25",
+                            amount: 1,
+                        },
+                        {
+                            id: "2",
+                            amount: 2,
+                        },
+                        {
+                            id: "4",
+                            amount: 3,
+                        },
+                ],
             },
         ],
         instruments: [

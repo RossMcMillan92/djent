@@ -1,13 +1,16 @@
 .note-panel
     background: $palette-shade-delta
-    padding: $base-spacing-unit
-    border-top: solid 5px $palette-alpha
+    border-top: solid 5px $palette-gamma
+    border-radius: 3px
+    padding-top: $base-spacing-unit
+    overflow: hidden
+    user-select: none
 
 .note-panel--disabled
-    background: $palette-shade-gamma
+    background: rgba($palette-shade-delta, .5)
     border-color: $palette-shade-delta
 
-$note-panel__svg-size: 40px
+$note-panel__svg-size: 30px
 .note-panel__svg
     position: relative
     display: block
@@ -21,19 +24,19 @@ $note-panel__svg-size: 40px
 .note-panel__amount-container
     display: block
     text-align: center
-    margin-bottom: $base-spacing-unit / 2
 
 .note-panel__amount
-    display: inline-block
-    font-size: rem(20px)
+    display: block
+    font-size: rem(16px)
     color: #fff
     vertical-align: middle
-    min-width: 52px
-    text-align: right
+    text-align: center
+    margin-bottom: $base-spacing-unit
 
 .note-panel__checkbox-container
-    position: relative
     text-align: center
+    padding: 5px
+    line-height: 1
 
 .note-panel__label
     font-size: rem(12px)
@@ -46,24 +49,40 @@ $note-panel__svg-size: 40px
     vertical-align: middle
 
 .note-panel__btn-container
-    display: inline-block
+    display: block
     vertical-align: middle
 
 .note-panel__btn
     display: block
+    width: 100%
+    text-align: center
     border: none
-    padding: $base-spacing-unit / 4
+    padding: $base-spacing-unit / 1.5
     margin: 0
     appearance: none
-    background: none
+    background: rgba(0, 0, 0, .2)
     cursor: pointer
 
+    &:hover,
+    &:focus
+        background: rgba(0, 0, 0, .3)
+        outline: none
+
+    &:active
+        background: rgba(0, 0, 0, .35)
+
+    &:not(:last-of-type)
+        margin-bottom: 1px
+
     &:after
+        position: relative
         content: ""
         width: 0
         height: 0
         border-style: solid
         display: block
+        left: 50%
+        transform: translateX(-50%)
 
 .note-panel__btn--up
     &:after
@@ -72,5 +91,5 @@ $note-panel__svg-size: 40px
 
 .note-panel__btn--down
     &:after
-        border-width: 8.7px 5px 0 5px;
-        border-color: #fff transparent transparent transparent;
+        border-width: 8.7px 5px 0 5px
+        border-color: #fff transparent transparent transparent

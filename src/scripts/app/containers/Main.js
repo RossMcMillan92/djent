@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import { bindActionCreators } from 'redux'
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import Main from '../routes/Main';
@@ -7,17 +6,15 @@ import Main from '../routes/Main';
 import * as configActions from '../actions/config';
 import * as instrumentsActions from '../actions/instruments';
 import * as modalActions from '../actions/modal';
-import { updateBeats } from '../actions/beats';
+import { updateSequence } from '../actions/sequences';
 
 function mapStateToProps(state) {
     return {
-        activePresetID : state.config.activePresetID,
-        allowedLengths : state.config.allowedLengths,
-        bpm            : state.config.bpm,
-        beats          : state.beats,
-        currentBuffer  : state.sound.currentSrc ? state.sound.currentSrc.buffer : undefined,
-        instruments    : state.instruments,
-    }
+        activePresetID       : state.config.activePresetID,
+        bpm                  : state.config.bpm,
+        sequences            : state.sequences,
+        instruments          : state.instruments,
+    };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -25,8 +22,8 @@ function mapDispatchToProps(dispatch) {
         ...configActions,
         ...instrumentsActions,
         ...modalActions,
-        updateBeats
-    }
+        updateSequence
+    };
 
     return {
         actions: {

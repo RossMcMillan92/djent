@@ -17,7 +17,7 @@ class AllowedLengthsController extends Component {
 
         const lengths = allowedLengths
             .map((length, i) => (
-                <div className="grid__item one-fifth gamma--one-third beta--one-half palm--one-whole" key={i} >
+                <div className="grid__item one-fifth alpha--one-third" key={i} >
                     <div className="u-mb1" key={i} >
                         <NotePanel length={length} { ...notePanelProps } />
                     </div>

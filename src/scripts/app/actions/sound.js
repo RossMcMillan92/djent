@@ -33,10 +33,10 @@ export function updateGenerationState(generationState) {
     };
 }
 
-export function updateCurrentBuffer(currentBuffer) {
+export function updateCurrentAudioTemplate(currentAudioTemplate) {
     return {
-        type: 'UPDATE_CURRENT_BUFFER',
-        payload: { currentBuffer },
+        type: 'UPDATE_CURRENT_AUDIO_TEMPLATE',
+        payload: { currentAudioTemplate },
     };
 }
 

@@ -1,0 +1,40 @@
+.tabgroup
+    background-color: darken($palette-shade-beta, 5%)
+    border-radius: 3px
+    overflow: hidden
+
+.tabgroup__pane
+    display: none
+
+    &.is-active
+        display: block
+
+.tabgroup__tab-container
+    display: flex
+    padding: 10px 10px 0 10px
+    background-color: rgba(0, 0, 0, .05)
+
+.tabgroup__tab
+    display: block
+    padding: 10px 18px
+    text-transform: uppercase
+    font-size: rem(13px)
+    background-color: rgba(0, 0, 0, .1)
+    cursor: pointer
+    user-select: none
+
+    &:not(:last-of-type)
+        border-right: solid 1px rgba(0, 0, 0, .05)
+
+    &:first-of-type
+        border-top-left-radius: 4px
+
+    &:last-of-type
+        border-top-right-radius: 4px
+
+    &.is-active
+        color: #fff
+        background-color: $palette-alpha
+
+.tabgroup__pane-container
+    padding: $base-spacing-unit

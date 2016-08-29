@@ -4,39 +4,39 @@ const preset = {
     settings: {
         config: {
             bpm            : 75,
-            hitChance      : 1,
-            allowedLengths : [
-                    {
-                        id: "0.25",
-                        amount: 1,
-                    },
-                    {
-                        id: "0.5",
-                        amount: 2,
-                        isTriplet: true,
-                    },
-                    {
-                        id: "1",
-                        amount: 5,
-                        isTriplet: true,
-                    },
-                    {
-                        id: "2",
-                        amount: 7,
-                        isTriplet: true,
-                    },
-            ],
         },
-        beats: [
+        sequences: [
             {
                 id    : 'total',
-                bars  : 8,
+                bars  : 4,
                 beats : 4,
             },
             {
-                id    : 'groove',
+                id    : 'CUSTOM_SEQUENCE_1',
                 bars  : 4,
                 beats : 4,
+                hitChance      : 1,
+                allowedLengths : [
+                        {
+                            id: '0.25',
+                            amount: 1,
+                        },
+                        {
+                            id: '0.5',
+                            amount: 2,
+                            isTriplet: true,
+                        },
+                        {
+                            id: '1',
+                            amount: 5,
+                            isTriplet: true,
+                        },
+                        {
+                            id: '2',
+                            amount: 7,
+                            isTriplet: true,
+                        },
+                ],
             },
         ],
         instruments: [
@@ -108,6 +108,6 @@ const preset = {
             },
         ]
     }
-}
+};
 
 export default preset;

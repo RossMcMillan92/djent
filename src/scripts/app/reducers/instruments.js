@@ -16,41 +16,57 @@ const updateInstrumentSoundByID = ({ instruments, soundID, parentID, prop, value
         return {
             ...instrument,
             sounds
-        }
-    })
+        };
+    });
 
     return newInstruments;
-}
+};
 
-export default function instruments(state = initialState, action) {
+export default function instrumentsReducer(state = initialState, action) {
     const { type, payload } = action;
-    let newState
+    let newState;
 
     switch (type) {
         case 'UPDATE_INSTRUMENT_SOUND_PROP':
-            return updateInstrumentSoundByID({ ...payload, instruments: state })
+            return updateInstrumentSoundByID({ ...payload, instruments: state });
 
         case 'UPDATE_INSTRUMENT_DETUNE_PROP':
-            return updateObjByID({ objs: state, id: payload.instrumentID, prop: 'pitch', value: payload.value })
+            return updateObjByID({ objs: state, id: payload.instrumentID, prop: 'pitch', value: payload.value });
+
+        case 'UPDATE_INSTRUMENT_VOLUME_PROP':
+            return updateObjByID({ objs: state, id: payload.instrumentID, prop: 'volume', value: payload.value });
+
+        case 'UPDATE_INSTRUMENT_REPEATING_HITS':
+            return updateObjByID({ objs: state, id: payload.instrumentID, prop: 'repeatHitTypeForXBeat', value: payload.value });
+
+        case 'UPDATE_INSTRUMENT_SEQUENCES':
+            return state
+                .map(i => i.id === payload.instrumentID ? { ...i, sequences: payload.sequences } : i);
 
         case 'APPLY_PRESET':
             const { preset } = payload;
             const instruments = preset.settings.instruments;
 
             newState = initialState.map(instrument => {
-                const newInstrument = instruments.find(newInstrument => newInstrument.id === instrument.id);
+                const newInstrument = instruments.find(i => i.id === instrument.id);
 
                 if (!newInstrument) return instrument;
 
                 let sounds = instrument.sounds;
                 if (newInstrument.sounds) {
-                    sounds = extendObjectArrayByID(instrument.sounds, newInstrument.sounds)
+                    sounds = extendObjectArrayByID(instrument.sounds, newInstrument.sounds);
+                }
+
+                let sequences = instrument.sequences;
+                if (newInstrument.sequences) {
+                    sequences = [ ...newInstrument.sequences ];
                 }
 
                 return {
                     ...instrument,
                     ...newInstrument,
-                    sounds
+                    sounds,
+                    sequences
                 };
             });
 
@@ -60,13 +76,13 @@ export default function instruments(state = initialState, action) {
             newState = state
                 .map(instrument => {
                     const i = payload.instruments
-                        .find(i => i.id === instrument.id);
+                        .find(inst => inst.id === instrument.id);
 
                     return {
                         ...instrument,
                         hitTypes: i ? [ ...i.hitTypes ] : [],
                         sequence: i ? deepClone(i.sequence) : [],
-                    }
+                    };
                 });
 
             return newState;

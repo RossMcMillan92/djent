@@ -1,0 +1,124 @@
+$button-primary__spacing: 15px
+$button-primary__total-line-height: 18px
+$button-primary__line-height: 1.4
+$button-primary__font-size: round($button-primary__total-line-height / $button-primary__line-height)
+$button-primary__svg-icon-size: $button-primary__total-line-height
+$button-primary__default-color: #fff
+$button-primary__default-bg-color: rgba(0, 0, 0, 0.2)
+
+.button-primary
+    position: relative
+    appearance: none
+    padding: $button-primary__spacing
+    text-decoration: none
+    text-transform: uppercase
+    line-height: $button-primary__line-height
+    font-size: $button-primary__font-size
+    border: none
+    border-radius: 3px
+    cursor: pointer
+    color: $button-primary__default-color
+    background-color: $button-primary__default-bg-color
+    white-space: nowrap
+    transition: all .1s ease-in-out
+    user-select: none
+    -webkit-tap-highlight-color: transparent
+
+    &:not([disabled]):hover,
+    &:not([disabled]):focus
+        background-color: lighten($button-primary__default-bg-color, 10%)
+        box-shadow: 0 7px 5px -3px rgba(0, 0, 0, .07)
+        outline: none
+
+    &:not([disabled]):active
+        box-shadow: 0 2px 2px -1px rgba(0, 0, 0, .05)
+        transform: scale(.99)
+
+    &[disabled]
+        background-color: lighten($button-primary__default-bg-color, 5%)
+        color: darken($button-primary__default-bg-color, 10%)
+        cursor: default
+
+.button-primary__svg-icon
+    display: block
+    width: $button-primary__svg-icon-size
+    height: $button-primary__svg-icon-size
+
+.button-primary__icon,
+.button-primary__inner
+    float: left
+
+.button-primary__inner
+    transition: all .25s ease-in-out
+    transform: scale(.8)
+    opacity: .1
+
+    .icon-is-hidden &
+        opacity: 1
+        transform: scale(1)
+
+.button-primary__icon
+    position: absolute
+    top: 50%
+    left: 50%
+    transform:  translate(-50%, -50%)
+    transition: all .25s ease-in-out
+
+    .icon-is-hidden &
+        transform: translateX(-50%) scale(0.7)
+        opacity: 0
+
+    .button-primary--tiny &
+        transform: translate(-50%, -50%) scale(0.7)
+
+.button-primary--negative,
+.button-primary--positive
+    color: #fff
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, .05)
+
+
+.button-primary--positive
+    background-color: $palette-alpha
+
+    &:not([disabled]):hover,
+    &:not([disabled]):focus
+        background-color: lighten($palette-alpha, 5%)
+
+
+.button-primary--negative
+    background-color: $palette-beta
+
+    &:not([disabled]):hover,
+    &:not([disabled]):focus
+        background-color: lighten($palette-beta, 5%)
+
+.button-primary--small
+    padding: 12px $base-spacing-unit
+    font-size: 12px
+    line-height: 1.6
+
+.button-primary--tiny
+    padding: 5px 10px
+    font-size: 10px
+    line-height: 1.6
+
+.button-primary--full
+    display: block
+    width: 100%
+    max-width: 400px
+    margin: 0 auto
+
+.button-primary--alpha-dark
+    background-color: $palette-alpha-dark
+
+    &:not([disabled]):hover,
+    &:not([disabled]):focus
+        background-color: darken($palette-alpha-dark, 5%)
+
+.button-primary--gamma
+    background-color: $palette-gamma
+    color: #fff
+
+    &:not([disabled]):hover,
+    &:not([disabled]):focus
+        background-color: lighten($palette-gamma, 5%)

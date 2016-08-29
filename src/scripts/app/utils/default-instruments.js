@@ -1,7 +1,5 @@
 const rootOctave = 1;
-const getMidiNote = (note, octave) => {
-    return note + (rootOctave + octave);
-}
+const getMidiNote = (note, octave) => note + (rootOctave + octave);
 
 const kickMidiNote = 'C2';
 const snareMidiNote = 'D2';
@@ -10,11 +8,21 @@ const crash1MidiNote = 'C#3';
 const crash2MidiNote = 'A3';
 const chinaMidiNote = 'E3';
 
+const defaultInstrumentProps = {
+    pitch: 0,
+    volume: 1,
+    repeatHitTypeForXBeat: 0,
+};
+
 const defaultInstruments = [
     {
+        ...defaultInstrumentProps,
         id: 'g',
         description: 'Guitar/Bass (Drop G#)',
-        pitch: 0,
+        fadeOutDuration: 0.025,
+        sequences: [
+            'CUSTOM_SEQUENCE_1',
+        ],
         sounds: [
             {
                 id: 'sixth-0-muted',
@@ -437,7 +445,7 @@ const defaultInstruments = [
                 category: 'Misc',
                 midi: {
                     pitch: [ getMidiNote('G#', 0), getMidiNote('D#', 1), getMidiNote('G#', 1) ],
-                    duration: .125,
+                    duration: 0.125,
                     muted: true,
                 },
                 tabConfig: {
@@ -449,8 +457,13 @@ const defaultInstruments = [
         ],
     },
     {
+        ...defaultInstrumentProps,
         id: 'k',
         description: 'Kick',
+        sequences: [
+            'CUSTOM_SEQUENCE_1',
+            // 'steadySixteenths'.map(b => ({ ...b, volume: .7})),
+        ],
         sounds: [
             {
                 id: 'k',
@@ -464,8 +477,12 @@ const defaultInstruments = [
         ],
     },
     {
+        ...defaultInstrumentProps,
         id: 's',
         description: 'Snare',
+        sequences: [
+            'offsetWholes',
+        ],
         sounds: [
             {
                 id: 's',
@@ -479,13 +496,27 @@ const defaultInstruments = [
         ],
     },
     {
+        ...defaultInstrumentProps,
         id: 'h',
         description: 'Hihat',
+        sequences: [
+            'steadyHalfs',
+            'steadyQuarters',
+        ],
         sounds: [
             {
                 id: 'h',
-                description: 'Basic hihat',
-                path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/assets/audio/mastered/hihat.wav',
+                description: 'Open hihat',
+                path: '/assets/audio/mastered/hihat-open.wav',
+                enabled: false,
+                midi: {
+                    pitch: [ hihatMidiNote ],
+                },
+            },
+            {
+                id: 'hc',
+                description: 'Closed hihat',
+                path: '/assets/audio/mastered/hihat-closed.wav',
                 enabled: false,
                 midi: {
                     pitch: [ hihatMidiNote ],
@@ -494,9 +525,14 @@ const defaultInstruments = [
         ],
     },
     {
+        ...defaultInstrumentProps,
         id: 'c',
         description: 'Cymbal',
         ringout: true,
+        sequences: [
+            'steadyHalfs',
+            'steadyQuarters',
+        ],
         sounds: [
             {
                 id: 'crash-left',
@@ -506,7 +542,7 @@ const defaultInstruments = [
                 category: 'Crash',
                 midi: {
                     pitch: [ crash1MidiNote ],
-                    duration: .125,
+                    duration: 0.125,
                 },
             },
             {
@@ -517,7 +553,7 @@ const defaultInstruments = [
                 category: 'Crash',
                 midi: {
                     pitch: [ crash2MidiNote ],
-                    duration: .125,
+                    duration: 0.125,
                 },
             },
             {
@@ -528,14 +564,18 @@ const defaultInstruments = [
                 category: 'China',
                 midi: {
                     pitch: [ chinaMidiNote ],
-                    duration: .125,
+                    duration: 0.125,
                 },
             }
         ],
     },
     {
+        ...defaultInstrumentProps,
         id: 'd',
         description: 'Drone',
+        sequences: [
+            'twoBars',
+        ],
         sounds: [
             {
                 id: 'drone-medium',
@@ -559,4 +599,4 @@ const defaultInstruments = [
     },
 ];
 
-export default defaultInstruments
+export default defaultInstruments;

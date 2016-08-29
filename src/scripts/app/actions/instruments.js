@@ -14,9 +14,30 @@ export function updateInstrumentPitch({ instrumentID, value }) {
     };
 }
 
+export function updateInstrumentVolume({ instrumentID, value }) {
+    return {
+        type: 'UPDATE_INSTRUMENT_VOLUME_PROP',
+        payload: { instrumentID, value: confineToRange(value, 0, 1) },
+    };
+}
+
+export function updateInstrumentRepeatingHits({ instrumentID, value }) {
+    return {
+        type: 'UPDATE_INSTRUMENT_REPEATING_HITS',
+        payload: { instrumentID, value: confineToRange(value, 0, 200) },
+    };
+}
+
 export function updateCustomPresetInstruments(instruments) {
     return {
         type: 'UPDATE_CUSTOM_PRESET_INSTRUMENTS',
         payload: { instruments },
+    };
+}
+
+export function updateInstrumentSequences(instrumentID, sequences) {
+    return {
+        type: 'UPDATE_INSTRUMENT_SEQUENCES',
+        payload: { instrumentID, sequences },
     };
 }

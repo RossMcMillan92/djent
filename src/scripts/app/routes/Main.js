@@ -1,48 +1,53 @@
 import React, { Component } from 'react';
 
-import BeatsController from '../components/BeatsController';
 import Expandable from '../components/Expandable';
-import ExportController from '../components/ExportController';
-import InstrumentList from '../components/InstrumentList';
-import Panel from '../components/Panel';
 import Spinner from '../components/Spinner';
+import SwipeableViews from '../components/SwipeableViews';
 
-import BeatPanel from '../containers/BeatPanel';
-import BPMController from '../containers/BPMController';
-import BPMTapper from '../containers/BPMTapper';
-import FadeController from '../containers/FadeController';
+import Instruments from '../containers/Instruments';
 import Modal from '../containers/Modal';
-import ShareController from '../containers/ShareController';
-import PresetController from '../containers/PresetController';
-import SoundController from '../containers/SoundController';
-import Visualiser from '../containers/Visualiser';
+import Player from '../containers/Player';
+import Sequences from '../containers/Sequences';
 
-import presets from '../utils/presets';
+import { defaultAllowedLengths } from '../reducers/sequences';
+
+import presets, { backwardsCompatibility } from '../utils/presets';
 import { getActiveSoundsFromHitTypes } from '../utils/instruments';
 import { getPresetData, getPresetFromData, handleGoogleAPI } from '../utils/short-urls';
-import { getAllowedLengthsFromSequence } from '../utils/sequences';
+
+import { log, throttle } from '../utils/tools';
+import { isMobile } from '../utils/mobile';
 
 export default class Main extends Component {
     static contextTypes = {
         router: React.PropTypes.object.isRequired
     }
     state = {
+        activePageIndex: 0,
         googleAPIHasLoaded: false
     }
 
+    refreshOnWindowResize = () => {
+        const throttledFn = throttle(() => this.forceUpdate(), 500);
+        window.addEventListener('resize', throttledFn);
+    }
+
     componentWillMount = () => {
+        this.setupBackButtonController();
+
         const shareID = this.props.params.shareID;
 
         handleGoogleAPI()
             .then(() => {
                 this.checkForShareData(shareID);
-                this.setState({ googleAPIHasLoaded: true })
+                this.setState({ googleAPIHasLoaded: true });
             })
-            .catch(e => console.log(e));
+            .catch(e => log(e));
 
         if (!shareID) {
             const presetID = this.props.params.presetID || this.props.activePresetID;
-            const preset = presets.find(preset => preset.id === presetID) || presets.find(preset => preset.id === this.props.activePresetID);
+            const preset = presets.find(p => p.id === presetID)
+                         || presets.find(p => p.id === this.props.activePresetID);
             return this.props.actions.applyPreset(preset);
         }
 
@@ -51,7 +56,10 @@ export default class Main extends Component {
             isCloseable: false,
             className: 'modal--auto-width',
         });
+    }
 
+    componentDidMount = () => {
+        this.refreshOnWindowResize();
     }
 
     componentWillUpdate = (nextProps) => {
@@ -60,187 +68,156 @@ export default class Main extends Component {
         }
     }
 
+    componentWillUnmount = () => {
+        window.removeEventListener('popstate', this.backToHome);
+    }
+
+    setupBackButtonController = () => {
+        window.addEventListener('popstate', this.backToHome);
+    }
+
+    backToHome = () => {
+        if (document.location.hash !== '#fwd') {
+            this.changeActivePageIdnex(0);
+        }
+    }
+
+    setActivePageIndex = (index) => {
+        if (this.state.activePageIndex !== index) this.setState({ activePageIndex: index });
+    }
+
     checkForShareData = (shareID) => {
-        if (shareID) getPresetData(shareID)
-            .then(this.applySharedPreset);
+        if (shareID) {
+            getPresetData(shareID)
+                .then(this.applySharedPreset);
+        }
     }
 
     applySharedPreset = (data) => {
-        const sharedPreset = getPresetFromData(data);
+        let sharedPreset = getPresetFromData(data);
 
         if (sharedPreset) {
-            sharedPreset.settings.config.allowedLengths = getAllowedLengthsFromSequence(sharedPreset.settings.instruments.find(i => i.id === 'g').predefinedSequence, this.props.allowedLengths)
+            sharedPreset = backwardsCompatibility(sharedPreset, defaultAllowedLengths);
             sharedPreset.settings.instruments = sharedPreset.settings.instruments
                 .map(i => ({ ...i, sounds: getActiveSoundsFromHitTypes(i.predefinedHitTypes) }));
+
+            this.props.actions.applyPreset(sharedPreset);
         }
 
-        const preset = sharedPreset;
-
-        this.props.actions.applyPreset(preset);
         this.props.actions.disableModal();
     }
 
+    changeActivePageIdnex = (index) => {
+        if (this.state.activePageIndex === index) return;
+        document.location.hash = index === 0 ? '' : '#fwd';
+        this.setActivePageIndex(index);
+    };
+
     render = () => {
-        const isShareRoute = this.props.route.id === 'share';
-        const totalBeat = this.props.beats.find(beat => beat.id === 'total');
-        const beats = this.props.beats
-            .filter(beat => beat.id !== 'total')
-            .map((beat, i) => <BeatPanel beat={ beat } key={i} /> );
-        const usePredefinedSettings = isShareRoute;
-        const generateButtonText = isShareRoute ? 'Load riff' : 'Generate Riff';
+        const tabs = ['Player', 'Sequences', 'Instruments']
+            .map((tabName, i) => (
+                <div
+                    key={i}
+                    className={`nav-tab ${i === this.state.activePageIndex ? 'is-active' : ''}`}
+                    onClick={() => this.changeActivePageIdnex(i)}
+                >
+                    <div className="nav-tab__inner">
+                        { tabName }
+                    </div>
+                </div>
+            ));
+        const isMobileView = isMobile();
+        const headerContent =  (
+            <div className="">
+                <div className="group-spacing-x">
+                    <div className="u-flex-row u-flex-justify">
+                        <img className="header__logo" src="/assets/images/logo.png" />
+                        <a className="" href="https://www.facebook.com/djenerationstation/" target="_blank">
+                            <img
+                                className="header__icon social-icon"
+                                src="/assets/images/F_icon.svg"
+                                width="39"
+                                height="39"
+                            />
+                        </a>
+                    </div>
+                </div>
+            </div>
+        );
+        const expandableTitleClass = 'title-primary u-txt-large dropdown-icon-before group-padding-x group-padding-x-small@mobile group-capped-x group-centered u-curp';
+        const views = isMobileView
+            ? (
+                <SwipeableViews
+                    viewHeight={true}
+                    resistance={true}
+                    index={this.state.activePageIndex}
+                    onChangeIndex={(i) => this.changeActivePageIdnex(i)}
+                >
+                    <Player
+                        route={this.props.route}
+                        googleAPIHasLoaded={this.state.googleAPIHasLoaded}
+                    />
+                    <Sequences route={this.props.route} />
+                    <Instruments route={this.props.route} />
+                </SwipeableViews>
+            )
+            : (
+                <div>
+                    <Player
+                        route={this.props.route}
+                        googleAPIHasLoaded={this.state.googleAPIHasLoaded}
+                    />
+                    <div className="group-padding-y u-bdrb">
+                        <Expandable
+                            title="Sequences"
+                            titleClassName={expandableTitleClass}
+                        >
+                            <Sequences route={this.props.route} />
+                        </Expandable>
+                    </div>
+                    <div className="group-padding-y u-bdrb">
+                        <Expandable
+                            title="Instruments"
+                            titleClassName={expandableTitleClass}
+                        >
+                            <Instruments route={this.props.route} />
+                        </Expandable>
+                    </div>
+                </div>
+            );
 
         return (
             <section>
                 <Modal />
-                <div className="group-capped-x group-centered">
-
-                    <div className="group-spacing-x">
-                        <div className="group-spacing-y-large u-flex-row u-flex-justify">
-                            <h1 className="title-primary u-txt-light">
-                                Djenerator
-                            </h1>
-                            <a className="" href="https://www.facebook.com/djenerationstation/" target="_blank">
-                                <img className="social-icon" src="/assets/images/F_icon.svg" width="39" height="39" />
-                            </a>
-                        </div>
-                    </div>
-
-                    <div className="group-spacing-x">
-                        <div className="group-spacing-y">
-                            {
-                                isShareRoute
-                                ? null
-                                : (
-                                    <Panel>
-                                        <h2 className="title-primary">
-                                            Preset
-                                        </h2>
-
-                                        <PresetController />
-                                    </Panel>
-                                )
-                            }
-
-                            <Panel>
-                                <Visualiser pretext={ isShareRoute ? "Click 'Load Riff' to begin" : "Click 'Generate Riff' to begin" } />
-                            </Panel>
-
-                            <Panel theme="dark" sizeY="small">
-                                <div className="u-flex-row u-flex-justify u-flex-center u-flex-wrap">
-                                    <SoundController
-                                        usePredefinedSettings={ usePredefinedSettings }
-                                        generateButtonText={ generateButtonText }
-                                        enableContinuousGenerationControl={ !isShareRoute }
-                                    />
-
-                                    <div className={`u-flex-row u-flex-wrap u-flex-${ isShareRoute ? 'center' : 'start' }`}>
-                                        <div className={`group-spacing-y-small u-mr05 ${ isShareRoute ? '' : 'u-mb0' }`}>
-                                            <ExportController
-                                                instruments={ this.props.instruments }
-                                                bpm={ this.props.bpm }
-                                                currentBuffer={ this.props.currentBuffer }
-                                                actions={{
-                                                    disableModal: this.props.actions.disableModal,
-                                                    enableModal: this.props.actions.enableModal,
-                                                }}
-                                            />
-                                        </div>
-
-                                        {
-                                            isShareRoute
-                                            ? (
-                                                <div className="group-spacing-y-small">
-                                                    <span className="u-mr05">or</span>
-                                                    <a className="link-base" onClick={e => this.context.router.push('/')}>
-                                                        Generate new riff
-                                                    </a>
-                                                </div>
-                                            )
-                                            : (
-                                                <div className="group-spacing-y-small">
-                                                    <ShareController googleAPIHasLoaded={this.state.googleAPIHasLoaded} />
-                                                </div>
-                                            )
-                                        }
-                                    </div>
-
-                                </div>
-                            </Panel>
+                <div className="site">
+                    <div className="site__content" ref="content">
+                        <div className="header" ref="header">
+                            <div className="group-capped-x group-centered">
+                                { headerContent }
+                            </div>
                         </div>
 
-                        {
-                            isShareRoute
-                            ? null
-                            : (
-                                <Expandable
-                                    title="Settings"
-                                    titleClassName="u-curp u-mb1 title-primary dropdown-icon-after dropdown-icon-after--light u-dib u-txt-light u-txt-large"
-                                    enableStateSave={true}
-                                >
-                                <div>
-                                    <Panel>
-                                        <h2 className="title-primary">Main Settings</h2>
-
-                                        <div className="grid grid--wide grid--middle">
-                                            <div className="grid__item one-half alpha--one-whole">
-                                                <div className="group-spacing-y-small">
-                                                    <div className="u-flex-row u-flex-end">
-                                                        <div className="u-flex-grow-1 u-mr1">
-                                                            <BPMController />
-                                                        </div>
-                                                        <div className="">
-                                                            <BPMTapper />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            {
-                                                isShareRoute
-                                                ? null
-                                                : (
-                                                    <div className="grid__item one-half alpha--one-whole">
-                                                        <div className="group-spacing-y-small">
-                                                            <BeatsController
-                                                                beat={ totalBeat }
-                                                                actions={{ updateBeats: this.props.actions.updateBeats }}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                )
-                                            }
-
-                                        </div>
-                                    </Panel>
-
-                                    <Panel>
-                                        { beats }
-                                    </Panel>
-                                </div>
-
-                                    <div className="group-spacing-y">
-                                        <Panel>
-                                            <h2 className="title-primary">Sounds</h2>
-
-                                            <InstrumentList
-                                                actions={{
-                                                    disableModal: this.props.actions.disableModal,
-                                                    enableModal: this.props.actions.enableModal,
-                                                    updateInstrumentSound: this.props.actions.updateInstrumentSound,
-                                                    updateInstrumentPitch: this.props.actions.updateInstrumentPitch,
-                                                }}
-                                                instruments={this.props.instruments}
-                                            />
-                                        </Panel>
-                                    </div>
-                                </Expandable>
-                            )
-                        }
-
+                        { views }
                     </div>
 
+                    {
+                        isMobile
+                      ? (
+                          <div className="site__fixed">
+                              <div className="u-flex-row u-flex-justify-around">
+                              {
+                                  isMobileView
+                                  ? tabs
+                                  : null
+                              }
+                              </div>
+                          </div>
+                        )
+                      : null
+                    }
                 </div>
             </section>
         );
     }
+
 }

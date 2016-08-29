@@ -1,7 +1,12 @@
 .site
-  display: flex
-  min-height: 100vh
-  flex-direction: column
+    overflow: hidden
+    @media screen and (max-width: $mobile-bp)
+        height: 100vh
 
 .site__content
-  flex: 1
+    position: relative
+    flex: 1 1 auto
+    overflow-y: auto
+
+.site__fixed
+    flex: 0 0 auto

@@ -1,22 +1,20 @@
-import { extendObjectArrayByID, updateObjByID } from '../utils/tools';
-
 const initialState =  {
-    isPlaying       : false,
-    isLooping       : true,
-    generationState : undefined,
-    currentBuffer   : undefined,
-    currentSrc      : undefined,
-}
+    isPlaying            : false,
+    isLooping            : true,
+    generationState      : undefined,
+    currentAudioTemplate : undefined,
+    currentSrc           : undefined,
+};
 
 export default function sound(state = initialState, action) {
-    let { type, payload } = action;
+    const { type, payload } = action;
 
     switch (type) {
         case 'UPDATE_IS_PLAYING':
             return {
                 ...state,
                 isPlaying: payload.isPlaying
-            }
+            };
 
         case 'UPDATE_CONTINUOUS_GENERATION':
             return {
@@ -28,25 +26,25 @@ export default function sound(state = initialState, action) {
             return {
                 ...state,
                 isLooping: payload.isLooping
-            }
+            };
 
         case 'UPDATE_GENERATION_STATE':
             return {
                 ...state,
                 generationState: payload.generationState
-            }
+            };
 
-        case 'UPDATE_CURRENT_BUFFER':
+        case 'UPDATE_CURRENT_AUDIO_TEMPLATE':
             return {
                 ...state,
-                currentBuffer: payload.currentBuffer
-            }
+                currentAudioTemplate: payload.currentAudioTemplate
+            };
 
         case 'UPDATE_CURRENT_SRC':
             return {
                 ...state,
                 currentSrc: payload.currentSrc
-            }
+            };
 
         default:
             return state;

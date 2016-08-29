@@ -5,33 +5,34 @@ import { capitalize } from '../utils/tools';
 import InputBox from './InputBox';
 
 class BeatsController extends Component {
-    shouldComponentUpdate = (nextProps) => !deepEqual(nextProps.beat, this.props.beat);
+    shouldComponentUpdate = (nextProps) => !deepEqual(nextProps.sequence, this.props.sequence);
 
     onChange = (event, type) => {
-        const [ prop, value ] = [event.target.getAttribute('id'), parseFloat(event.target.value)];
-        this.props.actions.updateBeats(this.props.beat.id, prop, value);
+        const prop = type;
+        const value = parseFloat(event.target.value);
+        this.props.actions.updateSequence(this.props.sequence.id, prop, value);
     }
 
     render = () => {
-        const getProps = (type) => {
-            return {
-                type: 'number',
-                id: type,
-                label: `${capitalize(type)} (1 - 8)`,
-                defaultValue : this.props.beat[type],
-                onChange: (event) => this.onChange(event, type),
-                className: 'input-base',
-                labelClassName: 'input-label',
-            }
-        }
+        const getProps = (type) => ({
+            type: 'number',
+            id: type,
+            label: capitalize((this.props.labelPrefix ? this.props.labelPrefix : '') + type),
+            defaultValue : this.props.sequence[type],
+            onChange: (event) => this.onChange(event, type),
+            className: 'input-base input-base--bare input-base--large input-base--short',
+            minVal: 1,
+            maxVal: 16,
+            labelClassName: 'input-label',
+        });
 
         return (
             <div className="u-flex-row u-flex-center">
-                <div className="u-flex-grow-1">
+                <div className="">
                     <InputBox { ...getProps('bars') } />
                 </div>
                 <span className="group-spacing-x-small u-mt1">&times;</span>
-                <div className="u-flex-grow-1">
+                <div className="">
                     <InputBox { ...getProps('beats') } />
                 </div>
             </div>

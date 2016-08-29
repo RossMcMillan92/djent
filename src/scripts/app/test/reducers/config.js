@@ -104,82 +104,6 @@ describe('Config reducer:', () => {
             expect(config(initialState, action))
                 .to.deep.equal(stateAfterAdd);
         });
-
-        it('should update allowedLengths', () => {
-            const stateAfterAdd = {
-                ...initialState,
-                activePresetID: 'newpreset',
-                allowedLengths: [
-                        {
-                            id: "0.25",
-                            name: 'whole',
-                            amount: 1,
-                            isTriplet: false
-                        },
-                        {
-                            id: "0.5",
-                            name: 'half',
-                            amount: 0,
-                            isTriplet: false
-                        },
-                        {
-                            id: "1",
-                            name: 'quarter',
-                            amount: 2,
-                            isTriplet: false
-                        },
-                        {
-                            id: "2",
-                            name: 'eighth',
-                            amount: 0,
-                            isTriplet: true
-                        },
-                        {
-                            id: "4",
-                            name: 'sixteenth',
-                            amount: 0,
-                            isTriplet: false
-                        },
-                ],
-            };
-            const payload = {
-                preset: {
-                    id: 'newpreset',
-                    settings: {
-                        config: {
-                            allowedLengths: [
-                                    {
-                                        id: "0.25",
-                                        name: 'whole',
-                                        amount: 1,
-                                        isTriplet: false
-                                    },
-
-                                    {
-                                        id: "1",
-                                        name: 'quarter',
-                                        amount: 2,
-                                        isTriplet: false
-                                    },
-                                    {
-                                        id: "2",
-                                        name: 'eighth',
-                                        amount: 0,
-                                        isTriplet: true
-                                    },
-                            ]
-                        }
-                    }
-                }
-            };
-            const action = {
-                type: 'APPLY_PRESET',
-                payload,
-            };
-
-            expect(config(initialState, action))
-                .to.deep.equal(stateAfterAdd);
-        });
     });
 
     describe('Action type: UPDATE_BPM', () => {
@@ -193,25 +117,6 @@ describe('Config reducer:', () => {
             };
             const action = {
                 type: 'UPDATE_BPM',
-                payload,
-            };
-
-            expect(config(initialState, action))
-                .to.deep.equal(stateAfterAdd);
-        });
-    });
-
-    describe('Action type: UPDATE_HITCHANCE', () => {
-        it('should update hitChance', () => {
-            const stateAfterAdd = {
-                ...initialState,
-                hitChance: 0.71,
-            };
-            const payload = {
-                hitChance: 0.71
-            };
-            const action = {
-                type: 'UPDATE_HITCHANCE',
                 payload,
             };
 

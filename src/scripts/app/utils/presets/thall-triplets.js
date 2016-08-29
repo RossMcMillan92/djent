@@ -4,35 +4,35 @@ const preset = {
     settings: {
         config: {
             bpm       : 104,
-            hitChance : 1,
-            allowedLengths: [
-                    {
-                        id: "0.25",
-                        amount: 1,
-                        isTriplet: true
-                    },
-                    {
-                        id: "0.5",
-                        amount: 1,
-                        isTriplet: true
-                    },
-                    {
-                        id: "2",
-                        amount:1,
-                        isTriplet: true
-                    },
-            ],
         },
-        beats: [
+        sequences: [
             {
                 id    : 'total',
                 bars  : 8,
                 beats : 4,
             },
             {
-                id    : 'groove',
+                id    : 'CUSTOM_SEQUENCE_1',
                 bars  : 1,
                 beats : 12,
+                hitChance : 1,
+                allowedLengths: [
+                        {
+                            id: "0.25",
+                            amount: 1,
+                            isTriplet: true
+                        },
+                        {
+                            id: "0.5",
+                            amount: 1,
+                            isTriplet: true
+                        },
+                        {
+                            id: "2",
+                            amount:1,
+                            isTriplet: true
+                        },
+                ],
             },
         ],
         instruments: [

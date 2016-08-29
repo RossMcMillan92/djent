@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import deepEqual from 'deep-equal';
 
 import { capitalize } from '../utils/tools';
 
@@ -13,9 +12,8 @@ class NotePanel extends Component {
         this.updateAllowedLengthsByID(id, 'amount', newAmount);
     }
 
-    onIsTripletChange = (event) => {
-        const [ id, value ] = [event.target.getAttribute('data-id'), event.target.checked];
-        this.updateAllowedLengthsByID(id, 'isTriplet', value);
+    onIsTripletClick = () => {
+        this.updateAllowedLengthsByID(this.props.length.id, 'isTriplet', !this.props.length.isTriplet);
     }
 
     updateAllowedLengthsByID = (id, prop, value) => {
@@ -35,7 +33,7 @@ class NotePanel extends Component {
         const isOn = length.amount > 0;
 
         return (
-            <div className={`note-panel ${ isOn ? '' : 'note-panel--disabled' }`}>
+            <div className={`note-panel ${isOn ? '' : 'note-panel--disabled'}`}>
                 <img className="note-panel__svg" src={`/assets/images/notes/${length.name}.svg`} alt={noteName} title={noteName} />
                 <div className="note-panel__amount-container">
                     <span className="note-panel__amount" title="Chance">{percentage}%</span>
@@ -45,8 +43,7 @@ class NotePanel extends Component {
                     </div>
                 </div>
                 <div className="note-panel__checkbox-container">
-                    <label className="note-panel__label" htmlFor={`${length.id}-triplet`}>Triplet: </label>
-                    <input className="note-panel__checkbox" id={`${length.id}-triplet`} data-id={length.id} type="checkbox" checked={length.isTriplet} onChange={this.onIsTripletChange} />
+                    <span className={`toggle-input u-txt-small u-txt-light ${length.isTriplet ? 'is-enabled' : ''}`} onClick={this.onIsTripletClick} >Triplet</span>
                 </div>
 
             </div>

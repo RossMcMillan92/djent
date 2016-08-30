@@ -3,7 +3,7 @@ import blackDahlia from './presets/black-dahlia';
 // import deftones from './presets/deftones'; // not ready for prime time
 // import greenDay from './presets/greenday';
 import meshuggah from './presets/meshuggah';
-import polyrythms from './presets/polyrythms';
+import polyrhythms from './presets/polyrhythms';
 import swornIn from './presets/sworn-in';
 import thallBuster from './presets/thall-buster';
 import thallBuster2 from './presets/thall-buster-2';
@@ -17,7 +17,7 @@ const presets = [
     // deftones,
     // greenDay,
     meshuggah,
-    polyrythms,
+    polyrhythms,
     swornIn,
     thallBuster2,
     thallBuster,

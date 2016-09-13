@@ -12,6 +12,7 @@ import audioContext from '../utils/audioContext';
 
 import {
     renderRiffTemplateAtTempo,
+    getBufferFromAudioTemplate,
 } from '../utils/instruments';
 
 import {
@@ -66,7 +67,6 @@ class SoundController extends Component {
     queuedInstruments;
     queuedRiffTemplate;
     currentGainNode;
-    audioContext = '';
     renewalTimeout;
     renewalPoint = 0.80;
     state = {
@@ -186,8 +186,13 @@ class SoundController extends Component {
     updateInstrumentsAndPlay = (audioTemplate, instruments) => {
         this.generationCount = this.generationCount + 1;
         this.stopEvent();
-        this.playEvent(audioTemplate);
-        this.props.actions.updateCustomPresetInstruments(instruments);
+        getBufferFromAudioTemplate(audioTemplate, getTotalTimeLength(this.props.generationState.sequences, this.props.generationState.bpm))
+            .then((buffer) => {
+                console.log('AUDIOCONTEXT, BUFFER, AUDIOCONTEXT.STARTTIME, BUFFER.DURATION, 1', audioContext, buffer, audioContext.currentTime, buffer.duration, 1)
+                playSound(audioContext, buffer, audioContext.currentTime, buffer.duration, 1);
+                // this.playEvent(buffer);
+                // this.props.actions.updateCustomPresetInstruments(instruments);
+            })
     }
 
     onSourceEnd = (source) => {

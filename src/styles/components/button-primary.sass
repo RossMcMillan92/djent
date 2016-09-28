@@ -23,6 +23,7 @@ $button-primary__default-bg-color: rgba(0, 0, 0, 0.2)
     transition: all .1s ease-in-out
     user-select: none
     -webkit-tap-highlight-color: transparent
+    vertical-align: middle
 
     &:not([disabled]):hover,
     &:not([disabled]):focus
@@ -38,6 +39,20 @@ $button-primary__default-bg-color: rgba(0, 0, 0, 0.2)
         background-color: lighten($button-primary__default-bg-color, 5%)
         color: darken($button-primary__default-bg-color, 10%)
         cursor: default
+
+    &.button-primary--joined
+        border-radius: 0
+
+    &.button-primary--joined:first-of-type
+        border-top-left-radius: 3px
+        border-bottom-left-radius: 3px
+        border-right: solid 2px rgba(0, 0, 0, .25)
+
+    &.button-primary--joined:last-of-type
+        border-top-right-radius: 3px
+        border-bottom-right-radius: 3px
+        border-right: none
+
 
 .button-primary__svg-icon
     display: block
@@ -107,6 +122,13 @@ $button-primary__default-bg-color: rgba(0, 0, 0, 0.2)
     width: 100%
     max-width: 400px
     margin: 0 auto
+
+.button-primary--alpha
+    background-color: $palette-alpha
+
+    &:not([disabled]):hover,
+    &:not([disabled]):focus
+        background-color: darken($palette-alpha, 5%)
 
 .button-primary--alpha-dark
     background-color: $palette-alpha-dark

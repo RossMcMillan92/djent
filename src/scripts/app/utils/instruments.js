@@ -79,17 +79,18 @@ const renderRiffTemplateAtTempo = (instruments, bpmMultiplier) => instruments
     .reduce((newArr, instrument) => {
         const hits = instrument.timeMap
             .reduce((newHits, time, i) => {
-                if (!instrument.sequence[i]) return newHits;
+                const instrumentSequence = instrument.sequence[i];
+                if (!instrumentSequence || instrument.volume === 0) return newHits;
 
                 const pitchAmount     = instrument.pitch || 0;
                 const buffer          = instrument.buffers[instrument.hitTypes[i]];
                 const startTime       = time * bpmMultiplier;
-                const duration        = instrument.ringout ? buffer.duration : ((1 / instrument.sequence[i].beat) * bpmMultiplier);
+                const duration        = instrument.ringout ? buffer.duration : ((1 / instrumentSequence.beat) * bpmMultiplier);
                 const prevNoteExisted = i && instrument.sequence[i - 1].volume;
                 const fadeOutDuration = Math.min(instrument.fadeOutDuration, duration) || 0;
                 const fadeInDuration  = prevNoteExisted ? fadeOutDuration || 0 : 0;
                 const reverb          = typeof instrument.reverb !== 'undefined' ? instrument.reverb : false;
-                const volume          = instrument.sequence[i].volume * (instrument.volume ? instrument.volume : 1);
+                const volume          = instrumentSequence.volume * (instrument.volume ? instrument.volume : 1);
 
                 return [
                     ...newHits,

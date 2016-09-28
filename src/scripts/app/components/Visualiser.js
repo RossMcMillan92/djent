@@ -17,27 +17,23 @@ class Visualiser extends Component {
 
     state = {
         buffer: undefined,
-        audioStartTime: undefined,
         isRenderingBuffer: false,
     }
 
     componentWillMount = () => {
-        if (this.props.currentAudioTemplate) {
+        if (this.props.currentPlaylistItem) {
             this.setState({ isRenderingBuffer: true });
-            this.renderBuffer(this.props.sequences, this.props.bpm, this.props.currentAudioTemplate.audioTemplate, this.props.currentAudioTemplate.audioStartTime);
+            this.renderBuffer(this.props.sequences, this.props.bpm, this.props.currentPlaylistItem.audioTemplate, this.props.currentPlaylistItem.audioStartTime);
         }
     }
 
     componentWillUpdate = (nextProps) => {
-        if (!this.props.isPlaying && nextProps.isPlaying) {
-            this.setState({ audioStartTime: audioContext.currentTime });
-        }
-        const firstAudioTemplate = nextProps.currentAudioTemplate && !this.props.currentAudioTemplate;
-        const differentAudioTemplate = !firstAudioTemplate && nextProps.currentAudioTemplate && nextProps.currentAudioTemplate.id !== this.props.currentAudioTemplate.id;
+        const firstAudioTemplate = nextProps.currentPlaylistItem && !this.props.currentPlaylistItem;
+        const differentAudioTemplate = !firstAudioTemplate && nextProps.currentPlaylistItem && nextProps.currentPlaylistItem.id !== this.props.currentPlaylistItem.id;
         if (firstAudioTemplate || differentAudioTemplate) {
-            const timeoutLength = (nextProps.currentAudioTemplate.audioStartTime - audioContext.currentTime) * 1000;
+            const timeoutLength = (nextProps.audioStartTime - audioContext.currentTime) * 1000;
             this.setState({ isRenderingBuffer: true });
-            this.renderBuffer(nextProps.sequences, nextProps.bpm, nextProps.currentAudioTemplate.audioTemplate, nextProps.currentAudioTemplate.audioStartTime, timeoutLength);
+            this.renderBuffer(nextProps.sequences, nextProps.bpm, nextProps.currentPlaylistItem.audioTemplate, timeoutLength);
         }
     }
 
@@ -45,14 +41,14 @@ class Visualiser extends Component {
         if (this.updateBufferTimeout) clearTimeout(this.updateBufferTimeout);
     }
 
-    renderBuffer = (sequences, bpm, audioTemplate, audioStartTime, timeoutLength = 0) => {
+    renderBuffer = (sequences, bpm, audioTemplate, timeoutLength = 0) => {
         if (typeof audioTemplate === 'undefined') return;
         if (this.updateBufferTimeout) clearTimeout(this.updateBufferTimeout);
 
         this.timeLength = getTotalTimeLength(sequences, bpm);
         getBufferFromAudioTemplate(audioTemplate, this.timeLength)
             .then(buffer => {
-                this.updateBufferTimeout = setTimeout(() => this.setState({ buffer, audioStartTime, isRenderingBuffer: false }), timeoutLength);
+                this.updateBufferTimeout = setTimeout(() => this.setState({ buffer, isRenderingBuffer: false }), timeoutLength);
             });
     }
 
@@ -70,7 +66,7 @@ class Visualiser extends Component {
                     isLoading={this.state.isRenderingBuffer}
                     buffer={this.state.buffer}
                     audioContext={audioContext}
-                    audioStartTime={this.state.audioStartTime}
+                    audioStartTime={this.props.audioStartTime}
                     timeLength={this.timeLength}
                     width={this.containerWidth}
                     height={75}

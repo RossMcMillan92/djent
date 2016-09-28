@@ -33,10 +33,17 @@ export function updateGenerationState(generationState) {
     };
 }
 
-export function updateCurrentAudioTemplate(currentAudioTemplate) {
+export function updateAudioPlaylist(audioPlaylist) {
     return {
-        type: 'UPDATE_CURRENT_AUDIO_TEMPLATE',
-        payload: { currentAudioTemplate },
+        type: 'UPDATE_AUDIO_PLAYLIST',
+        payload: { audioPlaylist },
+    };
+}
+
+export function updateActivePlaylistIndex(activePlaylistIndex) {
+    return {
+        type: 'UPDATE_ACTIVE_PLAYLIST_INDEX',
+        payload: { activePlaylistIndex },
     };
 }
 

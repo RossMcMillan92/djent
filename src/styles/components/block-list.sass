@@ -1,0 +1,21 @@
+.block-list
+    list-style: none
+    margin: 0
+    padding: 0
+    border: solid 1px rgba(0, 0, 0, .5)
+
+.block-list__item
+    font-size: rem(14px)
+    color: #aaa
+    text-transform: uppercase
+    background-color: $palette-alpha-dark
+    padding: 5px 8px
+    cursor: pointer
+
+    &:not(:last-of-type)
+        border-bottom: solid 1px rgba(0, 0, 0, .5)
+
+    &.is-active
+        color: #fff
+
+.block-list__item-handle

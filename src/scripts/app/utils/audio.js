@@ -89,7 +89,7 @@ const getPitchPlaybackRatio = (pitchAmount) => {
     return pitchIsPositive ? 1 / val : val;
 };
 
-const playSound = (context, buffer, time, duration, volume, pitchAmount = 0, fadeInDuration = 0, fadeOutDuration = 0, reverb = false) => {
+const playSound = (context, buffer, time, duration, volume, pitchAmount = 0, fadeInDuration = 0, fadeOutDuration = 0) => {
     if (!buffer) return;
 
     const source = context.createBufferSource();

@@ -3,6 +3,8 @@ const initialState =  {
     isLooping            : true,
     generationState      : undefined,
     currentAudioTemplate : undefined,
+    audioPlaylist        : [],
+    activePlaylistIndex  : 0,
     currentSrc           : undefined,
 };
 
@@ -34,10 +36,16 @@ export default function sound(state = initialState, action) {
                 generationState: payload.generationState
             };
 
-        case 'UPDATE_CURRENT_AUDIO_TEMPLATE':
+        case 'UPDATE_AUDIO_PLAYLIST':
             return {
                 ...state,
-                currentAudioTemplate: payload.currentAudioTemplate
+                audioPlaylist: payload.audioPlaylist
+            };
+
+        case 'UPDATE_ACTIVE_PLAYLIST_INDEX':
+            return {
+                ...state,
+                activePlaylistIndex: payload.activePlaylistIndex
             };
 
         case 'UPDATE_CURRENT_SRC':

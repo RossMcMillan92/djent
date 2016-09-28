@@ -5,6 +5,7 @@ import Panel from '../components/Panel';
 
 import BPMController from '../containers/BPMController';
 import BPMTapper from '../containers/BPMTapper';
+import PlaylistEditor from '../containers/PlaylistEditor';
 import PresetController from '../containers/PresetController';
 import SoundController from '../containers/SoundController';
 import Visualiser from '../containers/Visualiser';
@@ -74,7 +75,8 @@ export default class Player extends Component {
                 }
 
                 <Panel theme="alpha">
-                    <div className={`visualiser-container ${this.props.currentAudioTemplate ? 'is-active' : ''}`}>
+                    <PlaylistEditor />
+                    <div className={`visualiser-container ${this.props.hasAudioTemplate ? 'is-active' : ''}`}>
                         <div className="visualiser-container__backdrop"></div>
                         <div className="u-mb1">
                             <Visualiser googleAPIHasLoaded={this.props.googleAPIHasLoaded} />

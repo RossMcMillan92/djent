@@ -8,7 +8,7 @@ const preset = {
         sequences: [
             {
                 id    : 'total',
-                bars  : 4,
+                bars  : 2,
                 beats : 4,
             },
             {

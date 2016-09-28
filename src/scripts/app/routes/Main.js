@@ -171,6 +171,7 @@ export default class Main extends Component {
                         <Expandable
                             title="Sequences"
                             titleClassName={expandableTitleClass}
+                            enableStateSave={true}
                         >
                             <Sequences route={this.props.route} />
                         </Expandable>
@@ -179,6 +180,7 @@ export default class Main extends Component {
                         <Expandable
                             title="Instruments"
                             titleClassName={expandableTitleClass}
+                            enableStateSave={true}
                         >
                             <Instruments route={this.props.route} />
                         </Expandable>

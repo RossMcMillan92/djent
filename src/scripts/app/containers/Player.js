@@ -7,11 +7,12 @@ import * as modalActions from '../actions/modal';
 import { updateSequence } from '../actions/sequences';
 
 function mapStateToProps(state) {
+    const { config, sequences, sound, instruments } = state;
     return {
-        bpm                  : state.config.bpm,
-        sequences            : state.sequences,
-        currentAudioTemplate : state.sound.currentAudioTemplate,
-        instruments          : state.instruments,
+        bpm              : config.bpm,
+        hasAudioTemplate : !!sound.audioPlaylist[sound.activePlaylistIndex],
+        instruments,
+        sequences,
     };
 }
 

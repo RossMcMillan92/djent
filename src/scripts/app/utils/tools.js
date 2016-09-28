@@ -53,17 +53,19 @@ const deepClone = (obj) =>
 	: Object.keys(obj)
 		.reduce((newObject, objKey) => {
 			const value = obj[objKey];
-			const newValue = (typeof value === 'object' && !Array.isArray(value))
-				? deepClone(value)
-				: (Array.isArray(value))
-					? value.map(deepClone)
-					: value;
+			const newValue = deepCloneInner(value);
 
-		return {
-			...newObject,
-			[objKey]: newValue
-		};
-	}, {});
+			return {
+				...newObject,
+				[objKey]: newValue
+			};
+		}, {});
+
+const deepCloneInner = value => (typeof value === 'object' && !Array.isArray(value))
+	? deepClone(value)
+	: (Array.isArray(value))
+		? value.map(deepCloneInner)
+		: value;
 
 const updateObjByID = ({ objs, id, prop, value }) =>
 	objs.map(beat => {
@@ -131,7 +133,11 @@ const coinFlip = () => !!(Math.random() > 0.5);
 
 const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
-const log = (...args) => document.location.href.includes('localhost') && console.log(...args);
+const isDevEnv = () => document.location.href.includes('localhost');
+
+const log = (...args) => isDevEnv() && console.log(...args);
+
+const logError = (...args) => isDevEnv() && (console.error || console.log).apply(console, args);
 
 export {
 	arraySelector,
@@ -146,6 +152,7 @@ export {
 	isIOS,
 	loadScript,
 	log,
+	logError,
 	parseQueryString,
 	repeat,
 	randFromTo,

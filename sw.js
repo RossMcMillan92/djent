@@ -16,7 +16,7 @@
 
     // The route for the assets
     toolbox.router.get('/assets/(.*)', global.toolbox.fastest);
-    toolbox.router.get('/dist/(.*)', global.toolbox.fastest);
+    toolbox.router.get('/dist/(.*)', global.toolbox.network);
 
     global.toolbox.router.default = global.toolbox.networkFirst;
 

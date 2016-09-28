@@ -3,7 +3,7 @@ const preset = {
     description: 'Trap',
     settings: {
         config: {
-            bpm            : 120,
+            bpm            : 160,
         },
         sequences: [
             {
@@ -16,36 +16,36 @@ const preset = {
                 description : 'Hits',
                 bars        : 2,
                 beats       : 4,
-                hitChance   : .15,
+                hitChance   : 0.15,
                 allowedLengths : [
                     {
-                        id: "1",
+                        id: '1',
                         amount: 1,
                     },
                     {
-                        id: "2",
+                        id: '2',
                         amount: 1,
                     },
                 ],
             },
             {
                 id          : 'CUSTOM_SEQUENCE_2',
-                description : 'Bass drum',
-                bars        : 1,
+                description : 'Bass',
+                bars        : 2,
                 beats       : 4,
-                hitChance   : .8,
+                hitChance   : 0.95,
                 allowedLengths : [
                     {
-                        id: "1",
-                        amount: 4,
+                        id: '0.25',
+                        amount: 1,
                     },
                     {
-                        id: "2",
+                        id: '0.5',
                         amount: 2,
                     },
                     {
-                        id: "4",
-                        amount: 1,
+                        id: '2',
+                        amount: 2,
                     },
                 ],
             },
@@ -57,52 +57,55 @@ const preset = {
                 hitChance   : 1,
                 allowedLengths : [
                     {
-                        id: "1",
+                        id: '1',
+                        amount: 5,
+                    },
+                    {
+                        id: '2',
                         amount: 1,
-                    },
-                    {
-                        id: "2",
-                        amount: 8,
-                    },
-                    {
-                        id: "4",
-                        amount: 2,
                     },
                 ],
             },
         ],
         instruments: [
             {
-                id: 'g',
-                // repeatHitTypeForXBeat: 8,
-                ringout: true,
-                pitch: 600,
+                id: 'bass',
+                sequences: [
+                    'CUSTOM_SEQUENCE_2',
+                ],
                 sounds: [
                     {
-                        id: 'sixth-1-muted',
-                        path: '/assets/audio/trap/hit.wav',
-                        enabled: false,
-                    },
-                    {
-                        id: 'sixth-2-muted',
-                        path: '/assets/audio/trap/hit2.wav',
-                        enabled: false,
-                    },
-                    {
-                        id: 'sixth-3-muted',
-                        path: '/assets/audio/trap/hit3.wav',
+                        id: 'a',
                         enabled: true,
                     },
                     {
-                        id: 'sixth-4-muted',
-                        path: '/assets/audio/trap/hit4.wav',
-                        enabled: false,
+                        id: 'b',
+                        enabled: true,
+                    },
+                    {
+                        id: 'c',
+                        enabled: true,
+                    },
+                    {
+                        id: 'd',
+                        enabled: true,
+                    },
+                    {
+                        id: 'e',
+                        enabled: true,
+                    },
+                    {
+                        id: 'f',
+                        enabled: true,
+                    },
+                    {
+                        id: 'gs',
+                        enabled: true,
                     },
                 ],
             },
             {
                 id: 'k',
-                ringout: false,
                 sequences: [
                     'CUSTOM_SEQUENCE_2',
                 ],
@@ -110,62 +113,48 @@ const preset = {
                     {
                         id: 'k',
                         enabled: true,
-                        path: '/assets/audio/trap/bass.wav',
                     }
                 ],
             },
             {
                 id: 's',
+                volume: 0.7,
                 sounds: [
                     {
                         id: 's',
-                        path: '/assets/audio/trap/snare.wav',
                         enabled: true,
                     }
                 ],
             },
             {
-                id: 'c',
+                id: 'tuba',
+                pitch: 1200,
                 sounds: [
                     {
-                        id: 'crash-left',
-                        // enabled: true,
-                    },
-                    {
-                        id: 'crash-right',
-                        // enabled: true,
-                    },
+                        id: 'a',
+                        enabled: true,
+                    }
                 ],
             },
             {
                 id: 'h',
+                volume: 0.7,
                 sequences: [
                     'CUSTOM_SEQUENCE_3',
                 ],
                 sounds: [
                     {
                         id: 'h',
-                        path: '/assets/audio/trap/hihat-open.wav',
                         enabled: true,
                     },
                     {
                         id: 'hc',
-                        path: '/assets/audio/trap/hihat-closed.wav',
                         enabled: true,
-                    },
-                ],
-            },
-            {
-                id: 'd',
-                sounds: [
-                    {
-                        id: 'drone-high',
-                        enabled: false,
                     },
                 ],
             },
         ]
     }
-}
+};
 
 export default preset;

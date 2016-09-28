@@ -127,16 +127,6 @@ const preset = {
                 ],
             },
             {
-                id: 'tuba',
-                pitch: 1200,
-                sounds: [
-                    {
-                        id: 'a',
-                        enabled: true,
-                    }
-                ],
-            },
-            {
                 id: 'h',
                 volume: 0.7,
                 sequences: [

@@ -458,6 +458,260 @@ const defaultInstruments = [
     },
     {
         ...defaultInstrumentProps,
+        id: 'lg',
+        volume: 0.8,
+        description: 'Lead Guitar',
+        sequences: [
+            'steadyQuarters',
+        ],
+        sounds: [
+            {
+                id: 'gs3',
+                description: 'G#3',
+                path: '/assets/audio/leadguitar/lead-gs3.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('G#', 2) ],
+                },
+            },
+            {
+                id: 'a4',
+                description: 'A4',
+                path: '/assets/audio/leadguitar/lead-a4.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+            {
+                id: 'as4',
+                description: 'A#4',
+                path: '/assets/audio/leadguitar/lead-as4.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+            {
+                id: 'b4',
+                description: 'B4',
+                path: '/assets/audio/leadguitar/lead-b4.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+            {
+                id: 'c4',
+                description: 'C4',
+                path: '/assets/audio/leadguitar/lead-c4.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+            {
+                id: 'cs4',
+                description: 'C#4',
+                path: '/assets/audio/leadguitar/lead-cs4.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+            {
+                id: 'd4',
+                description: 'D4',
+                path: '/assets/audio/leadguitar/lead-d4.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+            {
+                id: 'ds4',
+                description: 'D#4',
+                path: '/assets/audio/leadguitar/lead-ds4.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+            {
+                id: 'e4',
+                description: 'E4',
+                path: '/assets/audio/leadguitar/lead-e4.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+            {
+                id: 'f4',
+                description: 'F4',
+                path: '/assets/audio/leadguitar/lead-f4.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+            {
+                id: 'fs4',
+                description: 'F#4',
+                path: '/assets/audio/leadguitar/lead-fs4.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+            {
+                id: 'g4',
+                description: 'G4',
+                path: '/assets/audio/leadguitar/lead-g4.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+            {
+                id: 'gs4',
+                description: 'G#4',
+                path: '/assets/audio/leadguitar/lead-gs4.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+            {
+                id: 'a5',
+                description: 'A5',
+                path: '/assets/audio/leadguitar/lead-a5.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+            {
+                id: 'as5',
+                description: 'A#5',
+                path: '/assets/audio/leadguitar/lead-as5.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+            {
+                id: 'b5',
+                description: 'B5',
+                path: '/assets/audio/leadguitar/lead-b5.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+            {
+                id: 'c5',
+                description: 'C5',
+                path: '/assets/audio/leadguitar/lead-c5.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+            {
+                id: 'cs5',
+                description: 'C#5',
+                path: '/assets/audio/leadguitar/lead-cs5.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+            {
+                id: 'd5',
+                description: 'D5',
+                path: '/assets/audio/leadguitar/lead-d5.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+            {
+                id: 'ds5',
+                description: 'D#5',
+                path: '/assets/audio/leadguitar/lead-ds5.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+            {
+                id: 'e5',
+                description: 'E5',
+                path: '/assets/audio/leadguitar/lead-e5.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+            {
+                id: 'f5',
+                description: 'F5',
+                path: '/assets/audio/leadguitar/lead-f5.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+            {
+                id: 'fs5',
+                description: 'F#5',
+                path: '/assets/audio/leadguitar/lead-fs5.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+            {
+                id: 'g5',
+                description: 'G5',
+                path: '/assets/audio/leadguitar/lead-g5.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+            {
+                id: 'gs5',
+                description: 'G#5',
+                path: '/assets/audio/leadguitar/lead-gs5.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+            {
+                id: 'a6',
+                description: 'A6',
+                path: '/assets/audio/leadguitar/lead-a6.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+            {
+                id: 'as6',
+                description: 'A#6',
+                path: '/assets/audio/leadguitar/lead-as6.mp3',
+                enabled: false,
+                midi: {
+                    pitch: [ getMidiNote('A', 3) ],
+                },
+            },
+        ],
+    },
+    {
+        ...defaultInstrumentProps,
         id: 'k',
         description: 'Kick',
         sequences: [

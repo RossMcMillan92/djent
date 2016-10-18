@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+
+import ReorderableList from '../components/ReorderableList';
+
 import {
     updateAudioPlaylist,
     updateActivePlaylistIndex
@@ -12,39 +14,37 @@ class PlaylistEditor extends Component {
         audioPlaylist: []
     }
 
-    shouldComponentUpdate = (nextProps) =>
-        nextProps.activePlaylistIndex !== this.props.activePlaylistIndex
-        || this.isPlaylistDifferent(nextProps.audioPlaylist, this.props.audioPlaylist)
-
-    isPlaylistDifferent = (pl1, pl2) =>
-        (pl1.length !== pl2.length)
-        || pl1
-            .reduce((answer, item, i) => !!(pl2[i] && item.id !== pl2[i].id), false);
-
-    onPlaylistSelected = (playlistIndex) => {
-        if (this.props.activePlaylistIndex === playlistIndex) return;
+    updateActivePlaylistIndex = (playlistIndex) => {
+        if (playlistIndex === undefined || this.props.activePlaylistIndex === playlistIndex) return;
         this.props.actions.updateActivePlaylistIndex(playlistIndex);
     }
 
+    onReorder = (newOrder) => {
+        const { audioPlaylist } = this.props;
+        const newAudioPlaylist = newOrder
+            .map(key => audioPlaylist.find(item => item.id === parseInt(key, 10)));
+        const activeItemID = this.props.audioPlaylist[this.props.activePlaylistIndex].id;
+        const newActivePlaylistIndex = newAudioPlaylist
+            .reduce((answer, item, i) => (activeItemID === item.id) ? i : answer, undefined);
+
+        this.updateActivePlaylistIndex(newActivePlaylistIndex);
+        this.props.actions.updateAudioPlaylist(newAudioPlaylist);
+    }
+
     render() {
+        const listItems = this.props.audioPlaylist
+            .map((item, i) => ({
+                id: item.id,
+                text: `Riff ${item.id} / ${item.bpm}BPM`,
+                className: `block-list__item ${this.props.activePlaylistIndex === i ? 'is-active' : ''}`,
+            }));
+
         return (
-            <ul className="block-list u-mb1">
-                {
-                    this.props.audioPlaylist.length
-                        ? this.props.audioPlaylist
-                            .map((item, i) => (
-                                <li
-                                    key={item.id}
-                                    className={ `block-list__item ${this.props.activePlaylistIndex === i ? 'is-active' : ''}` }
-                                    onClick={ () => this.onPlaylistSelected(i) }
-                                >
-                                    <span className="block-list__item-handle"></span>
-                                    Riff {item.id} - {item.bpm}BPM
-                                </li>
-                            ))
-                        : <li className="block-list__item">Hit Generate!</li>
-                }
-            </ul>
+            <ReorderableList
+                listItems={listItems}
+                onListItemClick={this.updateActivePlaylistIndex}
+                onReorder={this.onReorder}
+            />
         );
     }
 }

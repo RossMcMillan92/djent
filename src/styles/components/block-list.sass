@@ -1,21 +1,58 @@
+$block-list__item-height : 30px
+$block-list__font-size   : 13px
+$block-list__line-height : 1.5
+
+$block-list__padding-y   : ($block-list__item-height - ($block-list__font-size * $block-list__line-height)) / 2
+$block-list__padding-x   : $block-list__padding-y * 1.5
+
 .block-list
     list-style: none
     margin: 0
     padding: 0
-    border: solid 1px rgba(0, 0, 0, .5)
 
 .block-list__item
-    font-size: rem(14px)
-    color: #aaa
-    text-transform: uppercase
+    list-style: none
     background-color: $palette-alpha-dark
-    padding: 5px 8px
     cursor: pointer
+    user-select: none
+    -webkit-tap-highlight-color: transparent
 
     &:not(:last-of-type)
-        border-bottom: solid 1px rgba(0, 0, 0, .5)
+        border-bottom: solid 1px $palette-alpha
 
-    &.is-active
+.block-list__body
+    height: $block-list__item-height
+    font-size: rem($block-list__font-size)
+    line-height: $block-list__line-height
+    color: #aaa
+    text-transform: uppercase
+    padding: $block-list__padding-y $block-list__padding-x
+
+    .block-list__item.is-active &
         color: #fff
 
 .block-list__item-handle
+    position: relative
+    height: $block-list__item-height
+    width: $block-list__item-height
+    background-color: rgba(0, 0, 0, .25)
+
+    &::before,
+    &::after
+        position: absolute
+        content: ""
+        width: 0
+        height: 0
+        border-style: solid
+        top: 50%
+        left: 50%
+        transform: translate(-50%, -50%)
+
+    &::before
+        margin-top: -3px
+        border-width: 0 5px 5px 5px
+        border-color: transparent transparent rgba(255, 255, 255, .25) transparent
+    &::after
+        margin-top: 3px
+        border-width: 5px 5px 0 5px
+        border-color: rgba(255, 255, 255, .25) transparent transparent transparent

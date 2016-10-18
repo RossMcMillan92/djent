@@ -1,4 +1,4 @@
-$block-list__item-height : 30px
+$block-list__item-height : 35px
 $block-list__font-size   : 13px
 $block-list__line-height : 1.5
 
@@ -31,6 +31,9 @@ $block-list__padding-x   : $block-list__padding-y * 1.5
     .block-list__item.is-active &
         color: #fff
 
+$block-list__handle-arrow-size: 4px
+$block-list__handle-arrow-spacing: 2px
+$block-list__handle-arrow-color: rgba(255, 255, 255, .25)
 .block-list__item-handle
     position: relative
     height: $block-list__item-height
@@ -49,10 +52,10 @@ $block-list__padding-x   : $block-list__padding-y * 1.5
         transform: translate(-50%, -50%)
 
     &::before
-        margin-top: -3px
-        border-width: 0 5px 5px 5px
-        border-color: transparent transparent rgba(255, 255, 255, .25) transparent
+        margin-top: -(($block-list__handle-arrow-size / 2) + $block-list__handle-arrow-spacing)
+        border-width: 0 $block-list__handle-arrow-size $block-list__handle-arrow-size $block-list__handle-arrow-size
+        border-color: transparent transparent $block-list__handle-arrow-color transparent
     &::after
-        margin-top: 3px
-        border-width: 5px 5px 0 5px
-        border-color: rgba(255, 255, 255, .25) transparent transparent transparent
+        margin-top: (($block-list__handle-arrow-size / 2) + $block-list__handle-arrow-spacing)
+        border-width: $block-list__handle-arrow-size $block-list__handle-arrow-size 0 $block-list__handle-arrow-size
+        border-color: $block-list__handle-arrow-color transparent transparent transparent

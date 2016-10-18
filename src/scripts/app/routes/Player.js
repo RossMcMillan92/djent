@@ -44,14 +44,12 @@ export default class Player extends Component {
                     : (
                         <Panel>
                             <div className="u-flex-row u-flex-wrap">
-                                <div className="group-spacing-y-small u-mr1">
-                                    <div className="u-flex-row u-flex-end">
-                                        <div className="u-mr1">
-                                            <BPMController />
-                                        </div>
-                                        <div className="">
-                                            <BPMTapper />
-                                        </div>
+                                <div className="group-spacing-y-small u-flex-row u-flex-end u-mr1">
+                                    <div className="u-mr1">
+                                        <BPMController />
+                                    </div>
+                                    <div className="">
+                                        <BPMTapper />
                                     </div>
                                 </div>
 
@@ -75,8 +73,7 @@ export default class Player extends Component {
                 }
 
                 <Panel theme="alpha">
-                    <PlaylistEditor />
-                    <div className={`visualiser-container ${this.props.hasAudioTemplate ? 'is-active' : ''}`}>
+                    <div className={`visualiser-container ${this.props.hasAudioTemplate ? 'is-active' : ''} u-mb1`}>
                         <div className="visualiser-container__backdrop"></div>
                         <div className="u-mb1">
                             <Visualiser googleAPIHasLoaded={this.props.googleAPIHasLoaded} />
@@ -90,6 +87,7 @@ export default class Player extends Component {
                             />
                         </div>
                     </div>
+                    <PlaylistEditor />
                 </Panel>
 
                 {

@@ -38,7 +38,7 @@ class ReorderableList extends Component {
             ));
 
         return (
-            <ul className="block-list u-mb1" ref={this.dragulaDecorator}>
+            <ul className="block-list" ref={this.dragulaDecorator}>
                 { listItems }
             </ul>
         );

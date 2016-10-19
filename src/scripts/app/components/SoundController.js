@@ -78,8 +78,7 @@ class SoundController extends Component {
     componentWillUpdate = (nextProps) => {
         if (this.trueActivePlaylistIndex !== nextProps.activePlaylistIndex
         && nextProps.activePlaylistIndex !== this.props.activePlaylistIndex) {
-            this.stopEvent();
-            // if (this.props.isPlaying) setTimeout(() => this.updateInstrumentsAndPlay(nextProps.activePlaylistIndex, true), 0);
+            if (this.props.isPlaying) setTimeout(() => this.updateInstrumentsAndPlay(nextProps.activePlaylistIndex, true), 0);
         }
     }
 

@@ -38,17 +38,20 @@ class PlaylistEditor extends Component {
     onDelete = (e, i) => {
         e.preventDefault();
         e.stopPropagation();
-        const { audioPlaylist } = this.props;
+        const { audioPlaylist, activePlaylistIndex } = this.props;
         const newAudioPlaylist = splice(i, 1, audioPlaylist);
-        const newActivePlaylistIndex = confineToRange(0, newAudioPlaylist.length - 1 < 0 ? 0 : newAudioPlaylist.length - 1, i);
         this.props.actions.updateAudioPlaylist(newAudioPlaylist);
-        this.updateActivePlaylistIndex(newActivePlaylistIndex);
+
+        if (activePlaylistIndex >= i) {
+            const newActivePlaylistIndex = confineToRange(0, newAudioPlaylist.length - 1, activePlaylistIndex + 1);
+            this.updateActivePlaylistIndex(newActivePlaylistIndex);
+        }
     }
 
     onDuplicate = (e, i) => {
         e.preventDefault();
         e.stopPropagation();
-        const { audioPlaylist } = this.props;
+        const { audioPlaylist, activePlaylistIndex } = this.props;
         const selectedItem = { ...audioPlaylist[i] };
         const duplicationNumber = this.duplications[selectedItem.id];
         const newDuplicationNumber = duplicationNumber ? duplicationNumber + 1 : 1;
@@ -63,7 +66,10 @@ class PlaylistEditor extends Component {
         ];
 
         this.props.actions.updateAudioPlaylist(newAudioPlaylist);
-        this.updateActivePlaylistIndex(confineToRange(0, newAudioPlaylist.length - 1, i + 1));
+
+        if (activePlaylistIndex > i) {
+            this.updateActivePlaylistIndex(confineToRange(0, newAudioPlaylist.length - 1, activePlaylistIndex + 1));
+        }
     }
 
     render() {

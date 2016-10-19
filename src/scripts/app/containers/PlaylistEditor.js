@@ -9,10 +9,14 @@ import {
     updateActivePlaylistIndex
 } from '../actions/sound';
 
+import { confineToRange, splice } from '../utils/tools';
+
 class PlaylistEditor extends Component {
     static defaultProps = {
         audioPlaylist: []
     }
+
+    duplications = {}
 
     updateActivePlaylistIndex = (playlistIndex) => {
         if (playlistIndex === undefined || this.props.activePlaylistIndex === playlistIndex) return;
@@ -22,21 +26,72 @@ class PlaylistEditor extends Component {
     onReorder = (newOrder) => {
         const { audioPlaylist } = this.props;
         const newAudioPlaylist = newOrder
-            .map(key => audioPlaylist.find(item => item.id === parseInt(key, 10)));
-        const activeItemID = this.props.audioPlaylist[this.props.activePlaylistIndex].id;
+            .map(key => audioPlaylist.find(item => item.key === key));
+        const activeItemKey = this.props.audioPlaylist[this.props.activePlaylistIndex].id;
         const newActivePlaylistIndex = newAudioPlaylist
-            .reduce((answer, item, i) => (activeItemID === item.id) ? i : answer, undefined);
+            .reduce((answer, item, i) => (activeItemKey === item.id) ? i : answer, 0);
 
-        this.updateActivePlaylistIndex(newActivePlaylistIndex);
         this.props.actions.updateAudioPlaylist(newAudioPlaylist);
+        this.updateActivePlaylistIndex(newActivePlaylistIndex);
+    }
+
+    onDelete = (e, i) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const { audioPlaylist } = this.props;
+        const newAudioPlaylist = splice(i, 1, audioPlaylist);
+        const newActivePlaylistIndex = confineToRange(0, newAudioPlaylist.length - 1 < 0 ? 0 : newAudioPlaylist.length - 1, i);
+        this.props.actions.updateAudioPlaylist(newAudioPlaylist);
+        this.updateActivePlaylistIndex(newActivePlaylistIndex);
+    }
+
+    onDuplicate = (e, i) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const { audioPlaylist } = this.props;
+        const selectedItem = { ...audioPlaylist[i] };
+        const duplicationNumber = this.duplications[selectedItem.id];
+        const newDuplicationNumber = duplicationNumber ? duplicationNumber + 1 : 1;
+        this.duplications[selectedItem.id] = newDuplicationNumber;
+
+        selectedItem.key = `${selectedItem.id}-${newDuplicationNumber}`;
+
+        const newAudioPlaylist = [
+            ...audioPlaylist.slice(0, i + 1),
+            selectedItem,
+            ...audioPlaylist.slice(i + 1, audioPlaylist.length)
+        ];
+
+        this.props.actions.updateAudioPlaylist(newAudioPlaylist);
+        this.updateActivePlaylistIndex(confineToRange(0, newAudioPlaylist.length - 1, i + 1));
     }
 
     render() {
         const listItems = this.props.audioPlaylist
             .map((item, i) => ({
-                id: item.id,
-                text: `Riff ${item.id} / ${item.bpm}BPM`,
-                className: `block-list__item ${this.props.activePlaylistIndex === i ? 'is-active' : ''}`,
+                key: item.key,
+                body: (
+                    <div className="u-flex-row u-flex-justify">
+                        Riff {item.id} / {item.bpm}BPM
+                        <div>
+                            <span
+                                className="block-list__button u-txt-negative u-mr1"
+                                onClick={(e) => this.onDelete(e, i)}
+                                title="Delete"
+                            >
+                                -
+                            </span>
+                            <span
+                                className="block-list__button u-txt-positive"
+                                onClick={(e) => this.onDuplicate(e, i)}
+                                title="Duplicate"
+                            >
+                                +
+                            </span>
+                        </div>
+                    </div>
+                ),
+                className: `${this.props.activePlaylistIndex === i ? 'is-active' : ''}`,
             }));
 
         return (

@@ -59,7 +59,7 @@ const stop = (src) => {
 };
 
 class SoundController extends Component {
-    generationCount = -1
+    generationCount = 0;
     currentlyPlayingSources = [];
     currentGainNode;
     audioContext = '';
@@ -78,7 +78,8 @@ class SoundController extends Component {
     componentWillUpdate = (nextProps) => {
         if (this.trueActivePlaylistIndex !== nextProps.activePlaylistIndex
         && nextProps.activePlaylistIndex !== this.props.activePlaylistIndex) {
-            if (this.props.isPlaying) setTimeout(() => this.updateInstrumentsAndPlay(nextProps.activePlaylistIndex, true), 0);
+            this.stopEvent();
+            // if (this.props.isPlaying) setTimeout(() => this.updateInstrumentsAndPlay(nextProps.activePlaylistIndex, true), 0);
         }
     }
 
@@ -112,7 +113,8 @@ class SoundController extends Component {
 
                 this.updateUI(newState);
                 const playlistItem = {
-                    id: this.generationCount,
+                    id: this.generationCount.toString(),
+                    key: this.generationCount.toString(),
                     audioTemplate,
                     instruments: newInstruments,
                     sequences,
@@ -207,6 +209,7 @@ class SoundController extends Component {
             this.stopEvent();
             this.generate()
                 .then((playlistItem) => {
+                    console.log('THIS.PROPS.ACTIVEPLAYLISTINDEX', this.props.activePlaylistIndex)
                     this.replaceInAudioPlaylist(playlistItem, this.props.activePlaylistIndex);
                     this.updateInstrumentsAndPlay(this.props.activePlaylistIndex, true);
                 });
@@ -264,7 +267,7 @@ class SoundController extends Component {
 
     render = () => {
         const eventName = this.props.isPlaying ? 'stop' : 'play';
-        const continuousGeneration = this.props.enableContinuousGenerationControl
+        const continuousGeneration = this.props.enableContinuousGenerationControl && false
             ? (
                 <div className="u-mr1">
                     <ContinuousGenerationController

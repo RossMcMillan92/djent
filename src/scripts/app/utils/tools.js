@@ -121,7 +121,7 @@ const throttle = (fn, delay, context = this) => {
 const roundToXPlaces = (value, decimalPlaces, type = 'round') =>
 	Math[type](value * Math.pow(10, decimalPlaces)) / Math.pow(10, decimalPlaces);
 
-const confineToRange = (value, min, max) => Math.min(max, Math.max(min, value));
+const confineToRange = (min, max, value) => Math.min(max, Math.max(min, value));
 
 const randFromTo = (from, to) => Math.floor(Math.random() * (to - from + 1) + from);
 

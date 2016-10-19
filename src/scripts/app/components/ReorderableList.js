@@ -23,14 +23,14 @@ class ReorderableList extends Component {
         const listItems = this.props.listItems
             .map((item, i) => (
                 <li
-                    key={ item.id }
-                    data-key={ item.id }
-                    className={ item.className }
+                    key={ item.key }
+                    data-key={ item.key }
+                    className={ `block-list__item ${item.className}` }
                     onClick={ () => this.props.onListItemClick(i) }
                 >
                     <div className="u-flex-row u-flex-justify">
-                        <div className="block-list__body" >
-                            { item.text }
+                        <div className="block-list__body u-flex-grow-1" >
+                            { item.body }
                         </div>
                         <div className="block-list__item-handle js-handle" ></div>
                     </div>

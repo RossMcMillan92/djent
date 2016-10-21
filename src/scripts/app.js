@@ -5,6 +5,8 @@ import './polyfills/array.values';
 import './polyfills/requestIdleCallback';
 import './polyfills/string.includes';
 
+import '../styles/app.sass';
+
 import './app/libraries/HackTimer.js';
 
 import './app/index.js';

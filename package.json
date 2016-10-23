@@ -64,6 +64,7 @@
     "react-addons-shallow-compare": "^15.1.0",
     "react-document-meta": "^2.0.3",
     "react-dom": "^15.0.1",
+    "react-dragula": "^1.1.17",
     "react-hot-loader": "^1.3.0",
     "react-jsx": "^1.0.0",
     "react-redux": "^4.4.5",

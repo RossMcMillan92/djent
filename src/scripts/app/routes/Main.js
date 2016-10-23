@@ -15,7 +15,11 @@ import presets, { backwardsCompatibility } from '../utils/presets';
 import { getActiveSoundsFromHitTypes } from '../utils/instruments';
 import { getPresetData, getPresetFromData, handleGoogleAPI } from '../utils/short-urls';
 
-import { log, throttle } from '../utils/tools';
+import {
+    generatePlaylistItem,
+} from '../utils/riffs';
+
+import { compose, log, logError, throttle } from '../utils/tools';
 import { isMobile } from '../utils/mobile';
 
 export default class Main extends Component {
@@ -27,11 +31,6 @@ export default class Main extends Component {
         googleAPIHasLoaded: false
     }
 
-    refreshOnWindowResize = () => {
-        const throttledFn = throttle(() => this.forceUpdate(), 500);
-        window.addEventListener('resize', throttledFn);
-    }
-
     componentWillMount = () => {
         this.setupBackButtonController();
 
@@ -39,10 +38,10 @@ export default class Main extends Component {
 
         handleGoogleAPI()
             .then(() => {
-                this.checkForShareData(shareID);
+                this.doTheHing(shareID);
                 this.setState({ googleAPIHasLoaded: true });
             })
-            .catch(e => log(e));
+            .catch(e => logError(e));
 
         if (!shareID) {
             const presetID = this.props.params.presetID || this.props.activePresetID;
@@ -64,12 +63,62 @@ export default class Main extends Component {
 
     componentWillUpdate = (nextProps) => {
         if (!this.props.params.shareID && nextProps.params.shareID) {
-            this.checkForShareData(nextProps.params.shareID);
+            this.doTheHing(nextProps.params.shareID);
         }
     }
 
     componentWillUnmount = () => {
         window.removeEventListener('popstate', this.backToHome);
+    }
+
+    doTheHing = (shareID) => {
+        if (!shareID) return;
+        const dataPromises = shareID.split('-')
+            .map(getPresetData);
+
+        Promise.all(dataPromises)
+            .then(dataStrings => {
+                const sharedPresetPromises = dataStrings
+                    .map(this.dataStringToPlaylistItemPromise);
+
+                return Promise.all(sharedPresetPromises);
+            })
+            .then((audioPlaylist) => {
+                this.props.actions.updateAudioPlaylist(audioPlaylist)
+                this.props.actions.disableModal();
+                log(audioPlaylist);
+            })
+            .catch(logError);
+    }
+
+    dataStringToPlaylistItemPromise = (dataString) => compose(
+        this.presetToPlaylistItem,
+        this.insertSoundsIntoPresetInstruments,
+        preset => backwardsCompatibility(preset, defaultAllowedLengths),
+        getPresetFromData,
+    )(dataString);
+
+    insertSoundsIntoPresetInstruments = preset => {
+        preset.settings.instruments = preset.settings.instruments
+            .map(i => {
+                const inst = this.props.instruments.find(ins => ins.id === i.id);
+                const sounds = getActiveSoundsFromHitTypes(i.predefinedHitTypes)
+                    .map(sound => ({ ...inst.sounds.find(s => s.id === sound.id), ...sound }));
+                return { ...i, sounds };
+            });
+
+        return preset;
+    }
+
+    presetToPlaylistItem = ({ id, settings }) => {
+        const { config, instruments, sequences } = settings;
+        const usePredefinedSettings = true;
+        return generatePlaylistItem(id, config.bpm, sequences, instruments, usePredefinedSettings);
+    }
+
+    refreshOnWindowResize = () => {
+        const throttledFn = throttle(() => this.forceUpdate(), 500);
+        window.addEventListener('resize', throttledFn);
     }
 
     setupBackButtonController = () => {
@@ -86,17 +135,11 @@ export default class Main extends Component {
         if (this.state.activePageIndex !== index) this.setState({ activePageIndex: index });
     }
 
-    checkForShareData = (shareID) => {
-        if (shareID) {
-            getPresetData(shareID)
-                .then(this.applySharedPreset);
-        }
-    }
-
     applySharedPreset = (data) => {
         let sharedPreset = getPresetFromData(data);
 
         if (sharedPreset) {
+            // TODO: missed this bit out lol
             sharedPreset = backwardsCompatibility(sharedPreset, defaultAllowedLengths);
             sharedPreset.settings.instruments = sharedPreset.settings.instruments
                 .map(i => ({ ...i, sounds: getActiveSoundsFromHitTypes(i.predefinedHitTypes) }));

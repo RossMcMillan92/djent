@@ -11,43 +11,17 @@ import {
 import audioContext from '../utils/audioContext';
 
 import {
-    renderRiffTemplateAtTempo,
-} from '../utils/instruments';
-
-import {
-    generateRiff,
+    generatePlaylistItem,
 } from '../utils/riffs';
 
 import {
-    getSequence,
-    getTotalBeatsLength,
     getTotalTimeLength,
 } from '../utils/sequences';
 
 import {
     capitalize,
-    deepClone,
     splice,
 } from '../utils/tools';
-
-const generateNewRiff = ({ context, sequences, usePredefinedSettings, instruments, totalBeatsProduct }) => {
-    const generatedSequences    = {};
-    const getInstrumentSequence = getSequence({
-        sequences,
-        generatedSequences,
-        usePredefinedSettings
-    });
-    const instrumentsWithSequences = instruments
-        .map(getInstrumentSequence)
-        .filter(i => i.sequence !== undefined);
-
-    return generateRiff({
-        context,
-        totalBeatsProduct,
-        instruments: instrumentsWithSequences,
-        usePredefinedSettings
-    });
-};
 
 const stop = (src) => {
     if (src) {
@@ -91,36 +65,6 @@ class SoundController extends Component {
         if (this.updatePlayingTimeout) clearTimeout(this.updatePlayingTimeout);
         if (this.stopTimeout) clearTimeout(this.stopTimeout);
         if (this.loopTimeout) clearTimeout(this.loopTimeout);
-    }
-
-    generate = () => {
-        const { bpm, sequences, instruments, usePredefinedSettings } = this.props;
-        const generationState   = deepClone({ bpm, sequences, instruments, usePredefinedSettings });
-        const totalBeatsProduct = getTotalBeatsLength(sequences);
-
-        this.generationCount = this.generationCount + 1;
-        let newInstruments;
-        return generateNewRiff({ ...generationState, totalBeatsProduct, context: audioContext })
-            .then((instrumentss) => {
-                newInstruments = instrumentss;
-                const bpmMultiplier = 60 / bpm;
-                return renderRiffTemplateAtTempo(instrumentss, bpmMultiplier);
-            })
-            .then((audioTemplate) => {
-                const newState = { isLoading: false, error: '' };
-                if (!audioTemplate) newState.error = 'Error!';
-
-                this.updateUI(newState);
-                const playlistItem = {
-                    id: this.generationCount.toString(),
-                    key: this.generationCount.toString(),
-                    audioTemplate,
-                    instruments: newInstruments,
-                    sequences,
-                    bpm,
-                };
-                return playlistItem;
-            });
     }
 
     togglePlay = () => {
@@ -206,9 +150,8 @@ class SoundController extends Component {
         if (!this.state.isLoading) {
             this.setState({ isLoading: true });
             this.stopEvent();
-            this.generate()
+            this.generateFromProps()
                 .then((playlistItem) => {
-                    console.log('THIS.PROPS.ACTIVEPLAYLISTINDEX', this.props.activePlaylistIndex)
                     this.replaceInAudioPlaylist(playlistItem, this.props.activePlaylistIndex);
                     this.updateInstrumentsAndPlay(this.props.activePlaylistIndex, true);
                 });
@@ -216,8 +159,25 @@ class SoundController extends Component {
     }
 
     queueRiff = () => {
-        this.generate()
+        this.generateFromProps()
             .then(this.addToAudioPlaylist);
+    }
+
+    generateFromProps = () => {
+        const { bpm, sequences, instruments, usePredefinedSettings } = this.props;
+        this.generationCount = this.generationCount + 1;
+        return generatePlaylistItem(this.generationCount, bpm, sequences, instruments, usePredefinedSettings)
+            .then(playlistItem => {
+                this.updateErrorState(!!playlistItem.audioTemplate);
+                return playlistItem;
+            });
+    }
+
+    updateErrorState = (hasError) => {
+        const newState = { isLoading: false, error: '' };
+        if (!hasError) newState.error = 'Error!';
+        this.updateUI(newState);
+        return hasError;
     }
 
     addToAudioPlaylist = (playlistItem) => {

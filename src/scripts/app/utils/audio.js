@@ -1,4 +1,4 @@
-import { log } from '../utils/audio';
+import { log } from '../utils/tools';
 
 const bufferCache = {};
 const BufferLoader = (context) => {
@@ -13,6 +13,7 @@ const BufferLoader = (context) => {
 
         const loadingSound = new Promise((res, rej) => {
             enabledSounds.forEach((sound) => {
+                console.log('SOUND', sound)
                 const url = sound.path;
                 if (bufferCache[url]) {
                     newInstrument.buffers[sound.id] = bufferCache[url];
@@ -26,6 +27,7 @@ const BufferLoader = (context) => {
 
                 // Load buffer asynchronously
                 const request = new XMLHttpRequest();
+                console.log('URL', url)
                 request.open('GET', url, true);
                 request.responseType = 'arraybuffer';
 
@@ -43,7 +45,7 @@ const BufferLoader = (context) => {
                             newInstrumentPack[index] = newInstrument;
                             bufferCount++;
                             if (bufferCount === bufferAmount) {
-                                res();
+                                res(newInstrument);
                             }
                         },
                         (error) => {
@@ -64,13 +66,20 @@ const BufferLoader = (context) => {
     };
 
     const load = (instruments) => {
+        console.log('INSTRUMENTS3', instruments)
         const loadingSounds = instruments
             .filter(instrument => instrument.sounds.filter(sound => sound.enabled).length)
             .map(loadBuffer);
 
         return Promise.all(loadingSounds)
-                .then(() => newInstrumentPack)
-                .catch(e => log(e));
+                .then(() => {
+                    console.log('newInstrumentPack', newInstrumentPack)
+                    return newInstrumentPack;
+                })
+                .catch(e => {
+                    console.log('error here')
+                    return log(e);
+                });
     };
 
     return {
@@ -78,8 +87,9 @@ const BufferLoader = (context) => {
     };
 };
 
-const loadInstrumentBuffers = (context, instruments) => BufferLoader(context)
-    .load(instruments);
+const loadInstrumentBuffers = (context, instruments) =>
+    BufferLoader(context)
+        .load(instruments);
 
 const getPitchPlaybackRatio = (pitchAmount) => {
     const pitchIsPositive = pitchAmount > 0;

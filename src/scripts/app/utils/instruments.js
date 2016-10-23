@@ -75,7 +75,7 @@ const getBufferFromAudioTemplate = (audioTemplate, timeLength) => {
     });
 };
 
-const renderRiffTemplateAtTempo = (instruments, bpmMultiplier) => instruments
+const renderAudioTemplateAtTempo = (instruments, bpmMultiplier) => instruments
     .reduce((newArr, instrument) => {
         const hits = instrument.timeMap
             .reduce((newHits, time, i) => {
@@ -138,7 +138,7 @@ export {
     generateInstrumentHitTypes,
     getActiveSoundsFromHitTypes,
     getBufferFromAudioTemplate,
-    renderRiffTemplateAtTempo,
+    renderAudioTemplateAtTempo,
     repeatHits,
     repeatSequence,
 };

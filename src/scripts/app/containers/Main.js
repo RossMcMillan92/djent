@@ -7,6 +7,9 @@ import * as configActions from '../actions/config';
 import * as instrumentsActions from '../actions/instruments';
 import * as modalActions from '../actions/modal';
 import { updateSequence } from '../actions/sequences';
+import {
+    updateAudioPlaylist,
+} from '../actions/sound';
 
 function mapStateToProps(state) {
     return {
@@ -22,7 +25,8 @@ function mapDispatchToProps(dispatch) {
         ...configActions,
         ...instrumentsActions,
         ...modalActions,
-        updateSequence
+        updateSequence,
+        updateAudioPlaylist
     };
 
     return {

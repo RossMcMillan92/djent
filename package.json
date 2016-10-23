@@ -59,6 +59,7 @@
     "lodash": "^4.11.2",
     "mocha": "^2.5.3",
     "mocha-babel": "^3.0.0",
+    "my-local-ip": "^1.0.0",
     "node-sass": "^3.7.0",
     "node-watch": "^0.3.5",
     "postcss-cssnext": "^2.5.2",
@@ -79,10 +80,13 @@
     "style-loader": "^0.13.1",
     "uglifyify": "^3.0.2",
     "vinyl-source-stream": "^1.1.0",
-    "webpack": "^1.13.2"
+    "webpack": "^1.13.2",
+    "webpack-dev-server": "^1.16.2",
+    "webpack-watch-livereload-plugin": "^0.0.1"
   },
   "scripts": {
     "wizard": "/usr/bin/env node tools/wizard.js",
+    "winard": "node tools/wizard.js",
     "test": "./node_modules/mocha/bin/mocha ./src/scripts/app/test/* --require babel-core/register --watch"
   },
   "license": "ISC"

@@ -24,7 +24,7 @@ class BPMTapper extends Component {
                 return [ ...result, diff ];
             }, [])
             // take average
-            .reduce((total, val, i, arr) => (total + val) / (i+1 === arr.length ? arr.length : 1), 0);
+            .reduce((total, val, i, arr) => (total + val) / (i + 1 === arr.length ? arr.length : 1), 0);
 
         const bpm = average === 0 ? 100 : Math.round(1 / (average / 1000) * 60);
         return bpm;

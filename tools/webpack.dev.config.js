@@ -3,12 +3,14 @@ const outputCSSFile = constants.outputCSSFile;
 const sourceDir     = constants.sourceDir;
 
 const cwd = process.cwd();
+const localip = '192.168.0.2';
 
 const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const cssExtractor = new ExtractTextPlugin(outputCSSFile);
+const WatchLiveReloadPlugin = require('webpack-watch-livereload-plugin');
 
 const base = require('./webpack.base.config.js');
 
@@ -42,7 +44,14 @@ const config = Object.assign({}, base, {
             },
         ]
     },
+    devServer: {
+        inline: true,
+        port: 3123,
+        host: localip,
+        publicPath: '/'
+    },
     plugins: [
+        new webpack.NoErrorsPlugin(),
         new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.DefinePlugin({
             'process.env': {
@@ -61,6 +70,16 @@ const config = Object.assign({}, base, {
             }
         }),
         cssExtractor,
+        new WatchLiveReloadPlugin({
+            files: [
+                // Replace these globs with yours
+                '../src/**/*.html',
+                '../src/**/*.css',
+                '../src/**/*.png',
+                '../src/**/*.jpg',
+                '../src/**/*.js',
+            ]
+        }),
     ],
     postcss: [
         autoprefixer({ browsers: 'last 2 versions, iOS 8' })

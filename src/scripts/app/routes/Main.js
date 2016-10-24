@@ -78,21 +78,25 @@ export default class Main extends Component {
 
         Promise.all(dataPromises)
             .then(dataStrings => {
-                const sharedPresetPromises = dataStrings
-                    .map(this.dataStringToPlaylistItemPromise);
+                const sharedPresets = dataStrings
+                    .map(this.dataStringToPreset);
 
-                return Promise.all(sharedPresetPromises);
+                this.props.actions.applyPreset(sharedPresets[0]);
+
+                const playlistPromises = sharedPresets
+                    .map(this.presetToPlaylistItem);
+
+                return Promise.all(playlistPromises);
             })
             .then((audioPlaylist) => {
-                this.props.actions.updateAudioPlaylist(audioPlaylist)
+                this.props.actions.updateAudioPlaylist(audioPlaylist);
                 this.props.actions.disableModal();
                 log(audioPlaylist);
             })
             .catch(logError);
     }
 
-    dataStringToPlaylistItemPromise = (dataString) => compose(
-        this.presetToPlaylistItem,
+    dataStringToPreset = (dataString) => compose(
         this.insertSoundsIntoPresetInstruments,
         preset => backwardsCompatibility(preset, defaultAllowedLengths),
         getPresetFromData,

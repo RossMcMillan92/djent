@@ -16,7 +16,7 @@ export default class Player extends Component {
     }
 
     render = () => {
-        const isShareRoute = this.props.route.id === 'share';
+        const isShareRoute = false;
         const totalSequence = this.props.sequences.find(sequence => sequence.id === 'total');
         const usePredefinedSettings = isShareRoute;
         const generateButtonText = isShareRoute ? 'Load' : 'Generate';

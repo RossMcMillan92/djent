@@ -135,9 +135,15 @@ const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSSt
 
 const isDevEnv = () => document.location.href.includes('localhost');
 
-const log = (...args) => isDevEnv() && console.log(...args);
+const log = (...args) => {
+	if (isDevEnv()) console.log(...args);
+	return args[0];
+};
 
-const logError = (...args) => isDevEnv() && (console.error || console.log).apply(console, args);
+const logError = (...args) => {
+	if (isDevEnv()) (console.error || console.log).apply(console, args);
+	return args[0];
+};
 
 export {
 	arraySelector,

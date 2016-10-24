@@ -169,7 +169,9 @@ const getSequence = ({ sequences, generatedSequences, usePredefinedSettings }) =
         };
     }
 
-    let sequence = randomFromArray(instrumentSequences);
+    let sequence = !instrumentSequences || !instrumentSequences.length
+        ? []
+        : randomFromArray(instrumentSequences);
 
     if (typeof sequence === 'string') {
         if (predefinedSequences[sequence]) {

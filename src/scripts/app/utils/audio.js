@@ -1,4 +1,4 @@
-import { log } from '../utils/tools';
+import { logError } from '../utils/tools';
 
 const bufferCache = {};
 const BufferLoader = (context) => {
@@ -13,7 +13,6 @@ const BufferLoader = (context) => {
 
         const loadingSound = new Promise((res, rej) => {
             enabledSounds.forEach((sound) => {
-                console.log('SOUND', sound)
                 const url = sound.path;
                 if (bufferCache[url]) {
                     newInstrument.buffers[sound.id] = bufferCache[url];
@@ -27,7 +26,6 @@ const BufferLoader = (context) => {
 
                 // Load buffer asynchronously
                 const request = new XMLHttpRequest();
-                console.log('URL', url)
                 request.open('GET', url, true);
                 request.responseType = 'arraybuffer';
 
@@ -37,7 +35,7 @@ const BufferLoader = (context) => {
                         request.response,
                         (buffer) => {
                             if (!buffer) {
-                                // console.log('error decoding file data: ' + url);
+                                logError(`Error decoding file data: ${url}`);
                                 return;
                             }
                             newInstrument.buffers[sound.id] = buffer;
@@ -45,19 +43,14 @@ const BufferLoader = (context) => {
                             newInstrumentPack[index] = newInstrument;
                             bufferCount++;
                             if (bufferCount === bufferAmount) {
-                                res(newInstrument);
+                                res();
                             }
                         },
-                        (error) => {
-                            rej(error);
-                        }
+                        rej
                     );
                 };
 
-                request.onerror = (error) => {
-                    rej(error);
-                };
-
+                request.onerror = rej;
                 request.send();
             });
         });
@@ -66,20 +59,13 @@ const BufferLoader = (context) => {
     };
 
     const load = (instruments) => {
-        console.log('INSTRUMENTS3', instruments)
         const loadingSounds = instruments
             .filter(instrument => instrument.sounds.filter(sound => sound.enabled).length)
             .map(loadBuffer);
 
         return Promise.all(loadingSounds)
-                .then(() => {
-                    console.log('newInstrumentPack', newInstrumentPack)
-                    return newInstrumentPack;
-                })
-                .catch(e => {
-                    console.log('error here')
-                    return log(e);
-                });
+            .then(() => newInstrumentPack)
+            .catch(logError);
     };
 
     return {

@@ -11,6 +11,7 @@ import {
 import audioContext from '../utils/audioContext';
 
 import {
+    getGenerationID,
     generatePlaylistItem,
 } from '../utils/riffs';
 
@@ -158,19 +159,19 @@ class SoundController extends Component {
         }
     }
 
-    queueRiff = () => {
-        this.generateFromProps()
-            .then(this.addToAudioPlaylist);
-    }
-
     generateFromProps = () => {
-        const { bpm, sequences, instruments, usePredefinedSettings } = this.props;
-        this.generationCount = this.generationCount + 1;
+        const { audioPlaylist, bpm, sequences, instruments, usePredefinedSettings } = this.props;
+        this.generationCount = getGenerationID(this.generationCount + 1, audioPlaylist);
         return generatePlaylistItem(this.generationCount, bpm, sequences, instruments, usePredefinedSettings)
             .then(playlistItem => {
                 this.updateErrorState(!!playlistItem.audioTemplate);
                 return playlistItem;
             });
+    }
+
+    queueRiff = () => {
+        this.generateFromProps()
+            .then(this.addToAudioPlaylist);
     }
 
     updateErrorState = (hasError) => {
@@ -238,23 +239,30 @@ class SoundController extends Component {
                 </div>
             )
             : null;
+        const loopController = false && (
+            <div className="u-mr1">
+                <LoopController
+                    isLooping={this.props.isLooping}
+                    actions={{
+                        updateIsLooping: (newVal) => this.props.actions.updateIsLooping(newVal)
+                    }}
+                />
+            </div>
+        );
 
         return (
             <div>
                 { this.state.error ? <p className="txt-error">{ this.state.error }</p> : null }
                 <div className="u-flex-row u-flex-wrap">
                     <div className={`visualiser-container__button visualiser-container__button--${this.props.generateButtonText.toLowerCase()} u-mr05 u-mb0`}>
-                        <button className={`button-primary button-primary--alpha-dark button-primary--joined ${this.state.isLoading ? '' : 'icon-is-hidden'}`} onClick={() => this.generateEvent()}>
+                        <button className={`button-primary button-primary--alpha-dark button-primary--small-icon button-primary--joined ${this.state.isLoading ? '' : 'icon-is-hidden'}`} onClick={() => this.generateEvent()}>
                             <span className="button-primary__inner">{ this.props.generateButtonText || 'Generate' }</span>
                             <span className="button-primary__icon">
                                 <span className="spinner" />
                             </span>
                         </button>
-                    </div>
-
-                    <div className="u-mr05 u-mb0">
                         <button className="button-primary button-primary--alpha-dark button-primary--joined" title={ capitalize(eventName) } onClick={this.queueRiff} disabled={!this.props.audioPlaylist.length}>
-                            +
+                            <SVG className="button-primary__svg-icon" icon="plus" />
                         </button>
                     </div>
 
@@ -264,14 +272,7 @@ class SoundController extends Component {
                         </button>
                     </div>
 
-                    <div className="u-mr1">
-                        <LoopController
-                            isLooping={this.props.isLooping}
-                            actions={{
-                                updateIsLooping: (newVal) => this.props.actions.updateIsLooping(newVal)
-                            }}
-                        />
-                    </div>
+                    { loopController }
 
                     { continuousGeneration }
                 </div>

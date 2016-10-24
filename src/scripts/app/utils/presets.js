@@ -1,7 +1,6 @@
 import adtrBreakdown from './presets/adtr-breakdown';
 import blackDahlia from './presets/black-dahlia';
 // import deftones from './presets/deftones'; // not ready for prime time
-// import greenDay from './presets/greenday';
 import meshuggah from './presets/meshuggah';
 import polyrhythms from './presets/polyrhythms';
 import swornIn from './presets/sworn-in';
@@ -15,7 +14,6 @@ const presets = [
     adtrBreakdown,
     blackDahlia,
     // deftones,
-    // greenDay,
     meshuggah,
     polyrhythms,
     swornIn,

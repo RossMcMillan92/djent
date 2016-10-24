@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import ReorderableList from '../components/ReorderableList';
+import SVG from '../components/SVG';
 
 import {
     updateAudioPlaylist,
@@ -26,7 +27,7 @@ class PlaylistEditor extends Component {
     onReorder = (newOrder) => {
         const { audioPlaylist } = this.props;
         const newAudioPlaylist = newOrder
-            .map(key => audioPlaylist.find(item => item.key === key));
+            .map(key => audioPlaylist.find(item => `${item.key}` === key));
         const activeItemKey = this.props.audioPlaylist[this.props.activePlaylistIndex].id;
         const newActivePlaylistIndex = newAudioPlaylist
             .reduce((answer, item, i) => (activeItemKey === item.id) ? i : answer, 0);
@@ -81,18 +82,25 @@ class PlaylistEditor extends Component {
                         Riff {item.id} / {item.bpm}BPM
                         <div>
                             <span
+                                className="block-list__button u-mr1"
+                                onClick={(e) => this.onLoadSettings(e, i)}
+                                title="Load Settings"
+                            >
+                                <SVG className="block-list__button-icon" icon="gear" />
+                            </span>
+                            <span
                                 className="block-list__button u-txt-negative u-mr1"
                                 onClick={(e) => this.onDelete(e, i)}
                                 title="Delete"
                             >
-                                -
+                                <SVG className="block-list__button-icon" icon="cross" />
                             </span>
                             <span
                                 className="block-list__button u-txt-positive"
                                 onClick={(e) => this.onDuplicate(e, i)}
                                 title="Duplicate"
                             >
-                                +
+                                <SVG className="block-list__button-icon" icon="plus" />
                             </span>
                         </div>
                     </div>

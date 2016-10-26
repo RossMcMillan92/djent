@@ -1,19 +1,13 @@
 import React, { Component } from 'react';
 
-import LoopController from './LoopController';
+import Generator from './Generator';
 import SVG from './SVG';
-import ContinuousGenerationController from './ContinuousGenerationController';
 
 import {
     playSound,
 } from '../utils/audio';
 
 import audioContext from '../utils/audioContext';
-
-import {
-    getGenerationID,
-    generatePlaylistItem,
-} from '../utils/riffs';
 
 import {
     getTotalTimeLength,
@@ -57,10 +51,6 @@ class SoundController extends Component {
         }
     }
 
-    updateUI = (newState) => {
-        requestAnimationFrame(() => this.setState(newState));
-    }
-
     clearTimeouts = () => {
         if (this.renewalTimeout) clearTimeout(this.renewalTimeout);
         if (this.updatePlayingTimeout) clearTimeout(this.updatePlayingTimeout);
@@ -95,12 +85,6 @@ class SoundController extends Component {
             this.updatePlayingTimeout = setTimeout(() => {
                 this.updatePlayEventState(playlistIndex, audioStartTime);
             }, audioStartTimeFromNow * 1000);
-        }
-
-        if (this.props.continuousGeneration && this.props.audioPlaylist.length === 0) {
-            const currentPlaylistItem = this.props.audioPlaylist[this.props.activePlaylistIndex];
-            const renewalTimeoutTime = Math.round(getTotalTimeLength(currentPlaylistItem.sequences, currentPlaylistItem.bpm) * this.renewalPoint);
-            this.renewalTimeout = setTimeout(() => { if (this.props.continuousGeneration) this.queueRiff(); }, renewalTimeoutTime * 1000);
         }
     }
 
@@ -147,45 +131,10 @@ class SoundController extends Component {
         }
     }
 
-    generateEvent = () => {
-        if (!this.state.isLoading) {
-            this.setState({ isLoading: true });
-            this.stopEvent();
-            this.generateFromProps()
-                .then((playlistItem) => {
-                    this.replaceInAudioPlaylist(playlistItem, this.props.activePlaylistIndex);
-                    this.updateInstrumentsAndPlay(this.props.activePlaylistIndex, true);
-                });
-        }
-    }
-
-    generateFromProps = () => {
-        const { audioPlaylist, bpm, sequences, instruments, usePredefinedSettings } = this.props;
-        this.generationCount = getGenerationID(this.generationCount + 1, audioPlaylist);
-        return generatePlaylistItem(this.generationCount, bpm, sequences, instruments, usePredefinedSettings)
-            .then(playlistItem => {
-                this.updateErrorState(!!playlistItem.audioTemplate);
-                return playlistItem;
-            });
-    }
-
-    queueRiff = () => {
-        this.generateFromProps()
-            .then(this.addToAudioPlaylist);
-    }
-
-    updateErrorState = (hasError) => {
-        const newState = { isLoading: false, error: '' };
-        if (!hasError) newState.error = 'Error!';
-        this.updateUI(newState);
-        return hasError;
-    }
-
-    addToAudioPlaylist = (playlistItem) => {
-        this.props.actions.updateAudioPlaylist([
-            ...this.props.audioPlaylist,
-            playlistItem
-        ]);
+    onGenerationEnd = (playlistItem) => {
+        this.stopEvent();
+        this.replaceInAudioPlaylist(playlistItem, this.props.activePlaylistIndex);
+        this.updateInstrumentsAndPlay(this.props.activePlaylistIndex, true);
     }
 
     replaceInAudioPlaylist = (playlistItem, playlistIndex) => {
@@ -227,43 +176,21 @@ class SoundController extends Component {
 
     render = () => {
         const eventName = this.props.isPlaying ? 'stop' : 'play';
-        const continuousGeneration = this.props.enableContinuousGenerationControl && false
-            ? (
-                <div className="u-mr1">
-                    <ContinuousGenerationController
-                        continuousGeneration={this.props.continuousGeneration}
-                        actions={{
-                            updateContinuousGeneration: (newVal) => this.props.actions.updateContinuousGeneration(newVal)
-                        }}
-                    />
-                </div>
-            )
-            : null;
-        const loopController = false && (
-            <div className="u-mr1">
-                <LoopController
-                    isLooping={this.props.isLooping}
-                    actions={{
-                        updateIsLooping: (newVal) => this.props.actions.updateIsLooping(newVal)
-                    }}
-                />
-            </div>
-        );
 
         return (
             <div>
                 { this.state.error ? <p className="txt-error">{ this.state.error }</p> : null }
                 <div className="u-flex-row u-flex-wrap">
                     <div className={`visualiser-container__button visualiser-container__button--${this.props.generateButtonText.toLowerCase()} u-mr05 u-mb0`}>
-                        <button className={`button-primary button-primary--alpha-dark button-primary--small-icon button-primary--joined ${this.state.isLoading ? '' : 'icon-is-hidden'}`} onClick={() => this.generateEvent()}>
-                            <span className="button-primary__inner">{ this.props.generateButtonText || 'Generate' }</span>
-                            <span className="button-primary__icon">
-                                <span className="spinner" />
-                            </span>
-                        </button>
-                        <button className="button-primary button-primary--alpha-dark button-primary--joined" title={ capitalize(eventName) } onClick={this.queueRiff} disabled={!this.props.audioPlaylist.length}>
-                            <SVG className="button-primary__svg-icon" icon="plus" />
-                        </button>
+                        <Generator
+                            audioPlaylist={ this.props.audioPlaylist }
+                            bpm={ this.props.bpm }
+                            sequences={ this.props.sequences }
+                            instruments={ this.props.instruments }
+                            usePredefinedSettings={ this.props.usePredefinedSettings }
+                            onGenerationStart={ this.onGenerationStart }
+                            onGenerationEnd={ this.onGenerationEnd }
+                        />
                     </div>
 
                     <div className="u-mr1 u-mb0">
@@ -271,10 +198,6 @@ class SoundController extends Component {
                             <SVG icon={ eventName } className="button-primary__svg-icon" />
                         </button>
                     </div>
-
-                    { loopController }
-
-                    { continuousGeneration }
                 </div>
             </div>
         );

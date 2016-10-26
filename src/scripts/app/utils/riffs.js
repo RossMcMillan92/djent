@@ -85,7 +85,7 @@ const createPlaylistItem = (genID, audioTemplate, instruments, sequences, bpm) =
 });
 
 const getGenerationID = (currentCount, playlist) =>
-    playlist.find(pi => pi.id === currentCount)
+    playlist.find(pi => `${pi.id}` === `${currentCount}`)
         ? getGenerationID(currentCount + 1, playlist)
         : currentCount;
 

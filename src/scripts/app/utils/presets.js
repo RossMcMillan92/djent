@@ -9,6 +9,7 @@ import thallBuster2 from './presets/thall-buster-2';
 import thallTriplets from './presets/thall-triplets';
 
 import { getAllowedLengthsFromSequence } from './sequences';
+import { deepClone } from './tools';
 
 const presets = [
     adtrBreakdown,
@@ -21,6 +22,27 @@ const presets = [
     thallBuster,
     thallTriplets,
 ];
+
+const createPreset = ({ id, instruments, sequences, bpm, usePredefinedSettings }) => ({
+    id,
+    settings: {
+        config: {
+            bpm,
+        },
+        sequences: deepClone(sequences),
+        instruments: usePredefinedSettings
+            ? instruments
+            : instruments
+                .map(instrument => ({
+                    id: instrument.id,
+                    pitch: instrument.pitch,
+                    predefinedHitTypes: instrument.hitTypes,
+                    predefinedSequence: instrument.sequence,
+                    volume: instrument.volume,
+                    repeatHitTypeForXBeat: instrument.repeatHitTypeForXBeat,
+                })),
+    }
+});
 
 const backwardsCompatibility = (preset, allowedLengths) => {
     if (preset.settings.beats && preset.settings.beats.length) {
@@ -45,5 +67,6 @@ const backwardsCompatibility = (preset, allowedLengths) => {
 export default presets;
 
 export {
-    backwardsCompatibility
+    backwardsCompatibility,
+    createPreset,
 };

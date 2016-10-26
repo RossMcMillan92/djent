@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { compress } from 'lzutf8';
-import { compose, deepClone, logError, log } from '../utils/tools';
+import { createPreset } from '../utils/presets';
+import { compose, logError, log } from '../utils/tools';
 
 const domain = `${window.location.protocol}//${window.location.host}`;
 
@@ -11,29 +12,11 @@ class ShareController extends Component {
         shortURL: ''
     }
 
-    generatePreset = ({ id, instruments, sequences, bpm }) => ({
-        id,
-        settings: {
-            config: {
-                bpm,
-            },
-            sequences: deepClone(sequences),
-            instruments: instruments
-                .map(instrument => ({
-                    id: instrument.id,
-                    pitch: instrument.pitch,
-                    predefinedHitTypes: instrument.hitTypes,
-                    predefinedSequence: instrument.sequence,
-                    volume: instrument.volume,
-                    repeatHitTypeForXBeat: instrument.repeatHitTypeForXBeat,
-                })),
-        }
-    })
-
     getShortURLPromise = (preset) => compose(
         this.getShortURL,
         this.getShareableURL,
-        this.generatePreset,
+        createPreset,
+        (item) => ({ ...item, usePredefinedSettings: true })
     )(preset);
 
     onClick = () => {

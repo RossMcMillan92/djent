@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import Generator from '../components/Generator';
 import ReorderableList from '../components/ReorderableList';
 import SVG from '../components/SVG';
 
@@ -10,11 +11,20 @@ import {
     updateActivePlaylistIndex
 } from '../actions/sound';
 
+import {
+    applyPreset
+} from '../actions/config';
+
+import { createPreset } from '../utils/presets';
 import { confineToRange, splice } from '../utils/tools';
 
 class PlaylistEditor extends Component {
     static defaultProps = {
         audioPlaylist: []
+    }
+
+    state = {
+        isLoading: false,
     }
 
     duplications = {}
@@ -73,13 +83,33 @@ class PlaylistEditor extends Component {
         }
     }
 
+    onLoadSettings = (e, i) => {
+        const { audioPlaylist } = this.props;
+        const selectedItem = { ...audioPlaylist[i] };
+        const preset = createPreset(selectedItem);
+        console.log('PRESET', preset)
+        this.props.actions.applyPreset(preset);
+    }
+
+    onGenerationStart = () => {
+        this.setState({ isLoading: true });
+    }
+
+    onGenerate = (playlistItem) => {
+        this.setState({ isLoading: false });
+        this.props.actions.updateAudioPlaylist([
+            ...this.props.audioPlaylist,
+            playlistItem
+        ]);
+    }
+
     render() {
         const listItems = this.props.audioPlaylist
             .map((item, i) => ({
                 key: item.key,
                 body: (
                     <div className="u-flex-row u-flex-justify">
-                        Riff {item.id} / {item.bpm}BPM
+                        Riff {item.id} - {item.bpm}BPM - {item.sequences[0].bars} × {item.sequences[0].beats}
                         <div>
                             <span
                                 className="block-list__button u-mr1"
@@ -109,23 +139,48 @@ class PlaylistEditor extends Component {
             }));
 
         return (
-            <ReorderableList
-                listItems={listItems}
-                onListItemClick={this.updateActivePlaylistIndex}
-                onReorder={this.onReorder}
-            />
+            <div>
+                <div className="u-mb05">
+                    <ReorderableList
+                        listItems={listItems}
+                        onListItemClick={this.updateActivePlaylistIndex}
+                        onReorder={this.onReorder}
+                    />
+                </div>
+                <div className="block-list">
+                    <Generator
+                        audioPlaylist={ this.props.audioPlaylist }
+                        bpm={ this.props.bpm }
+                        sequences={ this.props.sequences }
+                        instruments={ this.props.instruments }
+                        usePredefinedSettings={ this.props.usePredefinedSettings }
+                        onGenerationStart={ this.onGenerationStart }
+                        onGenerationEnd={ this.onGenerate }
+                        wrapperClass="block-list__item u-bg-gamma"
+                        wrapperComponent='div'
+                    >
+                        <div className="block-list__body u-tac">
+                            <SVG className={`button-primary__svg-icon u-txt-light u-dib ${this.state.isLoading ? 'u-anim-spin' : ''}`} icon="plus" />
+                        </div>
+                    </Generator>
+                </div>
+            </div>
         );
     }
 }
 
 const mapStateToProps = (state) => ({
-    activePlaylistIndex: state.sound.activePlaylistIndex,
-    audioPlaylist: state.sound.audioPlaylist,
-    isPlaying: state.sound.isPlaying,
+    activePlaylistIndex : state.sound.activePlaylistIndex,
+    audioPlaylist       : state.sound.audioPlaylist,
+    isPlaying           : state.sound.isPlaying,
+    bpm                 : state.config.bpm,
+    sequences           : state.sequences,
+    instruments         : state.instruments,
 });
 
 const mapDispatchToProps = (dispatch) => {
     const actions = {
+        applyPreset,
         updateAudioPlaylist,
         updateActivePlaylistIndex
     };

@@ -87,7 +87,9 @@ export default class Player extends Component {
                             />
                         </div>
                     </div>
-                    <PlaylistEditor />
+                    <PlaylistEditor
+                        usePredefinedSettings={ usePredefinedSettings }
+                    />
                 </Panel>
 
                 {

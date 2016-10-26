@@ -1,10 +1,10 @@
-$block-list__item-height  : 35px
+$block-list__item-height  : 45px
 $block-list__font-size    : 13px
 $block-list__line-height  : 1.5
 
 $block-list__inner-height : $block-list__font-size * $block-list__line-height
 $block-list__padding-y    : ($block-list__item-height - $block-list__inner-height) / 2
-$block-list__padding-x    : $block-list__padding-y * 1.5
+$block-list__padding-x    : 10px
 
 $block-list__font-size--large   : 22px
 $block-list__line-height--large : ($block-list__item-height - ($block-list__padding-y * 2)) / $block-list__font-size--large
@@ -17,6 +17,7 @@ $block-list__line-height--large : ($block-list__item-height - ($block-list__padd
 .block-list__item
     list-style: none
     background-color: $palette-alpha-dark
+    overflow: hidden
     cursor: pointer
     user-select: none
     -webkit-tap-highlight-color: transparent
@@ -64,9 +65,17 @@ $block-list__handle-arrow-color: rgba(255, 255, 255, .25)
         border-width: $block-list__handle-arrow-size $block-list__handle-arrow-size 0 $block-list__handle-arrow-size
         border-color: $block-list__handle-arrow-color transparent transparent transparent
 
-// .block-list__button
-
 .block-list__button-icon
     width: $block-list__font-size
     height: $block-list__font-size
     margin-top: round(($block-list__font-size / $block-list__line-height) / 2)
+
+
+    transition: all 0.25s ease-in-out
+    transform: translateY(20%)
+    opacity: 0
+
+    .block-list__item.is-active &,
+    .block-list__item:hover &
+        transform: translateY(0)
+        opacity: 1

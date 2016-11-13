@@ -80,7 +80,6 @@ export default class Main extends Component {
             .then(dataStrings => {
                 const sharedPresets = dataStrings
                     .map(this.dataStringToPreset);
-                console.log('SHAREDPRESETS', sharedPresets)
 
                 this.props.actions.applyPreset(sharedPresets[0]);
 
@@ -106,11 +105,9 @@ export default class Main extends Component {
     insertSoundsIntoPresetInstruments = preset => {
         preset.settings.instruments = preset.settings.instruments
             .map(i => {
-                console.log('I', i)
                 const inst = this.props.instruments.find(ins => ins.id === i.id);
                 const sounds = getActiveSoundsFromHitTypes(i.predefinedHitTypes)
                     .map(sound => ({ ...inst.sounds.find(s => s.id === sound.id), ...sound }));
-                    console.log('SOUNDS', sounds)
                 return { ...i, sounds };
             });
 

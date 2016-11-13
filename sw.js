@@ -7,7 +7,7 @@
     // Load the sw-toolbox library.
     importScripts('/node_modules/sw-toolbox/sw-toolbox.js');
 
-    global.toolbox.options.debug = true;
+    global.toolbox.options.debug = false;
 
     // The route for any requests from the googleapis origin
     toolbox.router.get('/(.*)', global.toolbox.fastest, {

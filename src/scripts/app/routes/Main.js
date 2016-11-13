@@ -19,7 +19,7 @@ import {
     generatePlaylistItem,
 } from '../utils/riffs';
 
-import { compose, log, logError, throttle, trace } from '../utils/tools';
+import { compose, log, logError, throttle } from '../utils/tools';
 import { isMobile } from '../utils/mobile';
 
 export default class Main extends Component {

@@ -39,7 +39,6 @@ const getPresetFromData = (data) => {
                           && decompress(data, { inputEncoding: 'Base64' });
 
     const preset = /[A-Za-z0-9+/=]/.test(decompressedData) ? JSON.parse(decompressedData) : undefined;
-    console.log('PRESET', preset)
     return preset;
 };
 

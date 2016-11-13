@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { compress } from 'lzutf8';
 import { createPreset } from '../utils/presets';
-import { compose, logError, log, trace } from '../utils/tools';
+import { compose, logError, log } from '../utils/tools';
 
 const domain = `${window.location.protocol}//${window.location.host}`;
 
@@ -15,9 +15,7 @@ class ShareController extends Component {
     getShortURLPromise = (preset) => compose(
         this.getShortURL,
         this.getShareableURL,
-        trace('after createPreset'),
         createPreset,
-        trace('before createPreset'),
         (item) => ({ ...item, usePredefinedSettings: true })
     )(preset);
 

@@ -19,7 +19,7 @@ import {
     generatePlaylistItem,
 } from '../utils/riffs';
 
-import { compose, log, logError, throttle } from '../utils/tools';
+import { compose, log, logError, throttle, trace } from '../utils/tools';
 import { isMobile } from '../utils/mobile';
 
 export default class Main extends Component {
@@ -38,7 +38,7 @@ export default class Main extends Component {
 
         handleGoogleAPI()
             .then(() => {
-                this.doTheHing(shareID);
+                this.setupSharedItems(shareID);
                 this.setState({ googleAPIHasLoaded: true });
             })
             .catch(e => logError(e));
@@ -63,7 +63,7 @@ export default class Main extends Component {
 
     componentWillUpdate = (nextProps) => {
         if (!this.props.params.shareID && nextProps.params.shareID) {
-            this.doTheHing(nextProps.params.shareID);
+            this.setupSharedItems(nextProps.params.shareID);
         }
     }
 
@@ -71,7 +71,7 @@ export default class Main extends Component {
         window.removeEventListener('popstate', this.backToHome);
     }
 
-    doTheHing = (shareID) => {
+    setupSharedItems = (shareID) => {
         if (!shareID) return;
         const dataPromises = shareID.split('-')
             .map(getPresetData);
@@ -80,6 +80,7 @@ export default class Main extends Component {
             .then(dataStrings => {
                 const sharedPresets = dataStrings
                     .map(this.dataStringToPreset);
+                console.log('SHAREDPRESETS', sharedPresets)
 
                 this.props.actions.applyPreset(sharedPresets[0]);
 
@@ -105,9 +106,11 @@ export default class Main extends Component {
     insertSoundsIntoPresetInstruments = preset => {
         preset.settings.instruments = preset.settings.instruments
             .map(i => {
+                console.log('I', i)
                 const inst = this.props.instruments.find(ins => ins.id === i.id);
                 const sounds = getActiveSoundsFromHitTypes(i.predefinedHitTypes)
                     .map(sound => ({ ...inst.sounds.find(s => s.id === sound.id), ...sound }));
+                    console.log('SOUNDS', sounds)
                 return { ...i, sounds };
             });
 

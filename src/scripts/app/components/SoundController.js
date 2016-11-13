@@ -27,6 +27,12 @@ const stop = (src) => {
     }
 };
 
+// playlistsAreDifferent :: (Playlist a) => a -> a -> Boolean
+const playlistsAreDifferent = (playlist1, playlist2) =>
+    playlist1.length !== playlist2.length
+    || playlist1
+        .reduce((result, playlistItem, index) => playlistItem.id !== playlist2[index].id || result, false);
+
 class SoundController extends Component {
     generationCount = 0;
     currentlyPlayingSources = [];
@@ -35,8 +41,8 @@ class SoundController extends Component {
     renewalTimeout;
     renewalPoint = 0.80;
     state = {
-        isLoading           : false,
-        error               : '',
+        isLoading : false,
+        error     : '',
     }
 
     componentWillUnmount = () => {
@@ -45,9 +51,12 @@ class SoundController extends Component {
     }
 
     componentWillUpdate = (nextProps) => {
-        if (this.trueActivePlaylistIndex !== nextProps.activePlaylistIndex
-        && nextProps.activePlaylistIndex !== this.props.activePlaylistIndex) {
-            if (this.props.isPlaying) setTimeout(() => this.updateInstrumentsAndPlay(nextProps.activePlaylistIndex, true), 0);
+        if (this.props.isPlaying && !nextProps.isPlaying) return this.stopEvent();
+
+        const playlistItemWasDeleted = this.props.audioPlaylist.length > nextProps.audioPlaylist.length;
+
+        if (playlistItemWasDeleted) {
+            if (this.props.isPlaying) this.stopEvent();
         }
     }
 
@@ -138,7 +147,8 @@ class SoundController extends Component {
     }
 
     replaceInAudioPlaylist = (playlistItem, playlistIndex) => {
-        const newAudioPlaylist = [ ...this.props.audioPlaylist ];
+        const { audioPlaylist } = this.props;
+        const newAudioPlaylist = [ ...audioPlaylist ];
         newAudioPlaylist[playlistIndex] = playlistItem;
         this.props.actions.updateAudioPlaylist(newAudioPlaylist);
     }
@@ -188,7 +198,6 @@ class SoundController extends Component {
                             sequences={ this.props.sequences }
                             instruments={ this.props.instruments }
                             usePredefinedSettings={ this.props.usePredefinedSettings }
-                            onGenerationStart={ this.onGenerationStart }
                             onGenerationEnd={ this.onGenerationEnd }
                         />
                     </div>

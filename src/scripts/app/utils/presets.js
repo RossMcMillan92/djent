@@ -32,7 +32,6 @@ const createPreset = ({ id, instruments, sequences, bpm, usePredefinedSettings }
         sequences: deepClone(sequences),
         instruments: usePredefinedSettings
             ? instruments
-            : instruments
                 .map(instrument => ({
                     id: instrument.id,
                     pitch: instrument.pitch,
@@ -40,7 +39,8 @@ const createPreset = ({ id, instruments, sequences, bpm, usePredefinedSettings }
                     predefinedSequence: instrument.sequence,
                     volume: instrument.volume,
                     repeatHitTypeForXBeat: instrument.repeatHitTypeForXBeat,
-                })),
+                }))
+            : instruments,
     }
 });
 

@@ -1,6 +1,7 @@
 /* eslint no-console: 0 */
 
 import deepExtend from 'deep-extend';
+import { curry } from 'ramda';
 
 const arraySelector = selector => Array.from(document.querySelectorAll(selector));
 
@@ -84,7 +85,7 @@ const parseQueryString = (url = window.location.href) =>
 		}, {});
 
 const getHashQueryParam = (param, url = window.location.hash) => {
-	const paramPart1 = url.split(`${param}\=`)[1];
+	const paramPart1 = url.split(`${param}=`)[1];
 	if (!paramPart1) return '';
 
 	return paramPart1.split('&')[0];
@@ -145,6 +146,11 @@ const logError = (...args) => {
 	return args[0];
 };
 
+const trace = curry((tag, d) => {
+	log(tag, d);
+	return d;
+});
+
 export {
 	arraySelector,
 	capitalize,
@@ -167,5 +173,6 @@ export {
 	roundToXPlaces,
 	splice,
 	throttle,
+	trace,
 	updateObjByID,
 };

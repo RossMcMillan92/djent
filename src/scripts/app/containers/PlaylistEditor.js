@@ -8,7 +8,8 @@ import SVG from '../components/SVG';
 
 import {
     updateAudioPlaylist,
-    updateActivePlaylistIndex
+    updateActivePlaylistIndex,
+    updateIsPlaying,
 } from '../actions/sound';
 
 import {
@@ -32,6 +33,11 @@ class PlaylistEditor extends Component {
     updateActivePlaylistIndex = (playlistIndex) => {
         if (playlistIndex === undefined || this.props.activePlaylistIndex === playlistIndex) return;
         this.props.actions.updateActivePlaylistIndex(playlistIndex);
+    }
+
+    onListItemClick = (playlistIndex) => {
+        this.props.actions.updateIsPlaying(false);
+        this.updateActivePlaylistIndex(playlistIndex);
     }
 
     onReorder = (newOrder) => {
@@ -87,7 +93,6 @@ class PlaylistEditor extends Component {
         const { audioPlaylist } = this.props;
         const selectedItem = { ...audioPlaylist[i] };
         const preset = createPreset(selectedItem);
-        console.log('PRESET', preset)
         this.props.actions.applyPreset(preset);
     }
 
@@ -143,7 +148,7 @@ class PlaylistEditor extends Component {
                 <div className="u-mb05">
                     <ReorderableList
                         listItems={listItems}
-                        onListItemClick={this.updateActivePlaylistIndex}
+                        onListItemClick={this.onListItemClick}
                         onReorder={this.onReorder}
                     />
                 </div>
@@ -182,7 +187,8 @@ const mapDispatchToProps = (dispatch) => {
     const actions = {
         applyPreset,
         updateAudioPlaylist,
-        updateActivePlaylistIndex
+        updateActivePlaylistIndex,
+        updateIsPlaying,
     };
     return {
         actions: {

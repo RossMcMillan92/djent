@@ -43,7 +43,7 @@ export function updateAudioPlaylist(audioPlaylist) {
 export function updateActivePlaylistIndex(activePlaylistIndex) {
     return {
         type: 'UPDATE_ACTIVE_PLAYLIST_INDEX',
-        payload: { activePlaylistIndex },
+        payload: { activePlaylistIndex: activePlaylistIndex < 0 ? 0 : activePlaylistIndex },
     };
 }
 

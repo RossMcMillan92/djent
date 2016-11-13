@@ -62,7 +62,9 @@ const generateNewRiff = ({ context, sequences, usePredefinedSettings, instrument
 };
 
 const generatePlaylistItem = (genID, bpm, sequences, instruments, usePredefinedSettings) => {
-    const generationState   = deepClone({ bpm, sequences, instruments, usePredefinedSettings });
+    console.log('INSTRUMENTS', instruments)
+    const generationState   = { bpm, sequences, instruments, usePredefinedSettings };
+    console.log('GENERATIONSTATE', generationState)
     const totalBeatsProduct = getTotalBeatsLength(sequences);
 
     let newInstruments;

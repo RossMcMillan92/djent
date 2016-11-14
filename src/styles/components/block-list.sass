@@ -45,6 +45,10 @@ $block-list__handle-arrow-color: rgba(255, 255, 255, .25)
     width: $block-list__item-height
     background-color: rgba(0, 0, 0, .25)
 
+    .functionality-is-disabled &
+        background-color: rgba(0, 0, 0, .05)
+        pointer-events: none
+
     &::before,
     &::after
         position: absolute
@@ -78,3 +82,9 @@ $block-list__handle-arrow-color: rgba(255, 255, 255, .25)
     .block-list__item:hover &
         transform: translateY(0)
         opacity: 1
+
+    .block-list__item.functionality-is-disabled.is-active &,
+    .block-list__item.functionality-is-disabled:hover &
+        transform: translateY(0)
+        opacity: .25
+        pointer-events: none

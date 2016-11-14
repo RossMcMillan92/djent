@@ -76,9 +76,7 @@ const generatePlaylistItem = (genID, bpm, sequences, instruments, usePredefinedS
 
 let playlistItemCount = 0;
 const createPlaylistItem = (genID, audioTemplate, instruments, sequences, bpm) => {
-    console.log('INSTRUMENTS, SEQUENCES', instruments, sequences)
     const key = `${genID}-${playlistItemCount}`;
-    console.log('PLAYLISTITEMCOUNT', playlistItemCount)
     playlistItemCount = playlistItemCount + 1;
     return {
         id: genID,

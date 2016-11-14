@@ -52,6 +52,7 @@ class PlaylistEditor extends Component {
     }
 
     onDelete = (e, i) => {
+        if (this.props.isPlaying) return;
         e.preventDefault();
         e.stopPropagation();
         const { audioPlaylist, activePlaylistIndex } = this.props;
@@ -65,13 +66,12 @@ class PlaylistEditor extends Component {
     }
 
     onDuplicate = (e, i) => {
+        if (this.props.isPlaying) return;
         e.preventDefault();
         e.stopPropagation();
         const { audioPlaylist, activePlaylistIndex } = this.props;
         const playlistItem = audioPlaylist[i];
-        console.log('PLAYLISTITEM', playlistItem)
         const newAudioPlaylistItem = createPlaylistItem(playlistItem.id, playlistItem.audioTemplate, playlistItem.instruments, playlistItem.sequences, playlistItem.bpm);
-        console.log('NEWAUDIOPLAYLISTITEM', newAudioPlaylistItem)
 
         const newAudioPlaylist = [
             ...audioPlaylist.slice(0, i + 1),
@@ -87,6 +87,7 @@ class PlaylistEditor extends Component {
     }
 
     onLoadSettings = (e, i) => {
+        if (this.props.isPlaying) return;
         const { audioPlaylist } = this.props;
         const selectedItem = { ...audioPlaylist[i] };
         const preset = createPreset(selectedItem);
@@ -106,6 +107,7 @@ class PlaylistEditor extends Component {
     }
 
     render() {
+        const { activePlaylistIndex, isPlaying } = this.props;
         const listItems = this.props.audioPlaylist
             .map((item, i) => ({
                 key: item.key,
@@ -137,7 +139,7 @@ class PlaylistEditor extends Component {
                         </div>
                     </div>
                 ),
-                className: `${this.props.activePlaylistIndex === i ? 'is-active' : ''}`,
+                className: `${activePlaylistIndex === i ? 'is-active' : ''} ${isPlaying ? 'functionality-is-disabled' : ''}`,
             }));
 
         return (

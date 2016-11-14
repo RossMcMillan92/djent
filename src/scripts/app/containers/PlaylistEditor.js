@@ -17,6 +17,7 @@ import {
 } from '../actions/config';
 
 import { createPreset } from '../utils/presets';
+import { createPlaylistItem } from '../utils/riffs';
 import { confineToRange, splice } from '../utils/tools';
 
 class PlaylistEditor extends Component {
@@ -27,8 +28,6 @@ class PlaylistEditor extends Component {
     state = {
         isLoading: false,
     }
-
-    duplications = {}
 
     updateActivePlaylistIndex = (playlistIndex) => {
         if (playlistIndex === undefined || this.props.activePlaylistIndex === playlistIndex) return;
@@ -69,16 +68,14 @@ class PlaylistEditor extends Component {
         e.preventDefault();
         e.stopPropagation();
         const { audioPlaylist, activePlaylistIndex } = this.props;
-        const selectedItem = { ...audioPlaylist[i] };
-        const duplicationNumber = this.duplications[selectedItem.id];
-        const newDuplicationNumber = duplicationNumber ? duplicationNumber + 1 : 1;
-        this.duplications[selectedItem.id] = newDuplicationNumber;
-
-        selectedItem.key = `${selectedItem.id}-${newDuplicationNumber}`;
+        const playlistItem = audioPlaylist[i];
+        console.log('PLAYLISTITEM', playlistItem)
+        const newAudioPlaylistItem = createPlaylistItem(playlistItem.id, playlistItem.audioTemplate, playlistItem.instruments, playlistItem.sequences, playlistItem.bpm);
+        console.log('NEWAUDIOPLAYLISTITEM', newAudioPlaylistItem)
 
         const newAudioPlaylist = [
             ...audioPlaylist.slice(0, i + 1),
-            selectedItem,
+            newAudioPlaylistItem,
             ...audioPlaylist.slice(i + 1, audioPlaylist.length)
         ];
 

@@ -81,6 +81,7 @@ export default class Main extends Component {
                 const sharedPresets = dataStrings
                     .map(this.dataStringToPreset);
 
+                    console.log('SHAREDPRESETS', sharedPresets)
                 this.props.actions.applyPreset(sharedPresets[0]);
 
                 const playlistPromises = sharedPresets
@@ -89,6 +90,7 @@ export default class Main extends Component {
                 return Promise.all(playlistPromises);
             })
             .then((audioPlaylist) => {
+                console.log('AUDIOPLAYLIST', audioPlaylist)
                 this.props.actions.updateAudioPlaylist(audioPlaylist);
                 this.props.actions.disableModal();
                 log(audioPlaylist);

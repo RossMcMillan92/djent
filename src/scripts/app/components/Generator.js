@@ -23,7 +23,7 @@ class Generator extends Component {
                 .then((playlistItem) => {
                     this.setState({ isLoading: false });
                     if (this.props.onGenerationEnd) this.props.onGenerationEnd(playlistItem);
-                    else logError('No onGenerate function given');
+                    else logError('No onGenerationEnd function given');
 
                     return playlistItem;
                 });

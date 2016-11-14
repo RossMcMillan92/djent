@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { compress } from 'lzutf8';
 import { createPreset } from '../utils/presets';
-import { compose, logError, log } from '../utils/tools';
+import { compose, logError } from '../utils/tools';
 
 const domain = `${window.location.protocol}//${window.location.host}`;
 
 class ShareController extends Component {
+    shortURLCache = {}
     state = {
         isEnabled: false,
         isLoading: false,
@@ -33,12 +34,20 @@ class ShareController extends Component {
     getShareableURL = (preset) => {
         const compressedPreset = compress(JSON.stringify(preset), { outputEncoding: 'Base64' });
         const shareableURL = `djen.co/#share=${compressedPreset}`;
-        if (shareableURL.length > 3000) logError('URL exceeds 3000 chars. May not succeed');
+        if (shareableURL.length > 2048) logError('URL exceeds 2048 chars. May not succeed');
         return shareableURL;
     }
 
-    getShortURL = url => window.gapi.client.urlshortener.url.insert({ longUrl: url })
-        .then((response) => response.result.id, (reason) => log(reason));
+    getShortURL = url =>
+        this.shortURLCache[url]
+            ? this.shortURLCache[url]
+            : window.gapi.client.urlshortener.url
+                .insert({ longUrl: url })
+                .then(({ result }) => {
+                    const shortURL = result.id;
+                    this.shortURLCache[url] = shortURL;
+                    return shortURL;
+                }, logError);
 
     combineShortURLs = (googleURLs) => {
         const urlIDs = googleURLs

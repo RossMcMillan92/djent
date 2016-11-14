@@ -19,7 +19,6 @@ import {
 
 import {
     compose,
-    deepClone,
     logError,
 } from './tools';
 
@@ -75,14 +74,21 @@ const generatePlaylistItem = (genID, bpm, sequences, instruments, usePredefinedS
         .then((audioTemplate) => createPlaylistItem(genID, audioTemplate, newInstruments, sequences, bpm));
 };
 
-const createPlaylistItem = (genID, audioTemplate, instruments, sequences, bpm) => ({
-    id: genID,
-    key: genID,
-    audioTemplate,
-    instruments,
-    sequences,
-    bpm,
-});
+let playlistItemCount = 0;
+const createPlaylistItem = (genID, audioTemplate, instruments, sequences, bpm) => {
+    console.log('INSTRUMENTS, SEQUENCES', instruments, sequences)
+    const key = `${genID}-${playlistItemCount}`;
+    console.log('PLAYLISTITEMCOUNT', playlistItemCount)
+    playlistItemCount = playlistItemCount + 1;
+    return {
+        id: genID,
+        key,
+        audioTemplate,
+        instruments,
+        sequences,
+        bpm,
+    };
+};
 
 const getGenerationID = (currentCount, playlist) =>
     playlist.find(pi => `${pi.id}` === `${currentCount}`)

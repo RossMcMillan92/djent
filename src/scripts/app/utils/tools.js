@@ -151,8 +151,14 @@ const trace = curry((tag, d) => {
 	return d;
 });
 
+const catchError = curry((rej, p) => p.catch(rej));
+
+const fork = curry((rej, res, fu) => fu
+	.fork(rej, res));
+
 export {
 	arraySelector,
+	catchError,
 	capitalize,
 	coinFlip,
 	compose,
@@ -160,6 +166,7 @@ export {
 	deepClone,
 	extendObjectArrayByID,
 	filterOutKeys,
+	fork,
 	getHashQueryParam,
 	isIOS,
 	loadScript,

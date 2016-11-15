@@ -1,82 +1,73 @@
-import { logError } from '../utils/tools';
+import { compose, curry, filter, prop, map } from 'ramda';
+import { Future } from 'ramda-fantasy';
+import { catchError, fork, logError } from '../utils/tools';
 
 const bufferCache = {};
-const BufferLoader = (context) => {
-    const newInstrumentPack = [];
 
-    const loadBuffer = (instrument, index) => {
-        const newInstrument = Object.assign({}, instrument);
-        const enabledSounds = newInstrument.sounds.filter(sound => sound.enabled);
-        const bufferAmount = enabledSounds.length;
-        let bufferCount = 0;
-        newInstrument.buffers = {};
+// getBuffer :: url -> Future Error Buffer
+const getBuffer = curry((context, url) =>
+    Future((rej, res) => {
+        if (bufferCache[url]) return res(bufferCache[url]);
 
-        const loadingSound = new Promise((res, rej) => {
-            enabledSounds.forEach((sound) => {
-                const url = sound.path;
-                if (bufferCache[url]) {
-                    newInstrument.buffers[sound.id] = bufferCache[url];
-                    newInstrumentPack[index] = newInstrument;
-                    bufferCount++;
-                    if (bufferCount === bufferAmount) {
-                        res();
+        const request = new XMLHttpRequest();
+        request.open('GET', url, true);
+        request.responseType = 'arraybuffer';
+        request.onload = () =>
+            context.decodeAudioData(
+                request.response,
+                (buffer) => {
+                    if (!buffer) {
+                        rej(Error(`Error decoding file data: ${url}`));
+                        return;
                     }
-                    return;
-                }
+                    bufferCache[url] = buffer;
+                    res(buffer);
+                },
+                rej
+            );
+        request.onerror = rej;
+        request.send();
+    }));
 
-                // Load buffer asynchronously
-                const request = new XMLHttpRequest();
-                request.open('GET', url, true);
-                request.responseType = 'arraybuffer';
+// filterInstrumentsWithSounds :: [Instrument] -> [Instrument]
+const filterInstrumentsWithSounds = instrument =>
+    instrument.sounds.filter(sound => sound.enabled).length;
 
-                request.onload = () => {
-                    // Asynchronously decode the audio file data in request.response
-                    context.decodeAudioData(
-                        request.response,
-                        (buffer) => {
-                            if (!buffer) {
-                                logError(`Error decoding file data: ${url}`);
-                                return;
-                            }
-                            newInstrument.buffers[sound.id] = buffer;
-                            bufferCache[url] = buffer;
-                            newInstrumentPack[index] = newInstrument;
-                            bufferCount++;
-                            if (bufferCount === bufferAmount) {
-                                res();
-                            }
-                        },
-                        rej
-                    );
-                };
+// getBufferPromise :: Instrument -> Promise Error [Instrument]
+const getBufferPromise = curry((context, instrument) => {
+    const newInstrument = { ...instrument };
+    const enabledSounds = newInstrument.sounds
+        .filter(sound => sound.enabled);
+    newInstrument.buffers = {};
 
-                request.onerror = rej;
-                request.send();
-            });
+    return new Promise((res, rej) => {
+        let bufferCount = 0;
+        enabledSounds.forEach((sound, i, sounds) => {
+            compose(
+                fork(rej, (buffer) => {
+                    newInstrument.buffers[sound.id] = buffer;
+                    bufferCount++;
+                    if (bufferCount === sounds.length) {
+                        res(newInstrument);
+                    }
+                }),
+                getBuffer(context),
+                prop('path'),
+            )(sound);
         });
+    });
+});
 
-        return loadingSound;
-    };
-
-    const load = (instruments) => {
-        const loadingSounds = instruments
-            .filter(instrument => instrument.sounds.filter(sound => sound.enabled).length)
-            .map(loadBuffer);
-
-        return Promise.all(loadingSounds)
-            .then(() => newInstrumentPack)
-            .catch(logError);
-    };
-
-    return {
-        load
-    };
-};
-
+// loadInstrumentBuffers :: context -> [Instrument] -> Promise Error [Instruments]
 const loadInstrumentBuffers = (context, instruments) =>
-    BufferLoader(context)
-        .load(instruments);
+    compose(
+        catchError(logError),
+        ps => Promise.all(ps),
+        map(getBufferPromise(context)),
+        filter(filterInstrumentsWithSounds),
+    )(instruments);
 
+// getPitchPlaybackRatio :: Integer -> Integer
 const getPitchPlaybackRatio = (pitchAmount) => {
     const pitchIsPositive = pitchAmount > 0;
     const negAmount = pitchIsPositive ? pitchAmount * -1 : pitchAmount;

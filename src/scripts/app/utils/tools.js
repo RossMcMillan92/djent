@@ -151,8 +151,10 @@ const trace = curry((tag, d) => {
 	return d;
 });
 
+// catchError :: Promise p => (err -> b) -> p -> p
 const catchError = curry((rej, p) => p.catch(rej));
 
+// fork :: Future fu => (err -> b) -> (a -> b) -> fu -> fu
 const fork = curry((rej, res, fu) => fu
 	.fork(rej, res));
 

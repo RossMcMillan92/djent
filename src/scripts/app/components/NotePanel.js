@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 
 import { capitalize } from '../utils/tools';
 
+const getNewAllowedLengths = (allowedLengths, id, prop, value) =>
+    allowedLengths.map(obj => {
+        const newObj = { ...obj };
+        if (newObj.id === id) newObj[prop] = value;
+        return newObj;
+    });
+
 class NotePanel extends Component {
     onLengthAmountChange = (event, value) => {
         const { id, amount } = this.props.length;
@@ -12,17 +19,18 @@ class NotePanel extends Component {
         this.updateAllowedLengthsByID(id, 'amount', newAmount);
     }
 
-    onIsTripletClick = () => {
-        this.updateAllowedLengthsByID(this.props.length.id, 'isTriplet', !this.props.length.isTriplet);
+    onModifierClick = (m1, m2) => {
+        const { length } = this.props;
+        const newValue = !length[m1];
+        let newAllowedLengths = getNewAllowedLengths(this.props.allowedLengths, length.id, m1, newValue);
+        if (newValue && length[m2]) {
+            newAllowedLengths = getNewAllowedLengths(newAllowedLengths, length.id, m2, false);
+        }
+        this.props.actions.updateAllowedLengths(newAllowedLengths);
     }
 
     updateAllowedLengthsByID = (id, prop, value) => {
-        const newAllowedLengths = this.props.allowedLengths.map(obj => {
-            const newObj = { ...obj };
-            if (newObj.id === id) newObj[prop] = value;
-            return newObj;
-        });
-
+        const newAllowedLengths = getNewAllowedLengths(this.props.allowedLengths, id, prop, value);
         this.props.actions.updateAllowedLengths(newAllowedLengths);
     }
 
@@ -43,7 +51,8 @@ class NotePanel extends Component {
                     </div>
                 </div>
                 <div className="note-panel__checkbox-container">
-                    <span className={`toggle-input u-txt-small u-txt-light ${length.isTriplet ? 'is-enabled' : ''}`} onClick={this.onIsTripletClick} >Triplet</span>
+                    <div className={`toggle-input u-txt-small u-txt-light ${length.isTriplet ? 'is-enabled' : ''}`} onClick={() => this.onModifierClick('isTriplet', 'isDotted')} >Triplet</div>
+                    <div className={`toggle-input u-txt-small u-txt-light ${length.isDotted ? 'is-enabled' : ''}`} onClick={() => this.onModifierClick('isDotted', 'isTriplet')} >Dotted</div>
                 </div>
 
             </div>

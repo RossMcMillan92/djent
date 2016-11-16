@@ -27,12 +27,6 @@ const stop = (src) => {
     }
 };
 
-// playlistsAreDifferent :: (Playlist a) => a -> a -> Boolean
-const playlistsAreDifferent = (playlist1, playlist2) =>
-    playlist1.length !== playlist2.length
-    || playlist1
-        .reduce((result, playlistItem, index) => playlistItem.id !== playlist2[index].id || result, false);
-
 class SoundController extends Component {
     generationCount = 0;
     currentlyPlayingSources = [];

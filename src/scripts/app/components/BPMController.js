@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
+import { compose } from 'ramda';
 
+import { getTargetValueFromEvent } from '../modules/events';
 import InputBox from './InputBox';
 
 class BPMController extends Component {
     shouldComponentUpdate = (nextProps) => nextProps.bpm !== this.props.bpm;
 
-    onBPMChange = (event) => {
-        const bpm = parseFloat(event.target.value);
-        this.props.actions.updateBPM(bpm);
-    }
+    onBPMChange = compose(
+        this.props.actions.updateBPM,
+        parseFloat,
+        getTargetValueFromEvent,
+    )
 
     render = () => {
         const props = {

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { compose } from 'ramda';
 
 import { saveAsWAVFile, saveAsMIDIFile } from '../utils/save';
 import { buildMidiDataURIFromInstruments } from '../utils/midi';
@@ -14,24 +15,26 @@ const ExportModal = ({ actions }) => (
     </div>
 );
 
-class ExportController extends Component {
-    saveMIDI = () => saveAsMIDIFile(buildMidiDataURIFromInstruments(this.props.instruments, this.props.bpm))
-    saveWAV = () => saveAsWAVFile(this.props.buffer);
+const buildAndSaveMidi = compose(
+    saveAsMIDIFile,
+    buildMidiDataURIFromInstruments,
+);
 
-    launchExportModal = () => {
+const ExportController = props => {
+    const { instruments, bpm, buffer, actions } = props;
+    const launchExportModal = () => {
         const content = <ExportModal actions={{
-            disableModal: this.props.actions.disableModal,
-            saveMIDI: this.saveMIDI,
-            saveWAV: this.saveWAV,
+            disableModal: actions.disableModal,
+            saveMIDI: () => buildAndSaveMidi(instruments, bpm),
+            saveWAV: () => saveAsWAVFile(buffer),
         }} />;
-        this.props.actions.enableModal({ content, isCloseable: true, title: 'Export' });
+        actions.enableModal({ content, isCloseable: true, title: 'Export' });
     }
-
-    render = () => (
-        <button className="button-primary button-primary--alpha-dark button-primary--tiny" onClick={this.launchExportModal} disabled={!this.props.buffer}>
+    return (
+        <button className="button-primary button-primary--alpha-dark button-primary--tiny" onClick={launchExportModal} disabled={!buffer}>
             Save
         </button>
-    )
+    );
 }
 
 export default ExportController;

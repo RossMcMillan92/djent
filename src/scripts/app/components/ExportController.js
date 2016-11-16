@@ -23,11 +23,13 @@ const buildAndSaveMidi = compose(
 const ExportController = props => {
     const { instruments, bpm, buffer, actions } = props;
     const launchExportModal = () => {
-        const content = <ExportModal actions={{
-            disableModal: actions.disableModal,
-            saveMIDI: () => buildAndSaveMidi(instruments, bpm),
-            saveWAV: () => saveAsWAVFile(buffer),
-        }} />;
+        const content = (
+            <ExportModal actions={{
+                disableModal: actions.disableModal,
+                saveMIDI: () => buildAndSaveMidi(instruments, bpm),
+                saveWAV: () => saveAsWAVFile(buffer),
+            }} />
+        );
         actions.enableModal({ content, isCloseable: true, title: 'Export' });
     }
     return (

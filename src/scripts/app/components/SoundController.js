@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import Generator from './Generator';
 import SVG from './SVG';
 
+import LoopController from '../containers/LoopController';
+
 import {
     playSound,
 } from '../utils/audio';
@@ -100,13 +102,18 @@ class SoundController extends Component {
         const stopEventDiff        = timeTillEnd - timeThreshold;
 
         this.loopTimeout = setTimeout(() => {
-            const { activePlaylistIndex, audioPlaylist } = this.props;
-            const newPlaylistIndex = activePlaylistIndex + 1 > audioPlaylist.length - 1 ? 0 : activePlaylistIndex + 1;
-            if (this.props.isLooping || newPlaylistIndex !== 0) {
+            const { actions, activePlaylistIndex, audioPlaylist, isPlaying, loopMode } = this.props;
+            const newPlaylistIndex = loopMode === 2
+                ? activePlaylistIndex
+                : activePlaylistIndex + 1 < audioPlaylist.length
+                    ? activePlaylistIndex + 1
+                    : 0;
+
+            if (loopMode || newPlaylistIndex !== 0) {
                 this.trueActivePlaylistIndex = newPlaylistIndex;
-                if (this.props.isPlaying) this.updateInstrumentsAndPlay(newPlaylistIndex, false, audioTemplateEndTime);
+                if (isPlaying) this.updateInstrumentsAndPlay(newPlaylistIndex, false, audioTemplateEndTime);
                 this.stopTimeout = setTimeout(() => {
-                    this.props.actions.updateActivePlaylistIndex(newPlaylistIndex);
+                    actions.updateActivePlaylistIndex(newPlaylistIndex);
                 }, stopEventDiff * 1000);
             } else {
                 this.stopTimeout = setTimeout(this.stopEvent, stopEventDiff * 1000);
@@ -199,10 +206,14 @@ class SoundController extends Component {
                         />
                     </div>
 
-                    <div className="u-mr1 u-mb0">
+                    <div className="u-mr05 u-mb0">
                         <button className="button-primary button-primary--alpha-dark" title={ capitalize(eventName) } onClick={this.togglePlay} disabled={!this.props.audioPlaylist.length}>
                             <SVG icon={ eventName } className="button-primary__svg-icon" />
                         </button>
+                    </div>
+
+                    <div className="u-mr1 u-mb0">
+                        <LoopController />
                     </div>
                 </div>
             </div>

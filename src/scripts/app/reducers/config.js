@@ -16,12 +16,6 @@ export default function config(state = { ...initialState }, action) {
                 bpm: payload.bpm
             };
 
-        case 'UPDATE_IS_LOOOPING':
-            return {
-                ...state,
-                continuousGeneration: payload.isLooping ? false : state.continuousGeneration
-            };
-
         case 'UPDATE_CONTINUOUS_GENERATION':
             return {
                 ...state,

@@ -35,7 +35,7 @@ class ReorderableList extends Component {
                     onClick={ () => this.props.onListItemClick(i) }
                 >
                     <div className="u-flex-row u-flex-justify">
-                        <div className="block-list__body u-flex-grow-1" >
+                        <div className="u-flex-grow-1" >
                             { item.body }
                         </div>
                         <div className="block-list__item-handle js-handle" ></div>

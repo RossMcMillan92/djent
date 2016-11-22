@@ -52,8 +52,8 @@ class PlaylistEditor extends Component {
         this.updateActivePlaylistIndex(newActivePlaylistIndex);
     }
 
-    onDelete = (e, i) => {
-        if (this.props.isPlaying) return;
+    onDelete = (e, i, isDisabled) => {
+        if (isDisabled || this.props.isPlaying) return;
         e.preventDefault();
         e.stopPropagation();
         const { audioPlaylist, activePlaylistIndex } = this.props;
@@ -66,8 +66,8 @@ class PlaylistEditor extends Component {
         }
     }
 
-    onDuplicate = (e, i) => {
-        if (this.props.isPlaying) return;
+    onDuplicate = (e, i, isDisabled) => {
+        if (isDisabled || this.props.isPlaying) return;
         e.preventDefault();
         e.stopPropagation();
         const { audioPlaylist, activePlaylistIndex } = this.props;
@@ -82,8 +82,8 @@ class PlaylistEditor extends Component {
         }
     }
 
-    onLoadSettings = (e, i) => {
-        if (this.props.isPlaying) return;
+    onLoadSettings = (e, i, isDisabled) => {
+        if (isDisabled || this.props.isPlaying) return;
         const { audioPlaylist } = this.props;
         const selectedItem = { ...audioPlaylist[i] };
         const preset = createPreset(selectedItem);
@@ -121,32 +121,35 @@ class PlaylistEditor extends Component {
                     <div className="u-flex-row u-flex-justify">
                         <div className="u-flex-row u-align-center">
                             <span
-                                className={`block-list__button u-mr1 ${item.isLocked ? 'u-txt-positive' : ''}`}
+                                className={`block-list__button block-list__content-spacing ${item.isLocked ? 'u-txt-positive' : ''}`}
                                 onClick={(e) => this.onLockTrack(e, i)}
                                 title="Lock Track"
                             >
                                 <SVG className="block-list__button-icon" icon="lock" />
                             </span>
-                            Riff {item.id} - {item.bpm}BPM - {item.sequences[0].bars} × {item.sequences[0].beats}
+
+                            <span className="block-list__body u-pl0 u-txt-truncate">
+                                Riff {item.id} - {item.bpm}BPM - {item.sequences[0].bars} × {item.sequences[0].beats}
+                            </span>
                         </div>
-                        <div>
+                        <div className="u-flex-row u-align-center">
                             <span
-                                className="block-list__button is-disablable u-mr1"
-                                onClick={(e) => this.onLoadSettings(e, i)}
+                                className="block-list__button block-list__content-spacing is-disablable"
+                                onClick={(e) => this.onLoadSettings(e, i, item.isLocked)}
                                 title="Load Settings"
                             >
                                 <SVG className="block-list__button-icon" icon="gear" />
                             </span>
                             <span
-                                className="block-list__button is-disablable u-txt-negative u-mr1"
-                                onClick={(e) => this.onDelete(e, i)}
+                                className="block-list__button block-list__content-spacing is-disablable u-txt-negative"
+                                onClick={(e) => this.onDelete(e, i, item.isLocked)}
                                 title="Delete"
                             >
                                 <SVG className="block-list__button-icon" icon="cross" />
                             </span>
                             <span
-                                className="block-list__button is-disablable u-txt-positive"
-                                onClick={(e) => this.onDuplicate(e, i)}
+                                className="block-list__button block-list__content-spacing is-disablable u-txt-positive"
+                                onClick={(e) => this.onDuplicate(e, i, item.isLocked)}
                                 title="Duplicate"
                             >
                                 <SVG className="block-list__button-icon" icon="plus" />
@@ -178,7 +181,7 @@ class PlaylistEditor extends Component {
                         wrapperClass="block-list__item u-bg-gamma"
                         wrapperComponent='div'
                     >
-                        <div className="block-list__body u-tac">
+                        <div className="block-list__content-spacing u-tac">
                             <SVG className={`button-primary__svg-icon u-txt-light u-dib ${this.state.isLoading ? 'u-anim-spin' : ''}`} icon="plus" />
                         </div>
                     </Generator>

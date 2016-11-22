@@ -12,10 +12,10 @@ export function updateIsLoading(isLoading) {
     };
 }
 
-export function updateIsLooping(isLooping) {
+export function updateloopMode(loopMode) {
     return {
-        type: 'UPDATE_IS_LOOOPING',
-        payload: { isLooping },
+        type: 'UPDATE_LOOPING_MODE',
+        payload: { loopMode },
     };
 }
 

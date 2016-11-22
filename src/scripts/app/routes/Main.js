@@ -21,7 +21,7 @@ import {
 } from '../utils/riffs';
 
 import { isMobile } from '../utils/mobile';
-import { compose, log, logError, throttle, trace } from '../utils/tools';
+import { compose, log, logError, throttle } from '../utils/tools';
 
 export default class Main extends Component {
     static contextTypes = {

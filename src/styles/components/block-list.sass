@@ -4,7 +4,7 @@ $block-list__line-height  : 1.5
 
 $block-list__inner-height : $block-list__font-size * $block-list__line-height
 $block-list__padding-y    : ($block-list__item-height - $block-list__inner-height) / 2
-$block-list__padding-x    : 15px
+$block-list__padding-x    : 12px
 
 $block-list__font-size--large   : 22px
 $block-list__line-height--large : ($block-list__item-height - ($block-list__padding-y * 2)) / $block-list__font-size--large
@@ -25,6 +25,9 @@ $block-list__line-height--large : ($block-list__item-height - ($block-list__padd
     &:not(:last-of-type)
         border-bottom: solid 1px $palette-alpha
 
+.block-list__content-spacing
+    padding: $block-list__padding-y $block-list__padding-x
+
 .block-list__body
     height: $block-list__item-height
     font-size: rem($block-list__font-size)
@@ -36,6 +39,12 @@ $block-list__line-height--large : ($block-list__item-height - ($block-list__padd
     .block-list__item.is-active &
         color: #fff
 
+    .block-list__item:not(.functionality-is-disabled).is-active &,
+    .block-list__item:not(.functionality-is-disabled):hover &
+        @media screen and (max-width: $mobile-small-bp)
+            +txt-truncate(90px)
+
+
 $block-list__handle-arrow-size: 4px
 $block-list__handle-arrow-spacing: 2px
 $block-list__handle-arrow-color: rgba(255, 255, 255, .25)
@@ -44,10 +53,6 @@ $block-list__handle-arrow-color: rgba(255, 255, 255, .25)
     height: $block-list__item-height
     width: $block-list__item-height
     background-color: rgba(0, 0, 0, .25)
-
-    .functionality-is-disabled &
-        background-color: rgba(0, 0, 0, .05)
-        pointer-events: none
 
     &::before,
     &::after
@@ -69,22 +74,24 @@ $block-list__handle-arrow-color: rgba(255, 255, 255, .25)
         border-width: $block-list__handle-arrow-size $block-list__handle-arrow-size 0 $block-list__handle-arrow-size
         border-color: $block-list__handle-arrow-color transparent transparent transparent
 
+
+.block-list__button
+    &.is-disablable
+        opacity: 0.15
+
+    .block-list__item:not(.functionality-is-disabled).is-active &.is-disablable,
+    .block-list__item:not(.functionality-is-disabled):hover &.is-disablable
+        opacity: 1
+
+    @media screen and (max-width: $mobile-small-bp)
+        &.is-disablable
+            display: none
+
+        .block-list__item:not(.functionality-is-disabled).is-active &.is-disablable,
+        .block-list__item:not(.functionality-is-disabled):hover &.is-disablable
+            display: block
+
 .block-list__button-icon
     width: $block-list__font-size
     height: $block-list__font-size
     margin-top: round(($block-list__font-size / $block-list__line-height) / 2)
-
-    .block-list__button.is-disablable &
-        transition: all 0.25s ease-in-out
-        opacity: 0.25
-
-    .block-list__item.is-active .block-list__button.is-disablable &,
-    .block-list__item:hover .block-list__button.is-disablable &
-        transform: translateY(0)
-        opacity: 1
-
-    .block-list__item.functionality-is-disabled.is-active .block-list__button.is-disablable &,
-    .block-list__item.functionality-is-disabled:hover .block-list__button.is-disablable &
-        transform: translateY(0)
-        opacity: .25
-        pointer-events: none

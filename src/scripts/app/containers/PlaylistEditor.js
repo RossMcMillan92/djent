@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { insert, update } from 'ramda';
 
 import Generator from '../components/Generator';
 import ReorderableList from '../components/ReorderableList';
@@ -71,13 +72,8 @@ class PlaylistEditor extends Component {
         e.stopPropagation();
         const { audioPlaylist, activePlaylistIndex } = this.props;
         const playlistItem = audioPlaylist[i];
-        const newAudioPlaylistItem = createPlaylistItem(playlistItem.id, playlistItem.audioTemplate, playlistItem.instruments, playlistItem.sequences, playlistItem.bpm);
-
-        const newAudioPlaylist = [
-            ...audioPlaylist.slice(0, i + 1),
-            newAudioPlaylistItem,
-            ...audioPlaylist.slice(i + 1, audioPlaylist.length)
-        ];
+        const newAudioPlaylistItem = createPlaylistItem(playlistItem.id, playlistItem.audioTemplate, playlistItem.instruments, playlistItem.sequences, playlistItem.bpm, playlistItem.isLocked);
+        const newAudioPlaylist = insert(i, newAudioPlaylistItem, audioPlaylist);
 
         this.props.actions.updateAudioPlaylist(newAudioPlaylist);
 
@@ -92,6 +88,16 @@ class PlaylistEditor extends Component {
         const selectedItem = { ...audioPlaylist[i] };
         const preset = createPreset(selectedItem);
         this.props.actions.applyPreset(preset);
+    }
+
+    onLockTrack = (e, i) => {
+        if (this.props.isPlaying) return;
+        const { audioPlaylist } = this.props;
+        const playlistItem = audioPlaylist[i];
+        const newAudioPlaylistItem = createPlaylistItem(playlistItem.id, playlistItem.audioTemplate, playlistItem.instruments, playlistItem.sequences, playlistItem.bpm, !playlistItem.isLocked);
+        const newAudioPlaylist = update(i, newAudioPlaylistItem, audioPlaylist);
+
+        this.props.actions.updateAudioPlaylist(newAudioPlaylist);
     }
 
     onGenerationStart = () => {
@@ -113,24 +119,33 @@ class PlaylistEditor extends Component {
                 key: item.key,
                 body: (
                     <div className="u-flex-row u-flex-justify">
-                        Riff {item.id} - {item.bpm}BPM - {item.sequences[0].bars} × {item.sequences[0].beats}
+                        <div className="u-flex-row u-align-center">
+                            <span
+                                className={`block-list__button u-mr1 ${item.isLocked ? 'u-txt-positive' : ''}`}
+                                onClick={(e) => this.onLockTrack(e, i)}
+                                title="Lock Track"
+                            >
+                                <SVG className="block-list__button-icon" icon="lock" />
+                            </span>
+                            Riff {item.id} - {item.bpm}BPM - {item.sequences[0].bars} × {item.sequences[0].beats}
+                        </div>
                         <div>
                             <span
-                                className="block-list__button u-mr1"
+                                className="block-list__button is-disablable u-mr1"
                                 onClick={(e) => this.onLoadSettings(e, i)}
                                 title="Load Settings"
                             >
                                 <SVG className="block-list__button-icon" icon="gear" />
                             </span>
                             <span
-                                className="block-list__button u-txt-negative u-mr1"
+                                className="block-list__button is-disablable u-txt-negative u-mr1"
                                 onClick={(e) => this.onDelete(e, i)}
                                 title="Delete"
                             >
                                 <SVG className="block-list__button-icon" icon="cross" />
                             </span>
                             <span
-                                className="block-list__button u-txt-positive"
+                                className="block-list__button is-disablable u-txt-positive"
                                 onClick={(e) => this.onDuplicate(e, i)}
                                 title="Duplicate"
                             >
@@ -139,7 +154,7 @@ class PlaylistEditor extends Component {
                         </div>
                     </div>
                 ),
-                className: `${activePlaylistIndex === i ? 'is-active' : ''} ${isPlaying ? 'functionality-is-disabled' : ''}`,
+                className: `${activePlaylistIndex === i ? 'is-active' : ''} ${isPlaying || item.isLocked ? 'functionality-is-disabled' : ''}`,
             }));
 
         return (

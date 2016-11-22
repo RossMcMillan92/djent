@@ -74,17 +74,17 @@ $block-list__handle-arrow-color: rgba(255, 255, 255, .25)
     height: $block-list__font-size
     margin-top: round(($block-list__font-size / $block-list__line-height) / 2)
 
-    transition: all 0.25s ease-in-out
-    transform: translateY(20%)
-    opacity: 0
+    .block-list__button.is-disablable &
+        transition: all 0.25s ease-in-out
+        opacity: 0.25
 
-    .block-list__item.is-active &,
-    .block-list__item:hover &
+    .block-list__item.is-active .block-list__button.is-disablable &,
+    .block-list__item:hover .block-list__button.is-disablable &
         transform: translateY(0)
         opacity: 1
 
-    .block-list__item.functionality-is-disabled.is-active &,
-    .block-list__item.functionality-is-disabled:hover &
+    .block-list__item.functionality-is-disabled.is-active .block-list__button.is-disablable &,
+    .block-list__item.functionality-is-disabled:hover .block-list__button.is-disablable &
         transform: translateY(0)
         opacity: .25
         pointer-events: none

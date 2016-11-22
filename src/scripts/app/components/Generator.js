@@ -16,6 +16,7 @@ class Generator extends Component {
     generationCount = 0;
 
     generateEvent = () => {
+        if (this.props.disabled) return;
         if (this.props.onGenerationStart) this.props.onGenerationStart();
         if (!this.state.isLoading) {
             this.setState({ isLoading: true });
@@ -43,6 +44,7 @@ class Generator extends Component {
 
         const wrapperProps = {
             onClick: () => this.generateEvent(),
+            disabled: this.props.disabled,
             className: this.props.wrapperClass
                 ? this.props.wrapperClass
                 : `button-primary button-primary--alpha-dark button-primary--small-icon ${this.props.buttonClassAppended ? this.props.buttonClassAppended : ''} ${this.state.isLoading ? '' : 'icon-is-hidden'}`,

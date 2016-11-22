@@ -180,6 +180,8 @@ class SoundController extends Component {
 
     render = () => {
         const eventName = this.props.isPlaying ? 'stop' : 'play';
+        const currentPlaylistItem = this.props.audioPlaylist[this.props.activePlaylistIndex];
+        const currentPlaylistItemIsLocked = currentPlaylistItem && currentPlaylistItem.isLocked;
 
         return (
             <div>
@@ -193,6 +195,7 @@ class SoundController extends Component {
                             instruments={ this.props.instruments }
                             usePredefinedSettings={ this.props.usePredefinedSettings }
                             onGenerationEnd={ this.onGenerationEnd }
+                            disabled={currentPlaylistItemIsLocked}
                         />
                     </div>
 

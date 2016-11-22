@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { assoc, map } from 'ramda';
 
 import Expandable from '../components/Expandable';
 import Spinner from '../components/Spinner';
@@ -16,11 +17,11 @@ import { getActiveSoundsFromHitTypes } from '../utils/instruments';
 import { getPresetData, getPresetFromData, handleGoogleAPI } from '../utils/short-urls';
 
 import {
-    generatePlaylistItem,
+    presetToPlaylistItem,
 } from '../utils/riffs';
 
-import { compose, log, logError, throttle } from '../utils/tools';
 import { isMobile } from '../utils/mobile';
+import { compose, log, logError, throttle, trace } from '../utils/tools';
 
 export default class Main extends Component {
     static contextTypes = {
@@ -84,9 +85,10 @@ export default class Main extends Component {
                 this.props.actions.applyPreset(sharedPresets[0]);
 
                 const playlistPromises = sharedPresets
-                    .map(this.presetToPlaylistItem);
+                    .map(presetToPlaylistItem);
 
-                return Promise.all(playlistPromises);
+                return Promise.all(playlistPromises)
+                    .then(map(assoc('isLocked', true)));
             })
             .then((audioPlaylist) => {
                 this.props.actions.updateAudioPlaylist(audioPlaylist);
@@ -112,12 +114,6 @@ export default class Main extends Component {
             });
 
         return preset;
-    }
-
-    presetToPlaylistItem = ({ id, settings }) => {
-        const { config, instruments, sequences } = settings;
-        const usePredefinedSettings = true;
-        return generatePlaylistItem(id, config.bpm, sequences, instruments, usePredefinedSettings);
     }
 
     refreshOnWindowResize = () => {

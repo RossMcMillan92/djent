@@ -2,14 +2,20 @@ import React, { Component } from 'react';
 import Dragula from 'react-dragula';
 
 class ReorderableList extends Component {
+    drake;
+
+    onComponentWillUnmount = () => {
+        this.drake.destroy();
+    }
+
     dragulaDecorator = (container) => {
         if (container) {
             const options = {
                 moves: (el, source, handle) => handle.classList.contains('js-handle'),
             };
-            const drake = Dragula([container], options);
+            this.drake = Dragula([container], options);
 
-            drake.on('drop', () => {
+            this.drake.on('drop', () => {
                 const newOrder = Array.from(container.children)
                     .map(el => el.getAttribute('data-key'));
 

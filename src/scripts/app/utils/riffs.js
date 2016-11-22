@@ -71,15 +71,22 @@ const generatePlaylistItem = (genID, bpm, sequences, instruments, usePredefinedS
             const bpmMultiplier = 60 / bpm;
             return renderAudioTemplateAtTempo(instrumentss, bpmMultiplier);
         })
-        .then((audioTemplate) => createPlaylistItem(genID, audioTemplate, newInstruments, sequences, bpm));
+        .then((audioTemplate) => createPlaylistItem(genID, audioTemplate, newInstruments, sequences, bpm, false));
+};
+
+const presetToPlaylistItem = ({ id, settings }) => {
+    const { config, instruments, sequences } = settings;
+    const usePredefinedSettings = true;
+    return generatePlaylistItem(id, config.bpm, sequences, instruments, usePredefinedSettings);
 };
 
 let playlistItemCount = 0;
-const createPlaylistItem = (genID, audioTemplate, instruments, sequences, bpm) => {
+const createPlaylistItem = (genID, audioTemplate, instruments, sequences, bpm, isLocked) => {
     const key = `${genID}-${playlistItemCount}`;
     playlistItemCount = playlistItemCount + 1;
     return {
         id: genID,
+        isLocked,
         key,
         audioTemplate,
         instruments,
@@ -98,4 +105,5 @@ export {
     generateRiff,
     generatePlaylistItem,
     getGenerationID,
+    presetToPlaylistItem,
 };

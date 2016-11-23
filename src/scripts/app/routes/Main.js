@@ -21,7 +21,7 @@ import {
 } from '../utils/riffs';
 
 import { isMobile } from '../utils/mobile';
-import { compose, log, logError, throttle } from '../utils/tools';
+import { compose, logError, throttle } from '../utils/tools';
 
 export default class Main extends Component {
     static contextTypes = {
@@ -93,7 +93,6 @@ export default class Main extends Component {
             .then((audioPlaylist) => {
                 this.props.actions.updateAudioPlaylist(audioPlaylist);
                 this.props.actions.disableModal();
-                log(audioPlaylist);
             })
             .catch(logError);
     }

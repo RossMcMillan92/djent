@@ -54,6 +54,10 @@ $block-list__handle-arrow-color: rgba(255, 255, 255, .25)
     width: $block-list__item-height
     background-color: rgba(0, 0, 0, .25)
 
+    .functionality-is-disabled &
+        opacity: 0.25
+        pointer-events: none
+
     &::before,
     &::after
         position: absolute

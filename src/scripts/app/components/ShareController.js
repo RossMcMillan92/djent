@@ -80,9 +80,8 @@ const ShareBox = (props) => (
         <input
             className="input-base input-base--bare input-base--large input-base--long"
             type="text"
-            value={props.url}
+            defaultValue={props.url}
             onClick={e => e.target.select()}
-            readOnly
         />
     </div>
 );

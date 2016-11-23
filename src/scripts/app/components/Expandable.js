@@ -1,25 +1,16 @@
 import React, { Component } from 'react';
-import { Either, IO, Maybe, lift2 } from 'ramda-fantasy';
+import { IO, Maybe } from 'ramda-fantasy';
 
 import {
-    chain,
     compose,
     curry,
     flip,
-    join,
     map,
-    prop,
 } from 'ramda';
-
-import InputBox from './InputBox';
-import NotePanel from './NotePanel';
-import SVG from './SVG';
 
 import { getLocalStorageIO, setLocalStorageIO } from '../modules/localStorageIO';
 import { toBoolean } from '../modules/casting';
-import { repeatArray, trace } from '../utils/tools';
 
-const either = Either.either;
 const maybe  = Maybe.maybe;
 
 //    getExpandableKeyName :: String -> String
@@ -58,13 +49,13 @@ const setStateIO = curry((ctx, state) =>
 class Expandable extends Component {
     isPristine = true;
 
-    constructor (props) {
+    constructor(props) {
         super();
         const localStorageValue = getLSItemOrDefault(false, props.title);
 
         this.state = {
             isExpanded: props.isExpanded || (props.enableStateSave && localStorageValue.runIO())
-        }
+        };
     }
 
     componentWillUpdate = (nextProps) => {
@@ -87,11 +78,11 @@ class Expandable extends Component {
     }
 
     render = () => (
-        <div className={`expandable ${ this.state.isExpanded ? 'is-expanded' : '' } ${ this.props.className ? this.props.className : '' }`}>
+        <div className={`expandable ${this.state.isExpanded ? 'is-expanded' : ''} ${this.props.className ? this.props.className : ''}`}>
             <div className={`expandable__title ${this.props.titleClassName ? this.props.titleClassName : ''}`} onClick={this.onClick}>
                 { this.props.title }
             </div>
-            <div className={`expandable__body ${this.props.bodyClassName ? this.props.bodyClassName : ''}`} onClick={() => this.isPristine = false}>
+            <div className={`expandable__body ${this.props.bodyClassName ? this.props.bodyClassName : ''}`} onClick={() => { this.isPristine = false; }}>
                 { this.props.children }
             </div>
         </div>

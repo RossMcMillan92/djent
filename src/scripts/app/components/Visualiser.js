@@ -6,11 +6,7 @@ import ShareController from '../containers/ShareController';
 import ExportController from '../containers/ExportController';
 
 import audioContext from '../utils/audioContext';
-import { getBufferFromAudioTemplate } from '../utils/instruments';
-
-import {
-    getTotalTimeLength,
-} from '../utils/sequences';
+import { renderBuffer } from '../utils/instruments';
 
 class Visualiser extends Component {
     containerWidth = 0;
@@ -31,9 +27,7 @@ class Visualiser extends Component {
         const firstAudioTemplate = nextProps.currentPlaylistItem && !this.props.currentPlaylistItem;
         const differentAudioTemplate = !firstAudioTemplate && nextProps.currentPlaylistItem && nextProps.currentPlaylistItem.id !== this.props.currentPlaylistItem.id;
         if (firstAudioTemplate || differentAudioTemplate) {
-            const timeoutLength = (nextProps.audioStartTime - audioContext.currentTime) * 1000;
-            this.setState({ isRenderingBuffer: true });
-            this.renderBuffer(nextProps.sequences, nextProps.bpm, nextProps.currentPlaylistItem.audioTemplate, timeoutLength);
+            this.updateBuffer(nextProps.audioStartTime, nextProps.currentPlaylistItem, nextProps.sequences, nextProps.bpm);
         }
     }
 
@@ -41,20 +35,21 @@ class Visualiser extends Component {
         if (this.updateBufferTimeout) clearTimeout(this.updateBufferTimeout);
     }
 
-    renderBuffer = (sequences, bpm, audioTemplate, timeoutLength = 0) => {
-        if (typeof audioTemplate === 'undefined') return;
-        if (this.updateBufferTimeout) clearTimeout(this.updateBufferTimeout);
-
-        this.timeLength = getTotalTimeLength(sequences, bpm);
-        getBufferFromAudioTemplate(audioTemplate, this.timeLength)
-            .then(buffer => {
-                this.updateBufferTimeout = setTimeout(() => this.setState({ buffer, isRenderingBuffer: false }), timeoutLength);
-            });
-    }
-
     componentDidUpdate = () => {
         const { container } = this.refs;
         this.containerWidth = container.offsetWidth;
+    }
+
+    updateBuffer = (audioStartTime, currentPlaylistItem, sequences, bpm) => {
+        const timeoutLength = (audioStartTime - audioContext.currentTime) * 1000;
+        this.setState({ isRenderingBuffer: true });
+        const audioTemplate = currentPlaylistItem.audioTemplate;
+        if (typeof audioTemplate === 'undefined') return;
+        if (this.updateBufferTimeout) clearTimeout(this.updateBufferTimeout);
+        renderBuffer(sequences, bpm, audioTemplate)
+            .then(buffer => {
+                this.updateBufferTimeout = setTimeout(() => this.setState({ buffer, isRenderingBuffer: false }), timeoutLength);
+            });
     }
 
     render = () => (
@@ -67,7 +62,7 @@ class Visualiser extends Component {
                     buffer={this.state.buffer}
                     audioContext={audioContext}
                     audioStartTime={this.props.audioStartTime}
-                    timeLength={this.timeLength}
+                    timeLength={this.state.buffer ? this.state.buffer.duration : 0}
                     width={this.containerWidth}
                     height={75}
                     amplified={true}

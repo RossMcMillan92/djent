@@ -122,6 +122,7 @@ const getInstrumentTrack = (instruments, instrumentID, channel) => {
 
 const buildMidiDataURIFromInstruments = (instruments, bpm) => {
     const kickTrack        = getInstrumentTrack(instruments, 'k', 10);
+    console.log('KICKTRACK', kickTrack)
     const snareTrack       = getInstrumentTrack(instruments, 's', 10);
     const hihatTrack       = getInstrumentTrack(instruments, 'h', 10);
     const cymbalTrack      = getInstrumentTrack(instruments, 'c', 10);

@@ -18,4 +18,4 @@ const setLocalStorageIO = curry((key, value) =>
 export {
     getLocalStorageIO,
     setLocalStorageIO,
-}
+};

@@ -1,6 +1,7 @@
 import {
     loopSequence,
     generateTimeMap,
+    getTotalTimeLength,
 } from './sequences';
 
 import {
@@ -75,6 +76,11 @@ const getBufferFromAudioTemplate = (audioTemplate, timeLength) => {
     });
 };
 
+const renderBuffer = (sequences, bpm, audioTemplate) => {
+    const duration = getTotalTimeLength(sequences, bpm);
+    return getBufferFromAudioTemplate(audioTemplate, duration);
+};
+
 const renderAudioTemplateAtTempo = (instruments, bpmMultiplier) => instruments
     .reduce((newArr, instrument) => {
         const hits = instrument.timeMap
@@ -139,6 +145,7 @@ export {
     getActiveSoundsFromHitTypes,
     getBufferFromAudioTemplate,
     renderAudioTemplateAtTempo,
+    renderBuffer,
     repeatHits,
     repeatSequence,
 };

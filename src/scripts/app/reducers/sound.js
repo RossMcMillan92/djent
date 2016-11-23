@@ -1,6 +1,17 @@
+import { compose, flip, map } from 'ramda';
+import { getLocalStorageIO } from '../modules/localStorageIO';
+
+//    getStoredLoopModeValue :: Key -> a
+const getStoredLoopModeValue = compose(
+    map(flip(parseInt)(10)),
+    getLocalStorageIO,
+);
+
+const storedLoopModeValue = getStoredLoopModeValue('loopMode').runIO();
+
 const initialState =  {
     isPlaying            : false,
-    loopMode          : 0,
+    loopMode             : typeof storedLoopModeValue !== 'undefined' ? storedLoopModeValue : 0,
     generationState      : undefined,
     currentAudioTemplate : undefined,
     audioPlaylist        : [],
@@ -56,5 +67,5 @@ export default function sound(state = initialState, action) {
 
         default:
             return state;
-  }
+    }
 }

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { compose } from 'ramda';
 
 import { saveAsWAVFile, saveAsMIDIFile } from '../utils/save';
@@ -39,7 +39,7 @@ const launchExportModal = (instruments, bpm, buffer, actions) => {
         }} />
     );
     actions.enableModal({ content, isCloseable: true, title: 'Export' });
-}
+};
 
 const ExportController = props => {
     const { instruments, bpm, buffer, actions } = props;
@@ -52,6 +52,6 @@ const ExportController = props => {
             Save
         </button>
     );
-}
+};
 
 export default ExportController;

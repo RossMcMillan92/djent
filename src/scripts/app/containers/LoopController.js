@@ -1,7 +1,7 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { compose, flip, map } from 'ramda';
+import { compose, map } from 'ramda';
 
 import { updateloopMode } from '../actions/sound';
 import { setLocalStorageIO } from '../modules/localStorageIO';

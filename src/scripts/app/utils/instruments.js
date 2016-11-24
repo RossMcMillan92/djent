@@ -1,15 +1,12 @@
 import {
     loopSequence,
     generateTimeMap,
-    getTotalTimeLength,
 } from './sequences';
 
 import {
     randFromTo,
     repeatArray,
 } from './tools';
-
-import { playSound } from './audio';
 
 const generateInstrumentTimeMap = (instrument) => ({
     ...instrument,
@@ -52,34 +49,6 @@ const generateInstrumentHitTypes = (instrument, usePredefinedSettings) => {
 const getActiveSoundsFromHitTypes = (hitTypes) => (!hitTypes ? [] : hitTypes)
     .reduce((newArr, hit) => newArr.includes(hit) ? newArr : [ ...newArr, hit ], [])
     .map(hit => ({ id: hit, enabled: true }));
-
-const getBufferFromAudioTemplate = (audioTemplate, timeLength) => {
-    const offlineCtx = new OfflineAudioContext(2, 44100 * timeLength, 44100);
-
-    audioTemplate.forEach(({
-        buffer,
-        startTime,
-        duration,
-        volume,
-        pitchAmount,
-        fadeInDuration,
-        fadeOutDuration,
-        reverb,
-    }) => {
-        playSound(offlineCtx, buffer, startTime, duration, volume, pitchAmount, fadeInDuration, fadeOutDuration, reverb);
-    });
-
-    return new Promise((res, rej) => {
-        offlineCtx.oncomplete = ev => res(ev.renderedBuffer);
-        offlineCtx.onerror    = ev => rej(ev.renderedBuffer);
-        offlineCtx.startRendering();
-    });
-};
-
-const renderBuffer = (sequences, bpm, audioTemplate) => {
-    const duration = getTotalTimeLength(sequences, bpm);
-    return getBufferFromAudioTemplate(audioTemplate, duration);
-};
 
 const renderAudioTemplateAtTempo = (instruments, bpmMultiplier) => instruments
     .reduce((newArr, instrument) => {
@@ -143,9 +112,7 @@ export {
     generateInstrumentTimeMap,
     generateInstrumentHitTypes,
     getActiveSoundsFromHitTypes,
-    getBufferFromAudioTemplate,
     renderAudioTemplateAtTempo,
-    renderBuffer,
     repeatHits,
     repeatSequence,
 };

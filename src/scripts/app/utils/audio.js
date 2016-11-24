@@ -1,6 +1,10 @@
-import { compose, curry, filter, prop, map } from 'ramda';
+import { chain, compose, curry, filter, prop, map, sequence } from 'ramda';
 import { Future } from 'ramda-fantasy';
 import { catchError, fork, logError } from '../utils/tools';
+
+import {
+    getTotalTimeLength,
+} from './sequences';
 
 const bufferCache = {};
 
@@ -67,6 +71,65 @@ const loadInstrumentBuffers = (context, instruments) =>
         filter(filterInstrumentsWithSounds),
     )(instruments);
 
+
+//    getBufferFromAudioTemplate :: audioTemplate -> timeLength -> Future audioBuffer
+const getBufferFromAudioTemplate = (audioTemplate, timeLength) => {
+    const offlineCtx = new OfflineAudioContext(2, 44100 * timeLength, 44100);
+
+    audioTemplate.forEach(({
+        buffer,
+        startTime,
+        duration,
+        volume,
+        pitchAmount,
+        fadeInDuration,
+        fadeOutDuration,
+    }) => {
+        playSound(offlineCtx, buffer, startTime, duration, volume, pitchAmount, fadeInDuration, fadeOutDuration);
+    });
+
+    return Future((rej, res) => {
+        offlineCtx.oncomplete = ev => res(ev.renderedBuffer);
+        offlineCtx.onerror    = ev => rej(ev.renderedBuffer);
+        offlineCtx.startRendering();
+    });
+};
+
+//    renderBuffer :: {sequences, bpm, audioTemplate} -> Future audioBuffer
+const renderBuffer = ({ sequences, bpm, audioTemplate }) => {
+    const duration = getTotalTimeLength(sequences, bpm);
+    return getBufferFromAudioTemplate(audioTemplate, duration);
+};
+
+//    audioPlaylistItemToRenderable :: audioPlaylistItem -> renderable
+const audioPlaylistItemToRenderable = ({ sequences, bpm, audioTemplate }) => ({ sequences, bpm, audioTemplate });
+
+//    combineAudioBuffers :: [audioBuffer] -> Task audioBuffer
+const combineAudioBuffers = audioBuffers => {
+    let totalDuration = 0;
+    const audioTemplate = audioBuffers.map(buffer => {
+        const startTime = totalDuration;
+        const duration = buffer.duration;
+
+        totalDuration = totalDuration + duration;
+        return {
+            buffer,
+            startTime,
+            duration,
+            volume: 1,
+        };
+    });
+    return getBufferFromAudioTemplate(audioTemplate, totalDuration);
+};
+
+//    renderAudioPlaylistToBuffer :: [audioPlaylistItem] -> Future [audioBuffer]
+const renderAudioPlaylistItemToBuffer = compose(
+    chain(combineAudioBuffers),
+    sequence(Future.of),
+    map(renderBuffer),
+    map(audioPlaylistItemToRenderable),
+);
+
 // getPitchPlaybackRatio :: Integer -> Integer
 const getPitchPlaybackRatio = (pitchAmount) => {
     const pitchIsPositive = pitchAmount > 0;
@@ -101,11 +164,15 @@ const playSound = (context, buffer, time, duration, volume, pitchAmount = 0, fad
     }
 
     source.start(time, 0, (duration + fadeOutDuration) * durationMultiplier);
-
     return source;
 };
 
 export {
+    audioPlaylistItemToRenderable,
+    combineAudioBuffers,
+    getBufferFromAudioTemplate,
     loadInstrumentBuffers,
     playSound,
+    renderAudioPlaylistItemToBuffer,
+    renderBuffer,
 };

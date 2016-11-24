@@ -6,7 +6,8 @@ import ShareController from '../containers/ShareController';
 import ExportController from '../containers/ExportController';
 
 import audioContext from '../utils/audioContext';
-import { renderBuffer } from '../utils/instruments';
+import { renderBuffer } from '../utils/audio';
+import { logError } from '../utils/tools';
 
 class Visualiser extends Component {
     containerWidth = 0;
@@ -46,8 +47,8 @@ class Visualiser extends Component {
         const audioTemplate = currentPlaylistItem.audioTemplate;
         if (typeof audioTemplate === 'undefined') return;
         if (this.updateBufferTimeout) clearTimeout(this.updateBufferTimeout);
-        renderBuffer(sequences, bpm, audioTemplate)
-            .then(buffer => {
+        renderBuffer({ sequences, bpm, audioTemplate })
+            .fork(logError, buffer => {
                 this.updateBufferTimeout = setTimeout(() => this.setState({ buffer, isRenderingBuffer: false }), timeoutLength);
             });
     }

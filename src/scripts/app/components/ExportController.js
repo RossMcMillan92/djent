@@ -1,8 +1,19 @@
 import React from 'react';
 import { compose } from 'ramda';
 
-import { saveAsWAVFile, saveAsMIDIFile } from '../utils/save';
+import { renderAudioPlaylistItemToBuffer } from '../utils/audio';
 import { buildMidiDataURIFromInstruments } from '../utils/midi';
+import { saveAsWAVFile, saveAsMIDIFile } from '../utils/save';
+import { logError } from '../utils/tools';
+
+const buildAndSaveMidi = compose(
+    saveAsMIDIFile,
+    buildMidiDataURIFromInstruments,
+);
+
+//    saveAudioPlaylistAsWav :: audioPlaylist -> WAV
+const saveAudioPlaylistAsWav = audioPlaylist => renderAudioPlaylistItemToBuffer(audioPlaylist)
+    .fork(logError, saveAsWAVFile);
 
 const ExportModal = ({ actions }) => (
     <div className="u-flex-row u-flex-wrap">
@@ -25,29 +36,24 @@ const ExportModal = ({ actions }) => (
     </div>
 );
 
-const buildAndSaveMidi = compose(
-    saveAsMIDIFile,
-    buildMidiDataURIFromInstruments,
-);
-
-const launchExportModal = (instruments, bpm, buffer, actions) => {
+const launchExportModal = (audioPlaylist, actions) => {
     const content = (
         <ExportModal actions={{
             disableModal: actions.disableModal,
-            saveMIDI: () => buildAndSaveMidi(instruments, bpm),
-            saveWAV: () => saveAsWAVFile(buffer),
+            // saveMIDI: () => buildAndSaveMidi(instruments, bpm),
+            saveWAV: () => saveAudioPlaylistAsWav(audioPlaylist),
         }} />
     );
     actions.enableModal({ content, isCloseable: true, title: 'Export' });
 };
 
 const ExportController = props => {
-    const { instruments, bpm, buffer, actions } = props;
+    const { audioPlaylist, actions } = props;
     return (
         <button
             className="button-primary button-primary--alpha-dark button-primary--tiny"
-            onClick={() => launchExportModal(instruments, bpm, buffer, actions)}
-            disabled={!buffer}
+            onClick={() => launchExportModal(audioPlaylist, actions)}
+            disabled={false}
         >
             Save
         </button>

@@ -113,24 +113,28 @@ const getMidiTrack = (name, bpm, track, instrumentNumber) =>
 const getMidiDataURIFromInstruments = (tracks) => new Writer(tracks).dataUri();
 
 const getInstrumentTrack = (instruments, instrumentID, channel) => {
-    const instrument   = instruments.find(i => i.id === instrumentID);
-    const midiData     = getMidiDataFromHitTypes(instrument.sounds, instrument.hitTypes);
-    const track        = getTrackFromInstrument(midiData, instrument.sequence, channel);
+    console.log('INSTRUMENTID', instrumentID)
+    console.log('INSTRUMENTS', instruments)
+    const instrument = instruments.find(i => i.id === instrumentID);
+    if (!instrument) return [];
+    console.log('INSTRUMENT', instrument)
+    const midiData   = getMidiDataFromHitTypes(instrument.sounds, instrument.hitTypes);
+    const track      = getTrackFromInstrument(midiData, instrument.sequence, channel);
 
     return track;
 };
 
 const buildMidiDataURIFromInstruments = (instruments, bpm) => {
-    const kickTrack        = getInstrumentTrack(instruments, 'k', 10);
-    console.log('KICKTRACK', kickTrack)
-    const snareTrack       = getInstrumentTrack(instruments, 's', 10);
-    const hihatTrack       = getInstrumentTrack(instruments, 'h', 10);
-    const cymbalTrack      = getInstrumentTrack(instruments, 'c', 10);
-    const guitarTrack      = getInstrumentTrack(instruments, 'g', 0);
+    const kickTrack       = getInstrumentTrack(instruments, 'k', 10);
+    const snareTrack      = getInstrumentTrack(instruments, 's', 10);
+    const hihatTrack      = getInstrumentTrack(instruments, 'h', 10);
+    const cymbalTrack     = getInstrumentTrack(instruments, 'c', 10);
+    const guitarTrack     = getInstrumentTrack(instruments, 'g', 0);
 
-    const drumsTrack       = combineMultipleTracks(snareTrack, hihatTrack, kickTrack, cymbalTrack);
-    const drumsMidiTrack   = getMidiTrack('Drums', bpm, drumsTrack);
-    const guitarMidiTrack  = getMidiTrack('Guitar', bpm, guitarTrack, 30);
+    const drumsTrack      = combineMultipleTracks(snareTrack, hihatTrack, kickTrack, cymbalTrack);
+    const drumsMidiTrack  = getMidiTrack('Drums', bpm, drumsTrack);
+    const guitarMidiTrack = getMidiTrack('Guitar', bpm, guitarTrack, 30);
+    console.log('GUITARMIDITRACK', guitarMidiTrack)
 
     const base64 = getMidiDataURIFromInstruments([ drumsMidiTrack, guitarMidiTrack ]);
     return base64;

@@ -1,14 +1,39 @@
 import React from 'react';
-import { compose } from 'ramda';
+import { compose, map } from 'ramda';
 
 import { renderAudioPlaylistItemToBuffer } from '../utils/audio';
 import { buildMidiDataURIFromInstruments } from '../utils/midi';
 import { saveAsWAVFile, saveAsMIDIFile } from '../utils/save';
-import { logError } from '../utils/tools';
+import { logError, trace } from '../utils/tools';
+
+const combineAudioPlaylistInstruments = audioPlaylist => {
+    const newAudioPlaylist = audioPlaylist
+        .map(({ instruments }) => instruments
+            .map(({ id, sounds, hitTypes, sequence }) => ({
+                id,
+                sounds: [ ...sounds ],
+                hitTypes: [ ...hitTypes ],
+                sequence: [ ...sequence ]
+            })))
+        .reduce((result, playlistItemInstruments, index) => {
+            if (result.length === 0) return playlistItemInstruments;
+            let newResult = result;
+            playlistItemInstruments
+                .forEach(instrument => {
+                    console.log('INSTRUMENT', instrument)
+                })
+            return newResult;
+        }, []);
+    console.log('NEWAUDIOPLAYLIST', newAudioPlaylist);
+};
 
 const buildAndSaveMidi = compose(
-    saveAsMIDIFile,
-    buildMidiDataURIFromInstruments,
+    // saveAsMIDIFile,
+    trace('midi'),
+    map((playlistItem) => buildMidiDataURIFromInstruments(playlistItem.instruments, playlistItem.bpm)),
+    trace('midi'),
+    combineAudioPlaylistInstruments,
+    trace('whit'),
 );
 
 //    saveAudioPlaylistAsWav :: audioPlaylist -> WAV
@@ -40,7 +65,7 @@ const launchExportModal = (audioPlaylist, actions) => {
     const content = (
         <ExportModal actions={{
             disableModal: actions.disableModal,
-            // saveMIDI: () => buildAndSaveMidi(instruments, bpm),
+            saveMIDI: () => buildAndSaveMidi(audioPlaylist),
             saveWAV: () => saveAudioPlaylistAsWav(audioPlaylist),
         }} />
     );

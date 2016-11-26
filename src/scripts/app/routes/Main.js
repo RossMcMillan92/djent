@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { assoc, map } from 'ramda';
+import { assoc, last, map, split } from 'ramda';
 
 import Expandable from '../components/Expandable';
 import Spinner from '../components/Spinner';
@@ -14,14 +14,14 @@ import { defaultAllowedLengths } from '../reducers/sequences';
 
 import presets, { backwardsCompatibility } from '../utils/presets';
 import { getActiveSoundsFromHitTypes } from '../utils/instruments';
-import { getPresetData, getPresetFromData, handleGoogleAPI } from '../utils/short-urls';
+import { getLongURLFromShareID, getPresetFromData, handleGoogleAPI } from '../utils/short-urls';
 
 import {
     presetToPlaylistItem,
 } from '../utils/riffs';
 
 import { isMobile } from '../utils/mobile';
-import { compose, logError, throttle } from '../utils/tools';
+import { compose, getHashQueryParam, logError, throttle } from '../utils/tools';
 
 export default class Main extends Component {
     static contextTypes = {
@@ -39,7 +39,7 @@ export default class Main extends Component {
 
         handleGoogleAPI()
             .then(() => {
-                this.setupSharedItems(shareID);
+                if (shareID) this.setupSharedItemsAndUpdate(shareID);
                 this.setState({ googleAPIHasLoaded: true });
             })
             .catch(e => logError(e));
@@ -64,7 +64,7 @@ export default class Main extends Component {
 
     componentWillUpdate = (nextProps) => {
         if (!this.props.params.shareID && nextProps.params.shareID) {
-            this.setupSharedItems(nextProps.params.shareID);
+            this.setupSharedItemsAndUpdate(nextProps.params.shareID);
         }
     }
 
@@ -73,12 +73,16 @@ export default class Main extends Component {
     }
 
     setupSharedItems = (shareID) => {
-        if (!shareID) return;
-        const dataPromises = shareID.split('-')
-            .map(getPresetData);
+        const longURLPromises = shareID.split('-')
+            .map(getLongURLFromShareID);
 
-        Promise.all(dataPromises)
-            .then(dataStrings => {
+        return Promise.all(longURLPromises)
+            .then(longURLs => {
+                if (longURLs.length === 1 && longURLs[0].includes('-')) {
+                    return compose(this.setupSharedItems, last, split('/'))(longURLs[0]);
+                }
+                const dataStrings = longURLs
+                    .map(getHashQueryParam('share'));
                 const sharedPresets = dataStrings
                     .map(this.dataStringToPreset);
 
@@ -89,7 +93,11 @@ export default class Main extends Component {
 
                 return Promise.all(playlistPromises)
                     .then(map(assoc('isLocked', true)));
-            })
+            });
+    }
+
+    setupSharedItemsAndUpdate = (shareID) => {
+        this.setupSharedItems(shareID)
             .then((audioPlaylist) => {
                 this.props.actions.updateAudioPlaylist(audioPlaylist);
                 this.props.actions.disableModal();
@@ -126,7 +134,7 @@ export default class Main extends Component {
 
     backToHome = () => {
         if (document.location.hash !== '#fwd') {
-            this.changeActivePageIdnex(0);
+            this.changeActivePageIndex(0);
         }
     }
 
@@ -149,7 +157,7 @@ export default class Main extends Component {
         this.props.actions.disableModal();
     }
 
-    changeActivePageIdnex = (index) => {
+    changeActivePageIndex = (index) => {
         if (this.state.activePageIndex === index) return;
         document.location.hash = index === 0 ? '' : '#fwd';
         this.setActivePageIndex(index);
@@ -161,7 +169,7 @@ export default class Main extends Component {
                 <div
                     key={i}
                     className={`nav-tab ${i === this.state.activePageIndex ? 'is-active' : ''}`}
-                    onClick={() => this.changeActivePageIdnex(i)}
+                    onClick={() => this.changeActivePageIndex(i)}
                 >
                     <div className="nav-tab__inner">
                         { tabName }
@@ -193,7 +201,7 @@ export default class Main extends Component {
                     viewHeight={true}
                     resistance={true}
                     index={this.state.activePageIndex}
-                    onChangeIndex={(i) => this.changeActivePageIdnex(i)}
+                    onChangeIndex={(i) => this.changeActivePageIndex(i)}
                 >
                     <Player
                         route={this.props.route}

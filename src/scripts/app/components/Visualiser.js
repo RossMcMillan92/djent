@@ -19,8 +19,9 @@ class Visualiser extends Component {
 
     componentWillMount = () => {
         if (this.props.currentPlaylistItem) {
+            const props = this.props;
             this.setState({ isRenderingBuffer: true });
-            this.renderBuffer(this.props.sequences, this.props.bpm, this.props.currentPlaylistItem.audioTemplate, this.props.currentPlaylistItem.audioStartTime);
+            this.updateBuffer(props.audioStartTime, props.currentPlaylistItem, props.sequences, props.bpm);
         }
     }
 

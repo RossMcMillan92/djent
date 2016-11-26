@@ -26,6 +26,7 @@ class PlaylistEditor extends Component {
         audioPlaylist: []
     }
 
+    trackLimit = 30;
     state = {
         isLoading: false,
     }
@@ -113,8 +114,8 @@ class PlaylistEditor extends Component {
     }
 
     render() {
-        const { activePlaylistIndex, isPlaying } = this.props;
-        const listItems = this.props.audioPlaylist
+        const { activePlaylistIndex, audioPlaylist, isPlaying } = this.props;
+        const listItems = audioPlaylist
             .map((item, i) => ({
                 key: item.key,
                 body: (
@@ -129,7 +130,7 @@ class PlaylistEditor extends Component {
                             </span>
 
                             <span className="block-list__body u-pl0 u-txt-truncate">
-                                Riff {item.id} - {item.bpm}BPM - {item.sequences[0].bars} × {item.sequences[0].beats}
+                                Track {item.id} - {item.bpm}BPM - {item.sequences[0].bars} × {item.sequences[0].beats}
                             </span>
                         </div>
                         <div className="u-flex-row u-align-center">
@@ -169,23 +170,28 @@ class PlaylistEditor extends Component {
                         onReorder={this.onReorder}
                     />
                 </div>
-                <div className="block-list">
-                    <Generator
-                        audioPlaylist={ this.props.audioPlaylist }
-                        bpm={ this.props.bpm }
-                        sequences={ this.props.sequences }
-                        instruments={ this.props.instruments }
-                        usePredefinedSettings={ this.props.usePredefinedSettings }
-                        onGenerationStart={ this.onGenerationStart }
-                        onGenerationEnd={ this.onGenerate }
-                        wrapperClass="block-list__item u-bg-gamma"
-                        wrapperComponent='div'
-                    >
-                        <div className="block-list__content-spacing u-tac">
-                            <SVG className={`button-primary__svg-icon u-txt-light u-dib ${this.state.isLoading ? 'u-anim-spin' : ''}`} icon="plus" />
+                {
+                    audioPlaylist.length < this.trackLimit
+                    ? (
+                        <div className="block-list">
+                            <Generator
+                                audioPlaylist={ this.props.audioPlaylist }
+                                bpm={ this.props.bpm }
+                                sequences={ this.props.sequences }
+                                instruments={ this.props.instruments }
+                                onGenerationStart={ this.onGenerationStart }
+                                onGenerationEnd={ this.onGenerate }
+                                wrapperClass="block-list__item u-bg-gamma"
+                                wrapperComponent='div'
+                            >
+                                <div className="block-list__content-spacing u-flex-row u-flex-justify-center">
+                                    <SVG className={`button-primary__svg-icon u-txt-light ${this.state.isLoading ? 'u-anim-spin' : ''}`} icon="plus" />
+                                </div>
+                            </Generator>
                         </div>
-                    </Generator>
-                </div>
+                    ) : null
+                }
+
             </div>
         );
     }

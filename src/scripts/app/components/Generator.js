@@ -32,9 +32,9 @@ class Generator extends Component {
     }
 
     generateFromProps = () => {
-        const { audioPlaylist, bpm, sequences, instruments, usePredefinedSettings } = this.props;
+        const { audioPlaylist, bpm, sequences, instruments } = this.props;
         this.generationCount = getGenerationID(this.generationCount + 1, audioPlaylist);
-        return generatePlaylistItem(this.generationCount, bpm, sequences, instruments, usePredefinedSettings);
+        return generatePlaylistItem(this.generationCount, bpm, sequences, instruments);
     }
 
     render = () => {

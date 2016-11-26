@@ -84,12 +84,12 @@ const parseQueryString = (url = window.location.href) =>
 			return { ...list, [key]: value || '' };
 		}, {});
 
-const getHashQueryParam = (param, url = window.location.hash) => {
+const getHashQueryParam = curry((param, url) => {
 	const paramPart1 = url.split(`${param}=`)[1];
 	if (!paramPart1) return '';
 
 	return paramPart1.split('&')[0];
-};
+});
 
 const loadScript = (path) => {
 	const script = document.createElement('script');

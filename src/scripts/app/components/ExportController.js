@@ -3,60 +3,42 @@ import { compose, map } from 'ramda';
 
 import { renderAudioPlaylistItemToBuffer } from '../utils/audio';
 import { buildMidiDataURIFromInstruments } from '../utils/midi';
-import { saveAsWAVFile, saveAsMIDIFile } from '../utils/save';
-import { logError, trace } from '../utils/tools';
+import { saveAsFile } from '../utils/save';
+import { logError } from '../utils/tools';
 
-const combineAudioPlaylistInstruments = audioPlaylist => {
-    const newAudioPlaylist = audioPlaylist
-        .map(({ instruments }) => instruments
-            .map(({ id, sounds, hitTypes, sequence }) => ({
-                id,
-                sounds: [ ...sounds ],
-                hitTypes: [ ...hitTypes ],
-                sequence: [ ...sequence ]
-            })))
-        .reduce((result, playlistItemInstruments, index) => {
-            if (result.length === 0) return playlistItemInstruments;
-            let newResult = result;
-            playlistItemInstruments
-                .forEach(instrument => {
-                    console.log('INSTRUMENT', instrument)
-                })
-            return newResult;
-        }, []);
-    console.log('NEWAUDIOPLAYLIST', newAudioPlaylist);
-};
-
+//    buildAndSaveMidi :: audioPlaylist -> ()
 const buildAndSaveMidi = compose(
-    // saveAsMIDIFile,
-    trace('midi'),
-    map((playlistItem) => buildMidiDataURIFromInstruments(playlistItem.instruments, playlistItem.bpm)),
-    trace('midi'),
-    combineAudioPlaylistInstruments,
-    trace('whit'),
+    map(({ title, url }) => saveAsFile('mid', title, url)),
+    map(({ id, instruments, bpm }) => ({
+        title: `djen-track-${id}`,
+        url: buildMidiDataURIFromInstruments(instruments, bpm)
+    })),
 );
 
-//    saveAudioPlaylistAsWav :: audioPlaylist -> WAV
+//    saveAudioPlaylistAsWav :: audioPlaylist -> ()
 const saveAudioPlaylistAsWav = audioPlaylist => renderAudioPlaylistItemToBuffer(audioPlaylist)
-    .fork(logError, saveAsWAVFile);
+    .fork(logError, saveAsFile('wav', 'djen'));
 
 const ExportModal = ({ actions }) => (
-    <div className="u-flex-row u-flex-wrap">
-        <div className="u-mr05">
-            <button
-                className="button-primary button-primary--small button-primary--positive"
-                onClick={ () => { actions.saveMIDI(); actions.disableModal(); } }
-            >
-                Save as MIDI
-            </button>
-        </div>
-        <div className="">
-            <button
-                className="button-primary button-primary--small button-primary--positive"
-                onClick={ () => { actions.saveWAV(); actions.disableModal(); } }
-            >
-                Save as WAV
-            </button>
+    <div>
+        <p className="u-mb1 u-txt-small">Note: Saving as MIDI will download all tracks separately. Saving as WAV will download a single combination of all tracks.</p>
+        <div className="u-flex-row u-flex-wrap">
+            <div className="u-mr05">
+                <button
+                    className="button-primary button-primary--small button-primary--positive"
+                    onClick={ () => { actions.saveMIDI(); actions.disableModal(); } }
+                >
+                    Save as MIDI
+                </button>
+            </div>
+            <div className="">
+                <button
+                    className="button-primary button-primary--small button-primary--positive"
+                    onClick={ () => { actions.saveWAV(); actions.disableModal(); } }
+                >
+                    Save as WAV
+                </button>
+            </div>
         </div>
     </div>
 );

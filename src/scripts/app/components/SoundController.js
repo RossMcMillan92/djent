@@ -194,13 +194,12 @@ class SoundController extends Component {
             <div>
                 { this.state.error ? <p className="txt-error">{ this.state.error }</p> : null }
                 <div className="u-flex-row u-flex-wrap">
-                    <div className={`visualiser-container__button visualiser-container__button--${this.props.generateButtonText.toLowerCase()} u-mr05 u-mb0`}>
+                    <div className="visualiser-container__button u-mr05 u-mb0">
                         <Generator
                             audioPlaylist={ this.props.audioPlaylist }
                             bpm={ this.props.bpm }
                             sequences={ this.props.sequences }
                             instruments={ this.props.instruments }
-                            usePredefinedSettings={ this.props.usePredefinedSettings }
                             onGenerationEnd={ this.onGenerationEnd }
                             disabled={currentPlaylistItemIsLocked}
                         />

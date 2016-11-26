@@ -1,12 +1,26 @@
 import React, { Component } from 'react';
+import { assoc } from 'ramda';
 import { compress } from 'lzutf8';
 import { createPreset } from '../utils/presets';
 import { compose, logError } from '../utils/tools';
 
 const domain = `${window.location.protocol}//${window.location.host}`;
 
+const shortURLCache = {};
+
+//    getGoogleShortURL :: url -> Promise url
+const getGoogleShortURL = url =>
+    shortURLCache[url]
+        ? shortURLCache[url]
+        : window.gapi.client.urlshortener.url
+            .insert({ longUrl: url })
+            .then(({ result }) => {
+                const shortURL = result.id;
+                shortURLCache[url] = shortURL;
+                return shortURL;
+            }, logError);
+
 class ShareController extends Component {
-    shortURLCache = {}
     state = {
         isEnabled: false,
         isLoading: false,
@@ -14,10 +28,10 @@ class ShareController extends Component {
     }
 
     getShortURLPromise = (preset) => compose(
-        this.getShortURL,
+        getGoogleShortURL,
         this.getShareableURL,
         createPreset,
-        (item) => ({ ...item, usePredefinedSettings: true })
+        assoc('usePredefinedSettings', true),
     )(preset);
 
     onClick = () => {
@@ -27,6 +41,13 @@ class ShareController extends Component {
 
         Promise.all(presetPromises)
             .then(this.combineShortURLs)
+            .then(url => {
+                if (url.includes('-')) {
+                    return getGoogleShortURL(url)
+                        .then(shortURL => this.combineShortURLs([shortURL]));
+                }
+                return url;
+            })
             .then(this.launchModal)
             .then(() => this.setState({ isLoading: false }));
     }
@@ -38,17 +59,7 @@ class ShareController extends Component {
         return shareableURL;
     }
 
-    getShortURL = url =>
-        this.shortURLCache[url]
-            ? this.shortURLCache[url]
-            : window.gapi.client.urlshortener.url
-                .insert({ longUrl: url })
-                .then(({ result }) => {
-                    const shortURL = result.id;
-                    this.shortURLCache[url] = shortURL;
-                    return shortURL;
-                }, logError);
-
+    // combineShortURLs :: [url] -> url
     combineShortURLs = (googleURLs) => {
         const urlIDs = googleURLs
             .map(url => url.split('/').pop());

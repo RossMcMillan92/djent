@@ -12,20 +12,24 @@ const preset = {
                 beats : 4,
             },
             {
-                id    : 'CUSTOM_SEQUENCE_1',
-                bars  : 1,
-                beats : 7.5,
-                hitChance : 1,
-                allowedLengths: [
+                id             : 'CUSTOM_SEQUENCE_1',
+                bars           : 1,
+                beats          : 7.5,
+                hitChance      : 1,
+                allowedLengths : [
                         {
                             id: '1',
-                            amount:1,
-                            isTriplet: false
+                            amount: 1,
+                            isDotted: true
+                        },
+                        {
+                            id: '2',
+                            amount: 1,
+                            isDotted: true
                         },
                         {
                             id: '4',
-                            amount:3,
-                            isTriplet: false
+                            amount: 3,
                         },
                 ],
             },

@@ -1,86 +1,136 @@
-import { log } from '../utils/audio';
+import { chain, compose, curry, filter, prop, map, sequence } from 'ramda';
+import { Future } from 'ramda-fantasy';
+import { catchError, fork, logError } from '../utils/tools';
+
+import {
+    getTotalTimeLength,
+} from './sequences';
 
 const bufferCache = {};
-const BufferLoader = (context) => {
-    const newInstrumentPack = [];
 
-    const loadBuffer = (instrument, index) => {
-        const newInstrument = Object.assign({}, instrument);
-        const enabledSounds = newInstrument.sounds.filter(sound => sound.enabled);
-        const bufferAmount = enabledSounds.length;
-        let bufferCount = 0;
-        newInstrument.buffers = {};
+// getBuffer :: url -> Future Error Buffer
+const getBuffer = curry((context, url) =>
+    Future((rej, res) => {
+        if (bufferCache[url]) return res(bufferCache[url]);
 
-        const loadingSound = new Promise((res, rej) => {
-            enabledSounds.forEach((sound) => {
-                const url = sound.path;
-                if (bufferCache[url]) {
-                    newInstrument.buffers[sound.id] = bufferCache[url];
-                    newInstrumentPack[index] = newInstrument;
-                    bufferCount++;
-                    if (bufferCount === bufferAmount) {
-                        res();
+        const request = new XMLHttpRequest();
+        request.open('GET', url, true);
+        request.responseType = 'arraybuffer';
+        request.onload = () =>
+            context.decodeAudioData(
+                request.response,
+                (buffer) => {
+                    if (!buffer) {
+                        rej(Error(`Error decoding file data: ${url}`));
+                        return;
                     }
-                    return;
-                }
+                    bufferCache[url] = buffer;
+                    res(buffer);
+                },
+                rej
+            );
+        request.onerror = rej;
+        request.send();
+    }));
 
-                // Load buffer asynchronously
-                const request = new XMLHttpRequest();
-                request.open('GET', url, true);
-                request.responseType = 'arraybuffer';
+// filterInstrumentsWithSounds :: [Instrument] -> [Instrument]
+const filterInstrumentsWithSounds = instrument =>
+    instrument.sounds.filter(sound => sound.enabled).length;
 
-                request.onload = () => {
-                    // Asynchronously decode the audio file data in request.response
-                    context.decodeAudioData(
-                        request.response,
-                        (buffer) => {
-                            if (!buffer) {
-                                // console.log('error decoding file data: ' + url);
-                                return;
-                            }
-                            newInstrument.buffers[sound.id] = buffer;
-                            bufferCache[url] = buffer;
-                            newInstrumentPack[index] = newInstrument;
-                            bufferCount++;
-                            if (bufferCount === bufferAmount) {
-                                res();
-                            }
-                        },
-                        (error) => {
-                            rej(error);
-                        }
-                    );
-                };
+// getBufferPromise :: Instrument -> Promise Error [Instrument]
+const getBufferPromise = curry((context, instrument) => {
+    const newInstrument = { ...instrument };
+    const enabledSounds = newInstrument.sounds
+        .filter(sound => sound.enabled);
+    newInstrument.buffers = {};
 
-                request.onerror = (error) => {
-                    rej(error);
-                };
-
-                request.send();
-            });
+    return new Promise((res, rej) => {
+        let bufferCount = 0;
+        enabledSounds.forEach((sound, i, sounds) => {
+            compose(
+                fork(rej, (buffer) => {
+                    newInstrument.buffers[sound.id] = buffer;
+                    bufferCount++;
+                    if (bufferCount === sounds.length) {
+                        res(newInstrument);
+                    }
+                }),
+                getBuffer(context),
+                prop('path'),
+            )(sound);
         });
+    });
+});
 
-        return loadingSound;
-    };
+// loadInstrumentBuffers :: context -> [Instrument] -> Promise Error [Instruments]
+const loadInstrumentBuffers = (context, instruments) =>
+    compose(
+        catchError(logError),
+        ps => Promise.all(ps),
+        map(getBufferPromise(context)),
+        filter(filterInstrumentsWithSounds),
+    )(instruments);
 
-    const load = (instruments) => {
-        const loadingSounds = instruments
-            .filter(instrument => instrument.sounds.filter(sound => sound.enabled).length)
-            .map(loadBuffer);
 
-        return Promise.all(loadingSounds)
-                .then(() => newInstrumentPack)
-                .catch(e => log(e));
-    };
+//    getBufferFromAudioTemplate :: audioTemplate -> timeLength -> Future audioBuffer
+const getBufferFromAudioTemplate = (audioTemplate, timeLength) => {
+    const offlineCtx = new OfflineAudioContext(2, 44100 * timeLength, 44100);
 
-    return {
-        load
-    };
+    audioTemplate.forEach(({
+        buffer,
+        startTime,
+        duration,
+        volume,
+        pitchAmount,
+        fadeInDuration,
+        fadeOutDuration,
+    }) => {
+        playSound(offlineCtx, buffer, startTime, duration, volume, pitchAmount, fadeInDuration, fadeOutDuration);
+    });
+
+    return Future((rej, res) => {
+        offlineCtx.oncomplete = ev => res(ev.renderedBuffer);
+        offlineCtx.onerror    = ev => rej(ev.renderedBuffer);
+        offlineCtx.startRendering();
+    });
 };
 
-const loadInstrumentBuffers = (context, instruments) => BufferLoader(context)
-    .load(instruments);
+//    renderBuffer :: {sequences, bpm, audioTemplate} -> Future audioBuffer
+const renderBuffer = ({ sequences, bpm, audioTemplate }) => {
+    const duration = getTotalTimeLength(sequences, bpm);
+    return getBufferFromAudioTemplate(audioTemplate, duration);
+};
 
+//    audioPlaylistItemToRenderable :: audioPlaylistItem -> renderable
+const audioPlaylistItemToRenderable = ({ sequences, bpm, audioTemplate }) => ({ sequences, bpm, audioTemplate });
+
+//    combineAudioBuffers :: [audioBuffer] -> Task audioBuffer
+const combineAudioBuffers = audioBuffers => {
+    let totalDuration = 0;
+    const audioTemplate = audioBuffers.map(buffer => {
+        const startTime = totalDuration;
+        const duration = buffer.duration;
+
+        totalDuration = totalDuration + duration;
+        return {
+            buffer,
+            startTime,
+            duration,
+            volume: 1,
+        };
+    });
+    return getBufferFromAudioTemplate(audioTemplate, totalDuration);
+};
+
+//    renderAudioPlaylistToBuffer :: [audioPlaylistItem] -> Future [audioBuffer]
+const renderAudioPlaylistItemToBuffer = compose(
+    chain(combineAudioBuffers),
+    sequence(Future.of),
+    map(renderBuffer),
+    map(audioPlaylistItemToRenderable),
+);
+
+// getPitchPlaybackRatio :: Integer -> Integer
 const getPitchPlaybackRatio = (pitchAmount) => {
     const pitchIsPositive = pitchAmount > 0;
     const negAmount = pitchIsPositive ? pitchAmount * -1 : pitchAmount;
@@ -89,7 +139,7 @@ const getPitchPlaybackRatio = (pitchAmount) => {
     return pitchIsPositive ? 1 / val : val;
 };
 
-const playSound = (context, buffer, time, duration, volume, pitchAmount = 0, fadeInDuration = 0, fadeOutDuration = 0, reverb = false) => {
+const playSound = (context, buffer, time, duration, volume, pitchAmount = 0, fadeInDuration = 0, fadeOutDuration = 0) => {
     if (!buffer) return;
 
     const source = context.createBufferSource();
@@ -114,11 +164,15 @@ const playSound = (context, buffer, time, duration, volume, pitchAmount = 0, fad
     }
 
     source.start(time, 0, (duration + fadeOutDuration) * durationMultiplier);
-
     return source;
 };
 
 export {
+    audioPlaylistItemToRenderable,
+    combineAudioBuffers,
+    getBufferFromAudioTemplate,
     loadInstrumentBuffers,
     playSound,
+    renderAudioPlaylistItemToBuffer,
+    renderBuffer,
 };

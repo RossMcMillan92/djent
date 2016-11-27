@@ -1,10 +1,13 @@
-$button-primary__spacing: 15px
-$button-primary__total-line-height: 18px
-$button-primary__line-height: 1.4
-$button-primary__font-size: round($button-primary__total-line-height / $button-primary__line-height)
-$button-primary__svg-icon-size: $button-primary__total-line-height
-$button-primary__default-color: #fff
-$button-primary__default-bg-color: rgba(0, 0, 0, 0.2)
+$button-primary__spacing           : 15px
+$button-primary__total-line-height : 18px
+$button-primary__line-height       : 1.4
+$button-primary__font-size         : round($button-primary__total-line-height / $button-primary__line-height)
+$button-primary__icon-size         : $button-primary__font-size
+$button-primary__icon-size--large  : $button-primary__total-line-height
+$button-primary__svg-icon-margin   : ($button-primary__total-line-height - $button-primary__font-size) / 2
+$button-primary__svg-icon-size     : $button-primary__total-line-height
+$button-primary__default-color     : #fff
+$button-primary__default-bg-color  : rgba(0, 0, 0, 0.2)
 
 .button-primary
     position: relative
@@ -23,6 +26,7 @@ $button-primary__default-bg-color: rgba(0, 0, 0, 0.2)
     transition: all .1s ease-in-out
     user-select: none
     -webkit-tap-highlight-color: transparent
+    vertical-align: middle
 
     &:not([disabled]):hover,
     &:not([disabled]):focus
@@ -39,10 +43,31 @@ $button-primary__default-bg-color: rgba(0, 0, 0, 0.2)
         color: darken($button-primary__default-bg-color, 10%)
         cursor: default
 
+    &.button-primary--joined
+        border-radius: 0
+
+    &.button-primary--joined:first-of-type
+        border-top-left-radius: 3px
+        border-bottom-left-radius: 3px
+        border-right: solid 2px rgba(0, 0, 0, .25)
+
+    &.button-primary--joined:last-of-type
+        border-top-right-radius: 3px
+        border-bottom-right-radius: 3px
+        border-right: none
+
+
 .button-primary__svg-icon
     display: block
-    width: $button-primary__svg-icon-size
-    height: $button-primary__svg-icon-size
+    width: $button-primary__icon-size
+    height: $button-primary__icon-size
+    margin: $button-primary__svg-icon-margin
+
+.button-primary__svg-icon--large
+    width: $button-primary__icon-size--large
+    height: $button-primary__icon-size--large
+    margin: 0
+
 
 .button-primary__icon,
 .button-primary__inner
@@ -56,6 +81,10 @@ $button-primary__default-bg-color: rgba(0, 0, 0, 0.2)
     .icon-is-hidden &
         opacity: 1
         transform: scale(1)
+
+    .button-primary--full &
+        width: 100%
+        text-align: center
 
 .button-primary__icon
     position: absolute
@@ -107,6 +136,13 @@ $button-primary__default-bg-color: rgba(0, 0, 0, 0.2)
     width: 100%
     max-width: 400px
     margin: 0 auto
+
+.button-primary--alpha
+    background-color: $palette-alpha
+
+    &:not([disabled]):hover,
+    &:not([disabled]):focus
+        background-color: darken($palette-alpha, 5%)
 
 .button-primary--alpha-dark
     background-color: $palette-alpha-dark

@@ -12,10 +12,10 @@ export function updateIsLoading(isLoading) {
     };
 }
 
-export function updateIsLooping(isLooping) {
+export function updateloopMode(loopMode) {
     return {
-        type: 'UPDATE_IS_LOOOPING',
-        payload: { isLooping },
+        type: 'UPDATE_LOOPING_MODE',
+        payload: { loopMode },
     };
 }
 
@@ -33,10 +33,17 @@ export function updateGenerationState(generationState) {
     };
 }
 
-export function updateCurrentAudioTemplate(currentAudioTemplate) {
+export function updateAudioPlaylist(audioPlaylist) {
     return {
-        type: 'UPDATE_CURRENT_AUDIO_TEMPLATE',
-        payload: { currentAudioTemplate },
+        type: 'UPDATE_AUDIO_PLAYLIST',
+        payload: { audioPlaylist },
+    };
+}
+
+export function updateActivePlaylistIndex(activePlaylistIndex) {
+    return {
+        type: 'UPDATE_ACTIVE_PLAYLIST_INDEX',
+        payload: { activePlaylistIndex: activePlaylistIndex < 0 ? 0 : activePlaylistIndex },
     };
 }
 

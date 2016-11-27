@@ -14,7 +14,7 @@ const preset = {
             {
                 id             : 'CUSTOM_SEQUENCE_1',
                 bars           : 1,
-                beats          : 5,
+                beats          : 7,
                 hitChance      : 1,
                 allowedLengths : [
                         {

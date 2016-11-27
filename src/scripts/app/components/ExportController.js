@@ -21,7 +21,7 @@ const saveAudioPlaylistAsWav = audioPlaylist => renderAudioPlaylistItemToBuffer(
 
 const ExportModal = ({ actions }) => (
     <div>
-        <p className="u-mb1 u-txt-small">Note: Saving as MIDI will download all tracks separately. Saving as WAV will download a single combination of all tracks.</p>
+        <p className="u-mb1 u-txt-small">Note: Saving as MIDI will download all tracks separately. Saving as WAV will combine all tracks.</p>
         <div className="u-flex-row u-flex-wrap">
             <div className="u-mr05">
                 <button

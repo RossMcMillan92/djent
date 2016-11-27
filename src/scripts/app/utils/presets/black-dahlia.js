@@ -1,6 +1,6 @@
 const preset = {
     id: 'black-dahlia',
-    description: 'Black Dhalia Murder',
+    description: 'Blast Beats',
     settings: {
         config: {
             bpm            : 212,
@@ -54,7 +54,7 @@ const preset = {
             },
             {
                 id: 'k',
-                volume: .8,
+                volume: 0.8,
                 sequences: [
                     'steadyEighths',
                 ],
@@ -67,7 +67,7 @@ const preset = {
             },
             {
                 id: 's',
-                volume: .7,
+                volume: 0.7,
                 sequences: [
                     'offsetEighths',
                 ],

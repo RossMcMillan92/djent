@@ -1,6 +1,6 @@
 const preset = {
     id: 'thall-triplets',
-    description: 'Thall - Triplets',
+    description: 'Thall III',
     settings: {
         config: {
             bpm       : 104,
@@ -18,17 +18,17 @@ const preset = {
                 hitChance : 1,
                 allowedLengths: [
                         {
-                            id: "0.25",
+                            id: '0.25',
                             amount: 1,
                             isTriplet: true
                         },
                         {
-                            id: "0.5",
+                            id: '0.5',
                             amount: 1,
                             isTriplet: true
                         },
                         {
-                            id: "2",
+                            id: '2',
                             amount:1,
                             isTriplet: true
                         },
@@ -111,6 +111,6 @@ const preset = {
             },
         ]
     }
-}
+};
 
 export default preset;

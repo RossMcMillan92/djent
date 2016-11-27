@@ -39,17 +39,14 @@ const preset = {
             {
                 id    : 'CUSTOM_SEQUENCE_2',
                 description: 'Cymbal Beat',
-                bars  : 1,
-                beats : 6,
+                bars  : 4,
+                beats : 4,
                 hitChance : 1,
                 allowedLengths: [
                         {
-                            id: '0.5',
-                            amount: 1,
-                        },
-                        {
                             id: '1',
                             amount: 1,
+                            isDotted: true,
                         },
                 ],
             },
@@ -87,9 +84,26 @@ const preset = {
             },
             {
                 id: 's',
+                sequences: [
+                    'offsetWhole',
+                    'offsetHalves',
+                ],
                 sounds: [
                     {
                         id: 's',
+                        enabled: true,
+                    }
+                ],
+            },
+            {
+                id: 's',
+                volume: 0.3,
+                sequences: [
+                    'steadyQuarters',
+                ],
+                sounds: [
+                    {
+                        id: 'hc',
                         enabled: true,
                     }
                 ],
@@ -100,14 +114,6 @@ const preset = {
                     'CUSTOM_SEQUENCE_2',
                 ],
                 sounds: [
-                    {
-                        id: 'crash-left',
-                        enabled: true,
-                    },
-                    {
-                        id: 'crash-right',
-                        enabled: true,
-                    },
                     {
                         id: 'china-left',
                         enabled: true,

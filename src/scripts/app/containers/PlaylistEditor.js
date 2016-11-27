@@ -171,24 +171,22 @@ class PlaylistEditor extends Component {
                     />
                 </div>
                 {
-                    audioPlaylist.length < this.trackLimit
+                    audioPlaylist.length > 0 && (audioPlaylist.length < this.trackLimit)
                     ? (
-                        <div className="block-list">
-                            <Generator
-                                audioPlaylist={ this.props.audioPlaylist }
-                                bpm={ this.props.bpm }
-                                sequences={ this.props.sequences }
-                                instruments={ this.props.instruments }
-                                onGenerationStart={ this.onGenerationStart }
-                                onGenerationEnd={ this.onGenerate }
-                                wrapperClass="block-list__item u-bg-gamma"
-                                wrapperComponent='div'
-                            >
-                                <div className="block-list__content-spacing u-flex-row u-flex-justify-center">
-                                    <SVG className={`button-primary__svg-icon u-txt-light ${this.state.isLoading ? 'u-anim-spin' : ''}`} icon="plus" />
-                                </div>
-                            </Generator>
-                        </div>
+                        <Generator
+                            audioPlaylist={ this.props.audioPlaylist }
+                            bpm={ this.props.bpm }
+                            sequences={ this.props.sequences }
+                            instruments={ this.props.instruments }
+                            onGenerationStart={ this.onGenerationStart }
+                            onGenerationEnd={ this.onGenerate }
+                            wrapperClass="button-primary button-primary--full button-primary--gamma"
+                            wrapperComponent='button'
+                        >
+                            <div className="u-flex-row u-flex-justify-center">
+                                <SVG className={`button-primary__svg-icon u-txt-light ${this.state.isLoading ? 'u-anim-spin' : ''}`} icon="plus" />
+                            </div>
+                        </Generator>
                     ) : null
                 }
 

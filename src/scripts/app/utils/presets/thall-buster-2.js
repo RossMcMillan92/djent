@@ -1,6 +1,6 @@
 const preset = {
     id: 'thall',
-    description: 'Thall',
+    description: 'Thall I',
     settings: {
         config: {
             bpm       : 87,
@@ -18,12 +18,12 @@ const preset = {
                 hitChance : 1,
                 allowedLengths: [
                         {
-                            id: "1",
+                            id: '1',
                             amount:1,
                             isTriplet: false
                         },
                         {
-                            id: "4",
+                            id: '4',
                             amount:3,
                             isTriplet: false
                         },
@@ -122,6 +122,6 @@ const preset = {
             },
         ]
     }
-}
+};
 
 export default preset;

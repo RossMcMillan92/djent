@@ -93,12 +93,23 @@ class SoundController extends Component {
         }
     }
 
+    scheduleThreshold = 0.90;
     scheduleNextPlaylistItem = (playlistItem, audioStartTime) => {
         const totalLength          = getTotalTimeLength(playlistItem.sequences, playlistItem.bpm);
         const audioTemplateEndTime = audioStartTime + (totalLength);
         const audioProgress        = audioContext.currentTime - audioStartTime;
         const timeTillEnd          = (audioTemplateEndTime - (audioStartTime + audioProgress));
-        const timeThreshold        = timeTillEnd * 0.9;
+
+        if (timeTillEnd < 0) {
+            setTimeout(() => this.stopEvent(), 0);
+            return this.props.actions.enableModal({
+                title: 'Error!',
+                isCloseable: true,
+                content: <p>Sorry, we had to stop because the browser is overloaded. Hit play again!</p>
+            });
+        }
+
+        const timeThreshold        = timeTillEnd * this.scheduleThreshold;
         const stopEventDiff        = timeTillEnd - timeThreshold;
 
         this.loopTimeout = setTimeout(() => {
@@ -111,7 +122,9 @@ class SoundController extends Component {
 
             if (loopMode || newPlaylistIndex !== 0) {
                 this.trueActivePlaylistIndex = newPlaylistIndex;
-                if (isPlaying) this.updateInstrumentsAndPlay(newPlaylistIndex, false, audioTemplateEndTime);
+                const newStartTime = Math.max(audioContext.currentTime, audioTemplateEndTime);
+                if (newStartTime === audioContext.currentTime) this.scheduleThreshold = this.scheduleThreshold - 0.05;
+                if (isPlaying) this.updateInstrumentsAndPlay(newPlaylistIndex, false, newStartTime);
                 this.stopTimeout = setTimeout(() => {
                     actions.updateActivePlaylistIndex(newPlaylistIndex);
                 }, stopEventDiff * 1000);

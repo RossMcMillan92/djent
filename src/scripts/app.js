@@ -14,6 +14,5 @@ import 'assets/images/favicon.ico';
 import '../styles/app.sass';
 
 import 'app/libraries/HackTimer';
-import 'file!sw/sw';
 
 import 'app/index';

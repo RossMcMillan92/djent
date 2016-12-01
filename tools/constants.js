@@ -1,5 +1,5 @@
 const sourceDir     = '/src';
-const buildDir      = '/build';
+const buildDir      = '/public';
 const configDir     = '/tools';
 const entryJSFile   = `${sourceDir}/scripts/app.js`;
 const outputCSSFile = 'app.css';

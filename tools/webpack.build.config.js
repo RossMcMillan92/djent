@@ -8,6 +8,8 @@ const cwd = process.cwd();
 const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 
+console.log('dsad', process.env.NODE_ENV)
+
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const cssExtractor = new ExtractTextPlugin(outputCSSFile);
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -52,7 +54,10 @@ const config = Object.assign({}, base, {
             { from: 'node_modules/sw-toolbox/sw-toolbox.js', to: 'node_modules/sw-toolbox' },
         ]),
         new webpack.DefinePlugin({
-            NODE_ENV: JSON.stringify('production')
+            NODE_ENV: JSON.stringify('production'),
+            'process.env': {
+                NODE_ENV: JSON.stringify('production')
+            }
         }),
         new webpack.optimize.UglifyJsPlugin({
             debug: true,

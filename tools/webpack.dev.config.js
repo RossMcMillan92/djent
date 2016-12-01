@@ -60,7 +60,10 @@ const config = Object.assign({}, base, {
             { from: 'node_modules/sw-toolbox/sw-toolbox.js', to: 'node_modules/sw-toolbox/assets' },
         ]),
         new webpack.DefinePlugin({
-            NODE_ENV: JSON.stringify('development')
+            NODE_ENV: JSON.stringify('development'),
+            'process.env': {
+                NODE_ENV: JSON.stringify('development')
+            }
         }),
         cssExtractor,
     ],

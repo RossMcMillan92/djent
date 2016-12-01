@@ -1,3 +1,4 @@
+/* global NODE_ENV */
 import { applyMiddleware, createStore } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
@@ -7,7 +8,7 @@ export default function configureStore(initialState) {
   const logger = createLogger({
     collapsed: true,
     predicate: () =>
-    process.env.NODE_ENV === `development`, // eslint-disable-line no-unused-vars
+        NODE_ENV === 'development', // eslint-disable-line no-unused-vars
   });
 
   const middleware = applyMiddleware(thunkMiddleware, logger);

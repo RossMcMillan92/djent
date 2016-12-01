@@ -1,6 +1,6 @@
 // https://github.com/grimmdude/MidiWriterJS
 // MIDI reference: https://www.csie.ntu.edu.tw/~r92092/ref/midi/
-import { roundToXPlaces } from '../utils/tools';
+import { roundToXPlaces } from 'utils/tools';
 
 
 (function() {

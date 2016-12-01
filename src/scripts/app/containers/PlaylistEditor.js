@@ -3,23 +3,23 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { insert, update } from 'ramda';
 
-import Generator from '../components/Generator';
-import ReorderableList from '../components/ReorderableList';
-import SVG from '../components/SVG';
+import Generator from 'components/Generator';
+import ReorderableList from 'components/ReorderableList';
+import SVG from 'components/SVG';
 
 import {
     updateAudioPlaylist,
     updateActivePlaylistIndex,
     updateIsPlaying,
-} from '../actions/sound';
+} from 'actions/sound';
 
 import {
     applyPreset
-} from '../actions/config';
+} from 'actions/config';
 
-import { createPreset } from '../utils/presets';
-import { createPlaylistItem } from '../utils/riffs';
-import { confineToRange, splice } from '../utils/tools';
+import { createPreset } from 'utils/presets';
+import { createPlaylistItem } from 'utils/riffs';
+import { confineToRange, splice } from 'utils/tools';
 
 class PlaylistEditor extends Component {
     static defaultProps = {

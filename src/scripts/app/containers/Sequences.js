@@ -1,9 +1,9 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import Sequences from '../routes/Sequences';
+import Sequences from 'routes/Sequences';
 
-import { addSequence } from '../actions/sequences';
+import { addSequence } from 'actions/sequences';
 
 function mapStateToProps(state) {
     return {

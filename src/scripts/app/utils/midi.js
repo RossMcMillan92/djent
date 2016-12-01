@@ -3,7 +3,7 @@ import {
     ProgramChangeEvent,
     Track,
     Writer,
-} from '../libraries/MidiWriter';
+} from 'libraries/MidiWriter';
 
 const convertBPMtoMidi = (bpm) => (bpm / 60) * 250;
 

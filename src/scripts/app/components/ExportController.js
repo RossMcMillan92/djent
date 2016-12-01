@@ -1,10 +1,10 @@
 import React from 'react';
 import { compose, map } from 'ramda';
 
-import { renderAudioPlaylistItemToBuffer } from '../utils/audio';
-import { buildMidiDataURIFromInstruments } from '../utils/midi';
-import { saveAsFile } from '../utils/save';
-import { logError } from '../utils/tools';
+import { renderAudioPlaylistItemToBuffer } from 'utils/audio';
+import { buildMidiDataURIFromInstruments } from 'utils/midi';
+import { saveAsFile } from 'utils/save';
+import { logError } from 'utils/tools';
 
 //    buildAndSaveMidi :: audioPlaylist -> ()
 const buildAndSaveMidi = compose(

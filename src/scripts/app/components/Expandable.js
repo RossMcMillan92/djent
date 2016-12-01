@@ -8,8 +8,8 @@ import {
     map,
 } from 'ramda';
 
-import { getLocalStorageIO, setLocalStorageIO } from '../modules/localStorageIO';
-import { toBoolean } from '../modules/casting';
+import { getLocalStorageIO, setLocalStorageIO } from 'modules/localStorageIO';
+import { toBoolean } from 'modules/casting';
 
 const maybe  = Maybe.maybe;
 

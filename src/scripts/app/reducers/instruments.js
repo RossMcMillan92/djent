@@ -1,5 +1,5 @@
-import { extendObjectArrayByID, deepClone, updateObjByID } from '../utils/tools';
-import defaultInstruments from '../utils/default-instruments';
+import { extendObjectArrayByID, deepClone, updateObjByID } from 'utils/tools';
+import defaultInstruments from 'utils/default-instruments';
 
 const initialState = defaultInstruments;
 

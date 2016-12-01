@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { predefinedSequences } from '../utils/sequences';
+import { predefinedSequences } from 'utils/sequences';
 
 class SequenceController extends Component {
     onSequenceClick = ({ enabledSequences, sequenceID }) => {

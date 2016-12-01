@@ -6,7 +6,7 @@ import {
 import {
     randomFromArray,
     repeatArray
-} from '../utils/tools';
+} from 'utils/tools';
 
 const predefinedSequences = {
     steadyWholes: {

@@ -10,4 +10,4 @@ const getTargetValueFromEvent = compose(
 
 export {
     getTargetValueFromEvent,
-}
+};

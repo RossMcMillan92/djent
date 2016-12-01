@@ -3,9 +3,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { compose, map } from 'ramda';
 
-import { updateloopMode } from '../actions/sound';
-import { setLocalStorageIO } from '../modules/localStorageIO';
-import SVG from '../components/SVG';
+import { updateloopMode } from 'actions/sound';
+import { setLocalStorageIO } from 'modules/localStorageIO';
+import SVG from 'components/SVG';
 
 //    toggleLoopMode :: loopMode -> loopMode
 const toggleLoopMode = (loopMode) => loopMode + 1 <= 2 ? loopMode + 1 : 0;

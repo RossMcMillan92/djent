@@ -3,11 +3,11 @@ import React, { Component } from 'react';
 import {
     getGenerationID,
     generatePlaylistItem,
-} from '../utils/riffs';
+} from 'utils/riffs';
 
 import {
     logError,
-} from '../utils/tools';
+} from 'utils/tools';
 
 class Generator extends Component {
     state = {

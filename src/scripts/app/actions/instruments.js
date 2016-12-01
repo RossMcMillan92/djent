@@ -1,4 +1,4 @@
-import { confineToRange } from '../utils/tools';
+import { confineToRange } from 'utils/tools';
 
 export function updateInstrumentSound({ soundID, parentID, prop, value }) {
     return {

@@ -30,5 +30,7 @@
         "max-len": 0,
         "no-param-reassign": 0,
         "no-case-declarations": 0,
+        "import/no-unresolved": 0,
+        "global-require": 0,
     }
 }

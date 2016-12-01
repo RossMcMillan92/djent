@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { assoc } from 'ramda';
 import { compress } from 'lzutf8';
-import { createPreset } from '../utils/presets';
-import { compose, logError } from '../utils/tools';
+import { createPreset } from 'utils/presets';
+import { compose, logError } from 'utils/tools';
 
 const domain = `${window.location.protocol}//${window.location.host}`;
 

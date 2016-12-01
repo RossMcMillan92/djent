@@ -1,3 +1,4 @@
+/* global NODE_ENV */
 /* eslint no-console: 0 */
 
 import deepExtend from 'deep-extend';
@@ -134,7 +135,7 @@ const coinFlip = () => !!(Math.random() > 0.5);
 
 const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
-const isDevEnv = () => document.location.href.includes('localhost');
+const isDevEnv = () => NODE_ENV === 'development';
 
 const log = (...args) => {
 	if (isDevEnv()) console.log(...args);
@@ -170,6 +171,7 @@ export {
 	filterOutKeys,
 	fork,
 	getHashQueryParam,
+	isDevEnv,
 	isIOS,
 	loadScript,
 	log,

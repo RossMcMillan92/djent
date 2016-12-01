@@ -7,6 +7,7 @@
   "dependencies": {
     "audiobuffer-to-wav": "^1.0.0",
     "clone-deep": "^0.2.4",
+    "copy-webpack-plugin": "^4.0.1",
     "deep-equal": "^1.0.1",
     "deep-extend": "^0.4.1",
     "inferno": "^0.7.26",
@@ -15,6 +16,7 @@
     "inferno-dom": "^0.7.26",
     "inferno-redux": "^0.7.26",
     "inferno-router": "^0.7.26",
+    "json-loader": "^0.5.4",
     "lzutf8": "^0.3.4",
     "ramda": "^0.21.0",
     "ramda-fantasy": "^0.7.0",
@@ -27,7 +29,8 @@
     "sw-toolbox": "^3.2.1"
   },
   "devDependencies": {
-    "autoprefixer": "^6.3.6",
+    "autoprefixer": "^6.5.1",
+    "autoprefixer-core": "^6.0.1",
     "babel": "^6.3.26",
     "babel-cli": "^6.7.7",
     "babel-core": "^6.3.26",
@@ -46,22 +49,27 @@
     "browserify": "^13.0.0",
     "chai": "^3.5.0",
     "colors": "^1.1.2",
+    "css-loader": "^0.25.0",
     "deep-extend": "^0.4.1",
     "del": "^1.2.1",
     "eslint": "^3.1.1",
     "eslint-config-airbnb": "^9.0.1",
     "eslint-plugin-import": "^1.11.1",
     "eslint-plugin-react": "^5.2.2",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^0.9.0",
     "history": "^2.1.0",
     "inquirer": "^0.9.0",
     "livereload": "^0.4.1",
     "lodash": "^4.11.2",
     "mocha": "^2.5.3",
     "mocha-babel": "^3.0.0",
+    "my-local-ip": "^1.0.0",
     "node-sass": "^3.7.0",
     "node-watch": "^0.3.5",
     "postcss-cssnext": "^2.5.2",
     "postcss-import": "^8.1.2",
+    "postcss-loader": "^1.0.0",
     "react": "^15.0.1",
     "react-addons-shallow-compare": "^15.1.0",
     "react-document-meta": "^2.0.3",
@@ -74,13 +82,18 @@
     "redux": "^3.5.1",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.0.1",
+    "sass-loader": "^4.0.2",
+    "style-loader": "^0.13.1",
     "uglifyify": "^3.0.2",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^1.1.0",
+    "webpack": "^1.13.2",
+    "webpack-dev-server": "^1.16.2",
+    "webpack-watch-livereload-plugin": "^0.0.1"
   },
   "scripts": {
-    "build": "node dev.js build",
-    "dev": "node dev.js",
-    "test": "./node_modules/mocha/bin/mocha ./src/scripts/app/test/* --require babel-core/register --watch"
+    "wizard": "/usr/bin/env node tools/wizard.js",
+    "winard": "node tools/wizard.js",
+    "test": "node ./node_modules/mocha/bin/mocha ./src/scripts/app/test/* --require babel-core/register --watch"
   },
   "license": "ISC"
 }

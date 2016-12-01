@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Switch from '../components/Switch';
+import Switch from 'components/Switch';
 
 const FadeController = (props) => {
     const inputProps = {

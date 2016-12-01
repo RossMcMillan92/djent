@@ -1,10 +1,10 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import Player from '../routes/Player';
+import Player from 'routes/Player';
 
-import * as modalActions from '../actions/modal';
-import { updateSequence } from '../actions/sequences';
+import * as modalActions from 'actions/modal';
+import { updateSequence } from 'actions/sequences';
 
 function mapStateToProps(state) {
     const { config, sequences, sound, instruments } = state;

@@ -14,15 +14,15 @@ const getAverageBPM = (taps) => {
     const average = taps
         // convert  to differences
         .reduce((result, next, i, arr) => {
-            if (i == 0) return [ ...result ];
-            const diff = next - arr[i-1];
+            if (i === 0) return [ ...result ];
+            const diff = next - arr[i - 1];
             return [ ...result, diff ];
         }, [])
         // take average
-        .reduce((total, val, i, arr) => (total + val) / (i+1 === arr.length ? arr.length : 1), 0);
+        .reduce((total, val, i, arr) => (total + val) / (i + 1 === arr.length ? arr.length : 1), 0);
 
-    return average === 0 ? 100 : Math.round(1 / (average / 1000) * 60)
-}
+    return average === 0 ? 100 : Math.round(1 / (average / 1000) * 60);
+};
 
 class BPMTapper extends Component {
     shouldComponentUpdate = () => false;
@@ -34,7 +34,7 @@ class BPMTapper extends Component {
         getAverageBPM,
     )
 
-    onTap = (e) => {
+    onTap = () => {
         this.taps = getNewTaps(this.taps);
         this.getBPMAndUpdate(this.taps);
     }
@@ -45,7 +45,7 @@ class BPMTapper extends Component {
             label: 'BPM',
             type: 'number',
             className: 'button-primary button-primary--small',
-        }
+        };
 
         return (
             <button { ...props } onClick={this.onTap}>Tap</button>

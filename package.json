@@ -7,6 +7,7 @@
   "dependencies": {
     "audiobuffer-to-wav": "^1.0.0",
     "clone-deep": "^0.2.4",
+    "copy-webpack-plugin": "^4.0.1",
     "deep-equal": "^1.0.1",
     "deep-extend": "^0.4.1",
     "inferno": "^0.7.26",
@@ -15,6 +16,7 @@
     "inferno-dom": "^0.7.26",
     "inferno-redux": "^0.7.26",
     "inferno-router": "^0.7.26",
+    "json-loader": "^0.5.4",
     "lzutf8": "^0.3.4",
     "ramda": "^0.21.0",
     "ramda-fantasy": "^0.7.0",

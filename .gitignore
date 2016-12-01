@@ -1,5 +1,6 @@
 /.sass-cache/
 /node_modules/
 
+build/*
 dist/*
 !dist/.gitkeep

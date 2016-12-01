@@ -10,6 +10,7 @@ const autoprefixer = require('autoprefixer');
 
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const cssExtractor = new ExtractTextPlugin(outputCSSFile);
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const base = require('./webpack.base.config.js');
 
@@ -31,24 +32,25 @@ const config = Object.assign({}, base, {
                 loader: cssExtractor.extract('style', 'css!postcss!sass')
             },
             {
-                test: /\.((?!scss|sass|js).)*$/,
+                test: /\.json$/,
+                loader: 'json'
+            },
+            {
+                test: /\.((?!scss|sass|js|json).)*$/,
                 loader: 'file',
                 query: {
                     name: '[name].[ext]'
                 }
             },
-            {
-                test: /\.json$/,
-                loader: 'json'
-            },
         ]
     },
     plugins: [
         new webpack.optimize.OccurenceOrderPlugin(),
+        new CopyWebpackPlugin([
+            { from: 'src/assets', to: 'assets' }
+        ]),
         new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV: JSON.stringify('production')
-            }
+            NODE_ENV: JSON.stringify('production')
         }),
         new webpack.optimize.UglifyJsPlugin({
             debug: true,

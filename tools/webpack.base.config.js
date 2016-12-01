@@ -18,6 +18,8 @@ module.exports = {
             react: path.join(cwd, 'node_modules/react'),
         },
         root: [
+            path.join(cwd, '/'),
+            path.join(cwd, '/src/'),
             path.join(cwd, '/src/scripts/'),
             path.join(cwd, '/src/scripts/app/'),
             path.join(cwd, '/src/styles/styles/'),

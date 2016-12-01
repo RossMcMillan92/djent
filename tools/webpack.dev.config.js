@@ -1,6 +1,7 @@
 const path          = require('path');
 const constants     = require('./constants');
 const outputCSSFile = constants.outputCSSFile;
+const buildDir      = constants.buildDir;
 const sourceDir     = constants.sourceDir;
 
 const cwd = process.cwd();
@@ -11,7 +12,7 @@ const autoprefixer = require('autoprefixer');
 
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const cssExtractor = new ExtractTextPlugin(outputCSSFile);
-const WatchLiveReloadPlugin = require('webpack-watch-livereload-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const base = require('./webpack.base.config.js');
 
@@ -33,15 +34,15 @@ const config = Object.assign({}, base, {
                 loader: cssExtractor.extract('style', 'css!postcss!sass')
             },
             {
-                test: /\.((?!scss|sass|js).)*$/,
+                test: /\.json$/,
+                loader: 'json'
+            },
+            {
+                test: /\.((?!scss|sass|js|json).)*$/,
                 loader: 'file',
                 query: {
                     name: '[name].[ext]'
                 }
-            },
-            {
-                test: /\.json$/,
-                loader: 'json'
             },
         ]
     },
@@ -49,38 +50,18 @@ const config = Object.assign({}, base, {
         inline: true,
         port: 3123,
         host: localip,
-        publicPath: '/'
+        publicPath: '/',
+        contentBase: path.join(cwd, buildDir),
     },
     plugins: [
-        new webpack.NoErrorsPlugin(),
         new webpack.optimize.OccurenceOrderPlugin(),
+        new CopyWebpackPlugin([
+            { from: 'src/assets', to: 'assets' }
+        ]),
         new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV: JSON.stringify('development')
-            }
-        }),
-        new webpack.optimize.UglifyJsPlugin({
-            debug: true,
-            minimize: true,
-            sourceMap: false,
-            output: {
-                comments: false
-            },
-            compressor: {
-                warnings: false
-            }
+            NODE_ENV: JSON.stringify('development')
         }),
         cssExtractor,
-        new WatchLiveReloadPlugin({
-            files: [
-                // Replace these globs with yours
-                '../src/**/*.html',
-                '../src/**/*.css',
-                '../src/**/*.png',
-                '../src/**/*.jpg',
-                '../src/**/*.js',
-            ]
-        }),
     ],
     postcss: [
         autoprefixer({ browsers: 'last 2 versions, iOS 8' })

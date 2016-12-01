@@ -12,4 +12,4 @@ module.exports = {
     outputCSSFile,
     outputJSFile,
     sourceDir,
-}
+};

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import deepEqual from 'deep-equal';
 
-import { capitalize } from '../utils/tools';
+import { capitalize } from 'utils/tools';
 import InputBox from './InputBox';
 
 class BeatsController extends Component {

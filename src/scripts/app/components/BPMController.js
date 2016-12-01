@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { compose } from 'ramda';
 
-import { getTargetValueFromEvent } from '../modules/events';
+import { getTargetValueFromEvent } from 'modules/events';
 import InputBox from './InputBox';
 
 const BPMController = (props) => {

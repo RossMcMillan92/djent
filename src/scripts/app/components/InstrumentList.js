@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { capitalize } from '../utils/tools';
+import { capitalize } from 'utils/tools';
 
 import Expandable from './Expandable';
 import PitchController from './PitchController';

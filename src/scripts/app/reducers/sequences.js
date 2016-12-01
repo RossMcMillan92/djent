@@ -4,7 +4,7 @@ import {
     deepClone,
     extendObjectArrayByID,
     updateObjByID
-} from '../utils/tools';
+} from 'utils/tools';
 
 const allowedLengths = [
     {

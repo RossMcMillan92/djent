@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import InstrumentList from '../components/InstrumentList';
-import Panel from '../components/Panel';
+import InstrumentList from 'components/InstrumentList';
+import Panel from 'components/Panel';
 
 export default class Instruments extends Component {
     static contextTypes = {

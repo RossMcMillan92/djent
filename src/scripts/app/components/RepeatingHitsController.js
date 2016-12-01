@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import InputBox from './InputBox';
-import { roundToXPlaces } from '../utils/tools';
+import { roundToXPlaces } from 'utils/tools';
 
 class RepeatingHitsController extends Component {
     shouldComponentUpdate = (nextProps) => nextProps.repeatHitTypeForXBeat !== this.props.repeatHitTypeForXBeat;

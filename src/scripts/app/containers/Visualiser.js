@@ -1,8 +1,8 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as soundActions from '../actions/sound';
-import Visualiser from '../components/Visualiser';
-import audioContext from '../utils/audioContext';
+import * as soundActions from 'actions/sound';
+import Visualiser from 'components/Visualiser';
+import audioContext from 'utils/audioContext';
 
 const mapStateToProps = (state) => {
     const { sound, sequences } = state;

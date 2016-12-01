@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import Panel from '../components/Panel';
-import SequencePanel from '../containers/SequencePanel';
+import Panel from 'components/Panel';
+import SequencePanel from 'containers/SequencePanel';
 
 const getDescription = (sequence) => sequence.description ? unescape(sequence.description) : sequence.id;
 

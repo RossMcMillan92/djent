@@ -1,4 +1,4 @@
-import { extendObjectArrayByID } from '../utils/tools';
+import { extendObjectArrayByID } from 'utils/tools';
 
 const initialState = {
     activePresetID       : 'meshuggah',

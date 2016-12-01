@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 
 import Waveform from './Waveform';
 
-import ShareController from '../containers/ShareController';
-import ExportController from '../containers/ExportController';
+import ShareController from 'containers/ShareController';
+import ExportController from 'containers/ExportController';
 
-import audioContext from '../utils/audioContext';
-import { renderBuffer } from '../utils/audio';
-import { logError } from '../utils/tools';
+import audioContext from 'utils/audioContext';
+import { renderBuffer } from 'utils/audio';
+import { logError } from 'utils/tools';
 
 class Visualiser extends Component {
     containerWidth = 0;

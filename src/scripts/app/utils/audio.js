@@ -1,6 +1,6 @@
 import { chain, compose, curry, filter, prop, map, sequence } from 'ramda';
 import { Future } from 'ramda-fantasy';
-import { catchError, fork, logError } from '../utils/tools';
+import { catchError, fork, logError } from 'utils/tools';
 
 import {
     getTotalTimeLength,

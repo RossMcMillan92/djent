@@ -1,7 +1,7 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { applyPreset } from '../actions/config';
-import PresetController from '../components/PresetController';
+import { applyPreset } from 'actions/config';
+import PresetController from 'components/PresetController';
 
 const mapStateToProps = (state) => ({
     activePresetID: state.config.activePresetID,

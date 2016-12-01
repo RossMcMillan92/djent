@@ -1,6 +1,5 @@
 const inquirer = require('inquirer');
 const constants = require('./constants');
-const buildDir = constants.buildDir;
 const configDir = constants.configDir;
 
 const exec = require('child_process').execSync;
@@ -43,7 +42,7 @@ const build = () => {
 
 const dev = () => {
     exec(
-        `node ${cwd}/node_modules/webpack/bin/webpack.js --progress --colors --watch --config=${cwd}${configDir}/webpack.dev.config.js`,
+        `node ${cwd}/node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --colors --watch --config=${cwd}${configDir}/webpack.dev.config.js`,
         execSpawnOpts
     );
 };

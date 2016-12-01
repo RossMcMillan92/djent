@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { filterOutKeys, throttle } from '../utils/tools';
+import { filterOutKeys, throttle } from 'utils/tools';
 
 class InputBox extends Component {
     isFocused = false;

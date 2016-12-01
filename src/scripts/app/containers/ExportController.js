@@ -1,9 +1,9 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import ExportController from '../components/ExportController';
+import ExportController from 'components/ExportController';
 
-import * as modalActions from '../actions/modal';
+import * as modalActions from 'actions/modal';
 
 function mapStateToProps(state) {
     return {

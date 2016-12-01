@@ -3,22 +3,22 @@ import React, { Component } from 'react';
 import Generator from './Generator';
 import SVG from './SVG';
 
-import LoopController from '../containers/LoopController';
+import LoopController from 'containers/LoopController';
 
 import {
     playSound,
-} from '../utils/audio';
+} from 'utils/audio';
 
-import audioContext from '../utils/audioContext';
+import audioContext from 'utils/audioContext';
 
 import {
     getTotalTimeLength,
-} from '../utils/sequences';
+} from 'utils/sequences';
 
 import {
     capitalize,
     splice,
-} from '../utils/tools';
+} from 'utils/tools';
 
 const stop = (src) => {
     if (src) {

@@ -1,3 +1,4 @@
+const path          = require('path');
 const constants     = require('./constants');
 const outputCSSFile = constants.outputCSSFile;
 const sourceDir     = constants.sourceDir;
@@ -18,7 +19,7 @@ const config = Object.assign({}, base, {
             {
                 test: /\.js$/,
                 loader: 'babel',
-                include: `${cwd}${sourceDir}`,
+                include: path.join(cwd, sourceDir),
                 exclude: /node_modules/,
                 query: {
                     presets: ['es2015', 'stage-0'],

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import presets from '../utils/presets';
+import presets from 'utils/presets';
 
 class PresetController extends Component {
     shouldComponentUpdate = (nextProps) => nextProps.activePresetID !== this.props.activePresetID;

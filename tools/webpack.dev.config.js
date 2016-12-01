@@ -1,9 +1,10 @@
+const path          = require('path');
 const constants     = require('./constants');
 const outputCSSFile = constants.outputCSSFile;
 const sourceDir     = constants.sourceDir;
 
 const cwd = process.cwd();
-const localip = '192.168.0.2';
+const localip = '192.168.0.3';
 
 const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
@@ -20,7 +21,7 @@ const config = Object.assign({}, base, {
             {
                 test: /\.js$/,
                 loader: 'babel',
-                include: `${cwd}${sourceDir}`,
+                include: path.join(cwd, sourceDir),
                 exclude: /node_modules/,
                 query: {
                     presets: ['es2015', 'stage-0'],
@@ -55,7 +56,7 @@ const config = Object.assign({}, base, {
         new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.DefinePlugin({
             'process.env': {
-                NODE_ENV: JSON.stringify('production')
+                NODE_ENV: JSON.stringify('development')
             }
         }),
         new webpack.optimize.UglifyJsPlugin({

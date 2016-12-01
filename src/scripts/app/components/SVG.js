@@ -1,5 +1,5 @@
 import React from 'react';
-import { logError } from '../utils/tools';
+import { logError } from 'utils/tools';
 
 const SVG = (props) => {
     const icon = icons[props.icon];

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { capitalize } from '../utils/tools';
+import { capitalize } from 'utils/tools';
 
 const getNewAllowedLengths = (allowedLengths, id, prop, value) =>
     allowedLengths.map(obj => {

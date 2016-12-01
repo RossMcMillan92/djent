@@ -1,27 +1,27 @@
 import React, { Component } from 'react';
 import { assoc, last, map, split } from 'ramda';
 
-import Expandable from '../components/Expandable';
-import Spinner from '../components/Spinner';
-import SwipeableViews from '../components/SwipeableViews';
+import Expandable from 'components/Expandable';
+import Spinner from 'components/Spinner';
+import SwipeableViews from 'components/SwipeableViews';
 
-import Instruments from '../containers/Instruments';
-import Modal from '../containers/Modal';
-import Player from '../containers/Player';
-import Sequences from '../containers/Sequences';
+import Instruments from 'containers/Instruments';
+import Modal from 'containers/Modal';
+import Player from 'containers/Player';
+import Sequences from 'containers/Sequences';
 
-import { defaultAllowedLengths } from '../reducers/sequences';
+import { defaultAllowedLengths } from 'reducers/sequences';
 
-import presets, { backwardsCompatibility } from '../utils/presets';
-import { getActiveSoundsFromHitTypes } from '../utils/instruments';
-import { getLongURLFromShareID, getPresetFromData, handleGoogleAPI } from '../utils/short-urls';
+import presets, { backwardsCompatibility } from 'utils/presets';
+import { getActiveSoundsFromHitTypes } from 'utils/instruments';
+import { getLongURLFromShareID, getPresetFromData, handleGoogleAPI } from 'utils/short-urls';
 
 import {
     presetToPlaylistItem,
-} from '../utils/riffs';
+} from 'utils/riffs';
 
-import { isMobile } from '../utils/mobile';
-import { compose, getHashQueryParam, logError, throttle } from '../utils/tools';
+import { isMobile } from 'utils/mobile';
+import { compose, getHashQueryParam, logError, throttle } from 'utils/tools';
 
 export default class Main extends Component {
     static contextTypes = {

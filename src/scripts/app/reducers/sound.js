@@ -1,5 +1,5 @@
 import { compose, flip, map } from 'ramda';
-import { getLocalStorageIO } from '../modules/localStorageIO';
+import { getLocalStorageIO } from 'modules/localStorageIO';
 
 //    getStoredLoopModeValue :: Key -> a
 const getStoredLoopModeValue = compose(

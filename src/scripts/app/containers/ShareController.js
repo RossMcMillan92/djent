@@ -1,9 +1,9 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import ShareController from '../components/ShareController';
+import ShareController from 'components/ShareController';
 
-import * as modalActions from '../actions/modal';
+import * as modalActions from 'actions/modal';
 
 function mapStateToProps(state) {
     return {

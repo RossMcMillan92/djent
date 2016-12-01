@@ -1,15 +1,15 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import Main from '../routes/Main';
+import Main from 'routes/Main';
 
-import * as configActions from '../actions/config';
-import * as instrumentsActions from '../actions/instruments';
-import * as modalActions from '../actions/modal';
-import { updateSequence } from '../actions/sequences';
+import * as configActions from 'actions/config';
+import * as instrumentsActions from 'actions/instruments';
+import * as modalActions from 'actions/modal';
+import { updateSequence } from 'actions/sequences';
 import {
     updateAudioPlaylist,
-} from '../actions/sound';
+} from 'actions/sound';
 
 function mapStateToProps(state) {
     return {

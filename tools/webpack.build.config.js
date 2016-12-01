@@ -8,8 +8,6 @@ const cwd = process.cwd();
 const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 
-console.log('dsad', process.env.NODE_ENV)
-
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const cssExtractor = new ExtractTextPlugin(outputCSSFile);
 const CopyWebpackPlugin = require('copy-webpack-plugin');

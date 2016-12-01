@@ -513,7 +513,7 @@ const defaultInstruments = [
             {
                 id: 'h',
                 description: 'Open hihat',
-                path: '/assets/audio/mastered/hihat-open.wav',
+                path: getSoundURL('assets/audio/mastered/hihat-open.wav'),
                 enabled: false,
                 midi: {
                     pitch: [ hihatMidiNote ],
@@ -522,7 +522,7 @@ const defaultInstruments = [
             {
                 id: 'hc',
                 description: 'Closed hihat',
-                path: '/assets/audio/mastered/hihat-closed.wav',
+                path: getSoundURL('assets/audio/mastered/hihat-closed.wav'),
                 enabled: false,
                 midi: {
                     pitch: [ hihatMidiNote ],

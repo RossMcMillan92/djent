@@ -10,21 +10,21 @@ export function updateInstrumentSound({ soundID, parentID, prop, value }) {
 export function updateInstrumentPitch({ instrumentID, value }) {
     return {
         type: 'UPDATE_INSTRUMENT_DETUNE_PROP',
-        payload: { instrumentID, value: confineToRange(value, -1200, 1200) },
+        payload: { instrumentID, value: confineToRange(-1200, 1200, value) },
     };
 }
 
 export function updateInstrumentVolume({ instrumentID, value }) {
     return {
         type: 'UPDATE_INSTRUMENT_VOLUME_PROP',
-        payload: { instrumentID, value: confineToRange(value, 0, 1) },
+        payload: { instrumentID, value: confineToRange(0, 1, value) },
     };
 }
 
 export function updateInstrumentRepeatingHits({ instrumentID, value }) {
     return {
         type: 'UPDATE_INSTRUMENT_REPEATING_HITS',
-        payload: { instrumentID, value: confineToRange(value, 0, 200) },
+        payload: { instrumentID, value: confineToRange(0, 200, value) },
     };
 }
 

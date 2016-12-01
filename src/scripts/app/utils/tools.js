@@ -1,6 +1,7 @@
 /* eslint no-console: 0 */
 
 import deepExtend from 'deep-extend';
+import { curry } from 'ramda';
 
 const arraySelector = selector => Array.from(document.querySelectorAll(selector));
 
@@ -53,17 +54,19 @@ const deepClone = (obj) =>
 	: Object.keys(obj)
 		.reduce((newObject, objKey) => {
 			const value = obj[objKey];
-			const newValue = (typeof value === 'object' && !Array.isArray(value))
-				? deepClone(value)
-				: (Array.isArray(value))
-					? value.map(deepClone)
-					: value;
+			const newValue = deepCloneInner(value);
 
-		return {
-			...newObject,
-			[objKey]: newValue
-		};
-	}, {});
+			return {
+				...newObject,
+				[objKey]: newValue
+			};
+		}, {});
+
+const deepCloneInner = value => (typeof value === 'object' && !Array.isArray(value))
+	? deepClone(value)
+	: (Array.isArray(value))
+		? value.map(deepCloneInner)
+		: value;
 
 const updateObjByID = ({ objs, id, prop, value }) =>
 	objs.map(beat => {
@@ -81,12 +84,12 @@ const parseQueryString = (url = window.location.href) =>
 			return { ...list, [key]: value || '' };
 		}, {});
 
-const getHashQueryParam = (param, url = window.location.hash) => {
-	const paramPart1 = url.split(`${param}\=`)[1];
+const getHashQueryParam = curry((param, url) => {
+	const paramPart1 = url.split(`${param}=`)[1];
 	if (!paramPart1) return '';
 
 	return paramPart1.split('&')[0];
-};
+});
 
 const loadScript = (path) => {
 	const script = document.createElement('script');
@@ -119,7 +122,7 @@ const throttle = (fn, delay, context = this) => {
 const roundToXPlaces = (value, decimalPlaces, type = 'round') =>
 	Math[type](value * Math.pow(10, decimalPlaces)) / Math.pow(10, decimalPlaces);
 
-const confineToRange = (value, min, max) => Math.min(max, Math.max(min, value));
+const confineToRange = (min, max, value) => Math.min(max, Math.max(min, value));
 
 const randFromTo = (from, to) => Math.floor(Math.random() * (to - from + 1) + from);
 
@@ -131,10 +134,33 @@ const coinFlip = () => !!(Math.random() > 0.5);
 
 const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
-const log = (...args) => document.location.href.includes('localhost') && console.log(...args);
+const isDevEnv = () => document.location.href.includes('localhost');
+
+const log = (...args) => {
+	if (isDevEnv()) console.log(...args);
+	return args[0];
+};
+
+const logError = (...args) => {
+	if (isDevEnv()) (console.error || console.log).apply(console, args);
+	return args[0];
+};
+
+const trace = curry((tag, d) => {
+	log(tag, d);
+	return d;
+});
+
+// catchError :: Promise p => (err -> b) -> p -> p
+const catchError = curry((rej, p) => p.catch(rej));
+
+// fork :: Future fu => (err -> b) -> (a -> b) -> fu -> fu
+const fork = curry((rej, res, fu) => fu
+	.fork(rej, res));
 
 export {
 	arraySelector,
+	catchError,
 	capitalize,
 	coinFlip,
 	compose,
@@ -142,10 +168,12 @@ export {
 	deepClone,
 	extendObjectArrayByID,
 	filterOutKeys,
+	fork,
 	getHashQueryParam,
 	isIOS,
 	loadScript,
 	log,
+	logError,
 	parseQueryString,
 	repeat,
 	randFromTo,
@@ -154,5 +182,6 @@ export {
 	roundToXPlaces,
 	splice,
 	throttle,
+	trace,
 	updateObjByID,
 };

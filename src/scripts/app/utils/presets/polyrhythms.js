@@ -8,16 +8,16 @@ const preset = {
         sequences: [
             {
                 id    : 'total',
-                bars  : 8,
+                bars  : 4,
                 beats : 4,
             },
             {
-                id    : 'CUSTOM_SEQUENCE_1',
-                description: 'Guitars',
-                bars  : 1,
-                beats : 7.5,
-                hitChance : 0.95,
-                allowedLengths: [
+                id             : 'CUSTOM_SEQUENCE_1',
+                description    : 'Guitars',
+                bars           : 1,
+                beats          : 6,
+                hitChance      : 1,
+                allowedLengths : [
                         {
                             id: '0.5',
                             amount: 1,
@@ -25,31 +25,26 @@ const preset = {
                         {
                             id: '1',
                             amount: 1,
+                            isDotted: true,
                         },
                         {
                             id: '2',
                             amount: 1,
-                        },
-                        {
-                            id: '4',
-                            amount:1,
+                            isDotted: true,
                         },
                 ],
             },
             {
-                id    : 'CUSTOM_SEQUENCE_2',
-                description: 'Cymbal Beat',
-                bars  : 1,
-                beats : 6,
-                hitChance : 1,
-                allowedLengths: [
-                        {
-                            id: '0.5',
-                            amount: 1,
-                        },
+                id             : 'CUSTOM_SEQUENCE_2',
+                description    : 'Cymbal Beat',
+                bars           : 4,
+                beats          : 4,
+                hitChance      : 1,
+                allowedLengths : [
                         {
                             id: '1',
                             amount: 1,
+                            isDotted: true,
                         },
                 ],
             },
@@ -59,6 +54,14 @@ const preset = {
                 id: 'g',
                 sounds: [
                     {
+                        id: 'sixth-0-muted',
+                        enabled: true,
+                    },
+                    {
+                        id: 'sixth-1-muted',
+                        enabled: true,
+                    },
+                    {
                         id: 'sixth-0-open',
                         enabled: true,
                     },
@@ -67,11 +70,7 @@ const preset = {
                         enabled: true,
                     },
                     {
-                        id: 'fifth-8-open',
-                        enabled: true,
-                    },
-                    {
-                        id: 'scratch',
+                        id: 'fifth-4-open',
                         enabled: true,
                     },
                 ],
@@ -87,9 +86,27 @@ const preset = {
             },
             {
                 id: 's',
+                sequences: [
+                    'offsetWholes',
+                    'offsetHalfs',
+                    'offsetQuarters',
+                ],
                 sounds: [
                     {
                         id: 's',
+                        enabled: true,
+                    }
+                ],
+            },
+            {
+                id: 'h',
+                volume: 0.3,
+                sequences: [
+                    'steadyQuarters',
+                ],
+                sounds: [
+                    {
+                        id: 'hc',
                         enabled: true,
                     }
                 ],
@@ -100,14 +117,6 @@ const preset = {
                     'CUSTOM_SEQUENCE_2',
                 ],
                 sounds: [
-                    {
-                        id: 'crash-left',
-                        enabled: true,
-                    },
-                    {
-                        id: 'crash-right',
-                        enabled: true,
-                    },
                     {
                         id: 'china-left',
                         enabled: true,

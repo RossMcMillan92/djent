@@ -1,10 +1,24 @@
 import React, { Component } from 'react';
+import { assoc } from 'ramda';
 import { compress } from 'lzutf8';
-import { deepClone, log } from '../utils/tools';
-
-import ShareBox from './ShareBox.js';
+import { createPreset } from '../utils/presets';
+import { compose, logError } from '../utils/tools';
 
 const domain = `${window.location.protocol}//${window.location.host}`;
+
+const shortURLCache = {};
+
+//    getGoogleShortURL :: url -> Promise url
+const getGoogleShortURL = url =>
+    shortURLCache[url]
+        ? shortURLCache[url]
+        : window.gapi.client.urlshortener.url
+            .insert({ longUrl: url })
+            .then(({ result }) => {
+                const shortURL = result.id;
+                shortURLCache[url] = shortURL;
+                return shortURL;
+            }, logError);
 
 class ShareController extends Component {
     state = {
@@ -13,56 +27,49 @@ class ShareController extends Component {
         shortURL: ''
     }
 
-    generatePreset = () => {
-        const preset = {
-            id: 'custom',
-            settings: {
-                config: {
-                    bpm : this.props.bpm,
-                },
-                sequences: deepClone(this.props.sequences),
-                instruments: this.props.instruments
-                    .map(instrument => ({
-                        id: instrument.id,
-                        pitch: instrument.pitch,
-                        predefinedHitTypes: instrument.hitTypes,
-                        predefinedSequence: instrument.sequence,
-                        volume: instrument.volume,
-                        repeatHitTypeForXBeat: instrument.repeatHitTypeForXBeat,
-                    })),
-            }
-        };
-
-        this.getShareableURL(preset)
-            .then((url) => {
-                if (url) {
-                    const shareableURL = `${domain}/share/${url.split('/').pop()}`;
-                    const content = (<ShareBox url={shareableURL} />);
-                    this.props.actions.enableModal({ content, title: 'Share URL', isCloseable: true, className: 'modal--auto-width' });
-                }
-                this.setState({ isLoading: false });
-            });
-    }
+    getShortURLPromise = (preset) => compose(
+        getGoogleShortURL,
+        this.getShareableURL,
+        createPreset,
+        assoc('usePredefinedSettings', true),
+    )(preset);
 
     onClick = () => {
         this.setState({ isLoading: true });
-        this.generatePreset();
+        const presetPromises = this.props.audioPlaylist
+            .map(this.getShortURLPromise);
+
+        Promise.all(presetPromises)
+            .then(this.combineShortURLs)
+            .then(url => {
+                if (url.includes('-')) {
+                    return getGoogleShortURL(url)
+                        .then(shortURL => this.combineShortURLs([shortURL]));
+                }
+                return url;
+            })
+            .then(this.launchModal)
+            .then(() => this.setState({ isLoading: false }));
     }
 
     getShareableURL = (preset) => {
         const compressedPreset = compress(JSON.stringify(preset), { outputEncoding: 'Base64' });
         const shareableURL = `djen.co/#share=${compressedPreset}`;
-
-        if (shareableURL.length > 3000) {
-            log('No can do');
-            return;
-        }
-
-        return this.getShortURL(shareableURL);
+        if (shareableURL.length > 2048) logError('URL exceeds 2048 chars. May not succeed');
+        return shareableURL;
     }
 
-    getShortURL = url => window.gapi.client.urlshortener.url.insert({ longUrl: url })
-        .then((response) => response.result.id, (reason) => log(reason));
+    // combineShortURLs :: [url] -> url
+    combineShortURLs = (googleURLs) => {
+        const urlIDs = googleURLs
+            .map(url => url.split('/').pop());
+        return `${domain}/share/${urlIDs.join('-')}`;
+    }
+
+    launchModal = (url) => {
+        const content = (<ShareBox url={url} />);
+        this.props.actions.enableModal({ content, title: 'Share URL', isCloseable: true, className: 'modal--auto-width' });
+    }
 
     render = () => {
         const isDisabled = !this.props.googleAPIHasLoaded;
@@ -78,5 +85,16 @@ class ShareController extends Component {
         );
     }
 }
+
+const ShareBox = (props) => (
+    <div>
+        <input
+            className="input-base input-base--bare input-base--large input-base--long"
+            type="text"
+            defaultValue={props.url}
+            onClick={e => e.target.select()}
+        />
+    </div>
+);
 
 export default ShareController;

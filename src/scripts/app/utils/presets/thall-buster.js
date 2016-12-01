@@ -1,6 +1,6 @@
 const preset = {
     id: 'thall-buster',
-    description: 'Thall - Buster',
+    description: 'Thall II',
     settings: {
         config: {
             bpm       : 65,
@@ -18,17 +18,17 @@ const preset = {
                 hitChance : 1,
                 allowedLengths: [
                         {
-                            id: "1",
+                            id: '1',
                             amount:2,
                             isTriplet: false
                         },
                         {
-                            id: "2",
+                            id: '2',
                             amount:1,
                             isTriplet: false
                         },
                         {
-                            id: "4",
+                            id: '4',
                             amount:2,
                             isTriplet: false
                         },
@@ -38,6 +38,7 @@ const preset = {
         instruments: [
             {
                 id: 'g',
+                pitch: -200,
                 sounds: [
                     {
                         id: 'sixth-0-muted',
@@ -90,11 +91,13 @@ const preset = {
             },
             {
                 id: 'd',
+                pitch: 1200,
+                volume: 0.6,
+                sequences: [
+                    'twoBars',
+                    'none',
+                ],
                 sounds: [
-                    {
-                        id: 'drone-high',
-                        enabled: true,
-                    },
                     {
                         id: 'drone-high-2',
                         enabled: true,
@@ -103,6 +106,6 @@ const preset = {
             },
         ],
     },
-}
+};
 
 export default preset;

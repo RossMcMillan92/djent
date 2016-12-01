@@ -1,40 +1,39 @@
 import audioBufferToWav from 'audiobuffer-to-wav';
+import { curry } from 'ramda';
 
-const saveAsWAVFile = (() => {
+const downloadAudioBuffer = (a, fileName, audioBuffer) => {
+    const wav = audioBufferToWav(audioBuffer);
+    const blob = new window.Blob([ new DataView(wav) ], {
+        type: 'audio/wav'
+    });
+    const url = window.URL.createObjectURL(blob);
+
+    downloadURL(a, fileName, url);
+
+    setTimeout(() => {
+        window.URL.revokeObjectURL(url);
+    }, 0);
+};
+
+const downloadURL = curry((a, fileName, url) => {
+    a.href = url;
+    a.download = fileName;
+    a.click();
+});
+
+const downloadFile = {
+    wav: downloadAudioBuffer,
+    mid: downloadURL,
+};
+
+const saveAsFile = curry((fileType, fileName, fileContents) => {
     const a = document.createElement('a');
     a.style.display = 'none';
     document.body.appendChild(a);
-
-    return (audioBuffer) => {
-        const wav = audioBufferToWav(audioBuffer);
-        const blob = new window.Blob([ new DataView(wav) ], {
-            type: 'audio/wav'
-        });
-        const url = window.URL.createObjectURL(blob);
-
-        a.href = url;
-        a.download = 'djen.wav';
-        a.click();
-
-        setTimeout(() => {
-            window.URL.revokeObjectURL(url);
-        }, 0);
-    };
-})();
-
-const saveAsMIDIFile = (() => {
-    const a = document.createElement('a');
-    a.style.display = 'none';
-    document.body.appendChild(a);
-
-    return (url) => {
-        a.href = url;
-        a.download = 'djen.mid';
-        a.click();
-    };
-})();
+    const downloadFn = downloadFile[fileType];
+    downloadFn(a, `${fileName}.${fileType}`, fileContents);
+});
 
 export {
-    saveAsMIDIFile,
-    saveAsWAVFile,
+    saveAsFile,
 };

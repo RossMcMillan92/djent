@@ -16,13 +16,6 @@ export function updateContinuousGeneration(continuousGeneration) {
   };
 }
 
-export function updateFadeIn(fadeIn) {
-  return {
-    type: 'UPDATE_FADEIN',
-    payload: { fadeIn },
-  };
-}
-
 export function updateFateOut(fadeOut) {
   return {
     type: 'UPDATE_FADEOUT',

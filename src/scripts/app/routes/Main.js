@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { assoc, last, map, split } from 'ramda';
 
 import Expandable from '../components/Expandable';
 import Spinner from '../components/Spinner';
@@ -13,10 +14,14 @@ import { defaultAllowedLengths } from '../reducers/sequences';
 
 import presets, { backwardsCompatibility } from '../utils/presets';
 import { getActiveSoundsFromHitTypes } from '../utils/instruments';
-import { getPresetData, getPresetFromData, handleGoogleAPI } from '../utils/short-urls';
+import { getLongURLFromShareID, getPresetFromData, handleGoogleAPI } from '../utils/short-urls';
 
-import { log, throttle } from '../utils/tools';
+import {
+    presetToPlaylistItem,
+} from '../utils/riffs';
+
 import { isMobile } from '../utils/mobile';
+import { compose, getHashQueryParam, logError, throttle } from '../utils/tools';
 
 export default class Main extends Component {
     static contextTypes = {
@@ -27,11 +32,6 @@ export default class Main extends Component {
         googleAPIHasLoaded: false
     }
 
-    refreshOnWindowResize = () => {
-        const throttledFn = throttle(() => this.forceUpdate(), 500);
-        window.addEventListener('resize', throttledFn);
-    }
-
     componentWillMount = () => {
         this.setupBackButtonController();
 
@@ -39,10 +39,10 @@ export default class Main extends Component {
 
         handleGoogleAPI()
             .then(() => {
-                this.checkForShareData(shareID);
+                if (shareID) this.setupSharedItemsAndUpdate(shareID);
                 this.setState({ googleAPIHasLoaded: true });
             })
-            .catch(e => log(e));
+            .catch(e => logError(e));
 
         if (!shareID) {
             const presetID = this.props.params.presetID || this.props.activePresetID;
@@ -64,12 +64,68 @@ export default class Main extends Component {
 
     componentWillUpdate = (nextProps) => {
         if (!this.props.params.shareID && nextProps.params.shareID) {
-            this.checkForShareData(nextProps.params.shareID);
+            this.setupSharedItemsAndUpdate(nextProps.params.shareID);
         }
     }
 
     componentWillUnmount = () => {
         window.removeEventListener('popstate', this.backToHome);
+    }
+
+    setupSharedItems = (shareID) => {
+        const longURLPromises = shareID.split('-')
+            .map(getLongURLFromShareID);
+
+        return Promise.all(longURLPromises)
+            .then(longURLs => {
+                if (longURLs.length === 1 && longURLs[0].includes('-')) {
+                    return compose(this.setupSharedItems, last, split('/'))(longURLs[0]);
+                }
+                const dataStrings = longURLs
+                    .map(getHashQueryParam('share'));
+                const sharedPresets = dataStrings
+                    .map(this.dataStringToPreset);
+
+                this.props.actions.applyPreset(sharedPresets[0]);
+
+                const playlistPromises = sharedPresets
+                    .map(presetToPlaylistItem);
+
+                return Promise.all(playlistPromises)
+                    .then(map(assoc('isLocked', true)));
+            });
+    }
+
+    setupSharedItemsAndUpdate = (shareID) => {
+        this.setupSharedItems(shareID)
+            .then((audioPlaylist) => {
+                this.props.actions.updateAudioPlaylist(audioPlaylist);
+                this.props.actions.disableModal();
+            })
+            .catch(logError);
+    }
+
+    dataStringToPreset = (dataString) => compose(
+        this.insertSoundsIntoPresetInstruments,
+        preset => backwardsCompatibility(preset, defaultAllowedLengths),
+        getPresetFromData,
+    )(dataString);
+
+    insertSoundsIntoPresetInstruments = preset => {
+        preset.settings.instruments = preset.settings.instruments
+            .map(i => {
+                const inst = this.props.instruments.find(ins => ins.id === i.id);
+                const sounds = getActiveSoundsFromHitTypes(i.predefinedHitTypes)
+                    .map(sound => ({ ...inst.sounds.find(s => s.id === sound.id), ...sound }));
+                return { ...i, sounds };
+            });
+
+        return preset;
+    }
+
+    refreshOnWindowResize = () => {
+        const throttledFn = throttle(() => this.forceUpdate(), 500);
+        window.addEventListener('resize', throttledFn);
     }
 
     setupBackButtonController = () => {
@@ -78,7 +134,7 @@ export default class Main extends Component {
 
     backToHome = () => {
         if (document.location.hash !== '#fwd') {
-            this.changeActivePageIdnex(0);
+            this.changeActivePageIndex(0);
         }
     }
 
@@ -86,17 +142,11 @@ export default class Main extends Component {
         if (this.state.activePageIndex !== index) this.setState({ activePageIndex: index });
     }
 
-    checkForShareData = (shareID) => {
-        if (shareID) {
-            getPresetData(shareID)
-                .then(this.applySharedPreset);
-        }
-    }
-
     applySharedPreset = (data) => {
         let sharedPreset = getPresetFromData(data);
 
         if (sharedPreset) {
+            // TODO: missed this bit out lol
             sharedPreset = backwardsCompatibility(sharedPreset, defaultAllowedLengths);
             sharedPreset.settings.instruments = sharedPreset.settings.instruments
                 .map(i => ({ ...i, sounds: getActiveSoundsFromHitTypes(i.predefinedHitTypes) }));
@@ -107,7 +157,7 @@ export default class Main extends Component {
         this.props.actions.disableModal();
     }
 
-    changeActivePageIdnex = (index) => {
+    changeActivePageIndex = (index) => {
         if (this.state.activePageIndex === index) return;
         document.location.hash = index === 0 ? '' : '#fwd';
         this.setActivePageIndex(index);
@@ -119,7 +169,7 @@ export default class Main extends Component {
                 <div
                     key={i}
                     className={`nav-tab ${i === this.state.activePageIndex ? 'is-active' : ''}`}
-                    onClick={() => this.changeActivePageIdnex(i)}
+                    onClick={() => this.changeActivePageIndex(i)}
                 >
                     <div className="nav-tab__inner">
                         { tabName }
@@ -151,7 +201,7 @@ export default class Main extends Component {
                     viewHeight={true}
                     resistance={true}
                     index={this.state.activePageIndex}
-                    onChangeIndex={(i) => this.changeActivePageIdnex(i)}
+                    onChangeIndex={(i) => this.changeActivePageIndex(i)}
                 >
                     <Player
                         route={this.props.route}
@@ -171,6 +221,7 @@ export default class Main extends Component {
                         <Expandable
                             title="Sequences"
                             titleClassName={expandableTitleClass}
+                            enableStateSave={true}
                         >
                             <Sequences route={this.props.route} />
                         </Expandable>
@@ -179,6 +230,7 @@ export default class Main extends Component {
                         <Expandable
                             title="Instruments"
                             titleClassName={expandableTitleClass}
+                            enableStateSave={true}
                         >
                             <Instruments route={this.props.route} />
                         </Expandable>

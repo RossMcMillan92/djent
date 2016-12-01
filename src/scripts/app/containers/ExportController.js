@@ -7,8 +7,7 @@ import * as modalActions from '../actions/modal';
 
 function mapStateToProps(state) {
     return {
-        bpm            : state.config.bpm,
-        instruments    : state.instruments,
+        audioPlaylist: state.sound.audioPlaylist,
     };
 }
 

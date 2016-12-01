@@ -16,14 +16,14 @@ const preset = {
                 description : 'Hits',
                 bars        : 2,
                 beats       : 4,
-                hitChance   : .15,
+                hitChance   : 0.15,
                 allowedLengths : [
                     {
-                        id: "1",
+                        id: '1',
                         amount: 1,
                     },
                     {
-                        id: "2",
+                        id: '2',
                         amount: 1,
                     },
                 ],
@@ -33,18 +33,18 @@ const preset = {
                 description : 'Bass drum',
                 bars        : 1,
                 beats       : 4,
-                hitChance   : .8,
+                hitChance   : 0.8,
                 allowedLengths : [
                     {
-                        id: "1",
+                        id: '1',
                         amount: 4,
                     },
                     {
-                        id: "2",
+                        id: '2',
                         amount: 2,
                     },
                     {
-                        id: "4",
+                        id: '4',
                         amount: 1,
                     },
                 ],
@@ -57,15 +57,15 @@ const preset = {
                 hitChance   : 1,
                 allowedLengths : [
                     {
-                        id: "1",
+                        id: '1',
                         amount: 1,
                     },
                     {
-                        id: "2",
+                        id: '2',
                         amount: 8,
                     },
                     {
-                        id: "4",
+                        id: '4',
                         amount: 2,
                     },
                 ],
@@ -166,6 +166,6 @@ const preset = {
             },
         ]
     }
-}
+};
 
 export default preset;

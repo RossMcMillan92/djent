@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 
-import LoopController from './LoopController';
+import Generator from './Generator';
 import SVG from './SVG';
-import ContinuousGenerationController from './ContinuousGenerationController';
+
+import LoopController from '../containers/LoopController';
 
 import {
     playSound,
@@ -11,44 +12,13 @@ import {
 import audioContext from '../utils/audioContext';
 
 import {
-    renderRiffTemplateAtTempo,
-} from '../utils/instruments';
-
-import {
-    generateRiff,
-} from '../utils/riffs';
-
-import {
-    getSequence,
-    getTotalBeatsLength,
     getTotalTimeLength,
 } from '../utils/sequences';
 
 import {
     capitalize,
-    deepClone,
     splice,
 } from '../utils/tools';
-
-const generateNewRiff = ({ context, sequences, usePredefinedSettings, instruments, totalBeatsProduct }) => {
-    const generatedSequences    = {};
-    const getInstrumentSequence = getSequence({
-        sequences,
-        generatedSequences,
-        usePredefinedSettings
-    });
-    const instrumentsWithSequences = instruments
-        .map(getInstrumentSequence)
-        .filter(i => i.sequence !== undefined);
-
-    return generateRiff({
-        context,
-        totalBeatsProduct,
-        instruments:
-        instrumentsWithSequences,
-        usePredefinedSettings
-    });
-};
 
 const stop = (src) => {
     if (src) {
@@ -60,11 +30,8 @@ const stop = (src) => {
 };
 
 class SoundController extends Component {
-    generationCount = -1
+    generationCount = 0;
     currentlyPlayingSources = [];
-    currentRiffTemplate;
-    queuedInstruments;
-    queuedRiffTemplate;
     currentGainNode;
     audioContext = '';
     renewalTimeout;
@@ -79,8 +46,14 @@ class SoundController extends Component {
         this.clearTimeouts();
     }
 
-    updateUI = (newState) => {
-        requestAnimationFrame(() => this.setState(newState));
+    componentWillUpdate = (nextProps) => {
+        if (this.props.isPlaying && !nextProps.isPlaying) return this.stopEvent();
+
+        const playlistItemWasDeleted = this.props.audioPlaylist.length > nextProps.audioPlaylist.length;
+
+        if (playlistItemWasDeleted) {
+            if (this.props.isPlaying) this.stopEvent();
+        }
     }
 
     clearTimeouts = () => {
@@ -90,38 +63,17 @@ class SoundController extends Component {
         if (this.loopTimeout) clearTimeout(this.loopTimeout);
     }
 
-    generate = () => {
-        const { bpm, sequences, instruments, usePredefinedSettings } = this.props;
-        const generationState   = deepClone({ bpm, sequences, instruments, usePredefinedSettings });
-        const totalBeatsProduct = getTotalBeatsLength(sequences);
-
-        this.props.actions.updateGenerationState(generationState);
-        let newInstruments;
-        return generateNewRiff({ ...generationState, instruments, totalBeatsProduct, context: audioContext })
-            .then((instrumentss) => {
-                newInstruments = instrumentss;
-                const bpmMultiplier     = 60 / bpm;
-                return renderRiffTemplateAtTempo(instrumentss, bpmMultiplier);
-            })
-            .then((audioTemplate) => {
-                const newState = { isLoading: false, error: '' };
-                if (!audioTemplate) newState.error = 'Error!';
-
-                this.updateUI(newState);
-                return { audioTemplate, instruments: newInstruments };
-            });
-    }
-
     togglePlay = () => {
         if (this.props.isPlaying) {
             this.stopEvent();
         } else {
-            this.playEvent(this.currentRiffTemplate);
+            this.playEvent(this.props.activePlaylistIndex);
         }
     }
 
-    playEvent = (audioTemplate, audioStartTime = audioContext.currentTime) => {
-        if (this.state.error || !audioTemplate) return;
+    playEvent = (playlistIndex, audioStartTime = audioContext.currentTime) => {
+        const playlistItem = this.props.audioPlaylist[playlistIndex];
+        if (this.state.error || !playlistItem) return;
 
         let audioStartTimeFromNow = audioStartTime - audioContext.currentTime;
         if (audioStartTimeFromNow < 0) {
@@ -129,28 +81,66 @@ class SoundController extends Component {
             audioStartTimeFromNow = 0;
         }
 
-        this.currentRiffTemplate = audioTemplate;
-        this.playAudioTemplate(audioTemplate, audioStartTime);
-
-        this.props.actions.updateCurrentAudioTemplate({
-            id: this.generationCount,
-            audioStartTime,
-            audioTemplate
-        });
+        this.playAudioTemplate(playlistItem, audioStartTime);
+        this.scheduleNextPlaylistItem(playlistItem, audioStartTime);
 
         if (audioStartTimeFromNow === 0) {
-            if (!this.props.isPlaying) this.props.actions.updateIsPlaying(true);
+            this.updatePlayEventState(playlistIndex, audioStartTime);
         } else {
             this.updatePlayingTimeout = setTimeout(() => {
-                if (!this.props.isPlaying) this.props.actions.updateIsPlaying(true);
+                this.updatePlayEventState(playlistIndex, audioStartTime);
             }, audioStartTimeFromNow * 1000);
         }
+    }
 
+    scheduleThreshold = 0.90;
+    scheduleNextPlaylistItem = (playlistItem, audioStartTime) => {
+        const totalLength          = getTotalTimeLength(playlistItem.sequences, playlistItem.bpm);
+        const audioTemplateEndTime = audioStartTime + (totalLength);
+        const audioProgress        = audioContext.currentTime - audioStartTime;
+        const timeTillEnd          = (audioTemplateEndTime - (audioStartTime + audioProgress));
 
-        if (this.props.continuousGeneration) {
-            const renewalTimeoutTime = Math.round(getTotalTimeLength(this.props.generationState.sequences, this.props.generationState.bpm) * this.renewalPoint);
-            this.renewalTimeout = setTimeout(this.generateAndQueue, renewalTimeoutTime);
+        if (timeTillEnd < 0) {
+            setTimeout(() => this.stopEvent(), 0);
+            return this.props.actions.enableModal({
+                title: 'Error!',
+                isCloseable: true,
+                content: <p>Sorry, we had to stop because the browser is overloaded. Hit play again!</p>
+            });
         }
+
+        const timeThreshold        = timeTillEnd * this.scheduleThreshold;
+        const stopEventDiff        = timeTillEnd - timeThreshold;
+
+        this.loopTimeout = setTimeout(() => {
+            const { actions, activePlaylistIndex, audioPlaylist, isPlaying, loopMode } = this.props;
+            const newPlaylistIndex = loopMode === 2
+                ? activePlaylistIndex
+                : activePlaylistIndex + 1 < audioPlaylist.length
+                    ? activePlaylistIndex + 1
+                    : 0;
+
+            if (loopMode || newPlaylistIndex !== 0) {
+                this.trueActivePlaylistIndex = newPlaylistIndex;
+                const newStartTime = Math.max(audioContext.currentTime, audioTemplateEndTime);
+                if (newStartTime === audioContext.currentTime) this.scheduleThreshold = this.scheduleThreshold - 0.05;
+                if (isPlaying) this.updateInstrumentsAndPlay(newPlaylistIndex, false, newStartTime);
+                this.stopTimeout = setTimeout(() => {
+                    actions.updateActivePlaylistIndex(newPlaylistIndex);
+                }, stopEventDiff * 1000);
+            } else {
+                this.stopTimeout = setTimeout(this.stopEvent, stopEventDiff * 1000);
+            }
+        }, timeThreshold * 1000);
+    }
+
+    updatePlayEventState = (playlistIndex, audioStartTime) => {
+        const playlistItem = this.props.audioPlaylist[playlistIndex];
+        if (!this.props.isPlaying) this.props.actions.updateIsPlaying(true);
+        this.replaceInAudioPlaylist({
+            ...playlistItem,
+            audioStartTime,
+        }, playlistIndex);
     }
 
     stopEvent = () => {
@@ -164,39 +154,32 @@ class SoundController extends Component {
         }
     }
 
-    generateEvent = () => {
-        if (!this.state.isLoading) {
-            this.setState({ isLoading: true });
-            this.stopEvent();
-            this.generate()
-                .then(({ audioTemplate, instruments }) => this.updateInstrumentsAndPlay(audioTemplate, instruments));
-        }
-    }
-
-    generateAndQueue = () => {
-        this.generate()
-            .then(({ audioTemplate, instruments }) => {
-                if (!this.props.isPlaying) return this.updateInstrumentsAndPlay(audioTemplate, instruments);
-
-                this.queuedRiffTemplate = audioTemplate;
-                this.queuedInstruments = instruments;
-            });
-    }
-
-    updateInstrumentsAndPlay = (audioTemplate, instruments) => {
-        this.generationCount = this.generationCount + 1;
+    onGenerationEnd = (playlistItem) => {
         this.stopEvent();
-        this.playEvent(audioTemplate);
-        this.props.actions.updateCustomPresetInstruments(instruments);
+        this.replaceInAudioPlaylist(playlistItem, this.props.activePlaylistIndex);
+        this.updateInstrumentsAndPlay(this.props.activePlaylistIndex, true);
+    }
+
+    replaceInAudioPlaylist = (playlistItem, playlistIndex) => {
+        const { audioPlaylist } = this.props;
+        const newAudioPlaylist = [ ...audioPlaylist ];
+        newAudioPlaylist[playlistIndex] = playlistItem;
+        this.props.actions.updateAudioPlaylist(newAudioPlaylist);
+    }
+
+    updateInstrumentsAndPlay = (newPlaylistIndex, shouldStop, audioStartTime) => {
+        const nextPlaylistItem = this.props.audioPlaylist[newPlaylistIndex];
+        if (shouldStop) this.stopEvent();
+        this.playEvent(newPlaylistIndex, audioStartTime);
+        this.props.actions.updateCustomPresetInstruments(nextPlaylistItem.instruments);
     }
 
     onSourceEnd = (source) => {
         this.currentlyPlayingSources = splice(this.currentlyPlayingSources.indexOf(source), 1, this.currentlyPlayingSources);
     }
 
-    playAudioTemplate = (audioTemplate, audioStartTime) => {
-        const audioProgress = audioContext.currentTime - audioStartTime;
-        const upcomingSources = audioTemplate
+    playAudioTemplate = (playlistItem, audioStartTime) => {
+        const upcomingSources = playlistItem.audioTemplate
             .map(({
                     buffer,
                     startTime,
@@ -213,62 +196,37 @@ class SoundController extends Component {
             );
 
         this.currentlyPlayingSources = [ ...this.currentlyPlayingSources, ...upcomingSources ];
-
-        const totalLength          = getTotalTimeLength(this.props.generationState.sequences, this.props.generationState.bpm);
-        const audioTemplateEndTime = audioStartTime + (totalLength);
-        const timeTillEnd          = (audioTemplateEndTime - (audioStartTime + audioProgress));
-
-        if (this.props.isLooping) {
-            this.loopTimeout = setTimeout(() => {
-                if (this.props.isPlaying) this.playEvent(audioTemplate, audioTemplateEndTime);
-            }, (timeTillEnd * 0.9) * 1000);
-        } else {
-            this.stopTimeout = setTimeout(this.stopEvent, timeTillEnd * 1000);
-        }
     }
 
     render = () => {
         const eventName = this.props.isPlaying ? 'stop' : 'play';
-        const continuousGeneration = document.location.hash === '#beta' && this.props.enableContinuousGenerationControl ? (
-            <div className="u-mr1">
-                <ContinuousGenerationController
-                    continuousGeneration={this.props.continuousGeneration}
-                    actions={{
-                        updateContinuousGeneration: (newVal) => this.props.actions.updateContinuousGeneration(newVal)
-                    }}
-                />
-            </div>
-        ) : null;
+        const currentPlaylistItem = this.props.audioPlaylist[this.props.activePlaylistIndex];
+        const currentPlaylistItemIsLocked = currentPlaylistItem && currentPlaylistItem.isLocked;
 
         return (
             <div>
                 { this.state.error ? <p className="txt-error">{ this.state.error }</p> : null }
                 <div className="u-flex-row u-flex-wrap">
-                    <div className={`visualiser-container__button visualiser-container__button--${this.props.generateButtonText.toLowerCase()} u-mr05 u-mb0`}>
-                        <button className={`button-primary button-primary--alpha-dark ${this.state.isLoading ? '' : 'icon-is-hidden'}`} onClick={() => this.generateEvent()}>
-                            <span className="button-primary__inner">{ this.props.generateButtonText || 'Generate' }</span>
-                            <span className="button-primary__icon">
-                                <span className="spinner" />
-                            </span>
-                        </button>
+                    <div className="visualiser-container__button u-mr05 u-mb0">
+                        <Generator
+                            audioPlaylist={ this.props.audioPlaylist }
+                            bpm={ this.props.bpm }
+                            sequences={ this.props.sequences }
+                            instruments={ this.props.instruments }
+                            onGenerationEnd={ this.onGenerationEnd }
+                            disabled={currentPlaylistItemIsLocked}
+                        />
                     </div>
 
-                    <div className="u-mr1 u-mb0">
-                        <button className="button-primary button-primary--alpha-dark" title={ capitalize(eventName) } onClick={this.togglePlay} disabled={!this.currentRiffTemplate}>
+                    <div className="u-mr05 u-mb0">
+                        <button className="button-primary button-primary--alpha-dark" title={ capitalize(eventName) } onClick={this.togglePlay} disabled={!this.props.audioPlaylist.length}>
                             <SVG icon={ eventName } className="button-primary__svg-icon" />
                         </button>
                     </div>
 
-                    <div className="u-mr1">
-                        <LoopController
-                            isLooping={this.props.isLooping}
-                            actions={{
-                                updateIsLooping: (newVal) => this.props.actions.updateIsLooping(newVal)
-                            }}
-                        />
+                    <div className="u-mr1 u-mb0">
+                        <LoopController />
                     </div>
-
-                    { continuousGeneration }
                 </div>
             </div>
         );

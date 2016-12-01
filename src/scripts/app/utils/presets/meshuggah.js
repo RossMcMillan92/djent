@@ -3,7 +3,7 @@ const preset = {
     description: 'Meshuggah',
     settings: {
         config: {
-            bpm            : 75,
+            bpm : 90,
         },
         sequences: [
             {
@@ -12,29 +12,23 @@ const preset = {
                 beats : 4,
             },
             {
-                id    : 'CUSTOM_SEQUENCE_1',
-                bars  : 4,
-                beats : 4,
+                id             : 'CUSTOM_SEQUENCE_1',
+                bars           : 1,
+                beats          : 7,
                 hitChance      : 1,
                 allowedLengths : [
                         {
-                            id: '0.25',
-                            amount: 1,
-                        },
-                        {
-                            id: '0.5',
-                            amount: 2,
-                            isTriplet: true,
-                        },
-                        {
                             id: '1',
-                            amount: 5,
-                            isTriplet: true,
+                            amount: 1,
+                            isDotted: true,
                         },
                         {
                             id: '2',
-                            amount: 7,
-                            isTriplet: true,
+                            amount: 3,
+                        },
+                        {
+                            id: '4',
+                            amount: 1,
                         },
                 ],
             },
@@ -43,7 +37,7 @@ const preset = {
             {
                 id: 'g',
                 pitch: -300,
-                sounds: [
+                sounds : [
                     {
                         id: 'sixth-0-open',
                         enabled: true,
@@ -57,15 +51,15 @@ const preset = {
                         enabled: true,
                     },
                     {
+                        id: 'sixth-8-open',
+                        enabled: true,
+                    },
+                    {
                         id: 'sixth-0-muted',
                         enabled: true,
                     },
                     {
-                        id: 'sixth-1-muted',
-                        enabled: true,
-                    },
-                    {
-                        id: 'fifth-6-open',
+                        id: 'sixth-8-muted',
                         enabled: true,
                     },
                 ],

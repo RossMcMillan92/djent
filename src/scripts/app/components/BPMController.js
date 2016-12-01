@@ -1,31 +1,28 @@
 import React, { Component } from 'react';
+import { compose } from 'ramda';
 
+import { getTargetValueFromEvent } from '../modules/events';
 import InputBox from './InputBox';
 
-class BPMController extends Component {
-    shouldComponentUpdate = (nextProps) => nextProps.bpm !== this.props.bpm;
+const BPMController = (props) => {
+    const inputProps = {
+        id: 'bpm',
+        label: 'BPM',
+        type: 'number',
+        defaultValue: props.bpm,
+        onChange: compose(
+            props.actions.updateBPM,
+            parseFloat,
+            getTargetValueFromEvent
+        ),
+        minVal: 50,
+        maxVal: 300,
+        step: 5,
+        className: 'input-base input-base--bare input-base--large input-base--short',
+        labelClassName: 'input-label',
+    };
 
-    onBPMChange = (event) => {
-        const bpm = parseFloat(event.target.value);
-        this.props.actions.updateBPM(bpm);
-    }
-
-    render = () => {
-        const props = {
-            id: 'bpm',
-            label: 'BPM',
-            type: 'number',
-            defaultValue: this.props.bpm,
-            onChange: this.onBPMChange,
-            minVal: 50,
-            maxVal: 300,
-            step: 5,
-            className: 'input-base input-base--bare input-base--large input-base--short',
-            labelClassName: 'input-label',
-        };
-
-        return <InputBox { ...props } />;
-    }
+    return <InputBox { ...inputProps } />;
 }
 
 export default BPMController;

@@ -82,6 +82,7 @@ export default class Waveform extends Component {
         this.props.isPlaying !== nextProps.isPlaying
         || this.props.isLoading !== nextProps.isLoading
         || this.props.buffer !== nextProps.buffer
+        || this.props.audioStartTime !== nextProps.audioStartTime
 
     componentDidMount = () => {
         this.initialise(this.props);
@@ -113,7 +114,7 @@ export default class Waveform extends Component {
     }
 
     createInitialLevelsFromWidth = (width, height) => {
-        const levelAmount = Math.ceil(width / RESOLUTION);
+        const levelAmount = Math.floor(width / RESOLUTION);
 
         if (this.levels.length !== levelAmount) {
             this.levels = createInitialLevels(levelAmount, height, RESOLUTION);
@@ -143,7 +144,7 @@ export default class Waveform extends Component {
         const duration = timeLength;
         const iteration = duration === 0 || currentTime <= 0 ? 0 : Math.floor(currentTime / duration);
         const percentPassed = (currentTime - (duration * iteration)) / duration;
-        const indexThreshold = Math.ceil(this.levels.length * percentPassed);
+        const indexThreshold = Math.floor(this.levels.length * percentPassed);
 
         this.levels.forEach((level, i) => {
             const levelColor = currentTime && i <= indexThreshold ? this.activeColor : this.backgroundColor;

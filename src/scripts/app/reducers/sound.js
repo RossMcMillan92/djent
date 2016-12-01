@@ -1,8 +1,21 @@
+import { compose, flip, map } from 'ramda';
+import { getLocalStorageIO } from '../modules/localStorageIO';
+
+//    getStoredLoopModeValue :: Key -> a
+const getStoredLoopModeValue = compose(
+    map(flip(parseInt)(10)),
+    getLocalStorageIO,
+);
+
+const storedLoopModeValue = getStoredLoopModeValue('loopMode').runIO();
+
 const initialState =  {
     isPlaying            : false,
-    isLooping            : true,
+    loopMode             : typeof storedLoopModeValue !== 'undefined' ? storedLoopModeValue : 0,
     generationState      : undefined,
     currentAudioTemplate : undefined,
+    audioPlaylist        : [],
+    activePlaylistIndex  : 0,
     currentSrc           : undefined,
 };
 
@@ -19,13 +32,13 @@ export default function sound(state = initialState, action) {
         case 'UPDATE_CONTINUOUS_GENERATION':
             return {
                 ...state,
-                isLooping: payload.continuousGeneration ? false : payload.isLooping
+                loopMode: payload.continuousGeneration ? false : payload.loopMode
             };
 
-        case 'UPDATE_IS_LOOOPING':
+        case 'UPDATE_LOOPING_MODE':
             return {
                 ...state,
-                isLooping: payload.isLooping
+                loopMode: payload.loopMode
             };
 
         case 'UPDATE_GENERATION_STATE':
@@ -34,10 +47,16 @@ export default function sound(state = initialState, action) {
                 generationState: payload.generationState
             };
 
-        case 'UPDATE_CURRENT_AUDIO_TEMPLATE':
+        case 'UPDATE_AUDIO_PLAYLIST':
             return {
                 ...state,
-                currentAudioTemplate: payload.currentAudioTemplate
+                audioPlaylist: payload.audioPlaylist
+            };
+
+        case 'UPDATE_ACTIVE_PLAYLIST_INDEX':
+            return {
+                ...state,
+                activePlaylistIndex: payload.activePlaylistIndex
             };
 
         case 'UPDATE_CURRENT_SRC':
@@ -48,5 +67,5 @@ export default function sound(state = initialState, action) {
 
         default:
             return state;
-  }
+    }
 }

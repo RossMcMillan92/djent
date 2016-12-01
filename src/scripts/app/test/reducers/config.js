@@ -55,31 +55,6 @@ describe('Config reducer:', () => {
                 .to.deep.equal(stateAfterAdd);
         });
 
-        it('should update fadeIn', () => {
-            const stateAfterAdd = {
-                ...initialState,
-                activePresetID: 'newpreset',
-                fadeIn: true,
-            };
-            const payload = {
-                preset: {
-                    id: 'newpreset',
-                    settings: {
-                        config: {
-                            fadeIn: true,
-                        }
-                    }
-                }
-            };
-            const action = {
-                type: 'APPLY_PRESET',
-                payload,
-            };
-
-            expect(config(initialState, action))
-                .to.deep.equal(stateAfterAdd);
-        });
-
         it('should update hitChance', () => {
             const stateAfterAdd = {
                 ...initialState,
@@ -117,25 +92,6 @@ describe('Config reducer:', () => {
             };
             const action = {
                 type: 'UPDATE_BPM',
-                payload,
-            };
-
-            expect(config(initialState, action))
-                .to.deep.equal(stateAfterAdd);
-        });
-    });
-
-    describe('Action type: UPDATE_FADEIN', () => {
-        it('should update fadeIn', () => {
-            const stateAfterAdd = {
-                ...initialState,
-                fadeIn: true,
-            };
-            const payload = {
-                fadeIn: true
-            };
-            const action = {
-                type: 'UPDATE_FADEIN',
                 payload,
             };
 

@@ -1,4 +1,9 @@
 import {
+    multiply,
+    divide
+} from 'ramda';
+
+import {
     randomFromArray,
     repeatArray
 } from '../utils/tools';
@@ -89,7 +94,14 @@ const predefinedSequences = {
 const convertAllowedLengthsToArray = (objs) => objs
     .reduce((newArr, obj) => {
         if (obj.amount) {
-            const length = parseFloat(obj.id) * (obj.isTriplet ? 1.5 : 1);
+            const multiplier = obj.isTriplet || obj.isDotted
+                ? 1.5
+                : 1;
+            const transform = obj.isTriplet
+                ? multiply
+                : divide;
+
+            const length = transform(parseFloat(obj.id), multiplier);
             return [ ...newArr, ...repeatArray([length], obj.amount) ];
         }
         return [ ...newArr ];
@@ -122,11 +134,13 @@ const getAllowedLengthsFromSequence = (sequence, allowedLengths) =>
     allowedLengths.map(length => {
         const amount         = sequence.filter(item => item.beat === parseFloat(length.id)).length;
         const amountTriplets = sequence.filter(item => item.beat === parseFloat(length.id) * 1.5).length;
+        const amountDotted = sequence.filter(item => item.beat === parseFloat(length.id) * 0.75).length;
 
         return {
             ...length,
             amount    : amount || amountTriplets,
-            isTriplet : !!amountTriplets
+            isTriplet : !!amountTriplets,
+            isDotted : !!amountDotted,
         };
     });
 
@@ -169,7 +183,9 @@ const getSequence = ({ sequences, generatedSequences, usePredefinedSettings }) =
         };
     }
 
-    let sequence = randomFromArray(instrumentSequences);
+    let sequence = !instrumentSequences || !instrumentSequences.length
+        ? []
+        : randomFromArray(instrumentSequences);
 
     if (typeof sequence === 'string') {
         if (predefinedSequences[sequence]) {

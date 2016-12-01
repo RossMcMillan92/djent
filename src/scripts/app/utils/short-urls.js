@@ -1,5 +1,5 @@
 import { decompress } from 'lzutf8';
-import { getHashQueryParam, log, loadScript } from './tools';
+import { logError, loadScript } from './tools';
 
 const googleAPIKey = 'AIzaSyCUN26hzVNf0P_ED_oALvsVx3ffmyzliOI';
 
@@ -22,13 +22,13 @@ const handleGoogleAPI = () =>
         window.handleClientLoad = handleClientLoad;
     });
 
-const getPresetData = (shareID) => {
+const getLongURLFromShareID = (shareID) => {
     if (!window.gapi) return Promise.reject();
     return window.gapi.client.urlshortener.url
         .get({
           shortUrl: `http://goo.gl/${shareID}`
         })
-        .then((response) => getHashQueryParam('share', response.result.longUrl), log);
+        .then((response) => response.result.longUrl, logError);
 };
 
 const getPresetFromData = (data) => {
@@ -43,7 +43,7 @@ const getPresetFromData = (data) => {
 };
 
 export {
-    getPresetData,
+    getLongURLFromShareID,
     getPresetFromData,
     handleGoogleAPI,
 };

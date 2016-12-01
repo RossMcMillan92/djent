@@ -5,7 +5,7 @@
     'use strict';
 
     // Load the sw-toolbox library.
-    importScripts('/node_modules/sw-toolbox/sw-toolbox.js');
+    importScripts('node_modules/sw-toolbox/sw-toolbox.js');
 
     global.toolbox.options.debug = false;
 
@@ -16,9 +16,8 @@
 
     // The route for the assets
     toolbox.router.get('/assets/(.*)', global.toolbox.fastest);
-    toolbox.router.get('/dist/(.*)', global.toolbox.fastest);
 
-    global.toolbox.router.default = global.toolbox.networkFirst;
+    global.toolbox.router.default = global.toolbox.fastest;
 
     // Ensure that our service worker takes control of the page as soon as possible.
     global.addEventListener('install', event => event.waitUntil(global.skipWaiting()));

@@ -5,7 +5,6 @@ const buildDir      = constants.buildDir;
 const sourceDir     = constants.sourceDir;
 
 const cwd = process.cwd();
-const localip = '192.168.0.3';
 
 const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
@@ -48,8 +47,8 @@ const config = Object.assign({}, base, {
     },
     devServer: {
         inline: true,
-        port: 3123,
-        host: localip,
+        port: 3002,
+        host: '0.0.0.0',
         publicPath: '/',
         contentBase: path.join(cwd, buildDir),
     },
@@ -57,7 +56,8 @@ const config = Object.assign({}, base, {
         new webpack.optimize.OccurenceOrderPlugin(),
         new CopyWebpackPlugin([
             { from: 'src/scripts/sw/sw.js' },
-            { from: 'src/assets', to: 'assets' }
+            { from: 'src/assets', to: 'assets' },
+            { from: 'node_modules/sw-toolbox/sw-toolbox.js', to: 'node_modules/sw-toolbox/assets' },
         ]),
         new webpack.DefinePlugin({
             NODE_ENV: JSON.stringify('development')

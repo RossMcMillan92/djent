@@ -48,7 +48,8 @@ const config = Object.assign({}, base, {
         new webpack.optimize.OccurenceOrderPlugin(),
         new CopyWebpackPlugin([
             { from: 'src/scripts/sw/sw.js' },
-            { from: 'src/assets', to: 'assets' }
+            { from: 'src/assets', to: 'assets' },
+            { from: 'node_modules/sw-toolbox/sw-toolbox.js', to: 'node_modules/sw-toolbox' },
         ]),
         new webpack.DefinePlugin({
             NODE_ENV: JSON.stringify('production')

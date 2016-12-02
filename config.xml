@@ -9,4 +9,5 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
+    <engine name="ios" spec="~4.3.0" />
 </widget>

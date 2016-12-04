@@ -11,8 +11,8 @@ import 'static/.htaccess';
 import 'static/manifest.json';
 import 'assets/images/favicon.ico';
 
-import '../styles/app.sass';
+import 'styles/app.sass';
 
-import 'app/libraries/HackTimer';
+import 'libraries/HackTimer';
 
 import 'app/index';

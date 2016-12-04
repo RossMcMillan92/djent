@@ -1,7 +1,7 @@
 const sourceDir     = '/src';
 const buildDir      = '/www';
 const configDir     = '/tools';
-const entryJSFile   = `${sourceDir}/scripts/app.js`;
+const entryJSFile   = `${sourceDir}/generic/scripts/app.js`;
 const outputCSSFile = 'app.css';
 const outputJSFile  = 'app.js';
 

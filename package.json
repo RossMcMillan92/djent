@@ -91,9 +91,8 @@
     "webpack-watch-livereload-plugin": "^0.0.1"
   },
   "scripts": {
-    "wizard": "/usr/bin/env node tools/wizard.js",
-    "winard": "node tools/wizard.js",
-    "test": "node ./node_modules/mocha/bin/mocha ./src/scripts/app/test/* --require babel-core/register --watch"
+    "start": "node tools/wizard.js",
+    "test": "node ./node_modules/mocha/bin/mocha ./src/generic/scripts/app/test/* --require babel-core/register --watch"
   },
   "license": "ISC"
 }

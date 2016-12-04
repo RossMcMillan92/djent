@@ -1,4 +1,4 @@
-import { isDevEnv } from 'utils/tools';
+import settings from 'settings';
 
 const rootOctave = 1;
 const getMidiNote = (note, octave) => note + (rootOctave + octave);
@@ -16,9 +16,10 @@ const defaultInstrumentProps = {
     repeatHitTypeForXBeat: 0,
 };
 
-const getSoundURL = (path) => isDevEnv()
-    ? path
-    : `https://raw.githubusercontent.com/RossMcMillan92/djent/master/src/${path}`;
+console.log('SETTINGS.USEEXTERNALSOUNDFILES', settings.useExternalSoundFiles)
+const getSoundURL = (path) => settings.useExternalSoundFiles
+    ? `https://raw.githubusercontent.com/RossMcMillan92/djent/master/src/generic/${path}`
+    : path;
 
 const defaultInstruments = [
     {

@@ -55,8 +55,8 @@ const config = Object.assign({}, base, {
     plugins: [
         new webpack.optimize.OccurenceOrderPlugin(),
         new CopyWebpackPlugin([
-            { from: 'src/scripts/sw/sw.js' },
-            { from: 'src/assets', to: 'assets' },
+            { from: 'src/generic/scripts/sw/sw.js' },
+            { from: 'src/generic/assets', to: 'assets' },
             { from: 'node_modules/sw-toolbox/sw-toolbox.js', to: 'node_modules/sw-toolbox/assets' },
         ]),
         new webpack.DefinePlugin({

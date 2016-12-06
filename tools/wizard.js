@@ -42,7 +42,7 @@ const build = () => {
 
 const dev = () => {
     exec(
-        `node ${cwd}/node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --colors --watch --config=${cwd}${configDir}/webpack.dev.config.js`,
+        `node ${cwd}/node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --colors --watch --https --config=${cwd}${configDir}/webpack.dev.config.js`,
         execSpawnOpts
     );
 };

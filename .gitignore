@@ -1,7 +1,12 @@
 /.sass-cache/
 /node_modules/
 
+platforms/*
+plugins/*
+www/*
 build/*
 dist/*
 public/*
 !dist/.gitkeep
+
+.DS_Store

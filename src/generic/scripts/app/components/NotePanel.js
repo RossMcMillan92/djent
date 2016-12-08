@@ -42,7 +42,7 @@ class NotePanel extends Component {
 
         return (
             <div className={`note-panel ${isOn ? '' : 'note-panel--disabled'}`}>
-                <img className="note-panel__svg" src={`assets/images/notes/${length.name}.svg`} alt={noteName} title={noteName} />
+                <img className="note-panel__svg" src={`/assets/images/notes/${length.name}.svg`} alt={noteName} title={noteName} />
                 <div className="note-panel__amount-container">
                     <span className="note-panel__amount" title="Chance">{percentage}%</span>
                     <div className="note-panel__btn-container">

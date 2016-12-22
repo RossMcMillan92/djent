@@ -25,6 +25,7 @@ const preset = {
                         {
                             id: '2',
                             amount: 3,
+                            isDotted: true,
                         },
                         {
                             id: '4',
@@ -43,23 +44,19 @@ const preset = {
                         enabled: true,
                     },
                     {
-                        id: 'sixth-1-open',
+                        id: 'sixth-12-open',
                         enabled: true,
                     },
                     {
-                        id: 'sixth-4-open',
+                        id: 'sixth-13-open',
                         enabled: true,
                     },
                     {
-                        id: 'sixth-8-open',
+                        id: 'sixth-15-open',
                         enabled: true,
                     },
                     {
                         id: 'sixth-0-muted',
-                        enabled: true,
-                    },
-                    {
-                        id: 'sixth-8-muted',
                         enabled: true,
                     },
                 ],

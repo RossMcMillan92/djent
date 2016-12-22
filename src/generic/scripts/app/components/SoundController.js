@@ -47,12 +47,12 @@ class SoundController extends Component {
     }
 
     componentWillUpdate = (nextProps) => {
-        if (this.props.isPlaying && !nextProps.isPlaying) return this.stopEvent();
+        if (this.props.isPlaying && !nextProps.isPlaying) return this.stopEvent(false);
 
         const playlistItemWasDeleted = this.props.audioPlaylist.length > nextProps.audioPlaylist.length;
 
-        if (playlistItemWasDeleted) {
-            if (this.props.isPlaying) this.stopEvent();
+        if (playlistItemWasDeleted && this.props.isPlaying) {
+            this.stopEvent();
         }
     }
 
@@ -65,7 +65,7 @@ class SoundController extends Component {
 
     togglePlay = () => {
         if (this.props.isPlaying) {
-            this.stopEvent();
+            this.props.actions.updateIsPlaying(false);
         } else {
             this.playEvent(this.props.activePlaylistIndex);
         }
@@ -143,21 +143,21 @@ class SoundController extends Component {
         }, playlistIndex);
     }
 
-    stopEvent = () => {
+    stopEvent = (sendAction = true) => {
         if (this.props.isPlaying) {
             this.clearTimeouts();
             this.currentlyPlayingSources
                 .map(src => stop(src));
             this.currentlyPlayingSources = [];
 
-            if (this.props.isPlaying) this.props.actions.updateIsPlaying(false);
+            if (sendAction && this.props.isPlaying) this.props.actions.updateIsPlaying(false);
         }
     }
 
     onGenerationEnd = (playlistItem) => {
         this.stopEvent();
         this.replaceInAudioPlaylist(playlistItem, this.props.activePlaylistIndex);
-        this.updateInstrumentsAndPlay(this.props.activePlaylistIndex, true);
+        this.updateInstrumentsAndPlay(this.props.activePlaylistIndex);
     }
 
     replaceInAudioPlaylist = (playlistItem, playlistIndex) => {

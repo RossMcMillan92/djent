@@ -1,6 +1,6 @@
 import adtrBreakdown from './presets/adtr-breakdown';
 import blackDahlia from './presets/black-dahlia';
-// import deftones from './presets/deftones'; // not ready for prime time
+import deftones from './presets/deftones'; // not ready for prime time
 import meshuggah from './presets/meshuggah';
 import polyrhythms from './presets/polyrhythms';
 import swornIn from './presets/sworn-in';
@@ -14,7 +14,7 @@ import { deepClone } from './tools';
 const presets = [
     adtrBreakdown,
     blackDahlia,
-    // deftones,
+    deftones,
     meshuggah,
     polyrhythms,
     swornIn,

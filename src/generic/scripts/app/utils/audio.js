@@ -1,6 +1,6 @@
 import { chain, compose, curry, filter, prop, map, sequence } from 'ramda';
 import { Future } from 'ramda-fantasy';
-import { catchError, fork, logError } from 'utils/tools';
+import { catchError, fork, logError, trace } from 'utils/tools';
 
 import {
     getTotalTimeLength,
@@ -125,7 +125,9 @@ const combineAudioBuffers = audioBuffers => {
 //    renderAudioPlaylistToBuffer :: [audioPlaylistItem] -> Future [audioBuffer]
 const renderAudioPlaylistItemToBuffer = compose(
     chain(combineAudioBuffers),
+    trace('after sequence(Future.of)'),
     sequence(Future.of),
+    trace('before sequence(Future.of)'),
     map(renderBuffer),
     map(audioPlaylistItemToRenderable),
 );

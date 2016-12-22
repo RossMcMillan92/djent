@@ -1,6 +1,6 @@
 const preset = {
     id: 'deftones',
-    description: 'Deftones',
+    description: 'Chords',
     settings: {
         config: {
             bpm            : 90,
@@ -8,13 +8,13 @@ const preset = {
         sequences: [
             {
                 id    : 'total',
-                bars  : 4,
+                bars  : 8,
                 beats : 4,
             },
             {
                 id          : 'CUSTOM_SEQUENCE_1',
                 description : 'Guitars',
-                bars        : 4,
+                bars        : 8,
                 beats       : 4,
                 hitChance   : 1,
                 allowedLengths : [
@@ -26,26 +26,31 @@ const preset = {
                         id: '0.5',
                         amount: 1,
                     },
+                    {
+                        id: '1',
+                        amount: 1,
+                    },
                 ],
             },
             {
                 id          : 'CUSTOM_SEQUENCE_2',
-                description : 'Bass drum',
+                description : 'Lead Guitar',
                 bars        : 1,
-                beats       : 4,
-                hitChance   : 0.5,
+                beats       : 8,
+                hitChance   : 1,
                 allowedLengths : [
                     {
                         id: '1',
-                        amount: 4,
+                        amount: 1,
                     },
                     {
                         id: '2',
-                        amount: 2,
+                        amount: 3,
+                        isDotted: true,
                     },
                     {
                         id: '4',
-                        amount: 1,
+                        amount: 2,
                     },
                 ],
             },
@@ -57,12 +62,12 @@ const preset = {
                 hitChance   : 1,
                 allowedLengths : [
                     {
-                        id: '1',
-                        amount: 1,
-                    },
-                    {
                         id: '2',
                         amount: 8,
+                    },
+                    {
+                        id: '4',
+                        amount: 3,
                     },
                 ],
             },
@@ -73,11 +78,51 @@ const preset = {
                 repeatHitTypeForXBeat: 8,
                 sounds: [
                     {
-                        id: 'sixth-4-muted',
+                        id: 'sixth-0-chord',
                         enabled: true,
                     },
                     {
-                        id: 'sixth-8-muted',
+                        id: 'sixth-3-chord',
+                        enabled: true,
+                    },
+                    {
+                        id: 'sixth-8-chord',
+                        enabled: true,
+                    },
+                ],
+            },
+            {
+                id: 'lg',
+                sequences: [
+                    'CUSTOM_SEQUENCE_2',
+                ],
+                sounds: [
+                    {
+                        id: 'gs4',
+                        enabled: true,
+                    },
+                    {
+                        id: 'as5',
+                        enabled: true,
+                    },
+                    {
+                        id: 'b5',
+                        enabled: true,
+                    },
+                    {
+                        id: 'cs5',
+                        enabled: true,
+                    },
+                    {
+                        id: 'ds5',
+                        enabled: true,
+                    },
+                    {
+                        id: 'e5',
+                        enabled: true,
+                    },
+                    {
+                        id: 'fs5',
                         enabled: true,
                     },
                 ],
@@ -85,7 +130,7 @@ const preset = {
             {
                 id: 'k',
                 sequences: [
-                    'CUSTOM_SEQUENCE_2',
+                    'CUSTOM_SEQUENCE_1',
                 ],
                 sounds: [
                     {
@@ -106,9 +151,7 @@ const preset = {
             {
                 id: 'c',
                 sequences: [
-                    [
-                       { beat: 0.25, volume: 1 },
-                   ]
+                    'twoBars',
                 ],
                 sounds: [
                     {

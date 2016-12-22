@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { assoc, last, map, sequence, split, traverse } from 'ramda';
+import { assoc, last, split } from 'ramda';
 import { Future as Task } from 'ramda-fantasy';
 import { List } from 'immutable-ext';
 
@@ -23,7 +23,7 @@ import {
 } from 'utils/riffs';
 
 import { isMobile } from 'utils/mobile';
-import { compose, getHashQueryParam, logError, throttle, trace } from 'utils/tools';
+import { compose, getHashQueryParam, logError, throttle } from 'utils/tools';
 
 export default class Main extends Component {
     static contextTypes = {
@@ -75,34 +75,30 @@ export default class Main extends Component {
     }
 
     setupSharedItems = (shareID) => {
-        const longURLPromises = shareID.split('-')
-            .map(getLongURLFromShareID);
-
-        return Promise.all(longURLPromises)
-            .then(longURLs => {
-                if (longURLs.length === 1 && longURLs[0].includes('-')) {
-                    return compose(this.setupSharedItems, last, split('/'))(longURLs[0]);
+        const audioPlaylist = List(shareID.split('-'))
+            .traverse(Task.of, getLongURLFromShareID)
+            .chain(longURLs => {
+                if (longURLs.size === 1 && longURLs.get(0).includes('-')) {
+                    return compose(this.setupSharedItems, last, split('/'))(longURLs.get(0));
                 }
                 const sharedPresets = longURLs
                     .map(compose(this.dataStringToPreset, getHashQueryParam('share')));
 
-                this.props.actions.applyPreset(sharedPresets[0]);
+                this.props.actions.applyPreset(sharedPresets.get(0));
 
-                const playlistPromises = List(sharedPresets)
-                    .traverse(Task.of, presetToPlaylistItem);
-
-                return playlistPromises
+                return sharedPresets
+                    .traverse(Task.of, presetToPlaylistItem)
                     .map(assoc('isLocked', true));
             });
+
+        return audioPlaylist;
     }
 
     setupSharedItemsAndUpdate = (shareID) => {
         this.setupSharedItems(shareID)
-            .then(pl => {
-                pl.fork(logError, audioPlaylist => {
-                    this.props.actions.updateAudioPlaylist(audioPlaylist.toJS());
-                    this.props.actions.disableModal();
-                });
+            .fork(logError, audioPlaylist => {
+                this.props.actions.updateAudioPlaylist(audioPlaylist.toJS());
+                this.props.actions.disableModal();
             });
     }
 
@@ -141,21 +137,6 @@ export default class Main extends Component {
 
     setActivePageIndex = (index) => {
         if (this.state.activePageIndex !== index) this.setState({ activePageIndex: index });
-    }
-
-    applySharedPreset = (data) => {
-        let sharedPreset = getPresetFromData(data);
-
-        if (sharedPreset) {
-            // TODO: missed this bit out lol
-            sharedPreset = backwardsCompatibility(sharedPreset, defaultAllowedLengths);
-            sharedPreset.settings.instruments = sharedPreset.settings.instruments
-                .map(i => ({ ...i, sounds: getActiveSoundsFromHitTypes(i.predefinedHitTypes) }));
-
-            this.props.actions.applyPreset(sharedPreset);
-        }
-
-        this.props.actions.disableModal();
     }
 
     changeActivePageIndex = (index) => {

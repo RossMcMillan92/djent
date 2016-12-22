@@ -1,6 +1,6 @@
-import { chain, compose, curry, filter, prop, map, sequence } from 'ramda';
-import { Future } from 'ramda-fantasy';
-import { catchError, fork, logError, trace } from 'utils/tools';
+import { chain, compose, curry, filter, prop, map, traverse } from 'ramda';
+import { Future as Task } from 'ramda-fantasy';
+import { fork } from 'utils/tools';
 
 import {
     getTotalTimeLength,
@@ -8,11 +8,11 @@ import {
 
 const bufferCache = {};
 
-// getBuffer :: url -> Future Error Buffer
-const getBuffer = curry((context, url) =>
-    Future((rej, res) => {
+//    getBufferFromURL :: context -> url -> Task Error Buffer
+const getBufferFromURL = curry((context, url) =>
+    Task((rej, res) => {
         if (bufferCache[url]) return res(bufferCache[url]);
-
+        const onError = () => rej(Error(`Error decoding file data: ${url}`));
         const request = new XMLHttpRequest();
         request.open('GET', url, true);
         request.responseType = 'arraybuffer';
@@ -21,58 +21,53 @@ const getBuffer = curry((context, url) =>
                 request.response,
                 (buffer) => {
                     if (!buffer) {
-                        rej(Error(`Error decoding file data: ${url}`));
+                        onError();
                         return;
                     }
                     bufferCache[url] = buffer;
                     res(buffer);
                 },
-                rej
+                onError
             );
-        request.onerror = rej;
+        request.onerror = onError;
         request.send();
     }));
 
-// filterInstrumentsWithSounds :: [Instrument] -> [Instrument]
+//    filterInstrumentsWithSounds :: [Instrument] -> [Instrument]
 const filterInstrumentsWithSounds = instrument =>
     instrument.sounds.filter(sound => sound.enabled).length;
 
-// getBufferPromise :: Instrument -> Promise Error [Instrument]
-const getBufferPromise = curry((context, instrument) => {
+//    getBufferFromInstrument :: audioContext -> Instrument -> Task Error [Instrument]
+const getBufferFromInstrument = curry((context, instrument) => {
     const newInstrument = { ...instrument };
     const enabledSounds = newInstrument.sounds
         .filter(sound => sound.enabled);
     newInstrument.buffers = {};
 
-    return new Promise((res, rej) => {
+    return Task((rej, res) => {
+        const onComplete = (buffer, sound, sounds) => {
+            newInstrument.buffers[sound.id] = buffer;
+            bufferCount++;
+            if (bufferCount === sounds.length) {
+                res(newInstrument);
+            }
+        };
         let bufferCount = 0;
-        enabledSounds.forEach((sound, i, sounds) => {
-            compose(
-                fork(rej, (buffer) => {
-                    newInstrument.buffers[sound.id] = buffer;
-                    bufferCount++;
-                    if (bufferCount === sounds.length) {
-                        res(newInstrument);
-                    }
-                }),
-                getBuffer(context),
-                prop('path'),
-            )(sound);
-        });
+        enabledSounds.forEach((sound, i, sounds) =>
+            getBufferFromURL(context, sound.path)
+                .fork(rej, buffer => onComplete(buffer, sound, sounds)));
     });
 });
 
-// loadInstrumentBuffers :: context -> [Instrument] -> Promise Error [Instruments]
+//    loadInstrumentBuffers :: context -> [Instrument] -> Task Error [Instrument]
 const loadInstrumentBuffers = (context, instruments) =>
     compose(
-        catchError(logError),
-        ps => Promise.all(ps),
-        map(getBufferPromise(context)),
+        traverse(Task.of, getBufferFromInstrument(context)),
         filter(filterInstrumentsWithSounds),
     )(instruments);
 
 
-//    getBufferFromAudioTemplate :: audioTemplate -> timeLength -> Future audioBuffer
+//    getBufferFromAudioTemplate :: audioTemplate -> timeLength -> Task audioBuffer
 const getBufferFromAudioTemplate = (audioTemplate, timeLength) => {
     const offlineCtx = new OfflineAudioContext(2, 44100 * timeLength, 44100);
 
@@ -88,14 +83,14 @@ const getBufferFromAudioTemplate = (audioTemplate, timeLength) => {
         playSound(offlineCtx, buffer, startTime, duration, volume, pitchAmount, fadeInDuration, fadeOutDuration);
     });
 
-    return Future((rej, res) => {
+    return Task((rej, res) => {
         offlineCtx.oncomplete = ev => res(ev.renderedBuffer);
-        offlineCtx.onerror    = ev => rej(ev.renderedBuffer);
+        offlineCtx.onerror    = () => rej(Error('Failed rendering buffer'));
         offlineCtx.startRendering();
     });
 };
 
-//    renderBuffer :: {sequences, bpm, audioTemplate} -> Future audioBuffer
+//    renderBuffer :: {sequences, bpm, audioTemplate} -> Task audioBuffer
 const renderBuffer = ({ sequences, bpm, audioTemplate }) => {
     const duration = getTotalTimeLength(sequences, bpm);
     return getBufferFromAudioTemplate(audioTemplate, duration);
@@ -122,17 +117,14 @@ const combineAudioBuffers = audioBuffers => {
     return getBufferFromAudioTemplate(audioTemplate, totalDuration);
 };
 
-//    renderAudioPlaylistToBuffer :: [audioPlaylistItem] -> Future [audioBuffer]
+//    renderAudioPlaylistToBuffer :: [audioPlaylistItem] -> Task [audioBuffer]
 const renderAudioPlaylistItemToBuffer = compose(
     chain(combineAudioBuffers),
-    trace('after sequence(Future.of)'),
-    sequence(Future.of),
-    trace('before sequence(Future.of)'),
-    map(renderBuffer),
+    traverse(Task.of, renderBuffer),
     map(audioPlaylistItemToRenderable),
 );
 
-// getPitchPlaybackRatio :: Integer -> Integer
+//    getPitchPlaybackRatio :: Integer -> Integer
 const getPitchPlaybackRatio = (pitchAmount) => {
     const pitchIsPositive = pitchAmount > 0;
     const negAmount = pitchIsPositive ? pitchAmount * -1 : pitchAmount;

@@ -1,4 +1,4 @@
-import { chain, compose, curry, filter, prop, map, sequence } from 'ramda';
+import { chain, compose, curry, filter, prop, map, traverse } from 'ramda';
 import { Future } from 'ramda-fantasy';
 import { catchError, fork, logError } from 'utils/tools';
 
@@ -125,8 +125,7 @@ const combineAudioBuffers = audioBuffers => {
 //    renderAudioPlaylistToBuffer :: [audioPlaylistItem] -> Future [audioBuffer]
 const renderAudioPlaylistItemToBuffer = compose(
     chain(combineAudioBuffers),
-    sequence(Future.of),
-    map(renderBuffer),
+    traverse(Future.of, renderBuffer),
     map(audioPlaylistItemToRenderable),
 );
 

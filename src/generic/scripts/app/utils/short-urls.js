@@ -23,7 +23,7 @@ const handleGoogleAPI = () =>
     });
 
 const getLongURLFromShareID = (shareID) => {
-    if (!window.gapi) return Promise.reject();
+    if (!window.gapi) return Promise.reject(Error(`Google URL Shortener API Failed: ${shareID}`));
     return window.gapi.client.urlshortener.url
         .get({
           shortUrl: `http://goo.gl/${shareID}`

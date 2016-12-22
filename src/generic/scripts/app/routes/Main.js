@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { assoc, last, map, split } from 'ramda';
+import { assoc, last, map, sequence, split, traverse } from 'ramda';
+import { Future as Task } from 'ramda-fantasy';
+import { List } from 'immutable-ext';
 
 import Expandable from 'components/Expandable';
 import Spinner from 'components/Spinner';
@@ -21,7 +23,7 @@ import {
 } from 'utils/riffs';
 
 import { isMobile } from 'utils/mobile';
-import { compose, getHashQueryParam, logError, throttle } from 'utils/tools';
+import { compose, getHashQueryParam, logError, throttle, trace } from 'utils/tools';
 
 export default class Main extends Component {
     static contextTypes = {
@@ -81,28 +83,27 @@ export default class Main extends Component {
                 if (longURLs.length === 1 && longURLs[0].includes('-')) {
                     return compose(this.setupSharedItems, last, split('/'))(longURLs[0]);
                 }
-                const dataStrings = longURLs
-                    .map(getHashQueryParam('share'));
-                const sharedPresets = dataStrings
-                    .map(this.dataStringToPreset);
+                const sharedPresets = longURLs
+                    .map(compose(this.dataStringToPreset, getHashQueryParam('share')));
 
                 this.props.actions.applyPreset(sharedPresets[0]);
 
-                const playlistPromises = sharedPresets
-                    .map(presetToPlaylistItem);
+                const playlistPromises = List(sharedPresets)
+                    .traverse(Task.of, presetToPlaylistItem);
 
-                return Promise.all(playlistPromises)
-                    .then(map(assoc('isLocked', true)));
+                return playlistPromises
+                    .map(assoc('isLocked', true));
             });
     }
 
     setupSharedItemsAndUpdate = (shareID) => {
         this.setupSharedItems(shareID)
-            .then((audioPlaylist) => {
-                this.props.actions.updateAudioPlaylist(audioPlaylist);
-                this.props.actions.disableModal();
-            })
-            .catch(logError);
+            .then(pl => {
+                pl.fork(logError, audioPlaylist => {
+                    this.props.actions.updateAudioPlaylist(audioPlaylist.toJS());
+                    this.props.actions.disableModal();
+                });
+            });
     }
 
     dataStringToPreset = (dataString) => compose(

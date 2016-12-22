@@ -12,7 +12,7 @@ const bufferCache = {};
 const getBufferFromURL = curry((context, url) =>
     Task((rej, res) => {
         if (bufferCache[url]) return res(bufferCache[url]);
-
+        const onError = () => rej(Error(`Error decoding file data: ${url}`));
         const request = new XMLHttpRequest();
         request.open('GET', url, true);
         request.responseType = 'arraybuffer';
@@ -21,15 +21,15 @@ const getBufferFromURL = curry((context, url) =>
                 request.response,
                 (buffer) => {
                     if (!buffer) {
-                        rej(Error(`Error decoding file data: ${url}`));
+                        onError();
                         return;
                     }
                     bufferCache[url] = buffer;
                     res(buffer);
                 },
-                rej
+                onError
             );
-        request.onerror = rej;
+        request.onerror = onError;
         request.send();
     }));
 

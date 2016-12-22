@@ -50,6 +50,7 @@ const getActiveSoundsFromHitTypes = (hitTypes) => (!hitTypes ? [] : hitTypes)
     .reduce((newArr, hit) => newArr.includes(hit) ? newArr : [ ...newArr, hit ], [])
     .map(hit => ({ id: hit, enabled: true }));
 
+//    renderAudioTemplateAtTempo :: instruments -> bpmMultiplier -> AudioTemplate
 const renderAudioTemplateAtTempo = (instruments, bpmMultiplier) => instruments
     .reduce((newArr, instrument) => {
         const hits = instrument.timeMap

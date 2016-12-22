@@ -1,4 +1,8 @@
 import {
+    compose,
+} from 'ramda';
+
+import {
     loadInstrumentBuffers,
 } from './audio';
 
@@ -17,17 +21,13 @@ import {
     getTotalBeatsLength,
 } from './sequences';
 
-import {
-    compose,
-    logError,
-} from './tools';
-
+//    generateRiff :: audioSettings -> Task Error [Instrument]
 const generateRiff = ({ context, totalBeatsProduct, instruments, usePredefinedSettings }) =>
     loadInstrumentBuffers(context, instruments)
-        .then(newInstruments => initiateInstruments({ instruments: newInstruments, totalBeatsProduct, usePredefinedSettings }))
-        .catch(logError);
+        .map(newInstruments => addSoundMapsToInstrument({ instruments: newInstruments, totalBeatsProduct, usePredefinedSettings }));
 
-const initiateInstruments = ({ instruments, totalBeatsProduct, usePredefinedSettings }) => {
+//    addSoundMapsToInstrument :: Instrument -> Instrument
+const addSoundMapsToInstrument = ({ instruments, totalBeatsProduct, usePredefinedSettings }) => {
     const createSoundMaps = instrument => compose(
         generateInstrumentTimeMap,
         repeatHits,
@@ -41,6 +41,7 @@ const initiateInstruments = ({ instruments, totalBeatsProduct, usePredefinedSett
     return instrumentsWithSoundMaps;
 };
 
+//    generateNewRiff :: audioSettings -> Task Error [Instrument]
 const generateNewRiff = ({ context, sequences, usePredefinedSettings, instruments, totalBeatsProduct }) => {
     const generatedSequences    = {};
     const getInstrumentSequence = getSequence({
@@ -60,27 +61,8 @@ const generateNewRiff = ({ context, sequences, usePredefinedSettings, instrument
     });
 };
 
-const generatePlaylistItem = (genID, bpm, sequences, instruments, usePredefinedSettings) => {
-    const generationState   = { bpm, sequences, instruments, usePredefinedSettings };
-    const totalBeatsProduct = getTotalBeatsLength(sequences);
-
-    let newInstruments;
-    return generateNewRiff({ ...generationState, totalBeatsProduct, context: audioContext })
-        .then((instrumentss) => {
-            newInstruments = instrumentss;
-            const bpmMultiplier = 60 / bpm;
-            return renderAudioTemplateAtTempo(instrumentss, bpmMultiplier);
-        })
-        .then((audioTemplate) => createPlaylistItem(genID, audioTemplate, newInstruments, sequences, bpm, false));
-};
-
-const presetToPlaylistItem = ({ id, settings }) => {
-    const { config, instruments, sequences } = settings;
-    const usePredefinedSettings = true;
-    return generatePlaylistItem(id, config.bpm, sequences, instruments, usePredefinedSettings);
-};
-
 let playlistItemCount = 0;
+//    createPlaylistItem :: (genID, audioTemplate, instruments, sequences, bpm, isLocked) -> PlaylistItem
 const createPlaylistItem = (genID, audioTemplate, instruments, sequences, bpm, isLocked) => {
     const key = `${genID}-${playlistItemCount}`;
     playlistItemCount = playlistItemCount + 1;
@@ -95,6 +77,27 @@ const createPlaylistItem = (genID, audioTemplate, instruments, sequences, bpm, i
     };
 };
 
+//    generatePlaylistItem :: audioSettings -> Task Error PlaylistItem
+const generatePlaylistItem = (genID, bpm, sequences, instruments, usePredefinedSettings) => {
+    const generationState   = { bpm, sequences, instruments, usePredefinedSettings };
+    const totalBeatsProduct = getTotalBeatsLength(sequences);
+
+    return generateNewRiff({ ...generationState, totalBeatsProduct, context: audioContext })
+        .map((newInstruments) => {
+            const bpmMultiplier = 60 / bpm;
+            const audioTemplate = renderAudioTemplateAtTempo(newInstruments, bpmMultiplier);
+            return createPlaylistItem(genID, audioTemplate, newInstruments, sequences, bpm, false);
+        });
+};
+
+//    generatePlaylistItem :: { id, settings } -> PlaylistItem
+const presetToPlaylistItem = ({ id, settings }) => {
+    const { config, instruments, sequences } = settings;
+    const usePredefinedSettings = true;
+    return generatePlaylistItem(id, config.bpm, sequences, instruments, usePredefinedSettings);
+};
+
+//    getGenerationID :: (currentCount, playlist) -> Integer
 const getGenerationID = (currentCount, playlist) =>
     playlist.find(pi => `${pi.id}` === `${currentCount}`)
         ? getGenerationID(currentCount + 1, playlist)
@@ -102,7 +105,6 @@ const getGenerationID = (currentCount, playlist) =>
 
 export {
     createPlaylistItem,
-    generateRiff,
     generatePlaylistItem,
     getGenerationID,
     presetToPlaylistItem,

@@ -21,11 +21,9 @@ class Generator extends Component {
         if (!this.state.isLoading) {
             this.setState({ isLoading: true });
             return this.generateFromProps()
-                .then((playlistItem) => {
+                .fork(logError, (playlistItem) => {
                     this.setState({ isLoading: false });
-                    if (this.props.onGenerationEnd) this.props.onGenerationEnd(playlistItem);
-                    else logError('No onGenerationEnd function given');
-
+                    this.props.onGenerationEnd(playlistItem);
                     return playlistItem;
                 });
         }

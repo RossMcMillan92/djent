@@ -157,7 +157,9 @@ class SoundController extends Component {
     onGenerationEnd = (playlistItem) => {
         this.stopEvent();
         this.replaceInAudioPlaylist(playlistItem, this.props.activePlaylistIndex);
-        this.updateInstrumentsAndPlay(this.props.activePlaylistIndex);
+        setTimeout(() => {
+            this.updateInstrumentsAndPlay(this.props.activePlaylistIndex);
+        }, 0);
     }
 
     replaceInAudioPlaylist = (playlistItem, playlistIndex) => {

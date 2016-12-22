@@ -38,6 +38,7 @@ const createPreset = ({ id, instruments, sequences, bpm, usePredefinedSettings }
                     predefinedHitTypes: instrument.hitTypes,
                     predefinedSequence: instrument.sequence,
                     volume: instrument.volume,
+                    fadeOutDuration: instrument.fadeOutDuration,
                     repeatHitTypeForXBeat: instrument.repeatHitTypeForXBeat,
                 }))
             : instruments,

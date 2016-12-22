@@ -28,6 +28,13 @@ export function updateInstrumentRepeatingHits({ instrumentID, value }) {
     };
 }
 
+export function updateInstrumentFadeOutDuration({ instrumentID, value }) {
+    return {
+        type: 'UPDATE_INSTRUMENT_FADE_OUT_DURATION',
+        payload: { instrumentID, value: confineToRange(0, 2, value) },
+    };
+}
+
 export function updateCustomPresetInstruments(instruments) {
     return {
         type: 'UPDATE_CUSTOM_PRESET_INSTRUMENTS',

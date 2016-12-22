@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { capitalize } from 'utils/tools';
 
 import Expandable from './Expandable';
+import FadeOutDurationController from './FadeOutDurationController';
 import PitchController from './PitchController';
 import RepeatingHitsController from './RepeatingHitsController';
-import VolumeController from './VolumeController';
 import SequenceController from './SequenceController';
 import Tabgroup, { Tabpane } from './Tabgroup';
+import VolumeController from './VolumeController';
 
 export default class InstrumentList extends Component {
     onSoundToggle = (event) => {
@@ -45,7 +46,7 @@ export default class InstrumentList extends Component {
     render = () => {
         const instrumentViews = this.props.instruments
             .map((instrument, index, instArr) => {
-                let categories = instrument.sounds
+                const categories = instrument.sounds
                     .reduce((cats, sound) => {
                         if (!cats.includes(sound.category)) {
                             return [
@@ -127,12 +128,22 @@ export default class InstrumentList extends Component {
                                             }}
                                         />
                                     </div>
-                                    <RepeatingHitsController
-                                        repeatHitTypeForXBeat={instrument.repeatHitTypeForXBeat}
+                                    <div className="u-mr1 u-mb05">
+                                        <RepeatingHitsController
+                                            repeatHitTypeForXBeat={instrument.repeatHitTypeForXBeat}
+                                            id={instrument.id}
+                                            actions={{
+                                                updateInstrumentRepeatingHits:
+                                                    this.props.actions.updateInstrumentRepeatingHits
+                                            }}
+                                        />
+                                    </div>
+                                    <FadeOutDurationController
+                                        fadeOutDuration={instrument.fadeOutDuration}
                                         id={instrument.id}
                                         actions={{
-                                            updateInstrumentRepeatingHits:
-                                                this.props.actions.updateInstrumentRepeatingHits
+                                            updateInstrumentFadeOutDuration:
+                                                this.props.actions.updateInstrumentFadeOutDuration
                                         }}
                                     />
                                 </div>

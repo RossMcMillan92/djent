@@ -39,6 +39,9 @@ export default function instrumentsReducer(state = initialState, action) {
         case 'UPDATE_INSTRUMENT_REPEATING_HITS':
             return updateObjByID({ objs: state, id: payload.instrumentID, prop: 'repeatHitTypeForXBeat', value: payload.value });
 
+        case 'UPDATE_INSTRUMENT_FADE_OUT_DURATION':
+            return updateObjByID({ objs: state, id: payload.instrumentID, prop: 'fadeOutDuration', value: payload.value });
+
         case 'UPDATE_INSTRUMENT_SEQUENCES':
             return state
                 .map(i => i.id === payload.instrumentID ? { ...i, sequences: payload.sequences } : i);

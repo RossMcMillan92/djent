@@ -19,6 +19,7 @@ export default class Instruments extends Component {
                     updateInstrumentVolume: this.props.actions.updateInstrumentVolume,
                     updateInstrumentRepeatingHits: this.props.actions.updateInstrumentRepeatingHits,
                     updateInstrumentSequences: this.props.actions.updateInstrumentSequences,
+                    updateInstrumentFadeOutDuration: this.props.actions.updateInstrumentFadeOutDuration,
                 }}
                 sequences={this.props.sequences}
                 instruments={this.props.instruments}

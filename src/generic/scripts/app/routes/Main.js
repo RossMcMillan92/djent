@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { assoc, last, split } from 'ramda';
+import { assoc, compose, last, map, split } from 'ramda';
 import { Future as Task } from 'ramda-fantasy';
 import { List } from 'immutable-ext';
 
@@ -23,7 +23,7 @@ import {
 } from 'utils/riffs';
 
 import { isMobile } from 'utils/mobile';
-import { compose, getHashQueryParam, logError, throttle } from 'utils/tools';
+import { getHashQueryParam, logError, throttle } from 'utils/tools';
 
 export default class Main extends Component {
     static contextTypes = {
@@ -88,7 +88,7 @@ export default class Main extends Component {
 
                 return sharedPresets
                     .traverse(Task.of, presetToPlaylistItem)
-                    .map(assoc('isLocked', true));
+                    .map(map(assoc('isLocked', true)));
             });
 
         return audioPlaylist;

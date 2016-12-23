@@ -1,30 +1,29 @@
-import React, { Component } from 'react';
-import { assoc, chain, compose, last, map, split, traverse } from 'ramda';
-import { Future as Task } from 'ramda-fantasy';
+import React, { Component } from 'react'
+import { assoc, compose, last, map, split } from 'ramda'
+import { Future as Task } from 'ramda-fantasy'
+import { List } from 'immutable-ext'
 
-import { List } from 'immutable-ext';
+import Expandable from 'components/Expandable'
+import Spinner from 'components/Spinner'
+import SwipeableViews from 'components/SwipeableViews'
 
-import Expandable from 'components/Expandable';
-import Spinner from 'components/Spinner';
-import SwipeableViews from 'components/SwipeableViews';
+import Instruments from 'containers/Instruments'
+import Modal from 'containers/Modal'
+import Player from 'containers/Player'
+import Sequences from 'containers/Sequences'
 
-import Instruments from 'containers/Instruments';
-import Modal from 'containers/Modal';
-import Player from 'containers/Player';
-import Sequences from 'containers/Sequences';
+import { defaultAllowedLengths } from 'reducers/sequences'
 
-import { defaultAllowedLengths } from 'reducers/sequences';
-
-import presets, { backwardsCompatibility } from 'utils/presets';
-import { getActiveSoundsFromHitTypes } from 'utils/instruments';
-import { getLongURLFromShareID, getPresetFromData, handleGoogleAPI } from 'utils/short-urls';
+import presets, { backwardsCompatibility } from 'utils/presets'
+import { getActiveSoundsFromHitTypes } from 'utils/instruments'
+import { getLongURLFromShareID, getPresetFromData, handleGoogleAPI } from 'utils/short-urls'
 
 import {
     presetToPlaylistItem,
-} from 'utils/riffs';
+} from 'utils/riffs'
 
-import { isMobile } from 'utils/mobile';
-import { getHashQueryParam, logError, throttle } from 'utils/tools';
+import { isMobile } from 'utils/mobile'
+import { getHashQueryParam, logError, throttle } from 'utils/tools'
 
 export default class Main extends Component {
     static contextTypes = {
@@ -36,115 +35,116 @@ export default class Main extends Component {
     }
 
     componentWillMount = () => {
-        this.setupBackButtonController();
+        this.setupBackButtonController()
 
-        const shareID = this.props.params.shareID;
+        const shareID = this.props.params.shareID
 
         handleGoogleAPI()
             .then(() => {
-                if (shareID) this.setupSharedItemsAndUpdate(shareID);
-                this.setState({ googleAPIHasLoaded: true });
+                if (shareID) this.setupSharedItemsAndUpdate(shareID)
+                this.setState({ googleAPIHasLoaded: true })
             })
-            .catch(e => logError(e));
+            .catch(e => logError(e))
 
         if (!shareID) {
-            const presetID = this.props.params.presetID || this.props.activePresetID;
+            const presetID = this.props.params.presetID || this.props.activePresetID
             const preset = presets.find(p => p.id === presetID)
-                         || presets.find(p => p.id === this.props.activePresetID);
-            return this.props.actions.applyPreset(preset);
+                         || presets.find(p => p.id === this.props.activePresetID)
+            return this.props.actions.applyPreset(preset)
         }
 
         this.props.actions.enableModal({
             content: (<Spinner subtext="Loading..." />),
             isCloseable: false,
             className: 'modal--auto-width',
-        });
+        })
     }
 
     componentDidMount = () => {
-        this.refreshOnWindowResize();
+        this.refreshOnWindowResize()
     }
 
     componentWillUpdate = (nextProps) => {
         if (!this.props.params.shareID && nextProps.params.shareID) {
-            this.setupSharedItemsAndUpdate(nextProps.params.shareID);
+            this.setupSharedItemsAndUpdate(nextProps.params.shareID)
         }
     }
 
     componentWillUnmount = () => {
-        window.removeEventListener('popstate', this.backToHome);
+        window.removeEventListener('popstate', this.backToHome)
     }
 
-    setupSharedItems = shareID => compose(
-        chain(this.setupPresetAndPlaylist),
-        traverse(Task.of, getLongURLFromShareID),
-        List,
-        split('-'),
-    )(shareID)
+    // setupSharedItems :: shareID -> Task Error audioPlaylist
+    setupSharedItems = (shareID) =>
+        List(shareID.split('-'))
+            .traverse(Task.of, getLongURLFromShareID)
+            .chain(this.updatePresetAndGetPlaylist)
 
-    setupPresetAndPlaylist = longURLs => {
+    // updatePresetAndGetPlaylist :: List longURLs -> Task Error audioPlaylist
+    updatePresetAndGetPlaylist = longURLs => {
         if (longURLs.size === 1 && longURLs.get(0).includes('-')) {
-            return compose(this.setupSharedItems, last, split('/'))(longURLs.get(0));
+            return compose(this.setupSharedItems, last, split('/'))(longURLs.get(0))
         }
         const sharedPresets = longURLs
-            .map(compose(this.dataStringToPreset, getHashQueryParam('share')));
+            .map(compose(this.dataStringToPreset, getHashQueryParam('share')))
 
-        this.props.actions.applyPreset(sharedPresets.get(0));
+        this.props.actions.applyPreset(sharedPresets.get(0))
 
         return sharedPresets
             .traverse(Task.of, presetToPlaylistItem)
-            .map(map(assoc('isLocked', true)));
+            .map(map(assoc('isLocked', true)))
+    }
+
+    setupSharedItemsAndUpdate = (shareID) => {
+        this.setupSharedItems(shareID)
+            .fork(logError, audioPlaylist => {
+                this.props.actions.updateAudioPlaylist(audioPlaylist.toJS())
+                this.props.actions.disableModal()
+            })
     }
 
     dataStringToPreset = (dataString) => compose(
         this.insertSoundsIntoPresetInstruments,
         preset => backwardsCompatibility(preset, defaultAllowedLengths),
         getPresetFromData,
-    )(dataString);
+    )(dataString)
 
     insertSoundsIntoPresetInstruments = preset => {
         preset.settings.instruments = preset.settings.instruments
             .map(i => {
-                const inst = this.props.instruments.find(ins => ins.id === i.id);
+                const inst = this.props.instruments.find(ins => ins.id === i.id)
                 const sounds = getActiveSoundsFromHitTypes(i.predefinedHitTypes)
-                    .map(sound => ({ ...inst.sounds.find(s => s.id === sound.id), ...sound }));
-                return { ...i, sounds };
-            });
+                    .map(sound => ({ ...inst.sounds.find(s => s.id === sound.id), ...sound }))
+                return { ...i, sounds }
+            })
 
-        return preset;
+        return preset
     }
 
-    setupSharedItemsAndUpdate = (shareID) =>
-        this.setupSharedItems(shareID)
-            .fork(logError, audioPlaylist => {
-                this.props.actions.updateAudioPlaylist(audioPlaylist.toJS());
-                this.props.actions.disableModal();
-            });
-
     refreshOnWindowResize = () => {
-        const throttledFn = throttle(() => this.forceUpdate(), 500);
-        window.addEventListener('resize', throttledFn);
+        const throttledFn = throttle(() => this.forceUpdate(), 500)
+        window.addEventListener('resize', throttledFn)
     }
 
     setupBackButtonController = () => {
-        window.addEventListener('popstate', this.backToHome);
+        window.addEventListener('popstate', this.backToHome)
     }
 
     backToHome = () => {
         if (document.location.hash !== '#fwd') {
-            this.changeActivePageIndex(0);
+            this.changeActivePageIndex(0)
         }
     }
 
     setActivePageIndex = (index) => {
-        if (this.state.activePageIndex !== index) this.setState({ activePageIndex: index });
+        if (this.state.activePageIndex !== index) this.setState({ activePageIndex: index })
     }
 
     changeActivePageIndex = (index) => {
-        if (this.state.activePageIndex === index) return;
-        document.location.hash = index === 0 ? '' : '#fwd';
-        this.setActivePageIndex(index);
-    };
+        if (this.state.activePageIndex === index) return
+        document.location.hash = index === 0 ? '' : '#fwd'
+        this.setActivePageIndex(index)
+    }
 
     render = () => {
         const tabs = ['Player', 'Sequences', 'Instruments']
@@ -158,8 +158,8 @@ export default class Main extends Component {
                         { tabName }
                     </div>
                 </div>
-            ));
-        const isMobileView = isMobile();
+            ))
+        const isMobileView = isMobile()
         const headerContent =  (
             <div className="">
                 <div className="group-spacing-x">
@@ -176,8 +176,8 @@ export default class Main extends Component {
                     </div>
                 </div>
             </div>
-        );
-        const expandableTitleClass = 'title-primary u-txt-large dropdown-icon-before group-padding-x group-padding-x-small@mobile group-capped-x group-centered u-curp';
+        )
+        const expandableTitleClass = 'title-primary u-txt-large dropdown-icon-before group-padding-x group-padding-x-small@mobile group-capped-x group-centered u-curp'
         const views = isMobileView
             ? (
                 <SwipeableViews
@@ -219,7 +219,7 @@ export default class Main extends Component {
                         </Expandable>
                     </div>
                 </div>
-            );
+            )
 
         return (
             <section>
@@ -252,7 +252,6 @@ export default class Main extends Component {
                     }
                 </div>
             </section>
-        );
+        )
     }
-
 }

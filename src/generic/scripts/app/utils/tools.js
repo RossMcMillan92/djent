@@ -152,6 +152,8 @@ const trace = curry((tag, d) => {
 	return d;
 });
 
+if (isDevEnv()) window.trace = trace;
+
 // catchError :: Promise p => (err -> b) -> p -> p
 const catchError = curry((rej, p) => p.catch(rej));
 

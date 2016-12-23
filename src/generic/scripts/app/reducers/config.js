@@ -1,7 +1,7 @@
 import { extendObjectArrayByID } from 'utils/tools';
 
 const initialState = {
-    activePresetID       : 'deftones',
+    activePresetID       : 'contortionist',
     bpm                  : 50,
     continuousGeneration : false,
 };

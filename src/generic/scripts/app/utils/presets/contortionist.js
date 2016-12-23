@@ -1,6 +1,6 @@
 const preset = {
-    id: 'deftones',
-    description: 'Chords',
+    id: 'contortionist',
+    description: 'Poly Chords & Melody',
     settings: {
         config: {
             bpm            : 90,
@@ -19,16 +19,14 @@ const preset = {
                 hitChance   : 1,
                 allowedLengths : [
                     {
-                        id: '0.25',
-                        amount: 1,
-                    },
-                    {
                         id: '0.5',
                         amount: 1,
+                        isDotted: true,
                     },
                     {
                         id: '1',
                         amount: 1,
+                        isDotted: true,
                     },
                 ],
             },
@@ -36,21 +34,21 @@ const preset = {
                 id          : 'CUSTOM_SEQUENCE_2',
                 description : 'Lead Guitar',
                 bars        : 1,
-                beats       : 8,
+                beats       : 6,
                 hitChance   : 1,
                 allowedLengths : [
                     {
-                        id: '1',
+                        id: '0.5',
                         amount: 1,
                     },
                     {
                         id: '2',
-                        amount: 3,
+                        amount: 2,
                         isDotted: true,
                     },
                     {
                         id: '4',
-                        amount: 2,
+                        amount: 1,
                     },
                 ],
             },
@@ -63,11 +61,25 @@ const preset = {
                 allowedLengths : [
                     {
                         id: '2',
-                        amount: 8,
+                        amount: 9,
                     },
                     {
                         id: '4',
-                        amount: 3,
+                        amount: 1,
+                    },
+                ],
+            },
+            {
+                id          : 'CUSTOM_SEQUENCE_4',
+                description : 'Dotted',
+                bars        : 4,
+                beats       : 4,
+                hitChance   : 1,
+                allowedLengths : [
+                    {
+                        id: '1',
+                        amount: 1,
+                        isDotted: true,
                     },
                 ],
             },
@@ -141,6 +153,10 @@ const preset = {
             },
             {
                 id: 's',
+                sequences: [
+                    'offsetWholes',
+                    'offsetHalfs',
+                ],
                 sounds: [
                     {
                         id: 's',
@@ -152,6 +168,7 @@ const preset = {
                 id: 'c',
                 sequences: [
                     'twoBars',
+                    'CUSTOM_SEQUENCE_4',
                 ],
                 sounds: [
                     {
@@ -166,31 +183,19 @@ const preset = {
             },
             {
                 id: 'h',
+                volume: 0.7,
                 sequences: [
                     'CUSTOM_SEQUENCE_3',
                 ],
                 sounds: [
-                    {
-                        id: 'h',
-                        enabled: true,
-                    },
                     {
                         id: 'hc',
                         enabled: true,
                     },
                 ],
             },
-            {
-                id: 'd',
-                sounds: [
-                    {
-                        id: 'drone-high',
-                        enabled: false,
-                    },
-                ],
-            },
         ]
     }
-};
+}
 
-export default preset;
+export default preset

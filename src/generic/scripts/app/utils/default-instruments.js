@@ -1,30 +1,31 @@
-import settings from 'settings';
+import settings from 'settings'
 
-const rootOctave = 1;
-const getMidiNote = (note, octave) => note + (rootOctave + octave);
+const rootOctave = 1
+const getMidiNote = (note, octave) => note + (rootOctave + octave)
 
-const kickMidiNote = 'C2';
-const snareMidiNote = 'D2';
-const hihatMidiNote = 'A#2';
-const crash1MidiNote = 'C#3';
-const crash2MidiNote = 'A3';
-const chinaMidiNote = 'E3';
+const kickMidiNote = 'C2'
+const snareMidiNote = 'D2'
+const hihatMidiNote = 'A#2'
+const crash1MidiNote = 'C#3'
+const crash2MidiNote = 'A3'
+const chinaMidiNote = 'E3'
 
 const defaultInstrumentProps = {
     pitch: 0,
     volume: 1,
     repeatHitTypeForXBeat: 0,
-};
+    fadeOutDuration: 0,
+}
 
 const getSoundURL = (path) => settings.useExternalSoundFiles
     ? `https://raw.githubusercontent.com/RossMcMillan92/djent/master/src/generic${path}`
-    : path;
+    : path
 
 const defaultInstruments = [
     {
         ...defaultInstrumentProps,
         id: 'g',
-        description: 'Guitar/Bass (Drop G#)',
+        description: 'Rythm Guitar/Bass (Drop G#)',
         fadeOutDuration: 0.025,
         sequences: [
             'CUSTOM_SEQUENCE_1',
@@ -357,7 +358,14 @@ const defaultInstruments = [
                 enabled: false,
                 category: 'Sixth string [Chord]',
                 midi: {
-                    pitch: [ getMidiNote('G#', 0) ],
+                    pitch: [
+                        getMidiNote('G#', 0),
+                        getMidiNote('D#', 1),
+                        getMidiNote('G#', 1),
+                        getMidiNote('D#', 2),
+                        getMidiNote('G#', 2),
+                        getMidiNote('D#', 3),
+                    ],
                 },
                 tabConfig: {
                     strings: [ 6 ],
@@ -371,7 +379,13 @@ const defaultInstruments = [
                 enabled: false,
                 category: 'Sixth string [Chord]',
                 midi: {
-                    pitch: [ getMidiNote('A', 0) ],
+                    pitch: [
+                        getMidiNote('A', 1),
+                        getMidiNote('E', 1),
+                        getMidiNote('A', 2),
+                        getMidiNote('E', 2),
+                        getMidiNote('A', 3),
+                    ],
                 },
                 tabConfig: {
                     strings: [ 6 ],
@@ -385,7 +399,13 @@ const defaultInstruments = [
                 enabled: false,
                 category: 'Sixth string [Chord]',
                 midi: {
-                    pitch: [ getMidiNote('A#', 0) ],
+                    pitch: [
+                        getMidiNote('A#', 1),
+                        getMidiNote('F', 1),
+                        getMidiNote('A#', 2),
+                        getMidiNote('F', 2),
+                        getMidiNote('A#', 3),
+                    ],
                 },
                 tabConfig: {
                     strings: [ 6 ],
@@ -399,7 +419,13 @@ const defaultInstruments = [
                 enabled: false,
                 category: 'Sixth string [Chord]',
                 midi: {
-                    pitch: [ getMidiNote('B', 0) ],
+                    pitch: [
+                        getMidiNote('B', 1),
+                        getMidiNote('F#', 1),
+                        getMidiNote('B', 2),
+                        getMidiNote('F#', 2),
+                        getMidiNote('B', 3),
+                    ],
                 },
                 tabConfig: {
                     strings: [ 6 ],
@@ -413,7 +439,13 @@ const defaultInstruments = [
                 enabled: false,
                 category: 'Sixth string [Chord]',
                 midi: {
-                    pitch: [ getMidiNote('C', 1) ],
+                    pitch: [
+                        getMidiNote('C', 1),
+                        getMidiNote('G', 1),
+                        getMidiNote('C', 2),
+                        getMidiNote('G', 2),
+                        getMidiNote('C', 3),
+                    ],
                 },
                 tabConfig: {
                     strings: [ 6 ],
@@ -427,7 +459,13 @@ const defaultInstruments = [
                 enabled: false,
                 category: 'Sixth string [Chord]',
                 midi: {
-                    pitch: [ getMidiNote('C#', 1) ],
+                    pitch: [
+                        getMidiNote('C#', 1),
+                        getMidiNote('G#', 1),
+                        getMidiNote('C#', 2),
+                        getMidiNote('G#', 2),
+                        getMidiNote('C#', 3),
+                    ],
                 },
                 tabConfig: {
                     strings: [ 6 ],
@@ -441,7 +479,13 @@ const defaultInstruments = [
                 enabled: false,
                 category: 'Sixth string [Chord]',
                 midi: {
-                    pitch: [ getMidiNote('D', 1) ],
+                    pitch: [
+                        getMidiNote('D', 1),
+                        getMidiNote('A', 2),
+                        getMidiNote('D', 2),
+                        getMidiNote('A', 3),
+                        getMidiNote('D', 3),
+                    ],
                 },
                 tabConfig: {
                     strings: [ 6 ],
@@ -455,7 +499,13 @@ const defaultInstruments = [
                 enabled: false,
                 category: 'Sixth string [Chord]',
                 midi: {
-                    pitch: [ getMidiNote('D#', 1) ],
+                    pitch: [
+                        getMidiNote('D#', 1),
+                        getMidiNote('A#', 2),
+                        getMidiNote('D#', 2),
+                        getMidiNote('A#', 3),
+                        getMidiNote('D#', 3),
+                    ],
                 },
                 tabConfig: {
                     strings: [ 6 ],
@@ -469,7 +519,13 @@ const defaultInstruments = [
                 enabled: false,
                 category: 'Sixth string [Chord]',
                 midi: {
-                    pitch: [ getMidiNote('E', 1) ],
+                    pitch: [
+                        getMidiNote('E', 1),
+                        getMidiNote('B', 2),
+                        getMidiNote('E', 2),
+                        getMidiNote('B', 3),
+                        getMidiNote('E', 3),
+                    ],
                 },
                 tabConfig: {
                     strings: [ 6 ],
@@ -483,7 +539,13 @@ const defaultInstruments = [
                 enabled: false,
                 category: 'Sixth string [Chord]',
                 midi: {
-                    pitch: [ getMidiNote('F', 1) ],
+                    pitch: [
+                        getMidiNote('F', 1),
+                        getMidiNote('C', 2),
+                        getMidiNote('F', 2),
+                        getMidiNote('C', 3),
+                        getMidiNote('F', 3),
+                    ],
                 },
                 tabConfig: {
                     strings: [ 6 ],
@@ -497,7 +559,13 @@ const defaultInstruments = [
                 enabled: false,
                 category: 'Sixth string [Chord]',
                 midi: {
-                    pitch: [ getMidiNote('F#', 1) ],
+                    pitch: [
+                        getMidiNote('F#', 1),
+                        getMidiNote('C#', 2),
+                        getMidiNote('F#', 2),
+                        getMidiNote('C#', 3),
+                        getMidiNote('F#', 3),
+                    ],
                 },
                 tabConfig: {
                     strings: [ 6 ],
@@ -511,7 +579,13 @@ const defaultInstruments = [
                 enabled: false,
                 category: 'Sixth string [Chord]',
                 midi: {
-                    pitch: [ getMidiNote('G', 1) ],
+                    pitch: [
+                        getMidiNote('G', 1),
+                        getMidiNote('D', 2),
+                        getMidiNote('G', 2),
+                        getMidiNote('D', 3),
+                        getMidiNote('G', 3),
+                    ],
                 },
                 tabConfig: {
                     strings: [ 6 ],
@@ -525,7 +599,13 @@ const defaultInstruments = [
                 enabled: false,
                 category: 'Sixth string [Chord]',
                 midi: {
-                    pitch: [ getMidiNote('G#', 1) ],
+                    pitch: [
+                        getMidiNote('G#', 1),
+                        getMidiNote('D#', 2),
+                        getMidiNote('G#', 2),
+                        getMidiNote('D#', 3),
+                        getMidiNote('G#', 3),
+                    ],
                 },
                 tabConfig: {
                     strings: [ 6 ],
@@ -834,7 +914,7 @@ const defaultInstruments = [
                 path: getSoundURL('/assets/audio/lead-guitar/lead-as4.mp3'),
                 enabled: false,
                 midi: {
-                    pitch: [ getMidiNote('A', 3) ],
+                    pitch: [ getMidiNote('A#', 3) ],
                 },
             },
             {
@@ -843,7 +923,7 @@ const defaultInstruments = [
                 path: getSoundURL('/assets/audio/lead-guitar/lead-b4.mp3'),
                 enabled: false,
                 midi: {
-                    pitch: [ getMidiNote('A', 3) ],
+                    pitch: [ getMidiNote('B', 3) ],
                 },
             },
             {
@@ -852,7 +932,7 @@ const defaultInstruments = [
                 path: getSoundURL('/assets/audio/lead-guitar/lead-c4.mp3'),
                 enabled: false,
                 midi: {
-                    pitch: [ getMidiNote('A', 3) ],
+                    pitch: [ getMidiNote('C', 3) ],
                 },
             },
             {
@@ -861,7 +941,7 @@ const defaultInstruments = [
                 path: getSoundURL('/assets/audio/lead-guitar/lead-cs4.mp3'),
                 enabled: false,
                 midi: {
-                    pitch: [ getMidiNote('A', 3) ],
+                    pitch: [ getMidiNote('C#', 3) ],
                 },
             },
             {
@@ -870,7 +950,7 @@ const defaultInstruments = [
                 path: getSoundURL('/assets/audio/lead-guitar/lead-d4.mp3'),
                 enabled: false,
                 midi: {
-                    pitch: [ getMidiNote('A', 3) ],
+                    pitch: [ getMidiNote('D', 3) ],
                 },
             },
             {
@@ -879,7 +959,7 @@ const defaultInstruments = [
                 path: getSoundURL('/assets/audio/lead-guitar/lead-ds4.mp3'),
                 enabled: false,
                 midi: {
-                    pitch: [ getMidiNote('A', 3) ],
+                    pitch: [ getMidiNote('D#', 3) ],
                 },
             },
             {
@@ -888,7 +968,7 @@ const defaultInstruments = [
                 path: getSoundURL('/assets/audio/lead-guitar/lead-e4.mp3'),
                 enabled: false,
                 midi: {
-                    pitch: [ getMidiNote('A', 3) ],
+                    pitch: [ getMidiNote('E', 3) ],
                 },
             },
             {
@@ -897,7 +977,7 @@ const defaultInstruments = [
                 path: getSoundURL('/assets/audio/lead-guitar/lead-f4.mp3'),
                 enabled: false,
                 midi: {
-                    pitch: [ getMidiNote('A', 3) ],
+                    pitch: [ getMidiNote('F', 3) ],
                 },
             },
             {
@@ -906,7 +986,7 @@ const defaultInstruments = [
                 path: getSoundURL('/assets/audio/lead-guitar/lead-fs4.mp3'),
                 enabled: false,
                 midi: {
-                    pitch: [ getMidiNote('A', 3) ],
+                    pitch: [ getMidiNote('F#', 3) ],
                 },
             },
             {
@@ -915,7 +995,7 @@ const defaultInstruments = [
                 path: getSoundURL('/assets/audio/lead-guitar/lead-g4.mp3'),
                 enabled: false,
                 midi: {
-                    pitch: [ getMidiNote('A', 3) ],
+                    pitch: [ getMidiNote('G', 3) ],
                 },
             },
             {
@@ -924,7 +1004,7 @@ const defaultInstruments = [
                 path: getSoundURL('/assets/audio/lead-guitar/lead-gs4.mp3'),
                 enabled: false,
                 midi: {
-                    pitch: [ getMidiNote('A', 3) ],
+                    pitch: [ getMidiNote('G#', 3) ],
                 },
             },
             {
@@ -933,7 +1013,7 @@ const defaultInstruments = [
                 path: getSoundURL('/assets/audio/lead-guitar/lead-a5.mp3'),
                 enabled: false,
                 midi: {
-                    pitch: [ getMidiNote('A', 3) ],
+                    pitch: [ getMidiNote('A', 4) ],
                 },
             },
             {
@@ -942,7 +1022,7 @@ const defaultInstruments = [
                 path: getSoundURL('/assets/audio/lead-guitar/lead-as5.mp3'),
                 enabled: false,
                 midi: {
-                    pitch: [ getMidiNote('A', 3) ],
+                    pitch: [ getMidiNote('A#', 4) ],
                 },
             },
             {
@@ -951,7 +1031,7 @@ const defaultInstruments = [
                 path: getSoundURL('/assets/audio/lead-guitar/lead-b5.mp3'),
                 enabled: false,
                 midi: {
-                    pitch: [ getMidiNote('A', 3) ],
+                    pitch: [ getMidiNote('B', 4) ],
                 },
             },
             {
@@ -960,7 +1040,7 @@ const defaultInstruments = [
                 path: getSoundURL('/assets/audio/lead-guitar/lead-c5.mp3'),
                 enabled: false,
                 midi: {
-                    pitch: [ getMidiNote('A', 3) ],
+                    pitch: [ getMidiNote('C', 4) ],
                 },
             },
             {
@@ -969,7 +1049,7 @@ const defaultInstruments = [
                 path: getSoundURL('/assets/audio/lead-guitar/lead-cs5.mp3'),
                 enabled: false,
                 midi: {
-                    pitch: [ getMidiNote('A', 3) ],
+                    pitch: [ getMidiNote('C#', 4) ],
                 },
             },
             {
@@ -978,7 +1058,7 @@ const defaultInstruments = [
                 path: getSoundURL('/assets/audio/lead-guitar/lead-d5.mp3'),
                 enabled: false,
                 midi: {
-                    pitch: [ getMidiNote('A', 3) ],
+                    pitch: [ getMidiNote('D', 4) ],
                 },
             },
             {
@@ -987,7 +1067,7 @@ const defaultInstruments = [
                 path: getSoundURL('/assets/audio/lead-guitar/lead-ds5.mp3'),
                 enabled: false,
                 midi: {
-                    pitch: [ getMidiNote('A', 3) ],
+                    pitch: [ getMidiNote('D#', 4) ],
                 },
             },
             {
@@ -996,7 +1076,7 @@ const defaultInstruments = [
                 path: getSoundURL('/assets/audio/lead-guitar/lead-e5.mp3'),
                 enabled: false,
                 midi: {
-                    pitch: [ getMidiNote('A', 3) ],
+                    pitch: [ getMidiNote('E', 4) ],
                 },
             },
             {
@@ -1005,7 +1085,7 @@ const defaultInstruments = [
                 path: getSoundURL('/assets/audio/lead-guitar/lead-f5.mp3'),
                 enabled: false,
                 midi: {
-                    pitch: [ getMidiNote('A', 3) ],
+                    pitch: [ getMidiNote('F', 4) ],
                 },
             },
             {
@@ -1014,7 +1094,7 @@ const defaultInstruments = [
                 path: getSoundURL('/assets/audio/lead-guitar/lead-fs5.mp3'),
                 enabled: false,
                 midi: {
-                    pitch: [ getMidiNote('A', 3) ],
+                    pitch: [ getMidiNote('F#', 4) ],
                 },
             },
             {
@@ -1023,7 +1103,7 @@ const defaultInstruments = [
                 path: getSoundURL('/assets/audio/lead-guitar/lead-g5.mp3'),
                 enabled: false,
                 midi: {
-                    pitch: [ getMidiNote('A', 3) ],
+                    pitch: [ getMidiNote('G', 4) ],
                 },
             },
             {
@@ -1032,7 +1112,7 @@ const defaultInstruments = [
                 path: getSoundURL('/assets/audio/lead-guitar/lead-gs5.mp3'),
                 enabled: false,
                 midi: {
-                    pitch: [ getMidiNote('A', 3) ],
+                    pitch: [ getMidiNote('G#', 4) ],
                 },
             },
             {
@@ -1041,7 +1121,7 @@ const defaultInstruments = [
                 path: getSoundURL('/assets/audio/lead-guitar/lead-a6.mp3'),
                 enabled: false,
                 midi: {
-                    pitch: [ getMidiNote('A', 3) ],
+                    pitch: [ getMidiNote('A', 5) ],
                 },
             },
             {
@@ -1050,7 +1130,7 @@ const defaultInstruments = [
                 path: getSoundURL('/assets/audio/lead-guitar/lead-as6.mp3'),
                 enabled: false,
                 midi: {
-                    pitch: [ getMidiNote('A', 3) ],
+                    pitch: [ getMidiNote('A#', 5) ],
                 },
             },
         ],
@@ -1196,6 +1276,6 @@ const defaultInstruments = [
             },
         ],
     },
-];
+]
 
-export default defaultInstruments;
+export default defaultInstruments

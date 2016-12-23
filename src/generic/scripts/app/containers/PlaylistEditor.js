@@ -121,40 +121,40 @@ class PlaylistEditor extends Component {
                 body: (
                     <div className="u-flex-row u-flex-justify">
                         <div className="u-flex-row u-align-center">
-                            <span
+                            <div
                                 className={`block-list__button block-list__content-spacing ${item.isLocked ? 'u-txt-positive' : ''}`}
                                 onClick={(e) => this.onLockTrack(e, i)}
                                 title="Lock Track"
                             >
                                 <SVG className="block-list__button-icon" icon="lock" />
-                            </span>
+                            </div>
 
-                            <span className="block-list__body u-pl0 u-txt-truncate">
+                            <div className="block-list__body u-pl0 u-txt-truncate">
                                 Track {item.id} - {item.bpm}BPM - {item.sequences[0].bars} × {item.sequences[0].beats}
-                            </span>
+                            </div>
                         </div>
                         <div className="u-flex-row u-align-center">
-                            <span
+                            <div
                                 className="block-list__button block-list__content-spacing is-disablable"
                                 onClick={(e) => this.onLoadSettings(e, i, item.isLocked)}
                                 title="Load Settings"
                             >
                                 <SVG className="block-list__button-icon" icon="gear" />
-                            </span>
-                            <span
+                            </div>
+                            <div
                                 className="block-list__button block-list__content-spacing is-disablable u-txt-negative"
                                 onClick={(e) => this.onDelete(e, i, item.isLocked)}
                                 title="Delete"
                             >
                                 <SVG className="block-list__button-icon" icon="cross" />
-                            </span>
-                            <span
+                            </div>
+                            <div
                                 className="block-list__button block-list__content-spacing is-disablable u-txt-positive"
                                 onClick={(e) => this.onDuplicate(e, i, item.isLocked)}
                                 title="Duplicate"
                             >
                                 <SVG className="block-list__button-icon" icon="plus" />
-                            </span>
+                            </div>
                         </div>
                     </div>
                 ),

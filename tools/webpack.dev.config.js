@@ -51,6 +51,7 @@ const config = Object.assign({}, base, {
         host: '0.0.0.0',
         publicPath: '/',
         contentBase: path.join(cwd, buildDir),
+        historyApiFallback: true,
     },
     plugins: [
         new webpack.optimize.OccurenceOrderPlugin(),

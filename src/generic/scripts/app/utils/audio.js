@@ -1,6 +1,5 @@
-import { chain, compose, curry, filter, prop, map, traverse } from 'ramda';
+import { chain, compose, curry, filter,  map, traverse } from 'ramda';
 import { Future as Task } from 'ramda-fantasy';
-import { fork } from 'utils/tools';
 
 import {
     getTotalTimeLength,
@@ -9,7 +8,7 @@ import {
 const bufferCache = {};
 
 //    getBufferFromURL :: context -> url -> Task Error Buffer
-const getBufferFromURL = curry((context, url) =>
+const getBufferFromURL = (context, url) =>
     Task((rej, res) => {
         if (bufferCache[url]) return res(bufferCache[url]);
         const onError = () => rej(Error(`Error decoding file data: ${url}`));
@@ -31,7 +30,7 @@ const getBufferFromURL = curry((context, url) =>
             );
         request.onerror = onError;
         request.send();
-    }));
+    });
 
 //    filterInstrumentsWithSounds :: [Instrument] -> [Instrument]
 const filterInstrumentsWithSounds = instrument =>

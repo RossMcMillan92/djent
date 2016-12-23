@@ -10,6 +10,8 @@
     "copy-webpack-plugin": "^4.0.1",
     "deep-equal": "^1.0.1",
     "deep-extend": "^0.4.1",
+    "immutable": "^3.8.1",
+    "immutable-ext": "^1.0.8",
     "inferno": "^0.7.26",
     "inferno-compat": "^0.7.26",
     "inferno-component": "^0.7.26",

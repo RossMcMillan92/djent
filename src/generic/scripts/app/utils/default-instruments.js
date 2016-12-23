@@ -816,9 +816,9 @@ const defaultInstruments = [
             },
 
             {
-                id: 'dissonance-10-shifted',
-                description: 'Dissonance fret 10 - shifted',
-                path: getSoundURL('/assets/audio/guitar/dissonance-10-shifted.mp3'),
+                id: 'dissonance-10',
+                description: 'Dissonance fret 10',
+                path: getSoundURL('/assets/audio/guitar/dissonance-10.mp3'),
                 enabled: false,
                 category: 'Misc',
                 midi: {
@@ -831,9 +831,9 @@ const defaultInstruments = [
                 },
             },
             {
-                id: 'dissonance-11-shifted',
-                description: 'Dissonance fret 11 - shifted',
-                path: getSoundURL('/assets/audio/guitar/dissonance-11-shifted.mp3'),
+                id: 'dissonance-16',
+                description: 'Dissonance fret 16',
+                path: getSoundURL('/assets/audio/guitar/dissonance-16.mp3'),
                 enabled: false,
                 category: 'Misc',
                 midi: {
@@ -842,22 +842,7 @@ const defaultInstruments = [
                 },
                 tabConfig: {
                     strings: [ 1, 2 ],
-                    frets: [ 11, 14 ],
-                },
-            },
-            {
-                id: 'dissonance-13-shifted',
-                description: 'Dissonance fret 13 - shifted',
-                path: getSoundURL('/assets/audio/guitar/dissonance-13-shifted.mp3'),
-                enabled: false,
-                category: 'Misc',
-                midi: {
-                    pitch: [ getMidiNote('G#', 3), getMidiNote('G', 3) ],
-                    muted: true,
-                },
-                tabConfig: {
-                    strings: [ 1, 2 ],
-                    frets: [ 13, 14 ],
+                    frets: [ 16, 14 ],
                 },
             },
 

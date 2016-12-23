@@ -90,7 +90,7 @@ const generatePlaylistItem = (genID, bpm, sequences, instruments, usePredefinedS
         });
 };
 
-//    generatePlaylistItem :: { id, settings } -> Task Error PlaylistItem
+//    presetToPlaylistItem :: { id, settings } -> Task Error PlaylistItem
 const presetToPlaylistItem = ({ id, settings }) => {
     const { config, instruments, sequences } = settings;
     const usePredefinedSettings = true;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { assoc, compose, last, map, split } from 'ramda';
+import { assoc, chain, compose, last, map, split, traverse } from 'ramda';
 import { Future as Task } from 'ramda-fantasy';
+
 import { List } from 'immutable-ext';
 
 import Expandable from 'components/Expandable';
@@ -74,32 +75,25 @@ export default class Main extends Component {
         window.removeEventListener('popstate', this.backToHome);
     }
 
-    setupSharedItems = (shareID) => {
-        const audioPlaylist = List(shareID.split('-'))
-            .traverse(Task.of, getLongURLFromShareID)
-            .chain(longURLs => {
-                if (longURLs.size === 1 && longURLs.get(0).includes('-')) {
-                    return compose(this.setupSharedItems, last, split('/'))(longURLs.get(0));
-                }
-                const sharedPresets = longURLs
-                    .map(compose(this.dataStringToPreset, getHashQueryParam('share')));
+    setupSharedItems = shareID => compose(
+        chain(this.setupPresetAndPlaylist),
+        traverse(Task.of, getLongURLFromShareID),
+        List,
+        split('-'),
+    )(shareID)
 
-                this.props.actions.applyPreset(sharedPresets.get(0));
+    setupPresetAndPlaylist = longURLs => {
+        if (longURLs.size === 1 && longURLs.get(0).includes('-')) {
+            return compose(this.setupSharedItems, last, split('/'))(longURLs.get(0));
+        }
+        const sharedPresets = longURLs
+            .map(compose(this.dataStringToPreset, getHashQueryParam('share')));
 
-                return sharedPresets
-                    .traverse(Task.of, presetToPlaylistItem)
-                    .map(map(assoc('isLocked', true)));
-            });
+        this.props.actions.applyPreset(sharedPresets.get(0));
 
-        return audioPlaylist;
-    }
-
-    setupSharedItemsAndUpdate = (shareID) => {
-        this.setupSharedItems(shareID)
-            .fork(logError, audioPlaylist => {
-                this.props.actions.updateAudioPlaylist(audioPlaylist.toJS());
-                this.props.actions.disableModal();
-            });
+        return sharedPresets
+            .traverse(Task.of, presetToPlaylistItem)
+            .map(map(assoc('isLocked', true)));
     }
 
     dataStringToPreset = (dataString) => compose(
@@ -119,6 +113,13 @@ export default class Main extends Component {
 
         return preset;
     }
+
+    setupSharedItemsAndUpdate = (shareID) =>
+        this.setupSharedItems(shareID)
+            .fork(logError, audioPlaylist => {
+                this.props.actions.updateAudioPlaylist(audioPlaylist.toJS());
+                this.props.actions.disableModal();
+            });
 
     refreshOnWindowResize = () => {
         const throttledFn = throttle(() => this.forceUpdate(), 500);

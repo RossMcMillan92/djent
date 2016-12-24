@@ -64,6 +64,7 @@ const config = env =>
         },
         plugins: [
             new CopyWebpackPlugin([
+                { from: 'src/generic/static/manifest.json' },
                 { from: 'src/generic/scripts/sw/sw.js' },
                 { from: 'src/generic/assets', to: 'assets' },
                 { from: 'node_modules/sw-toolbox/sw-toolbox.js', to: 'node_modules/sw-toolbox/assets' },

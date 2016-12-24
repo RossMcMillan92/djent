@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
-import BeatsController from 'components/BeatsController';
-import Panel from 'components/Panel';
+import BeatsController from 'components/BeatsController'
+import Panel from 'components/Panel'
 
-import BPMController from 'containers/BPMController';
-import BPMTapper from 'containers/BPMTapper';
-import PlaylistEditor from 'containers/PlaylistEditor';
-import PresetController from 'containers/PresetController';
-import SoundController from 'containers/SoundController';
-import Visualiser from 'containers/Visualiser';
+import BPMController from 'containers/BPMController'
+import BPMTapper from 'containers/BPMTapper'
+import PlaylistEditor from 'containers/PlaylistEditor'
+import PresetController from 'containers/PresetController'
+import SoundController from 'containers/SoundController'
+import Visualiser from 'containers/Visualiser'
 
 export default class Player extends Component {
     static contextTypes = {
@@ -16,7 +16,7 @@ export default class Player extends Component {
     }
 
     render = () => {
-        const totalSequence = this.props.sequences.find(sequence => sequence.id === 'total');
+        const totalSequence = this.props.sequences.find(sequence => sequence.id === 'total')
 
         return (
             <div>
@@ -65,6 +65,6 @@ export default class Player extends Component {
                     <PlaylistEditor />
                 </Panel>
             </div>
-        );
+        )
     }
 }

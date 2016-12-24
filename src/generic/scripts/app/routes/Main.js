@@ -164,13 +164,14 @@ export default class Main extends Component {
             <div className="">
                 <div className="group-spacing-x">
                     <div className="u-flex-row u-flex-justify">
-                        <img className="header__logo" src="/assets/images/logo.png" />
-                        <a className="" href="https://www.facebook.com/djenerationstation/" target="_blank">
+                        <img className="header__logo" src="/assets/images/logo.png" alt="DJEN metal generator logo" />
+                        <a className="" href="https://www.facebook.com/djenerationstation/" target="_blank" rel="noopener">
                             <img
                                 className="header__icon social-icon"
                                 src="/assets/images/F_icon.svg"
                                 width="39"
                                 height="39"
+                                alt="facebook icon"
                             />
                         </a>
                     </div>

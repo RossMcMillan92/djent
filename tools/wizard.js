@@ -50,7 +50,7 @@ const build = (platform) => {
     const args = [
         '--colors',
         `--config=${cwd}${configDir}/webpack.build.config.js`,
-        `--platform=${platform}`,
+        `--env.platform=${platform}`,
     ];
     exec(
         `node ${cwd}/node_modules/webpack/bin/webpack.js ${args.join(' ')}`,
@@ -64,7 +64,7 @@ const dev = (platform) => {
         '--colors',
         '--watch',
         `--config=${cwd}${configDir}/webpack.dev.config.js`,
-        `--platform=${platform}`,
+        `--env.platform=${platform}`,
     ];
     exec(
         `node ${cwd}/node_modules/webpack-dev-server/bin/webpack-dev-server.js ${args.join(' ')}`,

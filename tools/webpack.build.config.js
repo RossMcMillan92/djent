@@ -1,78 +1,83 @@
-const path          = require('path');
-const constants     = require('./constants');
-const outputCSSFile = constants.outputCSSFile;
-const sourceDir     = constants.sourceDir;
+const path              = require('path')
+const constants         = require('./constants')
+const webpack           = require('webpack')
+const autoprefixer      = require('autoprefixer')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const base              = require('./webpack.base.config.js')
 
-const cwd = process.cwd();
+const outputCSSFile = constants.outputCSSFile
+const cssExtractor = new ExtractTextPlugin({ filename: outputCSSFile, disable: false, allChunks: true })
 
-const webpack = require('webpack');
-const autoprefixer = require('autoprefixer');
-
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const cssExtractor = new ExtractTextPlugin(outputCSSFile);
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-
-const base = require('./webpack.base.config.js');
-
-const config = Object.assign({}, base, {
-    module: {
-        loaders: [
-            {
-                test: /\.js$/,
-                loader: 'babel',
-                include: path.join(cwd, sourceDir),
-                exclude: /node_modules/,
-                query: {
-                    presets: ['es2015', 'stage-0'],
-                    plugins: ['transform-react-jsx', 'external-helpers', 'transform-runtime']
+const config = env =>
+    Object.assign({}, base(env), {
+        module: {
+            rules: [
+                {
+                    test: /\.js$/,
+                    loader: 'babel-loader',
+                    exclude: /.*node_modules((?!immutable-ext).)*$/,
+                },
+                {
+                    test: /\.sass$/,
+                    loader: cssExtractor.extract({ loader: 'css-loader!postcss-loader!sass-loader' }),
+                },
+                {
+                    test: /\.((?!scss|sass|js|json).)*$/,
+                    loader: 'file-loader',
+                    options: {
+                        name: '[name].[ext]',
+                        minimize: true,
+                    }
+                },
+            ]
+        },
+        externals: {
+            react: 'React',
+            'react-dom': 'ReactDOM',
+        },
+        plugins: [
+            new CopyWebpackPlugin([
+                { from: 'src/generic/scripts/sw/sw.js' },
+                { from: 'src/generic/assets', to: 'assets' },
+                { from: 'node_modules/sw-toolbox/sw-toolbox.js', to: 'node_modules/sw-toolbox' },
+            ]),
+            new webpack.DefinePlugin({
+                NODE_ENV: JSON.stringify('production'),
+                'process.env': {
+                    NODE_ENV: JSON.stringify('production')
                 }
-            },
-            {
-                test: /\.sass$/,
-                loader: cssExtractor.extract('style', 'css!postcss!sass')
-            },
-            {
-                test: /\.json$/,
-                loader: 'json'
-            },
-            {
-                test: /\.((?!scss|sass|js|json).)*$/,
-                loader: 'file',
-                query: {
-                    name: '[name].[ext]'
+            }),
+            new webpack.LoaderOptionsPlugin({
+                minimize: true,
+                debug: false,
+                options: {
+                    postcss: [
+                        autoprefixer({
+                            browsers: ['last 2 version', 'iOS 8']
+                        })
+                    ]
                 }
-            },
-        ]
-    },
-    plugins: [
-        new webpack.optimize.OccurenceOrderPlugin(),
-        new CopyWebpackPlugin([
-            { from: 'src/generic/scripts/sw/sw.js' },
-            { from: 'src/generic/assets', to: 'assets' },
-            { from: 'node_modules/sw-toolbox/sw-toolbox.js', to: 'node_modules/sw-toolbox' },
-        ]),
-        new webpack.DefinePlugin({
-            NODE_ENV: JSON.stringify('production'),
-            'process.env': {
-                NODE_ENV: JSON.stringify('production')
-            }
-        }),
-        new webpack.optimize.UglifyJsPlugin({
-            debug: true,
-            minimize: true,
-            sourceMap: false,
-            output: {
-                comments: false
-            },
-            compressor: {
-                warnings: false
-            }
-        }),
-        cssExtractor,
-    ],
-    postcss: [
-        autoprefixer({ browsers: 'last 2 versions, iOS 8' })
-    ],
-});
+            }),
+            new webpack.optimize.UglifyJsPlugin({
+                compress: {
+                    warnings: false,
+                    screw_ie8: true,
+                    conditionals: true,
+                    unused: true,
+                    comparisons: true,
+                    sequences: true,
+                    dead_code: true,
+                    evaluate: true,
+                    if_return: true,
+                    join_vars: true,
+                },
+                output: {
+                    comments: false
+                },
+            }),
+            cssExtractor,
+        ],
+    })
 
-module.exports = config;
+module.exports = config

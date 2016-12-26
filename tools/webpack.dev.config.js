@@ -38,7 +38,6 @@ const config = env =>
         externals: {
             react: 'React',
             'react-dom': 'ReactDOM',
-            'react-router': 'ReactRouter',
         },
         devServer: {
             inline: true,

@@ -1,32 +1,32 @@
-import React, { Component } from 'react';
-import { IO, Maybe } from 'ramda-fantasy';
+import React, { Component } from 'react'
+import { IO, Maybe } from 'ramda-fantasy'
 
 import {
     compose,
     curry,
     flip,
     map,
-} from 'ramda';
+} from 'ramda'
 
-import { getLocalStorageIO, setLocalStorageIO } from 'modules/localStorageIO';
-import { toBoolean } from 'modules/casting';
+import { getLocalStorageIO, setLocalStorageIO } from 'modules/localStorageIO'
+import { toBoolean } from 'modules/casting'
 
-const maybe  = Maybe.maybe;
+const maybe  = Maybe.maybe
 
 //    getExpandableKeyName :: String -> String
-const getExpandableKeyName = title => `expandable-${title}`;
+const getExpandableKeyName = title => `expandable-${title}`
 
 //    titleToLSKey :: String -> String
 const titleToLSKey = curry(compose(
     getExpandableKeyName,
     escape,
-));
+))
 
 //    getLSItemFromTitle :: String -> IO String
 const getLSItemFromTitle = curry(compose(
     getLocalStorageIO,
     titleToLSKey,
-));
+))
 
 //    getLSItemOrDefault :: Boolean -> String -> IO Boolean
 const getLSItemOrDefault = curry((defaultVal, title) => compose(
@@ -34,47 +34,47 @@ const getLSItemOrDefault = curry((defaultVal, title) => compose(
     map(map(toBoolean)),
     map(Maybe),
     getLSItemFromTitle,
-)(title));
+)(title))
 
 //    setLSItemFromTitle :: String -> String -> IO
 const setLSItemFromTitle = curry((title, value) => compose(
     flip(setLocalStorageIO)(value),
     titleToLSKey,
-)(title));
+)(title))
 
 //    setStateIO :: ReactComponent -> Object -> IO
 const setStateIO = curry((ctx, state) =>
-    IO(() => ctx.setState(state)));
+    IO(() => ctx.setState(state)))
 
 class Expandable extends Component {
-    isPristine = true;
+    isPristine = true
 
     constructor(props) {
-        super();
-        const localStorageValue = getLSItemOrDefault(false, props.title);
+        super()
+        const localStorageValue = getLSItemOrDefault(false, props.title)
 
         this.state = {
             isExpanded: props.isExpanded || (props.enableStateSave && localStorageValue.runIO())
-        };
+        }
     }
 
     componentWillUpdate = (nextProps) => {
         if (nextProps.isExpanded !== this.state.isExpanded && nextProps.isExpanded !== undefined && this.isPristine) {
-            this.setState({ isExpanded: nextProps.isExpanded });
+            this.setState({ isExpanded: nextProps.isExpanded })
         }
     }
 
     onClick = () => {
-        const newValue = !this.state.isExpanded;
+        const newValue = !this.state.isExpanded
         const updateExpandedState = compose(
             setStateIO(this),
             d => ({ isExpanded: d }),
-        );
+        )
 
-        if (this.props.enableStateSave && window.localStorage) setLSItemFromTitle(this.props.title, newValue).runIO();
+        if (this.props.enableStateSave && window.localStorage) setLSItemFromTitle(this.props.title, newValue).runIO()
 
-        this.isPristine = false;
-        updateExpandedState(newValue).runIO();
+        this.isPristine = false
+        updateExpandedState(newValue).runIO()
     }
 
     render = () => (
@@ -82,11 +82,11 @@ class Expandable extends Component {
             <div className={`expandable__title ${this.props.titleClassName ? this.props.titleClassName : ''}`} onClick={this.onClick}>
                 { this.props.title }
             </div>
-            <div className={`expandable__body ${this.props.bodyClassName ? this.props.bodyClassName : ''}`} onClick={() => { this.isPristine = false; }}>
+            <div className={`expandable__body ${this.props.bodyClassName ? this.props.bodyClassName : ''}`} onClick={() => { this.isPristine = false }}>
                 { this.props.children }
             </div>
         </div>
-    );
+    )
 }
 
-export default Expandable;
+export default Expandable

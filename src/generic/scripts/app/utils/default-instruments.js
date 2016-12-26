@@ -18,6 +18,7 @@ const getSound = (id, description, path, category, midi) => ({
     id,
     description,
     path: getSoundURL(path),
+    category,
     midi,
     enabled: false,
 })
@@ -611,7 +612,6 @@ const defaultInstruments = [
     getInstrument(
         'lg',
         'Lead Guitar',
-        0.8,
         [
             'steadyQuarters',
         ],
@@ -620,6 +620,7 @@ const defaultInstruments = [
                 'gs3',
                 'G#3',
                 '/assets/audio/lead-guitar/lead-gs3.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('G#', 2) ],
                 },
@@ -628,6 +629,7 @@ const defaultInstruments = [
                 'a4',
                 'A4',
                 '/assets/audio/lead-guitar/lead-a4.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('A', 3) ],
                 },
@@ -636,6 +638,7 @@ const defaultInstruments = [
                 'as4',
                 'A#4',
                 '/assets/audio/lead-guitar/lead-as4.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('A#', 3) ],
                 },
@@ -644,6 +647,7 @@ const defaultInstruments = [
                 'b4',
                 'B4',
                 '/assets/audio/lead-guitar/lead-b4.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('B', 3) ],
                 },
@@ -652,6 +656,7 @@ const defaultInstruments = [
                 'c4',
                 'C4',
                 '/assets/audio/lead-guitar/lead-c4.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('C', 3) ],
                 },
@@ -660,6 +665,7 @@ const defaultInstruments = [
                 'cs4',
                 'C#4',
                 '/assets/audio/lead-guitar/lead-cs4.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('C#', 3) ],
                 },
@@ -668,6 +674,7 @@ const defaultInstruments = [
                 'd4',
                 'D4',
                 '/assets/audio/lead-guitar/lead-d4.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('D', 3) ],
                 },
@@ -676,6 +683,7 @@ const defaultInstruments = [
                 'ds4',
                 'D#4',
                 '/assets/audio/lead-guitar/lead-ds4.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('D#', 3) ],
                 },
@@ -684,6 +692,7 @@ const defaultInstruments = [
                 'e4',
                 'E4',
                 '/assets/audio/lead-guitar/lead-e4.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('E', 3) ],
                 },
@@ -692,6 +701,7 @@ const defaultInstruments = [
                 'f4',
                 'F4',
                 '/assets/audio/lead-guitar/lead-f4.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('F', 3) ],
                 },
@@ -700,6 +710,7 @@ const defaultInstruments = [
                 'fs4',
                 'F#4',
                 '/assets/audio/lead-guitar/lead-fs4.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('F#', 3) ],
                 },
@@ -708,6 +719,7 @@ const defaultInstruments = [
                 'g4',
                 'G4',
                 '/assets/audio/lead-guitar/lead-g4.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('G', 3) ],
                 },
@@ -716,6 +728,7 @@ const defaultInstruments = [
                 'gs4',
                 'G#4',
                 '/assets/audio/lead-guitar/lead-gs4.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('G#', 3) ],
                 },
@@ -724,6 +737,7 @@ const defaultInstruments = [
                 'a5',
                 'A5',
                 '/assets/audio/lead-guitar/lead-a5.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('A', 4) ],
                 },
@@ -732,6 +746,7 @@ const defaultInstruments = [
                 'as5',
                 'A#5',
                 '/assets/audio/lead-guitar/lead-as5.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('A#', 4) ],
                 },
@@ -740,6 +755,7 @@ const defaultInstruments = [
                 'b5',
                 'B5',
                 '/assets/audio/lead-guitar/lead-b5.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('B', 4) ],
                 },
@@ -748,6 +764,7 @@ const defaultInstruments = [
                 'c5',
                 'C5',
                 '/assets/audio/lead-guitar/lead-c5.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('C', 4) ],
                 },
@@ -756,6 +773,7 @@ const defaultInstruments = [
                 'cs5',
                 'C#5',
                 '/assets/audio/lead-guitar/lead-cs5.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('C#', 4) ],
                 },
@@ -764,6 +782,7 @@ const defaultInstruments = [
                 'd5',
                 'D5',
                 '/assets/audio/lead-guitar/lead-d5.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('D', 4) ],
                 },
@@ -772,6 +791,7 @@ const defaultInstruments = [
                 'ds5',
                 'D#5',
                 '/assets/audio/lead-guitar/lead-ds5.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('D#', 4) ],
                 },
@@ -780,6 +800,7 @@ const defaultInstruments = [
                 'e5',
                 'E5',
                 '/assets/audio/lead-guitar/lead-e5.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('E', 4) ],
                 },
@@ -788,6 +809,7 @@ const defaultInstruments = [
                 'f5',
                 'F5',
                 '/assets/audio/lead-guitar/lead-f5.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('F', 4) ],
                 },
@@ -796,6 +818,7 @@ const defaultInstruments = [
                 'fs5',
                 'F#5',
                 '/assets/audio/lead-guitar/lead-fs5.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('F#', 4) ],
                 },
@@ -804,6 +827,7 @@ const defaultInstruments = [
                 'g5',
                 'G5',
                 '/assets/audio/lead-guitar/lead-g5.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('G', 4) ],
                 },
@@ -812,6 +836,7 @@ const defaultInstruments = [
                 'gs5',
                 'G#5',
                 '/assets/audio/lead-guitar/lead-gs5.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('G#', 4) ],
                 },
@@ -820,6 +845,7 @@ const defaultInstruments = [
                 'a6',
                 'A6',
                 '/assets/audio/lead-guitar/lead-a6.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('A', 5) ],
                 },
@@ -828,6 +854,7 @@ const defaultInstruments = [
                 'as6',
                 'A#6',
                 '/assets/audio/lead-guitar/lead-as6.mp3',
+                'Upper Frets',
                 {
                     pitch: [ getMidiNote('A#', 5) ],
                 },
@@ -846,6 +873,7 @@ const defaultInstruments = [
                 'k',
                 'Basic kick',
                 '/assets/audio/mastered/kick.wav',
+                'Kick',
                 {
                     pitch: [ kickMidiNote ],
                 },
@@ -863,6 +891,7 @@ const defaultInstruments = [
                 's',
                 'Basic snare',
                 '/assets/audio/mastered/snare.wav',
+                'Snare',
                 {
                     pitch: [ snareMidiNote ],
                 },
@@ -881,6 +910,7 @@ const defaultInstruments = [
                 'h',
                 'Open hihat',
                 '/assets/audio/mastered/hihat-open.wav',
+                'Hihat',
                 {
                     pitch: [ hihatMidiNote ],
                 },
@@ -889,6 +919,7 @@ const defaultInstruments = [
                 'hc',
                 'Closed hihat',
                 '/assets/audio/mastered/hihat-closed.wav',
+                'Hihat',
                 {
                     pitch: [ hihatMidiNote ],
                 },
@@ -948,16 +979,19 @@ const defaultInstruments = [
                 'drone-medium',
                 'Medium',
                 '/assets/audio/drones/drone-medium.mp3',
+                'Drone'
             ),
             getSound(
                 'drone-high',
                 'High',
                 '/assets/audio/drones/drone-high.mp3',
+                'Drone'
             ),
             getSound(
                 'drone-high-2',
                 'Creepy',
                 '/assets/audio/drones/drone-high-2.mp3',
+                'Drone'
             )
         ]
     ),

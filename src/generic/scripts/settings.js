@@ -2,4 +2,4 @@ const settings = {
     useExternalSoundFiles: true,
 }
 
-export default settings;
+export default settings

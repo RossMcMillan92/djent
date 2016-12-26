@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import deepEqual from 'deep-equal';
+import React, { Component } from 'react'
+import deepEqual from 'deep-equal'
 
-import NotePanel from './NotePanel';
+import NotePanel from './NotePanel'
 
 class AllowedLengthsController extends Component {
-    shouldComponentUpdate = (nextProps) => !deepEqual(nextProps.allowedLengths, this.props.allowedLengths);
+    shouldComponentUpdate = nextProps => !deepEqual(nextProps.allowedLengths, this.props.allowedLengths)
 
     render = () => {
-        const { allowedLengths, actions } = this.props;
-        const totalAmount = allowedLengths.reduce((a,b) => a + b.amount, 0);
+        const { allowedLengths, actions } = this.props
+        const totalAmount = allowedLengths.reduce((a, b) => a + b.amount, 0)
         const notePanelProps = {
             actions,
             allowedLengths,
@@ -17,20 +17,20 @@ class AllowedLengthsController extends Component {
 
         const lengths = allowedLengths
             .map((length, i) => (
-                <div className="grid__item one-fifth alpha--one-third" key={i} >
-                    <div className="u-mb1" key={i} >
-                        <NotePanel length={length} { ...notePanelProps } />
+                    <div className="grid__item one-fifth alpha--one-third" key={i} >
+                        <div className="u-mb1" key={i} >
+                            <NotePanel length={length} { ...notePanelProps } />
+                        </div>
                     </div>
-                </div>
                 )
-            );
+            )
 
         return (
             <div className="grid grid--center">
                 { lengths }
             </div>
-        );
+        )
     }
 }
 
-export default AllowedLengthsController;
+export default AllowedLengthsController

@@ -75,13 +75,13 @@ export default class Main extends Component {
     }
 
     // setupSharedItems :: shareID -> Task Error audioPlaylist
-    setupSharedItems = (shareID) =>
+    setupSharedItems = shareID =>
         List(shareID.split('-'))
             .traverse(Task.of, getLongURLFromShareID)
             .chain(this.updatePresetAndGetPlaylist)
 
     // updatePresetAndGetPlaylist :: List longURLs -> Task Error audioPlaylist
-    updatePresetAndGetPlaylist = longURLs => {
+    updatePresetAndGetPlaylist = (longURLs) => {
         if (longURLs.size === 1 && longURLs.get(0).includes('-')) {
             return compose(this.setupSharedItems, last, split('/'))(longURLs.get(0))
         }
@@ -97,21 +97,21 @@ export default class Main extends Component {
 
     setupSharedItemsAndUpdate = (shareID) => {
         this.setupSharedItems(shareID)
-            .fork(logError, audioPlaylist => {
+            .fork(logError, (audioPlaylist) => {
                 this.props.actions.updateAudioPlaylist(audioPlaylist.toJS())
                 this.props.actions.disableModal()
             })
     }
 
-    dataStringToPreset = (dataString) => compose(
+    dataStringToPreset = dataString => compose(
         this.insertSoundsIntoPresetInstruments,
         preset => backwardsCompatibility(preset, defaultAllowedLengths),
         getPresetFromData,
     )(dataString)
 
-    insertSoundsIntoPresetInstruments = preset => {
+    insertSoundsIntoPresetInstruments = (preset) => {
         preset.settings.instruments = preset.settings.instruments
-            .map(i => {
+            .map((i) => {
                 const inst = this.props.instruments.find(ins => ins.id === i.id)
                 const sounds = getActiveSoundsFromHitTypes(i.predefinedHitTypes)
                     .map(sound => ({ ...inst.sounds.find(s => s.id === sound.id), ...sound }))
@@ -185,7 +185,7 @@ export default class Main extends Component {
                     viewHeight={true}
                     resistance={true}
                     index={this.state.activePageIndex}
-                    onChangeIndex={(i) => this.changeActivePageIndex(i)}
+                    onChangeIndex={i => this.changeActivePageIndex(i)}
                 >
                     <Player
                         route={this.props.route}

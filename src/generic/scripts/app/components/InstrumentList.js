@@ -1,25 +1,25 @@
-import React, { Component } from 'react';
-import { capitalize } from 'utils/tools';
+import React, { Component } from 'react'
+import { capitalize } from 'utils/tools'
 
-import Expandable from './Expandable';
-import FadeOutDurationController from './FadeOutDurationController';
-import PitchController from './PitchController';
-import RepeatingHitsController from './RepeatingHitsController';
-import SequenceController from './SequenceController';
-import Tabgroup, { Tabpane } from './Tabgroup';
-import VolumeController from './VolumeController';
+import Expandable from './Expandable'
+import FadeOutDurationController from './FadeOutDurationController'
+import PitchController from './PitchController'
+import RepeatingHitsController from './RepeatingHitsController'
+import SequenceController from './SequenceController'
+import Tabgroup, { Tabpane } from './Tabgroup'
+import VolumeController from './VolumeController'
 
 export default class InstrumentList extends Component {
     onSoundToggle = (event) => {
-        const soundID = event.target.getAttribute('id');
-        const parentID = event.target.getAttribute('data-parent-id');
+        const soundID = event.target.getAttribute('id')
+        const parentID = event.target.getAttribute('data-parent-id')
         const currentValue = this.props.instruments
             .find(i => i.id === parentID).sounds
-            .find(s => s.id === soundID).enabled;
-        const prop = 'enabled';
-        const value = !currentValue;
+            .find(s => s.id === soundID).enabled
+        const prop = 'enabled'
+        const value = !currentValue
 
-        this.props.actions.updateInstrumentSound({ soundID, parentID, prop, value });
+        this.props.actions.updateInstrumentSound({ soundID, parentID, prop, value })
     }
 
     renderSequenceController = instrument => {
@@ -28,7 +28,7 @@ export default class InstrumentList extends Component {
             .reduce((newObj, b) => ({
                 ...newObj,
                 [b.id]: { description: b.description, id: b.id }
-            }), {});
+            }), {})
         const content = (
             <SequenceController
                 instrumentID={ instrument.id }
@@ -38,9 +38,9 @@ export default class InstrumentList extends Component {
                     updateInstrumentSequences: this.props.actions.updateInstrumentSequences
                 }}
             />
-        );
+        )
 
-        return content;
+        return content
     }
 
     render = () => {
@@ -52,14 +52,14 @@ export default class InstrumentList extends Component {
                             return [
                                 ...cats,
                                 sound.category
-                            ];
+                            ]
                         }
-                        return cats;
+                        return cats
                     }, [])
                     .map((id, catIndex, arr) => {
                         const sounds = instrument.sounds
-                            .filter(sound => sound.category === id);
-                        const isExpanded = !!sounds.find(sound => sound.enabled);
+                            .filter(sound => sound.category === id)
+                        const isExpanded = !!sounds.find(sound => sound.enabled)
 
                         return (
                             <Expandable
@@ -91,8 +91,8 @@ export default class InstrumentList extends Component {
                                     ))}
                                 </ul>
                             </Expandable>
-                        );
-                    });
+                        )
+                    })
 
                 return (
                     <div className={`${index < instArr.length - 1 ? 'u-mb2' : ''}`} key={index}>
@@ -151,13 +151,13 @@ export default class InstrumentList extends Component {
                         </Tabgroup>
 
                     </div>
-                );
-            });
+                )
+            })
 
         return (
             <div>
                {instrumentViews}
             </div>
-        );
+        )
     }
 }

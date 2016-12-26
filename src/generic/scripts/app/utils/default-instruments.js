@@ -10,354 +10,248 @@ const crash1MidiNote = 'C#3'
 const crash2MidiNote = 'A3'
 const chinaMidiNote = 'E3'
 
-const defaultInstrumentProps = {
-    pitch: 0,
-    volume: 1,
-    repeatHitTypeForXBeat: 0,
-    fadeOutDuration: 0,
-}
-
-const getSoundURL = (path) => settings.useExternalSoundFiles
+const getSoundURL = path => settings.useExternalSoundFiles
     ? `https://raw.githubusercontent.com/RossMcMillan92/djent/master/src/generic${path}`
     : path
 
+const getSound = (id, description, path, category, midi) => ({
+    id,
+    description,
+    path: getSoundURL(path),
+    midi,
+    enabled: false,
+})
+
+const getInstrument = (id, description, sequences, sounds, fadeOutDuration = 0, ringout = false) => ({
+    id,
+    description,
+    sequences,
+    sounds,
+    fadeOutDuration,
+    ringout,
+    pitch: 0,
+    volume: 1,
+    repeatHitTypeForXBeat: 0,
+})
+
 const defaultInstruments = [
-    {
-        ...defaultInstrumentProps,
-        id: 'g',
-        description: 'Rythm Guitar/Bass (Drop G#)',
-        fadeOutDuration: 0.025,
-        sequences: [
+    getInstrument(
+        'g',
+        'Rythm Guitar/Bass (Drop G#)',
+        [
             'CUSTOM_SEQUENCE_1',
         ],
-        sounds: [
-            {
-                id: 'sixth-0-muted',
-                description: 'Fret 0',
-                path: getSoundURL('/assets/audio/guitar/sixth-0-muted.mp3'),
-                enabled: false,
-                category: 'Sixth string [Muted]',
-                midi: {
+        [
+            getSound(
+                'sixth-0-muted',
+                'Fret 0',
+                '/assets/audio/guitar/sixth-0-muted.mp3',
+                'Sixth string [Muted]',
+                {
                     pitch: [ getMidiNote('G#', 0), getMidiNote('D#', 1), getMidiNote('G#', 1) ],
                     muted: true,
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 0 ],
-                    palmMuted: true,
-                },
-            },
-            {
-                id: 'sixth-1-muted',
-                description: 'Fret 1',
-                path: getSoundURL('/assets/audio/guitar/sixth-1-muted.mp3'),
-                enabled: false,
-                category: 'Sixth string [Muted]',
-                midi: {
+            ),
+            getSound(
+                'sixth-1-muted',
+                'Fret 1',
+                '/assets/audio/guitar/sixth-1-muted.mp3',
+                'Sixth string [Muted]',
+                {
                     pitch: [ getMidiNote('A', 0), getMidiNote('E', 1), getMidiNote('A', 1) ],
                     muted: true,
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 1 ],
-                    palmMuted: true,
-                },
-            },
-            {
-                id: 'sixth-2-muted',
-                description: 'Fret 2',
-                path: getSoundURL('/assets/audio/guitar/sixth-2-muted.mp3'),
-                enabled: false,
-                category: 'Sixth string [Muted]',
-                midi: {
+            ),
+            getSound(
+                'sixth-2-muted',
+                'Fret 2',
+                '/assets/audio/guitar/sixth-2-muted.mp3',
+                'Sixth string [Muted]',
+                {
                     pitch: [ getMidiNote('A#', 0), getMidiNote('F', 1), getMidiNote('A#', 1) ],
                     muted: true,
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 2 ],
-                    palmMuted: true,
-                },
-            },
-            {
-                id: 'sixth-3-muted',
-                description: 'Fret 3',
-                path: getSoundURL('/assets/audio/guitar/sixth-3-muted.mp3'),
-                enabled: false,
-                category: 'Sixth string [Muted]',
-                midi: {
+            ),
+            getSound(
+                'sixth-3-muted',
+                'Fret 3',
+                '/assets/audio/guitar/sixth-3-muted.mp3',
+                'Sixth string [Muted]',
+                {
                     pitch: [ getMidiNote('B', 0), getMidiNote('F#', 1), getMidiNote('B', 1) ],
                     muted: true,
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 3 ],
-                    palmMuted: true,
-                },
-            },
-            {
-                id: 'sixth-4-muted',
-                description: 'Fret 4',
-                path: getSoundURL('/assets/audio/guitar/sixth-4-muted.mp3'),
-                enabled: false,
-                category: 'Sixth string [Muted]',
-                midi: {
+            ),
+            getSound(
+                'sixth-4-muted',
+                'Fret 4',
+                '/assets/audio/guitar/sixth-4-muted.mp3',
+                'Sixth string [Muted]',
+                {
                     pitch: [ getMidiNote('C', 1), getMidiNote('G', 1), getMidiNote('C', 2) ],
                     muted: true,
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 4 ],
-                    palmMuted: true,
-                },
-            },
-            {
-                id: 'sixth-8-muted',
-                description: 'Fret 8',
-                path: getSoundURL('/assets/audio/guitar/sixth-8-muted.mp3'),
-                enabled: false,
-                category: 'Sixth string [Muted]',
-                midi: {
+            ),
+            getSound(
+                'sixth-8-muted',
+                'Fret 8',
+                '/assets/audio/guitar/sixth-8-muted.mp3',
+                'Sixth string [Muted]',
+                {
                     pitch: [ getMidiNote('E', 1), getMidiNote('B', 1), getMidiNote('E', 2) ],
                     muted: true,
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 8 ],
-                    palmMuted: true,
-                },
-            },
-            {
-                id: 'sixth-0-open',
-                description: 'Fret 0',
-                path: getSoundURL('/assets/audio/guitar/sixth-0-open.mp3'),
-                enabled: false,
-                category: 'Sixth string [Open]',
-                midi: {
+            ),
+            getSound(
+                'sixth-0-open',
+                'Fret 0',
+                '/assets/audio/guitar/sixth-0-open.mp3',
+                'Sixth string [Open]',
+                {
                     pitch: [ getMidiNote('G#', 0) ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 0 ],
-                },
-            },
-            {
-                id: 'sixth-1-open',
-                description: 'Fret 1',
-                path: getSoundURL('/assets/audio/guitar/sixth-1-open.mp3'),
-                enabled: false,
-                category: 'Sixth string [Open]',
-                midi: {
+            ),
+            getSound(
+                'sixth-1-open',
+                'Fret 1',
+                '/assets/audio/guitar/sixth-1-open.mp3',
+                'Sixth string [Open]',
+                {
                     pitch: [ getMidiNote('A', 0) ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 1 ],
-                },
-            },
-            {
-                id: 'sixth-2-open',
-                description: 'Fret 2',
-                path: getSoundURL('/assets/audio/guitar/sixth-2-open.mp3'),
-                enabled: false,
-                category: 'Sixth string [Open]',
-                midi: {
+            ),
+            getSound(
+                'sixth-2-open',
+                'Fret 2',
+                '/assets/audio/guitar/sixth-2-open.mp3',
+                'Sixth string [Open]',
+                {
                     pitch: [ getMidiNote('A#', 0) ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 2 ],
-                },
-            },
-            {
-                id: 'sixth-3-open',
-                description: 'Fret 3',
-                path: getSoundURL('/assets/audio/guitar/sixth-3-open.mp3'),
-                enabled: false,
-                category: 'Sixth string [Open]',
-                midi: {
+            ),
+            getSound(
+                'sixth-3-open',
+                'Fret 3',
+                '/assets/audio/guitar/sixth-3-open.mp3',
+                'Sixth string [Open]',
+                {
                     pitch: [ getMidiNote('B', 0) ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 3 ],
-                },
-            },
-            {
-                id: 'sixth-4-open',
-                description: 'Fret 4',
-                path: getSoundURL('/assets/audio/guitar/sixth-4-open.mp3'),
-                enabled: false,
-                category: 'Sixth string [Open]',
-                midi: {
+            ),
+            getSound(
+                'sixth-4-open',
+                'Fret 4',
+                '/assets/audio/guitar/sixth-4-open.mp3',
+                'Sixth string [Open]',
+                {
                     pitch: [ getMidiNote('C', 1) ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 4 ],
-                },
-            },
-            {
-                id: 'sixth-5-open',
-                description: 'Fret 5',
-                path: getSoundURL('/assets/audio/guitar/sixth-5-open.mp3'),
-                enabled: false,
-                category: 'Sixth string [Open]',
-                midi: {
+            ),
+            getSound(
+                'sixth-5-open',
+                'Fret 5',
+                '/assets/audio/guitar/sixth-5-open.mp3',
+                'Sixth string [Open]',
+                {
                     pitch: [ getMidiNote('C#', 1) ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 5 ],
-                },
-            },
-            {
-                id: 'sixth-6-open',
-                description: 'Fret 6',
-                path: getSoundURL('/assets/audio/guitar/sixth-6-open.mp3'),
-                enabled: false,
-                category: 'Sixth string [Open]',
-                midi: {
+            ),
+            getSound(
+                'sixth-6-open',
+                'Fret 6',
+                '/assets/audio/guitar/sixth-6-open.mp3',
+                'Sixth string [Open]',
+                {
                     pitch: [ getMidiNote('D', 1) ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 6 ],
-                },
-            },
-            {
-                id: 'sixth-7-open',
-                description: 'Fret 7',
-                path: getSoundURL('/assets/audio/guitar/sixth-7-open.mp3'),
-                enabled: false,
-                category: 'Sixth string [Open]',
-                midi: {
+            ),
+            getSound(
+                'sixth-7-open',
+                'Fret 7',
+                '/assets/audio/guitar/sixth-7-open.mp3',
+                'Sixth string [Open]',
+                {
                     pitch: [ getMidiNote('D#', 1) ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 7 ],
-                },
-            },
-            {
-                id: 'sixth-8-open',
-                description: 'Fret 8',
-                path: getSoundURL('/assets/audio/guitar/sixth-8-open.mp3'),
-                enabled: false,
-                category: 'Sixth string [Open]',
-                midi: {
+            ),
+            getSound(
+                'sixth-8-open',
+                'Fret 8',
+                '/assets/audio/guitar/sixth-8-open.mp3',
+                'Sixth string [Open]',
+                {
                     pitch: [ getMidiNote('E', 1) ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 8 ],
-                },
-            },
-            {
-                id: 'sixth-9-open',
-                description: 'Fret 9',
-                path: getSoundURL('/assets/audio/guitar/sixth-9-open.mp3'),
-                enabled: false,
-                category: 'Sixth string [Open]',
-                midi: {
+            ),
+            getSound(
+                'sixth-9-open',
+                'Fret 9',
+                '/assets/audio/guitar/sixth-9-open.mp3',
+                'Sixth string [Open]',
+                {
                     pitch: [ getMidiNote('F', 1) ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 9 ],
-                },
-            },
-            {
-                id: 'sixth-10-open',
-                description: 'Fret 10',
-                path: getSoundURL('/assets/audio/guitar/sixth-10-open.mp3'),
-                enabled: false,
-                category: 'Sixth string [Open]',
-                midi: {
+            ),
+            getSound(
+                'sixth-10-open',
+                'Fret 10',
+                '/assets/audio/guitar/sixth-10-open.mp3',
+                'Sixth string [Open]',
+                {
                     pitch: [ getMidiNote('F#', 1) ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 10 ],
-                },
-            },
-            {
-                id: 'sixth-11-open',
-                description: 'Fret 11',
-                path: getSoundURL('/assets/audio/guitar/sixth-11-open.mp3'),
-                enabled: false,
-                category: 'Sixth string [Open]',
-                midi: {
+            ),
+            getSound(
+                'sixth-11-open',
+                'Fret 11',
+                '/assets/audio/guitar/sixth-11-open.mp3',
+                'Sixth string [Open]',
+                {
                     pitch: [ getMidiNote('G', 1) ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 11 ],
-                },
-            },
-            {
-                id: 'sixth-12-open',
-                description: 'Fret 12',
-                path: getSoundURL('/assets/audio/guitar/sixth-12-open.mp3'),
-                enabled: false,
-                category: 'Sixth string [Open]',
-                midi: {
+            ),
+            getSound(
+                'sixth-12-open',
+                'Fret 12',
+                '/assets/audio/guitar/sixth-12-open.mp3',
+                'Sixth string [Open]',
+                {
                     pitch: [ getMidiNote('G#', 1) ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 12 ],
-                },
-            },
-            {
-                id: 'sixth-13-open',
-                description: 'Fret 13',
-                path: getSoundURL('/assets/audio/guitar/sixth-13-open.mp3'),
-                enabled: false,
-                category: 'Sixth string [Open]',
-                midi: {
+            ),
+            getSound(
+                'sixth-13-open',
+                'Fret 13',
+                '/assets/audio/guitar/sixth-13-open.mp3',
+                'Sixth string [Open]',
+                {
                     pitch: [ getMidiNote('A', 1) ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 13 ],
-                },
-            },
-            {
-                id: 'sixth-14-open',
-                description: 'Fret 14',
-                path: getSoundURL('/assets/audio/guitar/sixth-14-open.mp3'),
-                enabled: false,
-                category: 'Sixth string [Open]',
-                midi: {
+            ),
+            getSound(
+                'sixth-14-open',
+                'Fret 14',
+                '/assets/audio/guitar/sixth-14-open.mp3',
+                'Sixth string [Open]',
+                {
                     pitch: [ getMidiNote('A#', 1) ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 14 ],
-                },
-            },
-            {
-                id: 'sixth-15-open',
-                description: 'Fret 15',
-                path: getSoundURL('/assets/audio/guitar/sixth-15-open.mp3'),
-                enabled: false,
-                category: 'Sixth string [Open]',
-                midi: {
+            ),
+            getSound(
+                'sixth-15-open',
+                'Fret 15',
+                '/assets/audio/guitar/sixth-15-open.mp3',
+                'Sixth string [Open]',
+                {
                     pitch: [ getMidiNote('B', 1) ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 15 ],
-                },
-            },
-            {
-                id: 'sixth-0-chord',
-                description: 'Fret 0',
-                path: getSoundURL('/assets/audio/guitar/sixth-0-chord.mp3'),
-                enabled: false,
-                category: 'Sixth string [Chord]',
-                midi: {
+            ),
+            getSound(
+                'sixth-0-chord',
+                'Fret 0',
+                '/assets/audio/guitar/sixth-0-chord.mp3',
+                'Sixth string [Chord]',
+                {
                     pitch: [
                         getMidiNote('G#', 0),
                         getMidiNote('D#', 1),
@@ -367,18 +261,13 @@ const defaultInstruments = [
                         getMidiNote('D#', 3),
                     ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 0 ],
-                },
-            },
-            {
-                id: 'sixth-1-chord',
-                description: 'Fret 1',
-                path: getSoundURL('/assets/audio/guitar/sixth-1-chord.mp3'),
-                enabled: false,
-                category: 'Sixth string [Chord]',
-                midi: {
+            ),
+            getSound(
+                'sixth-1-chord',
+                'Fret 1',
+                '/assets/audio/guitar/sixth-1-chord.mp3',
+                'Sixth string [Chord]',
+                {
                     pitch: [
                         getMidiNote('A', 1),
                         getMidiNote('E', 1),
@@ -387,18 +276,13 @@ const defaultInstruments = [
                         getMidiNote('A', 3),
                     ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 1 ],
-                },
-            },
-            {
-                id: 'sixth-2-chord',
-                description: 'Fret 2',
-                path: getSoundURL('/assets/audio/guitar/sixth-2-chord.mp3'),
-                enabled: false,
-                category: 'Sixth string [Chord]',
-                midi: {
+            ),
+            getSound(
+                'sixth-2-chord',
+                'Fret 2',
+                '/assets/audio/guitar/sixth-2-chord.mp3',
+                'Sixth string [Chord]',
+                {
                     pitch: [
                         getMidiNote('A#', 1),
                         getMidiNote('F', 1),
@@ -407,18 +291,13 @@ const defaultInstruments = [
                         getMidiNote('A#', 3),
                     ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 2 ],
-                },
-            },
-            {
-                id: 'sixth-3-chord',
-                description: 'Fret 3',
-                path: getSoundURL('/assets/audio/guitar/sixth-3-chord.mp3'),
-                enabled: false,
-                category: 'Sixth string [Chord]',
-                midi: {
+            ),
+            getSound(
+                'sixth-3-chord',
+                'Fret 3',
+                '/assets/audio/guitar/sixth-3-chord.mp3',
+                'Sixth string [Chord]',
+                {
                     pitch: [
                         getMidiNote('B', 1),
                         getMidiNote('F#', 1),
@@ -427,18 +306,13 @@ const defaultInstruments = [
                         getMidiNote('B', 3),
                     ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 3 ],
-                },
-            },
-            {
-                id: 'sixth-4-chord',
-                description: 'Fret 4',
-                path: getSoundURL('/assets/audio/guitar/sixth-4-chord.mp3'),
-                enabled: false,
-                category: 'Sixth string [Chord]',
-                midi: {
+            ),
+            getSound(
+                'sixth-4-chord',
+                'Fret 4',
+                '/assets/audio/guitar/sixth-4-chord.mp3',
+                'Sixth string [Chord]',
+                {
                     pitch: [
                         getMidiNote('C', 1),
                         getMidiNote('G', 1),
@@ -447,18 +321,13 @@ const defaultInstruments = [
                         getMidiNote('C', 3),
                     ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 4 ],
-                },
-            },
-            {
-                id: 'sixth-5-chord',
-                description: 'Fret 5',
-                path: getSoundURL('/assets/audio/guitar/sixth-5-chord.mp3'),
-                enabled: false,
-                category: 'Sixth string [Chord]',
-                midi: {
+            ),
+            getSound(
+                'sixth-5-chord',
+                'Fret 5',
+                '/assets/audio/guitar/sixth-5-chord.mp3',
+                'Sixth string [Chord]',
+                {
                     pitch: [
                         getMidiNote('C#', 1),
                         getMidiNote('G#', 1),
@@ -467,18 +336,13 @@ const defaultInstruments = [
                         getMidiNote('C#', 3),
                     ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 5 ],
-                },
-            },
-            {
-                id: 'sixth-6-chord',
-                description: 'Fret 6',
-                path: getSoundURL('/assets/audio/guitar/sixth-6-chord.mp3'),
-                enabled: false,
-                category: 'Sixth string [Chord]',
-                midi: {
+            ),
+            getSound(
+                'sixth-6-chord',
+                'Fret 6',
+                '/assets/audio/guitar/sixth-6-chord.mp3',
+                'Sixth string [Chord]',
+                {
                     pitch: [
                         getMidiNote('D', 1),
                         getMidiNote('A', 2),
@@ -487,18 +351,13 @@ const defaultInstruments = [
                         getMidiNote('D', 3),
                     ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 6 ],
-                },
-            },
-            {
-                id: 'sixth-7-chord',
-                description: 'Fret 7',
-                path: getSoundURL('/assets/audio/guitar/sixth-7-chord.mp3'),
-                enabled: false,
-                category: 'Sixth string [Chord]',
-                midi: {
+            ),
+            getSound(
+                'sixth-7-chord',
+                'Fret 7',
+                '/assets/audio/guitar/sixth-7-chord.mp3',
+                'Sixth string [Chord]',
+                {
                     pitch: [
                         getMidiNote('D#', 1),
                         getMidiNote('A#', 2),
@@ -507,18 +366,13 @@ const defaultInstruments = [
                         getMidiNote('D#', 3),
                     ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 7 ],
-                },
-            },
-            {
-                id: 'sixth-8-chord',
-                description: 'Fret 8',
-                path: getSoundURL('/assets/audio/guitar/sixth-8-chord.mp3'),
-                enabled: false,
-                category: 'Sixth string [Chord]',
-                midi: {
+            ),
+            getSound(
+                'sixth-8-chord',
+                'Fret 8',
+                '/assets/audio/guitar/sixth-8-chord.mp3',
+                'Sixth string [Chord]',
+                {
                     pitch: [
                         getMidiNote('E', 1),
                         getMidiNote('B', 2),
@@ -527,18 +381,13 @@ const defaultInstruments = [
                         getMidiNote('E', 3),
                     ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 8 ],
-                },
-            },
-            {
-                id: 'sixth-9-chord',
-                description: 'Fret 9',
-                path: getSoundURL('/assets/audio/guitar/sixth-9-chord.mp3'),
-                enabled: false,
-                category: 'Sixth string [Chord]',
-                midi: {
+            ),
+            getSound(
+                'sixth-9-chord',
+                'Fret 9',
+                '/assets/audio/guitar/sixth-9-chord.mp3',
+                'Sixth string [Chord]',
+                {
                     pitch: [
                         getMidiNote('F', 1),
                         getMidiNote('C', 2),
@@ -547,18 +396,13 @@ const defaultInstruments = [
                         getMidiNote('F', 3),
                     ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 9 ],
-                },
-            },
-            {
-                id: 'sixth-10-chord',
-                description: 'Fret 10',
-                path: getSoundURL('/assets/audio/guitar/sixth-10-chord.mp3'),
-                enabled: false,
-                category: 'Sixth string [Chord]',
-                midi: {
+            ),
+            getSound(
+                'sixth-10-chord',
+                'Fret 10',
+                '/assets/audio/guitar/sixth-10-chord.mp3',
+                'Sixth string [Chord]',
+                {
                     pitch: [
                         getMidiNote('F#', 1),
                         getMidiNote('C#', 2),
@@ -567,18 +411,13 @@ const defaultInstruments = [
                         getMidiNote('F#', 3),
                     ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 10 ],
-                },
-            },
-            {
-                id: 'sixth-11-chord',
-                description: 'Fret 11',
-                path: getSoundURL('/assets/audio/guitar/sixth-11-chord.mp3'),
-                enabled: false,
-                category: 'Sixth string [Chord]',
-                midi: {
+            ),
+            getSound(
+                'sixth-11-chord',
+                'Fret 11',
+                '/assets/audio/guitar/sixth-11-chord.mp3',
+                'Sixth string [Chord]',
+                {
                     pitch: [
                         getMidiNote('G', 1),
                         getMidiNote('D', 2),
@@ -587,18 +426,13 @@ const defaultInstruments = [
                         getMidiNote('G', 3),
                     ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 11 ],
-                },
-            },
-            {
-                id: 'sixth-12-chord',
-                description: 'Fret 12',
-                path: getSoundURL('/assets/audio/guitar/sixth-12-chord.mp3'),
-                enabled: false,
-                category: 'Sixth string [Chord]',
-                midi: {
+            ),
+            getSound(
+                'sixth-12-chord',
+                'Fret 12',
+                '/assets/audio/guitar/sixth-12-chord.mp3',
+                'Sixth string [Chord]',
+                {
                     pitch: [
                         getMidiNote('G#', 1),
                         getMidiNote('D#', 2),
@@ -607,660 +441,526 @@ const defaultInstruments = [
                         getMidiNote('G#', 3),
                     ],
                 },
-                tabConfig: {
-                    strings: [ 6 ],
-                    frets: [ 12 ],
-                },
-            },
+            ),
 
-            {
-                id: 'fifth-5-open',
-                description: 'Fret 5',
-                path: getSoundURL('/assets/audio/guitar/fifth-5-open.mp3'),
-                enabled: false,
-                category: 'Fifth string [Open]',
-                midi: {
+            getSound(
+                'fifth-5-open',
+                'Fret 5',
+                '/assets/audio/guitar/fifth-5-open.mp3',
+                'Fifth string [Open]',
+                {
                     pitch: [ getMidiNote('G#', 1) ],
                 },
-                tabConfig: {
-                    strings: [ 5 ],
-                    frets: [ 6 ],
-                    palmMuted: true,
-                },
-            },
-            {
-                id: 'fifth-6-open',
-                description: 'Fret 6',
-                path: getSoundURL('/assets/audio/guitar/fifth-6-open.mp3'),
-                enabled: false,
-                category: 'Fifth string [Open]',
-                midi: {
+            ),
+            getSound(
+                'fifth-6-open',
+                'Fret 6',
+                '/assets/audio/guitar/fifth-6-open.mp3',
+                'Fifth string [Open]',
+                {
                     pitch: [ getMidiNote('A', 1) ],
                 },
-                tabConfig: {
-                    strings: [ 5 ],
-                    frets: [ 6 ],
-                },
-            },
-            {
-                id: 'fifth-7-open',
-                description: 'Fret 7',
-                path: getSoundURL('/assets/audio/guitar/fifth-7-open.mp3'),
-                enabled: false,
-                category: 'Fifth string [Open]',
-                midi: {
+            ),
+            getSound(
+                'fifth-7-open',
+                'Fret 7',
+                '/assets/audio/guitar/fifth-7-open.mp3',
+                'Fifth string [Open]',
+                {
                     pitch: [ getMidiNote('A#', 1) ],
                 },
-                tabConfig: {
-                    strings: [ 5 ],
-                    frets: [ 7 ],
-                },
-            },
-            {
-                id: 'fifth-8-open',
-                description: 'Fret 8',
-                path: getSoundURL('/assets/audio/guitar/fifth-8-open.mp3'),
-                enabled: false,
-                category: 'Fifth string [Open]',
-                midi: {
+            ),
+            getSound(
+                'fifth-8-open',
+                'Fret 8',
+                '/assets/audio/guitar/fifth-8-open.mp3',
+                'Fifth string [Open]',
+                {
                     pitch: [ getMidiNote('B', 1) ],
                 },
-                tabConfig: {
-                    strings: [ 5 ],
-                    frets: [ 8 ],
-                },
-            },
-            {
-                id: 'fifth-9-open',
-                description: 'Fret 9',
-                path: getSoundURL('/assets/audio/guitar/fifth-9-open.mp3'),
-                enabled: false,
-                category: 'Fifth string [Open]',
-                midi: {
+            ),
+            getSound(
+                'fifth-9-open',
+                'Fret 9',
+                '/assets/audio/guitar/fifth-9-open.mp3',
+                'Fifth string [Open]',
+                {
                     pitch: [ getMidiNote('C', 2) ],
                 },
-                tabConfig: {
-                    strings: [ 5 ],
-                    frets: [ 9 ],
-                },
-            },
-            {
-                id: 'fifth-10-open',
-                description: 'Fret 10',
-                path: getSoundURL('/assets/audio/guitar/fifth-10-open.mp3'),
-                enabled: false,
-                category: 'Fifth string [Open]',
-                midi: {
+            ),
+            getSound(
+                'fifth-10-open',
+                'Fret 10',
+                '/assets/audio/guitar/fifth-10-open.mp3',
+                'Fifth string [Open]',
+                {
                     pitch: [ getMidiNote('Db', 2) ],
                 },
-                tabConfig: {
-                    strings: [ 5 ],
-                    frets: [ 10 ],
-                },
-            },
-            {
-                id: 'fifth-11-open',
-                description: 'Fret 11',
-                path: getSoundURL('/assets/audio/guitar/fifth-11-open.mp3'),
-                enabled: false,
-                category: 'Fifth string [Open]',
-                midi: {
+            ),
+            getSound(
+                'fifth-11-open',
+                'Fret 11',
+                '/assets/audio/guitar/fifth-11-open.mp3',
+                'Fifth string [Open]',
+                {
                     pitch: [ getMidiNote('D', 2) ],
                 },
-                tabConfig: {
-                    strings: [ 5 ],
-                    frets: [ 11 ],
-                },
-            },
-            {
-                id: 'fifth-12-open',
-                description: 'Fret 12',
-                path: getSoundURL('/assets/audio/guitar/fifth-12-open.mp3'),
-                enabled: false,
-                category: 'Fifth string [Open]',
-                midi: {
+            ),
+            getSound(
+                'fifth-12-open',
+                'Fret 12',
+                '/assets/audio/guitar/fifth-12-open.mp3',
+                'Fifth string [Open]',
+                {
                     pitch: [ getMidiNote('Eb', 2) ],
                 },
-                tabConfig: {
-                    strings: [ 5 ],
-                    frets: [ 12 ],
-                },
-            },
+            ),
 
-            {
-                id: 'third-7-open',
-                description: 'Fret 7',
-                path: getSoundURL('/assets/audio/guitar/third-7-open.mp3'),
-                enabled: false,
-                category: 'Third string [Open]',
-                midi: {
+            getSound(
+                'third-7-open',
+                'Fret 7',
+                '/assets/audio/guitar/third-7-open.mp3',
+                'Third string [Open]',
+                {
                     pitch: [ getMidiNote('G#', 2) ],
                 },
-                tabConfig: {
-                    strings: [ 3 ],
-                    frets: [ 7 ],
-                },
-            },
-            {
-                id: 'third-8-open',
-                description: 'Fret 8',
-                path: getSoundURL('/assets/audio/guitar/third-8-open.mp3'),
-                enabled: false,
-                category: 'Third string [Open]',
-                midi: {
+            ),
+            getSound(
+                'third-8-open',
+                'Fret 8',
+                '/assets/audio/guitar/third-8-open.mp3',
+                'Third string [Open]',
+                {
                     pitch: [ getMidiNote('A', 2) ],
                 },
-                tabConfig: {
-                    strings: [ 3 ],
-                    frets: [ 8 ],
-                },
-            },
-            {
-                id: 'third-9-open',
-                description: 'Fret 9',
-                path: getSoundURL('/assets/audio/guitar/third-9-open.mp3'),
-                enabled: false,
-                category: 'Third string [Open]',
-                midi: {
+            ),
+            getSound(
+                'third-9-open',
+                'Fret 9',
+                '/assets/audio/guitar/third-9-open.mp3',
+                'Third string [Open]',
+                {
                     pitch: [ getMidiNote('A#', 2) ],
                 },
-                tabConfig: {
-                    strings: [ 3 ],
-                    frets: [ 9 ],
-                },
-            },
-            {
-                id: 'third-10-open',
-                description: 'Fret 10',
-                path: getSoundURL('/assets/audio/guitar/third-10-open.mp3'),
-                enabled: false,
-                category: 'Third string [Open]',
-                midi: {
+            ),
+            getSound(
+                'third-10-open',
+                'Fret 10',
+                '/assets/audio/guitar/third-10-open.mp3',
+                'Third string [Open]',
+                {
                     pitch: [ getMidiNote('B', 2) ],
                 },
-                tabConfig: {
-                    strings: [ 3 ],
-                    frets: [ 10 ],
-                },
-            },
+            ),
 
-            {
-                id: 'third-7-bend',
-                description: 'Fret 7',
-                path: getSoundURL('/assets/audio/guitar/third-7-bend.mp3'),
-                enabled: false,
-                category: 'Third string [Bend]',
-                midi: {
+            getSound(
+                'third-7-bend',
+                'Fret 7',
+                '/assets/audio/guitar/third-7-bend.mp3',
+                'Third string [Bend]',
+                {
                     pitch: [ getMidiNote('G#', 2) ],
                 },
-                tabConfig: {
-                    strings: [ 3 ],
-                    frets: [ 7 ],
-                    bend: true,
-                },
-            },
-            {
-                id: 'third-8-bend',
-                description: 'Fret 8',
-                path: getSoundURL('/assets/audio/guitar/third-8-bend.mp3'),
-                enabled: false,
-                category: 'Third string [Bend]',
-                midi: {
+            ),
+            getSound(
+                'third-8-bend',
+                'Fret 8',
+                '/assets/audio/guitar/third-8-bend.mp3',
+                'Third string [Bend]',
+                {
                     pitch: [ getMidiNote('A', 2) ],
                 },
-                tabConfig: {
-                    strings: [ 3 ],
-                    frets: [ 8 ],
-                    bend: true,
-                },
-            },
+            ),
 
-            {
-                id: 'dissonance-10',
-                description: 'Dissonance fret 10',
-                path: getSoundURL('/assets/audio/guitar/dissonance-10.mp3'),
-                enabled: false,
-                category: 'Misc',
-                midi: {
+            getSound(
+                'dissonance-10',
+                'Dissonance fret 10',
+                '/assets/audio/guitar/dissonance-10.mp3',
+                'Misc',
+                {
                     pitch: [ getMidiNote('G#', 3), getMidiNote('G', 3) ],
                     muted: true,
                 },
-                tabConfig: {
-                    strings: [ 1, 2 ],
-                    frets: [ 10, 14 ],
-                },
-            },
-            {
-                id: 'dissonance-16',
-                description: 'Dissonance fret 16',
-                path: getSoundURL('/assets/audio/guitar/dissonance-16.mp3'),
-                enabled: false,
-                category: 'Misc',
-                midi: {
+            ),
+            getSound(
+                'dissonance-16',
+                'Dissonance fret 16',
+                '/assets/audio/guitar/dissonance-16.mp3',
+                'Misc',
+                {
                     pitch: [ getMidiNote('G#', 3), getMidiNote('G', 3) ],
                     muted: true,
                 },
-                tabConfig: {
-                    strings: [ 1, 2 ],
-                    frets: [ 16, 14 ],
-                },
-            },
+            ),
 
-            {
-                id: 'scratch',
-                description: 'Scratch',
-                path: getSoundURL('/assets/audio/guitar/scratch.mp3'),
-                enabled: false,
-                category: 'Misc',
-                midi: {
+            getSound(
+                'scratch',
+                'Scratch',
+                '/assets/audio/guitar/scratch.mp3',
+                'Misc',
+                {
                     pitch: [ getMidiNote('G#', 0), getMidiNote('D#', 1), getMidiNote('G#', 1) ],
                     duration: 0.125,
                     muted: true,
                 },
-                tabConfig: {
-                    strings: [ 4, 5, 6 ],
-                    frets: [ 'x', 'x', 'x' ],
-                },
-            },
+            ),
 
         ],
-    },
-    {
-        ...defaultInstrumentProps,
-        id: 'lg',
-        description: 'Lead Guitar',
-        volume: 0.8,
-        fadeOutDuration: 0.025,
-        sequences: [
+        0.025,
+    ),
+    getInstrument(
+        'lg',
+        'Lead Guitar',
+        0.8,
+        [
             'steadyQuarters',
         ],
-        sounds: [
-            {
-                id: 'gs3',
-                description: 'G#3',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-gs3.mp3'),
-                enabled: false,
-                midi: {
+        [
+            getSound(
+                'gs3',
+                'G#3',
+                '/assets/audio/lead-guitar/lead-gs3.mp3',
+                {
                     pitch: [ getMidiNote('G#', 2) ],
                 },
-            },
-            {
-                id: 'a4',
-                description: 'A4',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-a4.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'a4',
+                'A4',
+                '/assets/audio/lead-guitar/lead-a4.mp3',
+                {
                     pitch: [ getMidiNote('A', 3) ],
                 },
-            },
-            {
-                id: 'as4',
-                description: 'A#4',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-as4.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'as4',
+                'A#4',
+                '/assets/audio/lead-guitar/lead-as4.mp3',
+                {
                     pitch: [ getMidiNote('A#', 3) ],
                 },
-            },
-            {
-                id: 'b4',
-                description: 'B4',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-b4.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'b4',
+                'B4',
+                '/assets/audio/lead-guitar/lead-b4.mp3',
+                {
                     pitch: [ getMidiNote('B', 3) ],
                 },
-            },
-            {
-                id: 'c4',
-                description: 'C4',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-c4.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'c4',
+                'C4',
+                '/assets/audio/lead-guitar/lead-c4.mp3',
+                {
                     pitch: [ getMidiNote('C', 3) ],
                 },
-            },
-            {
-                id: 'cs4',
-                description: 'C#4',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-cs4.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'cs4',
+                'C#4',
+                '/assets/audio/lead-guitar/lead-cs4.mp3',
+                {
                     pitch: [ getMidiNote('C#', 3) ],
                 },
-            },
-            {
-                id: 'd4',
-                description: 'D4',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-d4.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'd4',
+                'D4',
+                '/assets/audio/lead-guitar/lead-d4.mp3',
+                {
                     pitch: [ getMidiNote('D', 3) ],
                 },
-            },
-            {
-                id: 'ds4',
-                description: 'D#4',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-ds4.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'ds4',
+                'D#4',
+                '/assets/audio/lead-guitar/lead-ds4.mp3',
+                {
                     pitch: [ getMidiNote('D#', 3) ],
                 },
-            },
-            {
-                id: 'e4',
-                description: 'E4',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-e4.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'e4',
+                'E4',
+                '/assets/audio/lead-guitar/lead-e4.mp3',
+                {
                     pitch: [ getMidiNote('E', 3) ],
                 },
-            },
-            {
-                id: 'f4',
-                description: 'F4',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-f4.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'f4',
+                'F4',
+                '/assets/audio/lead-guitar/lead-f4.mp3',
+                {
                     pitch: [ getMidiNote('F', 3) ],
                 },
-            },
-            {
-                id: 'fs4',
-                description: 'F#4',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-fs4.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'fs4',
+                'F#4',
+                '/assets/audio/lead-guitar/lead-fs4.mp3',
+                {
                     pitch: [ getMidiNote('F#', 3) ],
                 },
-            },
-            {
-                id: 'g4',
-                description: 'G4',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-g4.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'g4',
+                'G4',
+                '/assets/audio/lead-guitar/lead-g4.mp3',
+                {
                     pitch: [ getMidiNote('G', 3) ],
                 },
-            },
-            {
-                id: 'gs4',
-                description: 'G#4',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-gs4.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'gs4',
+                'G#4',
+                '/assets/audio/lead-guitar/lead-gs4.mp3',
+                {
                     pitch: [ getMidiNote('G#', 3) ],
                 },
-            },
-            {
-                id: 'a5',
-                description: 'A5',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-a5.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'a5',
+                'A5',
+                '/assets/audio/lead-guitar/lead-a5.mp3',
+                {
                     pitch: [ getMidiNote('A', 4) ],
                 },
-            },
-            {
-                id: 'as5',
-                description: 'A#5',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-as5.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'as5',
+                'A#5',
+                '/assets/audio/lead-guitar/lead-as5.mp3',
+                {
                     pitch: [ getMidiNote('A#', 4) ],
                 },
-            },
-            {
-                id: 'b5',
-                description: 'B5',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-b5.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'b5',
+                'B5',
+                '/assets/audio/lead-guitar/lead-b5.mp3',
+                {
                     pitch: [ getMidiNote('B', 4) ],
                 },
-            },
-            {
-                id: 'c5',
-                description: 'C5',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-c5.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'c5',
+                'C5',
+                '/assets/audio/lead-guitar/lead-c5.mp3',
+                {
                     pitch: [ getMidiNote('C', 4) ],
                 },
-            },
-            {
-                id: 'cs5',
-                description: 'C#5',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-cs5.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'cs5',
+                'C#5',
+                '/assets/audio/lead-guitar/lead-cs5.mp3',
+                {
                     pitch: [ getMidiNote('C#', 4) ],
                 },
-            },
-            {
-                id: 'd5',
-                description: 'D5',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-d5.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'd5',
+                'D5',
+                '/assets/audio/lead-guitar/lead-d5.mp3',
+                {
                     pitch: [ getMidiNote('D', 4) ],
                 },
-            },
-            {
-                id: 'ds5',
-                description: 'D#5',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-ds5.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'ds5',
+                'D#5',
+                '/assets/audio/lead-guitar/lead-ds5.mp3',
+                {
                     pitch: [ getMidiNote('D#', 4) ],
                 },
-            },
-            {
-                id: 'e5',
-                description: 'E5',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-e5.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'e5',
+                'E5',
+                '/assets/audio/lead-guitar/lead-e5.mp3',
+                {
                     pitch: [ getMidiNote('E', 4) ],
                 },
-            },
-            {
-                id: 'f5',
-                description: 'F5',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-f5.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'f5',
+                'F5',
+                '/assets/audio/lead-guitar/lead-f5.mp3',
+                {
                     pitch: [ getMidiNote('F', 4) ],
                 },
-            },
-            {
-                id: 'fs5',
-                description: 'F#5',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-fs5.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'fs5',
+                'F#5',
+                '/assets/audio/lead-guitar/lead-fs5.mp3',
+                {
                     pitch: [ getMidiNote('F#', 4) ],
                 },
-            },
-            {
-                id: 'g5',
-                description: 'G5',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-g5.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'g5',
+                'G5',
+                '/assets/audio/lead-guitar/lead-g5.mp3',
+                {
                     pitch: [ getMidiNote('G', 4) ],
                 },
-            },
-            {
-                id: 'gs5',
-                description: 'G#5',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-gs5.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'gs5',
+                'G#5',
+                '/assets/audio/lead-guitar/lead-gs5.mp3',
+                {
                     pitch: [ getMidiNote('G#', 4) ],
                 },
-            },
-            {
-                id: 'a6',
-                description: 'A6',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-a6.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'a6',
+                'A6',
+                '/assets/audio/lead-guitar/lead-a6.mp3',
+                {
                     pitch: [ getMidiNote('A', 5) ],
                 },
-            },
-            {
-                id: 'as6',
-                description: 'A#6',
-                path: getSoundURL('/assets/audio/lead-guitar/lead-as6.mp3'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'as6',
+                'A#6',
+                '/assets/audio/lead-guitar/lead-as6.mp3',
+                {
                     pitch: [ getMidiNote('A#', 5) ],
                 },
-            },
+            ),
         ],
-    },
-    {
-        ...defaultInstrumentProps,
-        id: 'k',
-        description: 'Kick',
-        sequences: [
+        0.025,
+    ),
+    getInstrument(
+        'k',
+        'Kick',
+        [
             'CUSTOM_SEQUENCE_1',
-            // 'steadySixteenths'.map(b => ({ ...b, volume: .7})),
         ],
-        sounds: [
-            {
-                id: 'k',
-                description: 'Basic kick',
-                path: getSoundURL('/assets/audio/mastered/kick.wav'),
-                enabled: false,
-                midi: {
+        [
+            getSound(
+                'k',
+                'Basic kick',
+                '/assets/audio/mastered/kick.wav',
+                {
                     pitch: [ kickMidiNote ],
                 },
-            }
+            )
         ],
-    },
-    {
-        ...defaultInstrumentProps,
-        id: 's',
-        description: 'Snare',
-        sequences: [
+    ),
+    getInstrument(
+        's',
+        'Snare',
+        [
             'offsetWholes',
         ],
-        sounds: [
-            {
-                id: 's',
-                description: 'Basic snare',
-                path: getSoundURL('/assets/audio/mastered/snare.wav'),
-                enabled: false,
-                midi: {
+        [
+            getSound(
+                's',
+                'Basic snare',
+                '/assets/audio/mastered/snare.wav',
+                {
                     pitch: [ snareMidiNote ],
                 },
-            }
+            )
         ],
-    },
-    {
-        ...defaultInstrumentProps,
-        id: 'h',
-        description: 'Hihat',
-        sequences: [
+    ),
+    getInstrument(
+        'h',
+        'Hihat',
+        [
             'steadyHalfs',
             'steadyQuarters',
         ],
-        sounds: [
-            {
-                id: 'h',
-                description: 'Open hihat',
-                path: getSoundURL('/assets/audio/mastered/hihat-open.wav'),
-                enabled: false,
-                midi: {
+        [
+            getSound(
+                'h',
+                'Open hihat',
+                '/assets/audio/mastered/hihat-open.wav',
+                {
                     pitch: [ hihatMidiNote ],
                 },
-            },
-            {
-                id: 'hc',
-                description: 'Closed hihat',
-                path: getSoundURL('/assets/audio/mastered/hihat-closed.wav'),
-                enabled: false,
-                midi: {
+            ),
+            getSound(
+                'hc',
+                'Closed hihat',
+                '/assets/audio/mastered/hihat-closed.wav',
+                {
                     pitch: [ hihatMidiNote ],
                 },
-            }
+            )
         ],
-    },
-    {
-        ...defaultInstrumentProps,
-        id: 'c',
-        description: 'Cymbal',
-        ringout: true,
-        sequences: [
+    ),
+    getInstrument(
+        'c',
+        'Cymbal',
+        [
             'steadyHalfs',
             'steadyQuarters',
         ],
-        sounds: [
-            {
-                id: 'crash-left',
-                description: 'Crash left',
-                path: getSoundURL('/assets/audio/mastered/crash-left.wav'),
-                enabled: false,
-                category: 'Crash',
-                midi: {
+        [
+            getSound(
+                'crash-left',
+                'Crash left',
+                '/assets/audio/mastered/crash-left.wav',
+                'Crash',
+                {
                     pitch: [ crash1MidiNote ],
                     duration: 0.125,
                 },
-            },
-            {
-                id: 'crash-right',
-                description: 'Crash right',
-                path: getSoundURL('/assets/audio/mastered/crash-right.wav'),
-                enabled: false,
-                category: 'Crash',
-                midi: {
+            ),
+            getSound(
+                'crash-right',
+                'Crash right',
+                '/assets/audio/mastered/crash-right.wav',
+                'Crash',
+                {
                     pitch: [ crash2MidiNote ],
                     duration: 0.125,
                 },
-            },
-            {
-                id: 'china-left',
-                description: 'China left',
-                path: getSoundURL('/assets/audio/mastered/china-left.wav'),
-                enabled: false,
-                category: 'China',
-                midi: {
+            ),
+            getSound(
+                'china-left',
+                'China left',
+                '/assets/audio/mastered/china-left.wav',
+                'China',
+                {
                     pitch: [ chinaMidiNote ],
                     duration: 0.125,
                 },
-            }
+            )
         ],
-    },
-    {
-        ...defaultInstrumentProps,
-        id: 'd',
-        description: 'Drone',
-        sequences: [
+        0,
+        true,
+    ),
+    getInstrument(
+        'd',
+        'Drone',
+        [
             'twoBars',
         ],
-        sounds: [
-            {
-                id: 'drone-medium',
-                description: 'Medium',
-                path: getSoundURL('/assets/audio/drones/drone-medium.mp3'),
-                enabled: false,
-            },
-            {
-                id: 'drone-high',
-                description: 'High',
-                path: getSoundURL('/assets/audio/drones/drone-high.mp3'),
-                enabled: false,
-            },
-            {
-                id: 'drone-high-2',
-                description: 'Creepy',
-                path: getSoundURL('/assets/audio/drones/drone-high-2.mp3'),
-                enabled: false,
-            },
-        ],
-    },
+        [
+            getSound(
+                'drone-medium',
+                'Medium',
+                '/assets/audio/drones/drone-medium.mp3',
+            ),
+            getSound(
+                'drone-high',
+                'High',
+                '/assets/audio/drones/drone-high.mp3',
+            ),
+            getSound(
+                'drone-high-2',
+                'Creepy',
+                '/assets/audio/drones/drone-high-2.mp3',
+            )
+        ]
+    ),
 ]
 
 export default defaultInstruments

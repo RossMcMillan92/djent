@@ -1,4 +1,3 @@
-const path              = require('path')
 const constants         = require('./constants')
 const webpack           = require('webpack')
 const autoprefixer      = require('autoprefixer')
@@ -35,6 +34,7 @@ const config = env =>
         externals: {
             react: 'React',
             'react-dom': 'ReactDOM',
+            'react-router': 'ReactRouter',
         },
         plugins: [
             new CopyWebpackPlugin([

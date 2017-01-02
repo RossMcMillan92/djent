@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import Instruments from 'routes/Instruments'
 
 import * as instrumentsActions from 'actions/instruments'
-import * as modalActions from 'actions/modal'
 
 function mapStateToProps(state) {
     return {
@@ -16,7 +15,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     const actions = {
         ...instrumentsActions,
-        ...modalActions,
     }
 
     return {

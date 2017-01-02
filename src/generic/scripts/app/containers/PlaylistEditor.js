@@ -121,40 +121,36 @@ class PlaylistEditor extends Component {
                 body: (
                     <div className="u-flex-row u-flex-justify">
                         <div className="u-flex-row u-align-center">
-                            <div
-                                className={`block-list__button block-list__content-spacing ${item.isLocked ? 'u-txt-positive' : ''}`}
-                                onClick={(e) => this.onLockTrack(e, i)}
+                            <BlockListButton
+                                className={item.isLocked ? 'u-txt-positive' : ''}
+                                onClick={e => this.onLockTrack(e, i)}
                                 title="Lock Track"
-                            >
-                                <SVG className="block-list__button-icon" icon="lock" />
-                            </div>
+                                icon="lock"
+                            />
 
                             <div className="block-list__body u-pl0 u-txt-truncate">
                                 Track {item.id} - {item.bpm}BPM - {item.sequences[0].bars} × {item.sequences[0].beats}
                             </div>
                         </div>
                         <div className="u-flex-row u-align-center">
-                            <div
-                                className="block-list__button block-list__content-spacing is-disablable"
-                                onClick={(e) => this.onLoadSettings(e, i, item.isLocked)}
+                            <BlockListButton
+                                className="is-disablable"
+                                onClick={e => this.onLoadSettings(e, i, item.isLocked)}
                                 title="Load Settings"
-                            >
-                                <SVG className="block-list__button-icon" icon="gear" />
-                            </div>
-                            <div
-                                className="block-list__button block-list__content-spacing is-disablable u-txt-negative"
-                                onClick={(e) => this.onDelete(e, i, item.isLocked)}
+                                icon="gear"
+                            />
+                            <BlockListButton
+                                className="is-disablable u-txt-negative"
+                                onClick={e => this.onDelete(e, i, item.isLocked)}
                                 title="Delete"
-                            >
-                                <SVG className="block-list__button-icon" icon="cross" />
-                            </div>
-                            <div
-                                className="block-list__button block-list__content-spacing is-disablable u-txt-positive"
-                                onClick={(e) => this.onDuplicate(e, i, item.isLocked)}
+                                icon="cross"
+                            />
+                            <BlockListButton
+                                className="is-disablable u-txt-positive"
+                                onClick={e => this.onDuplicate(e, i, item.isLocked)}
                                 title="Duplicate"
-                            >
-                                <SVG className="block-list__button-icon" icon="plus" />
-                            </div>
+                                icon="plus"
+                            />
                         </div>
                     </div>
                 ),
@@ -195,7 +191,17 @@ class PlaylistEditor extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({
+const BlockListButton = props => (
+    <div
+        className={`block-list__button block-list__content-spacing ${props.className}`}
+        onClick={ props.onClick }
+        title={ props.title }
+    >
+        <SVG className="block-list__button-icon" icon={props.icon} />
+    </div>
+)
+
+const mapStateToProps = state => ({
     activePlaylistIndex : state.sound.activePlaylistIndex,
     audioPlaylist       : state.sound.audioPlaylist,
     isPlaying           : state.sound.isPlaying,

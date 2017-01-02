@@ -1,9 +1,9 @@
-import React from 'react';
-import { Route, IndexRoute, Redirect } from 'react-router';
+import React from 'react'
+import { Route, IndexRoute, Redirect } from 'react-router'
 
 /* containers */
-import App from './containers/App';
-import Main from './containers/Main';
+import App from './containers/App'
+import Main from './containers/Main'
 
 export default (
     <Route path="/" component={App}>
@@ -15,4 +15,4 @@ export default (
         <Route path="instruments" component={Main} id="instruments" />
         <Route status={404} path="*" component={Main} />
     </Route>
-);
+)

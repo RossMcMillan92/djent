@@ -192,7 +192,6 @@ class SoundController extends Component {
     }
 
     render = () => {
-        const eventName = this.props.isPlaying ? 'stop' : 'play'
         const currentPlaylistItem = this.props.audioPlaylist[this.props.activePlaylistIndex]
         const currentPlaylistItemIsLocked = currentPlaylistItem && currentPlaylistItem.isLocked
 
@@ -212,9 +211,11 @@ class SoundController extends Component {
                     </div>
 
                     <div className="u-mr05 u-mb0">
-                        <button className="button-primary button-primary--alpha-dark" title={ capitalize(eventName) } onClick={this.togglePlay} disabled={!this.props.audioPlaylist.length}>
-                            <SVG icon={ eventName } className="button-primary__svg-icon" />
-                        </button>
+                        <PlayButton
+                            isDisabled={!this.props.audioPlaylist.length}
+                            isPlaying={this.props.isPlaying}
+                            onClick={this.togglePlay}
+                        />
                     </div>
 
                     <div className="u-mr1 u-mb0">
@@ -224,6 +225,16 @@ class SoundController extends Component {
             </div>
         )
     }
+}
+
+const PlayButton = ({ isPlaying, onClick, isDisabled }) => {
+    const eventName = isPlaying ? 'stop' : 'play'
+
+    return (
+        <button className="button-primary button-primary--alpha-dark" title={ capitalize(eventName) } onClick={onClick} disabled={isDisabled}>
+            <SVG icon={ eventName } className="button-primary__svg-icon" />
+        </button>
+    )
 }
 
 export default SoundController

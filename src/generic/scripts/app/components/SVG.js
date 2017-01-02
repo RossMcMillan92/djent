@@ -1,23 +1,29 @@
-import React from 'react';
-import { logError } from 'utils/tools';
+import React, { Component } from 'react'
+import { logError } from 'utils/tools'
 
-const SVG = (props) => {
-    const icon = icons[props.icon];
-    if (!icon) {
-        logError('No icon given to SVG component');
-        return null;
+class SVG extends Component {
+    shouldComponentUpdate = nextProps => nextProps.icon !== this.props.icon
+
+    render = () => {
+        const { icon, className } = this.props
+        const iconObj = icons[icon]
+
+        if (!iconObj) {
+            logError('No icon given to SVG component')
+            return null
+        }
+
+        const pathProps = iconObj.pathProps || {}
+
+        return (
+            <svg className={`${className || ''} svg-icon-${icon}`} viewBox={iconObj.viewBox}>
+                <path { ...pathProps } fill="currentColor" d={iconObj.pathCoordinates} />
+            </svg>
+        )
     }
+}
 
-    const pathProps = icon.pathProps || {};
-
-    return (
-        <svg className={`${props.className ? props.className : ''} svg-icon-${props.icon}`} viewBox={icon.viewBox}>
-            <path { ...pathProps } fill="currentColor" d={icon.pathCoordinates} />
-        </svg>
-    );
-};
-
-export default SVG;
+export default SVG
 
 const icons = {
     copy: {
@@ -64,4 +70,4 @@ const icons = {
         viewBox: '0 0 864 864',
         pathCoordinates: 'M864 18q0 -8 -5 -13t-13 -5h-828q-8 0 -13 5t-5 13v828q0 8 5 13t13 5h828q8 0 13 -5t5 -13v-828z'
     },
-};
+}

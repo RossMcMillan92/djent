@@ -5,14 +5,14 @@ import { logError, loadScript } from './tools'
 const googleAPIKey = 'AIzaSyCUN26hzVNf0P_ED_oALvsVx3ffmyzliOI'
 
 const handleGoogleAPI = () =>
-    new Promise((res, rej) => {
+    Task((rej, res) => {
         loadScript('https://apis.google.com/js/client.js?onload=handleClientLoad')
 
         let attempts = 0
         const handleClientLoad = () => {
             if (!window.gapi) {
-                attempts = attempts + 1
-                if (attempts === 3) rej()
+                attempts += 1
+                if (attempts === 3) rej(Error('Trouble loading the Google API'))
                 return setTimeout(handleClientLoad, 1000)
             }
 
@@ -24,14 +24,14 @@ const handleGoogleAPI = () =>
     })
 
 //    getLongURLFromShareID :: shareID -> Task Error LongURL
-const getLongURLFromShareID = (shareID) =>
+const getLongURLFromShareID = shareID =>
     Task((rej, res) => {
         if (!window.gapi) return rej(Error(`Google URL Shortener API Failed: ${shareID}`))
         return window.gapi.client.urlshortener.url
             .get({
               shortUrl: `http://goo.gl/${shareID}`
             })
-            .then((response) => res(response.result.longUrl), logError)
+            .then(response => res(response.result.longUrl), logError)
     })
 
 

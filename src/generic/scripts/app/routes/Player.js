@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 
 import BeatsController from 'components/BeatsController'
+import BPMTapper from 'components/BPMTapper'
 import Panel from 'components/Panel'
 
 import BPMController from 'containers/BPMController'
-import BPMTapper from 'containers/BPMTapper'
 import PlaylistEditor from 'containers/PlaylistEditor'
 import PresetController from 'containers/PresetController'
 import SoundController from 'containers/SoundController'
@@ -36,7 +36,7 @@ export default class Player extends Component {
                                 <BPMController />
                             </div>
                             <div className="">
-                                <BPMTapper />
+                                <BPMTapper onUpdate={this.props.actions.updateBPM} />
                             </div>
                         </div>
 

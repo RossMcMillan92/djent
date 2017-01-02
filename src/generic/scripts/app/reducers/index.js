@@ -1,10 +1,10 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux'
 
-import config from './config';
-import sequences from './sequences';
-import instruments from './instruments';
-import modal from './modal';
-import sound from './sound';
+import config from './config'
+import sequences from './sequences'
+import instruments from './instruments'
+import modal from './modal'
+import sound from './sound'
 
 const rootReducer = combineReducers({
     config,
@@ -12,6 +12,6 @@ const rootReducer = combineReducers({
     instruments,
     modal,
     sound,
-});
+})
 
-export default rootReducer;
+export default rootReducer

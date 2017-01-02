@@ -4,12 +4,13 @@ import { connect } from 'react-redux'
 import Player from 'routes/Player'
 
 import * as modalActions from 'actions/modal'
-import { updateBPM } from 'actions/config'
+import { applyPreset, updateBPM } from 'actions/config'
 import { updateSequence } from 'actions/sequences'
 
 function mapStateToProps(state) {
     const { config, sequences, sound, instruments } = state
     return {
+        activePresetID   : config.activePresetID,
         bpm              : config.bpm,
         hasAudioTemplate : !!sound.audioPlaylist[sound.activePlaylistIndex],
         instruments,
@@ -20,6 +21,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     const actions = {
         ...modalActions,
+        applyPreset,
         updateBPM,
         updateSequence
     }

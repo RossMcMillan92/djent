@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import { capitalize } from 'utils/tools'
 
-import Expandable from './Expandable'
-import FadeOutDurationController from './FadeOutDurationController'
-import PitchController from './PitchController'
-import RepeatingHitsController from './RepeatingHitsController'
-import SequenceController from './SequenceController'
-import Tabgroup, { Tabpane } from './Tabgroup'
-import VolumeController from './VolumeController'
+import Expandable from 'components/Expandable'
+import FadeOutDurationController from 'components/FadeOutDurationController'
+import PitchController from 'components/PitchController'
+import RepeatingHitsController from 'components/RepeatingHitsController'
+import SequenceController from 'components/SequenceController'
+import Tabgroup, { Tabpane } from 'components/Tabgroup'
+import VolumeController from 'components/VolumeController'
 
 const renderSoundsPane = (instrument, onSoundToggle) => {
     const categories = instrument.sounds

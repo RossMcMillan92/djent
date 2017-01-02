@@ -3,7 +3,7 @@ import { Future as Task } from 'ramda-fantasy';
 
 import {
     getTotalTimeLength,
-} from './sequences';
+} from 'utils/sequences';
 
 const bufferCache = {};
 

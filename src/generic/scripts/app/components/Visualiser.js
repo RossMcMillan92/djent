@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import Waveform from './Waveform';
+import Waveform from 'components/Waveform';
 
 import ShareController from 'containers/ShareController';
 import ExportController from 'containers/ExportController';

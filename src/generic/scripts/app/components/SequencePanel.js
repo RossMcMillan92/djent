@@ -64,13 +64,13 @@ class SequencePanel extends Component {
                     <div className="u-flex-row u-flex-row u-flex-wrap u-flex-justify">
                         <div className="u-mr1 u-mb05">
                             <BeatsController
+                                onUpdate={ this.props.actions.updateSequence }
                                 sequence={ this.props.sequence }
-                                actions={{ updateSequence: this.props.actions.updateSequence }}
                             />
                         </div>
                         <HitChanceController
                             hitChance={ this.props.sequence.hitChance }
-                            actions={{ updateHitChance: this.onHitChanceChange }}
+                            onUpdate={ this.onHitChanceChange }
                         />
                     </div>
                 </Tabpane>

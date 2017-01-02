@@ -1,44 +1,44 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
 import {
     getGenerationID,
     generatePlaylistItem,
-} from 'utils/riffs';
+} from 'utils/riffs'
 
 import {
     logError,
-} from 'utils/tools';
+} from 'utils/tools'
 
 class Generator extends Component {
     state = {
         isLoading: false,
     }
-    generationCount = 0;
+    generationCount = 0
 
     generateEvent = () => {
-        if (this.props.disabled) return;
-        if (this.props.onGenerationStart) this.props.onGenerationStart();
+        if (this.props.disabled) return
+        if (this.props.onGenerationStart) this.props.onGenerationStart()
         if (!this.state.isLoading) {
-            this.setState({ isLoading: true });
+            this.setState({ isLoading: true })
             return this.generateFromProps()
                 .fork(logError, (playlistItem) => {
-                    this.setState({ isLoading: false });
-                    this.props.onGenerationEnd(playlistItem);
-                    return playlistItem;
-                });
+                    this.setState({ isLoading: false })
+                    this.props.onGenerationEnd(playlistItem)
+                    return playlistItem
+                })
         }
     }
 
     generateFromProps = () => {
-        const { audioPlaylist, bpm, sequences, instruments } = this.props;
-        this.generationCount = getGenerationID(this.generationCount + 1, audioPlaylist);
-        return generatePlaylistItem(this.generationCount, bpm, sequences, instruments);
+        const { audioPlaylist, bpm, sequences, instruments } = this.props
+        this.generationCount = getGenerationID(this.generationCount + 1, audioPlaylist)
+        return generatePlaylistItem(this.generationCount, bpm, sequences, instruments)
     }
 
     render = () => {
         const Wrapper = this.props.wrapperComponent
             ? this.props.wrapperComponent
-            : 'button';
+            : 'button'
 
         const wrapperProps = {
             onClick: () => this.generateEvent(),
@@ -46,7 +46,8 @@ class Generator extends Component {
             className: this.props.wrapperClass
                 ? this.props.wrapperClass
                 : `button-primary button-primary--alpha-dark button-primary--small-icon ${this.props.buttonClassAppended ? this.props.buttonClassAppended : ''} ${this.state.isLoading ? '' : 'icon-is-hidden'}`,
-        };
+        }
+
         const children = this.props.children
             ? this.props.children
             : (
@@ -56,14 +57,14 @@ class Generator extends Component {
                         <span className="spinner" />
                     </span>
                 </span>
-            );
+            )
 
         return (
             <Wrapper { ...wrapperProps }>
                 { children }
             </Wrapper>
-        );
+        )
     }
 }
 
-export default Generator;
+export default Generator

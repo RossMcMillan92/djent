@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
-import InputBox from './InputBox';
-import { roundToXPlaces } from 'utils/tools';
+import React, { Component } from 'react'
+
+import InputBox from 'components/InputBox'
+import { roundToXPlaces } from 'utils/tools'
 
 class RepeatingHitsController extends Component {
-    shouldComponentUpdate = (nextProps) => nextProps.repeatHitTypeForXBeat !== this.props.repeatHitTypeForXBeat;
+    shouldComponentUpdate = nextProps => nextProps.repeatHitTypeForXBeat !== this.props.repeatHitTypeForXBeat
 
     onChange = (event) => {
-        const value = roundToXPlaces(parseFloat(event.target.value), 1);
-        this.props.actions.updateInstrumentRepeatingHits({ instrumentID: this.props.id, value });
+        const value = roundToXPlaces(parseFloat(event.target.value), 1)
+        this.props.onUpdate(value)
     }
 
     render = () => {
@@ -23,11 +24,11 @@ class RepeatingHitsController extends Component {
             maxVal: 200,
             className: 'input-base input-base--bare input-base--large input-base--short',
             labelClassName: 'input-label',
-        };
+        }
         return (
             <InputBox { ...props } />
-        );
+        )
     }
 }
 
-export default RepeatingHitsController;
+export default RepeatingHitsController

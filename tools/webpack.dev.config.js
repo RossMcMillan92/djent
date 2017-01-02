@@ -40,7 +40,7 @@ const config = env =>
             'react-dom': 'ReactDOM',
         },
         devServer: {
-            inline: true,
+            inline: false,
             compress: false,
             port: 3002,
             host: '0.0.0.0',

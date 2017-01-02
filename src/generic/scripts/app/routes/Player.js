@@ -42,9 +42,9 @@ export default class Player extends Component {
 
                         <div className="group-spacing-y-small">
                             <BeatsController
-                                sequence={ totalSequence }
-                                actions={{ updateSequence: this.props.actions.updateSequence }}
                                 labelPrefix='Total '
+                                onUpdate={ this.props.actions.updateSequence }
+                                sequence={ totalSequence }
                             />
                         </div>
 

@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
-import Waveform from 'components/Waveform';
+import Waveform from 'components/Waveform'
 
-import ShareController from 'containers/ShareController';
-import ExportController from 'containers/ExportController';
+import ShareController from 'containers/ShareController'
+import ExportController from 'containers/ExportController'
 
-import audioContext from 'utils/audioContext';
-import { renderBuffer } from 'utils/audio';
-import { logError } from 'utils/tools';
+import audioContext from 'utils/audioContext'
+import { renderBuffer } from 'utils/audio'
+import { logError } from 'utils/tools'
 
 class Visualiser extends Component {
-    containerWidth = 0;
+    containerWidth = 0
 
     state = {
         buffer: undefined,
@@ -19,39 +19,39 @@ class Visualiser extends Component {
 
     componentWillMount = () => {
         if (this.props.currentPlaylistItem) {
-            const props = this.props;
-            this.setState({ isRenderingBuffer: true });
-            this.updateBuffer(props.audioStartTime, props.currentPlaylistItem, props.sequences, props.bpm);
+            const props = this.props
+            this.setState({ isRenderingBuffer: true })
+            this.updateBuffer(props.audioStartTime, props.currentPlaylistItem, props.sequences, props.bpm)
         }
     }
 
     componentWillUpdate = (nextProps) => {
-        const firstAudioTemplate = nextProps.currentPlaylistItem && !this.props.currentPlaylistItem;
-        const differentAudioTemplate = !firstAudioTemplate && nextProps.currentPlaylistItem && nextProps.currentPlaylistItem.id !== this.props.currentPlaylistItem.id;
+        const firstAudioTemplate = nextProps.currentPlaylistItem && !this.props.currentPlaylistItem
+        const differentAudioTemplate = !firstAudioTemplate && nextProps.currentPlaylistItem && nextProps.currentPlaylistItem.id !== this.props.currentPlaylistItem.id
         if (firstAudioTemplate || differentAudioTemplate) {
-            this.updateBuffer(nextProps.audioStartTime, nextProps.currentPlaylistItem, nextProps.sequences, nextProps.bpm);
+            this.updateBuffer(nextProps.audioStartTime, nextProps.currentPlaylistItem, nextProps.sequences, nextProps.bpm)
         }
     }
 
     componentWillUnmount = () => {
-        if (this.updateBufferTimeout) clearTimeout(this.updateBufferTimeout);
+        if (this.updateBufferTimeout) clearTimeout(this.updateBufferTimeout)
     }
 
     componentDidUpdate = () => {
-        const { container } = this.refs;
-        this.containerWidth = container.offsetWidth;
+        const { container } = this.refs
+        this.containerWidth = container.offsetWidth
     }
 
     updateBuffer = (audioStartTime, currentPlaylistItem, sequences, bpm) => {
-        const timeoutLength = (audioStartTime - audioContext.currentTime) * 1000;
-        this.setState({ isRenderingBuffer: true });
-        const audioTemplate = currentPlaylistItem.audioTemplate;
-        if (typeof audioTemplate === 'undefined') return;
-        if (this.updateBufferTimeout) clearTimeout(this.updateBufferTimeout);
+        const timeoutLength = (audioStartTime - audioContext.currentTime) * 1000
+        this.setState({ isRenderingBuffer: true })
+        const audioTemplate = currentPlaylistItem.audioTemplate
+        if (typeof audioTemplate === 'undefined') return
+        if (this.updateBufferTimeout) clearTimeout(this.updateBufferTimeout)
         renderBuffer({ sequences, bpm, audioTemplate })
             .fork(logError, buffer => {
-                this.updateBufferTimeout = setTimeout(() => this.setState({ buffer, isRenderingBuffer: false }), timeoutLength);
-            });
+                this.updateBufferTimeout = setTimeout(() => this.setState({ buffer, isRenderingBuffer: false }), timeoutLength)
+            })
     }
 
     render = () => (
@@ -79,7 +79,7 @@ class Visualiser extends Component {
                 </div>
             </div>
         </div>
-    );
+    )
 }
 
-export default Visualiser;
+export default Visualiser

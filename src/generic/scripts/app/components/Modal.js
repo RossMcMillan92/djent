@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 
 class Modal extends Component {
-    shouldComponentUpdate = nextProps => nextProps.isActive !== this.props.isActive
-
     closeModal = () => {
         if (this.props.isCloseable) this.props.onClose()
     }

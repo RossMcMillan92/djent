@@ -131,7 +131,7 @@ class SwipeableViews extends Component {
                            : 'round'
 
         const index  = getFinalIndex(roundingType, this.props.children.length - 1, this.index)
-        const percent = roundToXPlaces(index * -100, 2)
+        const percent = roundToXPlaces(2, index * -100)
         this.updateTranslation(percent)
 
         if (pastSpeedThreshold && index !== this.currentIndex) {
@@ -148,7 +148,7 @@ class SwipeableViews extends Component {
 
     loop = () => {
         if (this.started) {
-            const percent = roundToXPlaces(this.index * -100, 2)
+            const percent = roundToXPlaces(2, this.index * -100)
             this.updateTranslation(percent)
             requestAnimationFrame(this.loop)
         }

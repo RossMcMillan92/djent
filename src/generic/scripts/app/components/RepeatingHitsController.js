@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { compose } from 'ramda'
+import { getTargetValueFromEvent } from 'modules/events'
 
 import InputBox from 'components/InputBox'
 import { roundToXPlaces } from 'utils/tools'
@@ -6,10 +8,11 @@ import { roundToXPlaces } from 'utils/tools'
 class RepeatingHitsController extends Component {
     shouldComponentUpdate = nextProps => nextProps.repeatHitTypeForXBeat !== this.props.repeatHitTypeForXBeat
 
-    onChange = (event) => {
-        const value = roundToXPlaces(parseFloat(event.target.value), 1)
-        this.props.onUpdate(value)
-    }
+    onChange = compose(
+        this.props.onUpdate,
+        roundToXPlaces(1),
+        getTargetValueFromEvent,
+    )
 
     render = () => {
         const props = {

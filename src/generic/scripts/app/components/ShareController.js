@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
-import { assoc, compose } from 'ramda'
+import { assoc, compose, concat, last, join, map, split } from 'ramda'
+import { Future as Task } from 'ramda-fantasy'
+import { List } from 'immutable-ext'
 import { compress } from 'lzutf8'
 import { createPreset } from 'utils/presets'
 import { logError } from 'utils/tools'
@@ -8,17 +10,36 @@ const domain = `${window.location.protocol}//${window.location.host}`
 
 const shortURLCache = {}
 
-//    getGoogleShortURL :: url -> Promise url
+//    getGoogleShortURL :: url -> Task Error url
 const getGoogleShortURL = url =>
-    shortURLCache[url]
-        ? shortURLCache[url]
-        : window.gapi.client.urlshortener.url
+    Task((rej, res) => {
+        if (shortURLCache[url]) return res(shortURLCache[url])
+
+        const onError = () => rej(Error(`Problem getting short URL: ${url}`))
+        window.gapi.client.urlshortener.url
             .insert({ longUrl: url })
             .then(({ result }) => {
                 const shortURL = result.id
                 shortURLCache[url] = shortURL
-                return shortURL
-            }, logError)
+                res(shortURL)
+            }, onError)
+    })
+
+const getIDFromGoogleURL = compose(last, split('/'))
+
+//    combineShortURLs :: [url] -> url
+const combineShortURLs = compose(
+    concat(`${domain}/share/`),
+    join('-'),
+    map(getIDFromGoogleURL),
+)
+
+//    compressShortMultiURL :: url -> Task Error url
+const compressShortMultiURL = (url) => {
+    if (!url.includes('-')) return Task.of(url)
+    return getGoogleShortURL(url)
+        .map(shortURL => combineShortURLs([shortURL]))
+}
 
 class ShareController extends Component {
     state = {
@@ -27,7 +48,8 @@ class ShareController extends Component {
         shortURL: ''
     }
 
-    getShortURLPromise = preset => compose(
+    // getShortURL :: preset -> Task Error url
+    getShortURL = preset => compose(
         getGoogleShortURL,
         this.getShareableURL,
         createPreset,
@@ -36,20 +58,14 @@ class ShareController extends Component {
 
     onClick = () => {
         this.setState({ isLoading: true })
-        const presetPromises = this.props.audioPlaylist
-            .map(this.getShortURLPromise)
-
-        Promise.all(presetPromises)
-            .then(this.combineShortURLs)
-            .then((url) => {
-                if (url.includes('-')) {
-                    return getGoogleShortURL(url)
-                        .then(shortURL => this.combineShortURLs([shortURL]))
-                }
-                return url
+        List(this.props.audioPlaylist)
+            .traverse(Task.of, this.getShortURL)
+            .map(combineShortURLs)
+            .chain(compressShortMultiURL)
+            .fork(logError, (url) => {
+                this.launchModal(url)
+                this.setState({ isLoading: false })
             })
-            .then(this.launchModal)
-            .then(() => this.setState({ isLoading: false }))
     }
 
     getShareableURL = (preset) => {
@@ -57,13 +73,6 @@ class ShareController extends Component {
         const shareableURL = `djen.co/#share=${compressedPreset}`
         if (shareableURL.length > 2048) logError('URL exceeds 2048 chars. May not succeed')
         return shareableURL
-    }
-
-    // combineShortURLs :: [url] -> url
-    combineShortURLs = (googleURLs) => {
-        const urlIDs = googleURLs
-            .map(url => url.split('/').pop())
-        return `${domain}/share/${urlIDs.join('-')}`
     }
 
     launchModal = (url) => {
@@ -91,7 +100,7 @@ const ShareBox = props => (
         <input
             className="input-base input-base--bare input-base--large input-base--long"
             type="text"
-            defaultValue={props.url}
+            value={props.url}
             onClick={e => e.target.select()}
         />
     </div>

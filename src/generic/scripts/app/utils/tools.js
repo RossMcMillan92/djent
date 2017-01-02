@@ -98,8 +98,8 @@ export const throttle = (fn, delay, context = this) => {
     }
 }
 
-export const roundToXPlaces = (value, decimalPlaces, type = 'round') =>
-	Math[type](value * (10 ** decimalPlaces)) / (10 ** decimalPlaces)
+export const roundToXPlaces = curry((decimalPlaces, value) =>
+	Math.round(value * (10 ** decimalPlaces)) / (10 ** decimalPlaces))
 
 export const confineToRange = (min, max, value) => Math.min(max, Math.max(min, value))
 

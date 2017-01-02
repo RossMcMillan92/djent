@@ -7,7 +7,7 @@ class FadeOutDurationController extends Component {
     shouldComponentUpdate = nextProps => nextProps.fadeOutDuration !== this.props.fadeOutDuration
 
     onChange = (event) => {
-        const value = roundToXPlaces(parseFloat(event.target.value), 3) / 1000
+        const value = roundToXPlaces(3, parseFloat(event.target.value)) / 1000
         this.props.onUpdate(value)
     }
 

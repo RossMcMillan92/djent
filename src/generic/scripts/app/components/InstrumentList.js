@@ -134,7 +134,7 @@ export default class InstrumentList extends Component {
         const prop = 'enabled'
         const value = !currentValue
 
-        this.props.actions.updateInstrumentSound({ soundID, parentID, prop, value })
+        this.props.onSoundToggle({ soundID, parentID, prop, value })
     }
 
     render = () => {

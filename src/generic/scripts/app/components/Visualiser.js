@@ -49,7 +49,7 @@ class Visualiser extends Component {
         if (typeof audioTemplate === 'undefined') return
         if (this.updateBufferTimeout) clearTimeout(this.updateBufferTimeout)
         renderBuffer({ sequences, bpm, audioTemplate })
-            .fork(logError, buffer => {
+            .fork(logError, (buffer) => {
                 this.updateBufferTimeout = setTimeout(() => this.setState({ buffer, isRenderingBuffer: false }), timeoutLength)
             })
     }

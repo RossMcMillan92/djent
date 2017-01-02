@@ -612,9 +612,7 @@ const defaultInstruments = [
     getInstrument(
         'lg',
         'Lead Guitar',
-        [
-            'steadyQuarters',
-        ],
+        [],
         [
             getSound(
                 'gs3',

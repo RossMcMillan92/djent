@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { capitalize } from 'utils/tools'
+import { curry } from 'ramda'
 
 import Expandable from 'components/Expandable'
 import FadeOutDurationController from 'components/FadeOutDurationController'
@@ -9,52 +9,61 @@ import SequenceController from 'components/SequenceController'
 import Tabgroup, { Tabpane } from 'components/Tabgroup'
 import VolumeController from 'components/VolumeController'
 
+import { capitalize } from 'utils/tools'
+
+//    getCategoriesFromSounds :: [] -> sound -> [sounds]
+const getCategoriesFromSounds = (cats, sound) => {
+    if (!cats.includes(sound.category)) {
+        return [
+            ...cats,
+            sound.category
+        ]
+    }
+    return cats
+}
+
+const renderSoundsInCategories = curry((instrument, onSoundToggle, id, catIndex, arr) => {
+    const sounds = instrument.sounds
+        .filter(sound => sound.category === id)
+    const isExpanded = !!sounds.find(sound => sound.enabled)
+    const title = id
+        || `${(instrument.description
+        || capitalize(instrument.id))}`
+
+    const renderSound = sound => (
+        <li
+            onClick={() => onSoundToggle(sound.id, instrument.id)}
+            className={`
+                toggle-input
+                ${sound.enabled ? 'is-enabled' : ''}`
+            }
+            key={sound.id}
+        >{sound.description || sound.id}</li>
+    )
+
+    return (
+        <Expandable
+            title={ title }
+            className={`
+                expandable-list
+                ${catIndex !== arr.length - 1 ? 'u-mb05' : ''}
+            `}
+            titleClassName="expandable-list__title"
+            bodyClassName="expandable-list__body"
+            isExpanded={isExpanded}
+            key={catIndex}
+        >
+            <ul className="cleanlist">
+                { sounds.map(renderSound) }
+            </ul>
+        </Expandable>
+    )
+})
+
 const renderSoundsPane = (instrument, onSoundToggle) => {
     const categories = instrument.sounds
-        .reduce((cats, sound) => {
-            if (!cats.includes(sound.category)) {
-                return [
-                    ...cats,
-                    sound.category
-                ]
-            }
-            return cats
-        }, [])
-        .map((id, catIndex, arr) => {
-            const sounds = instrument.sounds
-                .filter(sound => sound.category === id)
-            const isExpanded = !!sounds.find(sound => sound.enabled)
-            const title = id
-                || `${(instrument.description
-                || capitalize(instrument.id))}`
-
-            return (
-                <Expandable
-                    title={ title }
-                    className={`
-                        expandable-list
-                        ${catIndex !== arr.length - 1 ? 'u-mb05' : ''}
-                    `}
-                    titleClassName="expandable-list__title"
-                    bodyClassName="expandable-list__body"
-                    isExpanded={isExpanded}
-                    key={catIndex}
-                >
-                    <ul className="cleanlist">
-                        {sounds.map((sound, i) => (
-                            <li
-                                onClick={() => onSoundToggle(sound.id, instrument.id)}
-                                className={`
-                                    toggle-input
-                                    ${sound.enabled ? 'is-enabled' : ''}`
-                                }
-                                key={i}
-                            >{sound.description || sound.id}</li>
-                        ))}
-                    </ul>
-                </Expandable>
-            )
-        })
+        .reduce(getCategoriesFromSounds, [])
+        .map(renderSoundsInCategories(instrument, onSoundToggle))
 
     return categories
 }

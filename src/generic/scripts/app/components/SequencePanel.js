@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import AllowedLengthsController from './AllowedLengthsController'
 import BeatsController          from './BeatsController'
 import HitChanceController      from './HitChanceController'
-import InputBox                 from './InputBox'
+import InputBox                 from 'components/InputBox'
 import Tabgroup, { Tabpane }    from './Tabgroup'
 
 class SequencePanel extends Component {

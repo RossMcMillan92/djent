@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import deepEqual from 'deep-equal'
 
 import { capitalize } from 'utils/tools'
-import InputBox from './InputBox'
+import InputBox from 'components/InputBox'
 
 class BeatsController extends Component {
     shouldComponentUpdate = nextProps => !deepEqual(nextProps.sequence, this.props.sequence)

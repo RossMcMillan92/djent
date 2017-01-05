@@ -1,4 +1,11 @@
 {
-  "presets": ["es2015", "stage-0"],
-  "plugins": ["transform-react-jsx", "external-helpers", "transform-runtime"],
+    "plugins": [
+        "ramda",
+        "transform-class-properties"
+    ],
+    "presets": [
+        ["es2015", { "modules": false }],
+        "react",
+        "stage-0"
+    ],
 }

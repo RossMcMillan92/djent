@@ -1,0 +1,101 @@
+$block-list__item-height  : 46px
+$block-list__font-size    : 12px
+$block-list__line-height  : 1
+
+$block-list__inner-height : $block-list__font-size * $block-list__line-height
+$block-list__padding-y    : ($block-list__item-height - $block-list__inner-height) / 2
+$block-list__padding-x    : 12px
+
+$block-list__font-size--large   : 22px
+$block-list__line-height--large : ($block-list__item-height - ($block-list__padding-y * 2)) / $block-list__font-size--large
+
+.block-list
+    list-style: none
+    margin: 0
+    padding: 0
+
+.block-list__item
+    list-style: none
+    background-color: $palette-alpha-dark
+    overflow: hidden
+    cursor: pointer
+    user-select: none
+    -webkit-tap-highlight-color: transparent
+
+    &:not(:last-of-type)
+        border-bottom: solid 1px $palette-alpha
+
+.block-list__content-spacing
+    padding: $block-list__padding-y $block-list__padding-x
+
+.block-list__body
+    height: $block-list__item-height
+    font-size: rem($block-list__font-size)
+    line-height: $block-list__line-height
+    color: #aaa
+    text-transform: uppercase
+    padding: $block-list__padding-y $block-list__padding-x
+
+    .block-list__item.is-active &
+        color: #fff
+
+    .block-list__item:not(.functionality-is-disabled).is-active &,
+    .block-list__item:not(.functionality-is-disabled):hover &
+        @media screen and (max-width: $mobile-small-bp)
+            +txt-truncate(90px)
+
+
+$block-list__handle-arrow-size: 4px
+$block-list__handle-arrow-spacing: 2px
+$block-list__handle-arrow-color: rgba(255, 255, 255, .25)
+.block-list__item-handle
+    position: relative
+    height: $block-list__item-height
+    width: $block-list__item-height
+    background-color: rgba(0, 0, 0, .25)
+
+    .functionality-is-disabled &
+        opacity: 0.25
+        pointer-events: none
+
+    &::before,
+    &::after
+        position: absolute
+        content: ""
+        width: 0
+        height: 0
+        border-style: solid
+        top: 50%
+        left: 50%
+        transform: translate(-50%, -50%)
+
+    &::before
+        margin-top: -(($block-list__handle-arrow-size / 2) + $block-list__handle-arrow-spacing)
+        border-width: 0 $block-list__handle-arrow-size $block-list__handle-arrow-size $block-list__handle-arrow-size
+        border-color: transparent transparent $block-list__handle-arrow-color transparent
+    &::after
+        margin-top: (($block-list__handle-arrow-size / 2) + $block-list__handle-arrow-spacing)
+        border-width: $block-list__handle-arrow-size $block-list__handle-arrow-size 0 $block-list__handle-arrow-size
+        border-color: $block-list__handle-arrow-color transparent transparent transparent
+
+
+.block-list__button
+    &.is-disablable
+        opacity: 0.15
+
+    .block-list__item:not(.functionality-is-disabled).is-active &.is-disablable,
+    .block-list__item:not(.functionality-is-disabled):hover &.is-disablable
+        opacity: 1
+
+    @media screen and (max-width: $mobile-small-bp)
+        &.is-disablable
+            display: none
+
+        .block-list__item:not(.functionality-is-disabled).is-active &.is-disablable,
+        .block-list__item:not(.functionality-is-disabled):hover &.is-disablable
+            display: block
+
+.block-list__button-icon
+    display: block
+    width: $block-list__font-size
+    height: $block-list__font-size

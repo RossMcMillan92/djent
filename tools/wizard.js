@@ -8,7 +8,21 @@ const cwd = process.cwd();
 const env = Object.create(process.env);
 const execSpawnOpts = { stdio: 'inherit', env };
 
+const platformMap = {
+    Phonegap: 'phonegap',
+    'Generic (base)': 'generic'
+};
+
 const questions = [
+    {
+        type: 'list',
+        name: 'platform',
+        message: 'Which platform?',
+        choices: [
+            'Generic (base)',
+            'Phonegap'
+        ]
+    },
     {
         type: 'list',
         name: 'type',
@@ -23,26 +37,37 @@ const questions = [
 const answerCallback = (answers) => {
     switch (answers.type) {
         case 'Development':
-            dev();
+            dev(platformMap[answers.platform]);
         break;
         default:
-            build();
+            build(platformMap[answers.platform]);
         break;
     }
 };
 
-const build = () => {
+const build = (platform) => {
     execSpawnOpts.env.NODE_ENV = 'production';
-    // exec(`rm -rf ${cwd}${buildDir}`, execSpawnOpts);
+    const args = [
+        '--colors',
+        `--config=${cwd}${configDir}/webpack.build.config.js`,
+        `--env.platform=${platform}`,
+    ];
     exec(
-        `node ${cwd}/node_modules/webpack/bin/webpack.js --config=${cwd}${configDir}/webpack.build.config.js --color`,
+        `node ${cwd}/node_modules/webpack/bin/webpack.js ${args.join(' ')}`,
         execSpawnOpts
     );
 };
 
-const dev = () => {
+const dev = (platform) => {
+    const args = [
+        '--progress',
+        '--colors',
+        '--watch',
+        `--config=${cwd}${configDir}/webpack.dev.config.js`,
+        `--env.platform=${platform}`,
+    ];
     exec(
-        `node ${cwd}/node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --colors --watch --https --config=${cwd}${configDir}/webpack.dev.config.js`,
+        `node ${cwd}/node_modules/webpack-dev-server/bin/webpack-dev-server.js ${args.join(' ')}`,
         execSpawnOpts
     );
 };

@@ -1,15 +1,19 @@
 const path         = require('path')
 const constants    = require('./constants')
+
 const entryJSFile  = constants.entryJSFile
-const outputJSFile = constants.outputJSFile
 const buildDir     = constants.buildDir
 const cwd          = process.cwd()
 
 module.exports = env => ({
-    entry: path.join(cwd, entryJSFile),
+    entry: {
+        main: path.join(cwd, entryJSFile),
+        vendorReact: ['react', 'react-dom', 'react-router'],
+        vendor: ['lzutf8', 'immutable-ext']
+    },
     output: {
         path: path.join(cwd, buildDir),
-        filename: outputJSFile
+        filename: '[name].[chunkhash].js',
     },
     resolve: {
         extensions: ['.js', '.jsx', '.scss'],

@@ -1,10 +1,12 @@
-const autoprefixer      = require('autoprefixer')
-const path              = require('path')
-const constants         = require('./constants')
-const webpack           = require('webpack')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
-const base              = require('./webpack.base.config.js')
+const autoprefixer               = require('autoprefixer')
+const path                       = require('path')
+const constants                  = require('./constants')
+const webpack                    = require('webpack')
+const ExtractTextPlugin          = require('extract-text-webpack-plugin')
+const CopyWebpackPlugin          = require('copy-webpack-plugin')
+const base                       = require('./webpack.base.config.js')
+const HtmlWebpackPlugin          = require('html-webpack-plugin')
+const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
 
 const outputCSSFile = constants.outputCSSFile
 const buildDir      = constants.buildDir
@@ -34,10 +36,6 @@ const config = env =>
                     }
                 },
             ]
-        },
-        externals: {
-            react: 'React',
-            'react-dom': 'ReactDOM',
         },
         devServer: {
             inline: false,
@@ -83,6 +81,16 @@ const config = env =>
                         })
                     ]
                 }
+            }),
+            new webpack.optimize.CommonsChunkPlugin({
+                names: ['vendor', 'vendorReact', 'manifest']
+            }),
+            new HtmlWebpackPlugin({
+                template: './src/generic/static/index.ejs',
+                inject: 'body',
+            }),
+            new ScriptExtHtmlWebpackPlugin({
+                defaultAttribute: 'defer'
             }),
             cssExtractor,
         ],

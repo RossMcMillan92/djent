@@ -12,6 +12,7 @@
     "deep-equal": "^1.0.1",
     "deep-extend": "^0.4.1",
     "global": "^4.3.1",
+    "html-webpack-plugin": "^2.26.0",
     "immutable": "^3.8.1",
     "immutable-ext": "^1.0.8",
     "json-loader": "^0.5.4",
@@ -24,6 +25,7 @@
     "react-motion": "^0.4.4",
     "react-swipeable-views": "^0.8.3",
     "save": "^2.3.0",
+    "script-ext-html-webpack-plugin": "^1.5.0",
     "sw-toolbox": "^3.2.1",
     "webpack-bundle-size-analyzer": "^2.2.0"
   },
@@ -85,7 +87,7 @@
     "style-loader": "^0.13.1",
     "uglifyify": "^3.0.2",
     "vinyl-source-stream": "^1.1.0",
-    "webpack": "2.2.0-rc.2",
+    "webpack": "^2.2.0",
     "webpack-dev-server": "^1.16.2",
     "webpack-watch-livereload-plugin": "^0.0.1"
   },

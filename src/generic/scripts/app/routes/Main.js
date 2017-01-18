@@ -7,10 +7,8 @@ import Expandable from 'components/Expandable'
 import Spinner from 'components/Spinner'
 import SwipeableViews from 'components/SwipeableViews'
 
-import Instruments from 'containers/Instruments'
 import Modal from 'containers/Modal'
 import Player from 'containers/Player'
-import Sequences from 'containers/Sequences'
 
 import { defaultAllowedLengths } from 'reducers/sequences'
 
@@ -25,13 +23,17 @@ import {
 import { isMobile } from 'utils/mobile'
 import { getHashQueryParam, logError, throttle } from 'utils/tools'
 
+let Instruments
+let Sequences
+
 export default class Main extends Component {
     static contextTypes = {
         router: React.PropTypes.object.isRequired
     }
     state = {
         activePageIndex: 0,
-        googleAPIHasLoaded: false
+        googleAPIHasLoaded: false,
+        childrenLoaded: false,
     }
 
     componentWillMount = () => {
@@ -61,6 +63,20 @@ export default class Main extends Component {
 
     componentDidMount = () => {
         this.refreshOnWindowResize()
+        this.loadAdditionalViews()
+    }
+
+    loadAdditionalViews = () => {
+        require.ensure([
+            'containers/Instruments',
+            'containers/Sequences',
+        ], (require) => {
+            Instruments = require('containers/Instruments').default
+            Sequences = require('containers/Sequences').default
+            this.setState(() => ({
+                childrenLoaded: true,
+            }))
+        }, 'additional-views')
     }
 
     componentWillUpdate = (nextProps) => {
@@ -145,6 +161,60 @@ export default class Main extends Component {
         this.setActivePageIndex(index)
     }
 
+    getViews = (isMobileView) => {
+        const expandableTitleClass = 'title-primary u-txt-large dropdown-icon-before group-padding-x group-padding-x-small@mobile group-capped-x group-centered u-curp'
+        if (this.state.childrenLoaded) {
+            return isMobileView
+                ? (
+                    <SwipeableViews
+                        viewHeight={true}
+                        resistance={true}
+                        index={this.state.activePageIndex}
+                        onChangeIndex={i => this.changeActivePageIndex(i)}
+                    >
+                        <Player
+                            route={this.props.route}
+                            googleAPIHasLoaded={this.state.googleAPIHasLoaded}
+                        />
+                        <Sequences route={this.props.route} />
+                        <Instruments route={this.props.route} />
+                    </SwipeableViews>
+                )
+                : (
+                    <div>
+                        <Player
+                            route={this.props.route}
+                            googleAPIHasLoaded={this.state.googleAPIHasLoaded}
+                        />
+                        <div className="group-padding-y u-bdrb">
+                            <Expandable
+                                title="Sequences"
+                                titleClassName={expandableTitleClass}
+                                enableStateSave={true}
+                            >
+                                <Sequences route={this.props.route} />
+                            </Expandable>
+                        </div>
+                        <div className="group-padding-y u-bdrb">
+                            <Expandable
+                                title="Instruments"
+                                titleClassName={expandableTitleClass}
+                                enableStateSave={true}
+                            >
+                                <Instruments route={this.props.route} />
+                            </Expandable>
+                        </div>
+                    </div>
+                )
+        }
+        return (
+            <Player
+                route={this.props.route}
+                googleAPIHasLoaded={this.state.googleAPIHasLoaded}
+            />
+        )
+    }
+
     render = () => {
         const tabs = ['Player', 'Sequences', 'Instruments']
             .map((tabName, i) => (
@@ -158,7 +228,6 @@ export default class Main extends Component {
                     </div>
                 </div>
             ))
-        const isMobileView = isMobile()
         const headerContent =  (
             <div className="">
                 <div className="group-spacing-x">
@@ -177,49 +246,8 @@ export default class Main extends Component {
                 </div>
             </div>
         )
-        const expandableTitleClass = 'title-primary u-txt-large dropdown-icon-before group-padding-x group-padding-x-small@mobile group-capped-x group-centered u-curp'
-        const views = isMobileView
-            ? (
-                <SwipeableViews
-                    viewHeight={true}
-                    resistance={true}
-                    index={this.state.activePageIndex}
-                    onChangeIndex={i => this.changeActivePageIndex(i)}
-                >
-                    <Player
-                        route={this.props.route}
-                        googleAPIHasLoaded={this.state.googleAPIHasLoaded}
-                    />
-                    <Sequences route={this.props.route} />
-                    <Instruments route={this.props.route} />
-                </SwipeableViews>
-            )
-            : (
-                <div>
-                    <Player
-                        route={this.props.route}
-                        googleAPIHasLoaded={this.state.googleAPIHasLoaded}
-                    />
-                    <div className="group-padding-y u-bdrb">
-                        <Expandable
-                            title="Sequences"
-                            titleClassName={expandableTitleClass}
-                            enableStateSave={true}
-                        >
-                            <Sequences route={this.props.route} />
-                        </Expandable>
-                    </div>
-                    <div className="group-padding-y u-bdrb">
-                        <Expandable
-                            title="Instruments"
-                            titleClassName={expandableTitleClass}
-                            enableStateSave={true}
-                        >
-                            <Instruments route={this.props.route} />
-                        </Expandable>
-                    </div>
-                </div>
-            )
+        const views = this.getViews(isMobileView)
+        const isMobileView = isMobile()
 
         return (
             <section>

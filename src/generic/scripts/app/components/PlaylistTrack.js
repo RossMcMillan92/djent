@@ -1,3 +1,4 @@
+import React from 'react'
 import SVG from 'components/SVG'
 
 const PlaylistTrack = ({ isLocked, onDelete, onDuplicate, onLoadSettings, onLockTrack, title }) => (

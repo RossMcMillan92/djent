@@ -1,13 +1,12 @@
-import React, { Component } from 'react';
-
-import InputBox from './InputBox';
+import React, { Component } from 'react'
+import InputBox from 'components/InputBox'
 
 class PitchController extends Component {
-    shouldComponentUpdate = (nextProps) => nextProps.pitch !== this.props.pitch;
+    shouldComponentUpdate = nextProps => nextProps.pitch !== this.props.pitch
 
     onChange = (event) => {
-        const value = Math.round(parseFloat(event.target.value) * 100);
-        this.props.actions.updateInstrumentPitch({ instrumentID: this.props.id, value });
+        const value = Math.round(parseFloat(event.target.value) * 100)
+        this.props.onUpdate(value)
     }
 
     render = () => {
@@ -22,11 +21,11 @@ class PitchController extends Component {
             maxVal: 12,
             className: 'input-base input-base--bare input-base--large input-base--short',
             labelClassName: 'input-label',
-        };
+        }
         return (
             <InputBox { ...props } />
-        );
+        )
     }
 }
 
-export default PitchController;
+export default PitchController

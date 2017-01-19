@@ -3,7 +3,6 @@ import { extendObjectArrayByID } from 'utils/tools'
 const initialState = {
     activePresetID       : 'meshuggah',
     bpm                  : 50,
-    continuousGeneration : false,
 }
 
 export default function config(state = { ...initialState }, action) {
@@ -14,12 +13,6 @@ export default function config(state = { ...initialState }, action) {
             return {
                 ...state,
                 bpm: payload.bpm
-            }
-
-        case 'UPDATE_CONTINUOUS_GENERATION':
-            return {
-                ...state,
-                continuousGeneration: payload.continuousGeneration
             }
 
         case 'APPLY_PRESET':

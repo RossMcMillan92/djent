@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import InputBox from './InputBox';
-import { roundToXPlaces } from 'utils/tools';
+import React, { Component } from 'react'
+
+import InputBox from 'components/InputBox'
+import { roundToXPlaces } from 'utils/tools'
 
 class FadeOutDurationController extends Component {
-    shouldComponentUpdate = (nextProps) => nextProps.fadeOutDuration !== this.props.fadeOutDuration;
+    shouldComponentUpdate = nextProps => nextProps.fadeOutDuration !== this.props.fadeOutDuration
 
     onChange = (event) => {
-        const value = roundToXPlaces(parseFloat(event.target.value), 3) / 1000;
-        console.log('THIS.PROPS', this.props)
-        this.props.actions.updateInstrumentFadeOutDuration({ instrumentID: this.props.id, value });
+        const value = roundToXPlaces(3, parseFloat(event.target.value)) / 1000
+        this.props.onUpdate(value)
     }
 
     render = () => {
@@ -24,11 +24,11 @@ class FadeOutDurationController extends Component {
             maxVal: 2000,
             className: 'input-base input-base--bare input-base--large input-base--short',
             labelClassName: 'input-label',
-        };
+        }
         return (
             <InputBox { ...props } />
-        );
+        )
     }
 }
 
-export default FadeOutDurationController;
+export default FadeOutDurationController

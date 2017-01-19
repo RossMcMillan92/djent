@@ -6,7 +6,6 @@ import 'polyfills/array.values'
 import 'polyfills/requestIdleCallback'
 import 'polyfills/string.includes'
 
-import 'static/index.html'
 import 'static/.htaccess'
 import 'static/robots.txt'
 import 'assets/images/favicon.ico'

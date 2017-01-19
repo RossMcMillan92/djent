@@ -1,12 +1,9 @@
-import React, { Component } from 'react';
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 
-import * as modalActions from 'actions/modal';
-import Modal from 'components/Modal';
-import presets from 'utils/presets';
+import * as modalActions from 'actions/modal'
+import Modal from 'components/Modal'
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     isActive: state.modal.isActive,
     title: state.modal.title,
     content: state.modal.content,
@@ -14,15 +11,8 @@ const mapStateToProps = (state) => ({
     className: state.modal.className,
 })
 
-const mapDispatchToProps = (dispatch) => {
-    const actions = {
-        ...modalActions,
-    }
-    return {
-        actions: {
-            ...bindActionCreators(actions, dispatch)
-        }
-    };
-}
+const mapDispatchToProps = dispatch => ({
+    onClose: () => dispatch(modalActions.disableModal()),
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(Modal);
+export default connect(mapStateToProps, mapDispatchToProps)(Modal)

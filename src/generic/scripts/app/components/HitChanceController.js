@@ -1,15 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
-import InputBox from './InputBox';
+import InputBox from 'components/InputBox'
 
 class HitChanceController extends Component {
-    shouldComponentUpdate = (nextProps) => nextProps.hitChance !== this.props.hitChance;
+    shouldComponentUpdate = nextProps => nextProps.hitChance !== this.props.hitChance
 
     onChange = (event) => {
-        const value = Math.round(parseFloat(event.target.value)) / 100;
-        if (value) this.props.actions.updateHitChance(value);
+        const value = Math.round(parseFloat(event.target.value)) / 100
+        if (value) this.props.onUpdate(value)
     }
-
 
     render = () => {
         const props = {
@@ -23,12 +22,12 @@ class HitChanceController extends Component {
             step: 5,
             className: 'input-base input-base--bare input-base--large input-base--short',
             labelClassName: 'input-label',
-        };
+        }
 
         return (
             <InputBox { ...props } />
-        );
+        )
     }
 }
 
-export default HitChanceController;
+export default HitChanceController

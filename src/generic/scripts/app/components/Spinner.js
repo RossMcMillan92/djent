@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react'
 
-const Spinner = (props) => (
+const Spinner = ({ subtext }) => (
     <div>
         <div className="spinner spinner--large"></div>
-        { !props.subtext ? null : (<div className="spinner__subtext">{ props.subtext }</div>) }
+        { !subtext ? null : (<div className="spinner__subtext">{ subtext }</div>) }
     </div>
 )
 
-export default Spinner;
+export default Spinner

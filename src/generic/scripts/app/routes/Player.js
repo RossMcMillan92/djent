@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 
 import BeatsController from 'components/BeatsController'
+import BPMTapper from 'components/BPMTapper'
 import Panel from 'components/Panel'
+import PresetController from 'components/PresetController'
 
 import BPMController from 'containers/BPMController'
-import BPMTapper from 'containers/BPMTapper'
 import PlaylistEditor from 'containers/PlaylistEditor'
-import PresetController from 'containers/PresetController'
 import SoundController from 'containers/SoundController'
 import Visualiser from 'containers/Visualiser'
 
@@ -16,6 +16,7 @@ export default class Player extends Component {
     }
 
     render = () => {
+        const { actions, activePresetID } = this.props
         const totalSequence = this.props.sequences.find(sequence => sequence.id === 'total')
 
         return (
@@ -26,7 +27,10 @@ export default class Player extends Component {
                             Preset:
                         </h2>
 
-                        <PresetController />
+                        <PresetController
+                            activePresetID={ activePresetID }
+                            onUpdate={ actions.applyPreset }
+                        />
                     </div>
                 </Panel>
                 <Panel>
@@ -36,15 +40,15 @@ export default class Player extends Component {
                                 <BPMController />
                             </div>
                             <div className="">
-                                <BPMTapper />
+                                <BPMTapper onUpdate={actions.updateBPM} />
                             </div>
                         </div>
 
                         <div className="group-spacing-y-small">
                             <BeatsController
-                                sequence={ totalSequence }
-                                actions={{ updateSequence: this.props.actions.updateSequence }}
                                 labelPrefix='Total '
+                                onUpdate={ actions.updateSequence }
+                                sequence={ totalSequence }
                             />
                         </div>
 

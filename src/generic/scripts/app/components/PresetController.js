@@ -1,13 +1,18 @@
 import React, { Component } from 'react'
+import { compose } from 'ramda'
+import { getTargetValueFromEvent } from 'modules/events'
 import presets from 'utils/presets'
+
+const getPresetFromID = presetID => presets.find(preset => preset.id === presetID)
 
 class PresetController extends Component {
     shouldComponentUpdate = nextProps => nextProps.activePresetID !== this.props.activePresetID
 
-    onChange = (event) => {
-        const presetID = event.target.value
-        this.props.actions.applyPreset(presets.find(preset => preset.id === presetID))
-    }
+    onChange = event => compose(
+        this.props.onUpdate,
+        getPresetFromID,
+        getTargetValueFromEvent,
+    )(event)
 
     render = () => {
         const activePreset = presets.find(preset => preset.id === this.props.activePresetID)
@@ -23,7 +28,7 @@ class PresetController extends Component {
                 <label htmlFor="preset-dropdown" className="u-visually-hidden">
                     Preset picker
                 </label>
-                <select className="input-base input-base--dropdown" id="preset-dropdown" onChange={e => this.onChange(e)} value={activePreset ? this.props.activePresetID : 'custom'}>
+                <select className="input-base input-base--dropdown" id="preset-dropdown" onChange={this.onChange} value={activePreset ? this.props.activePresetID : 'custom'}>
                     { presetItems }
                 </select>
                 <div className="input-dropdown-icon"></div>

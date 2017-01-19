@@ -1,44 +1,45 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
-import { capitalize } from 'utils/tools';
+import { capitalize } from 'utils/tools'
 
 const getNewAllowedLengths = (allowedLengths, id, prop, value) =>
-    allowedLengths.map(obj => {
-        const newObj = { ...obj };
-        if (newObj.id === id) newObj[prop] = value;
-        return newObj;
-    });
+    allowedLengths.map((obj) => {
+        if (obj.id !== id) return obj
+        const newObj = { ...obj }
+        newObj[prop] = value
+        return newObj
+    })
 
 class NotePanel extends Component {
     onLengthAmountChange = (event, value) => {
-        const { id, amount } = this.props.length;
-        const newAmount = amount + value;
+        const { id, amount } = this.props.length
+        const newAmount = amount + value
 
-        if (newAmount < 0) return;
+        if (newAmount < 0) return
 
-        this.updateAllowedLengthsByID(id, 'amount', newAmount);
+        this.updateAllowedLengthsByID(id, 'amount', newAmount)
     }
 
     onModifierClick = (m1, m2) => {
-        const { length } = this.props;
-        const newValue = !length[m1];
-        let newAllowedLengths = getNewAllowedLengths(this.props.allowedLengths, length.id, m1, newValue);
+        const { length } = this.props
+        const newValue = !length[m1]
+        let newAllowedLengths = getNewAllowedLengths(this.props.allowedLengths, length.id, m1, newValue)
         if (newValue && length[m2]) {
-            newAllowedLengths = getNewAllowedLengths(newAllowedLengths, length.id, m2, false);
+            newAllowedLengths = getNewAllowedLengths(newAllowedLengths, length.id, m2, false)
         }
-        this.props.actions.updateAllowedLengths(newAllowedLengths);
+        this.props.onUpdate(newAllowedLengths)
     }
 
     updateAllowedLengthsByID = (id, prop, value) => {
-        const newAllowedLengths = getNewAllowedLengths(this.props.allowedLengths, id, prop, value);
-        this.props.actions.updateAllowedLengths(newAllowedLengths);
+        const newAllowedLengths = getNewAllowedLengths(this.props.allowedLengths, id, prop, value)
+        this.props.onUpdate(newAllowedLengths)
     }
 
     render = () => {
-        const { length, totalAmount } = this.props;
-        const noteName = `${capitalize(length.name)} note`;
-        const percentage = totalAmount ? Math.round(length.amount / totalAmount * 100) : 0;
-        const isOn = length.amount > 0;
+        const { length, totalAmount } = this.props
+        const noteName = `${capitalize(length.name)} note`
+        const percentage = totalAmount ? Math.round((length.amount / totalAmount) * 100) : 0
+        const isOn = length.amount > 0
 
         return (
             <div className={`note-panel ${isOn ? '' : 'note-panel--disabled'}`}>
@@ -46,8 +47,8 @@ class NotePanel extends Component {
                 <div className="note-panel__amount-container">
                     <span className="note-panel__amount" title="Chance">{percentage}%</span>
                     <div className="note-panel__btn-container">
-                        <button className="note-panel__btn note-panel__btn--up" title="Increase chance" onClick={(e) => this.onLengthAmountChange(e, 1)}></button>
-                        <button className="note-panel__btn note-panel__btn--down" title="Decrease chance" onClick={(e) => this.onLengthAmountChange(e, -1)}></button>
+                        <button className="note-panel__btn note-panel__btn--up" title="Increase chance" onClick={e => this.onLengthAmountChange(e, 1)}></button>
+                        <button className="note-panel__btn note-panel__btn--down" title="Decrease chance" onClick={e => this.onLengthAmountChange(e, -1)}></button>
                     </div>
                 </div>
                 <div className="note-panel__checkbox-container">
@@ -56,8 +57,8 @@ class NotePanel extends Component {
                 </div>
 
             </div>
-        );
+        )
     }
 }
 
-export default NotePanel;
+export default NotePanel

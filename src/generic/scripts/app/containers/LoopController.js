@@ -8,10 +8,10 @@ import { setLocalStorageIO } from 'modules/localStorageIO'
 import SVG from 'components/SVG'
 
 //    toggleLoopMode :: loopMode -> loopMode
-const toggleLoopMode = (loopMode) => loopMode + 1 <= 2 ? loopMode + 1 : 0
+const toggleLoopMode = loopMode => loopMode + 1 <= 2 ? loopMode + 1 : 0
 
 //    getLoopModeIcon :: loopMode -> String
-const getLoopModeIconType = (loopMode) =>
+const getLoopModeIconType = loopMode =>
     loopMode < 2
         ? 'loop'
         : 'loop_single'

@@ -7,7 +7,7 @@ import {
 } from 'ramda'
 
 //    getLocalStorageIO :: key -> IO String
-const getLocalStorageIO = (key) =>
+const getLocalStorageIO = key =>
     IO(() => window.localStorage.getItem(key))
 
 //    setLocalStorageIO :: key -> value -> IO String

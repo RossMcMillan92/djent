@@ -260,7 +260,7 @@ import { roundToXPlaces } from 'utils/tools';
 
 		cache = cache + (tickDuration - (quarterTicks * this.duration));
 
-		if (Math.abs(roundToXPlaces(cache, 3)) > 1) {
+		if (Math.abs(roundToXPlaces(3, cache)) > 1) {
 			tickDuration += -Math.round(cache);
 			cache += -Math.round(cache);
 		}

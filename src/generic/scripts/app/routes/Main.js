@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { assoc, compose, last, map, split } from 'ramda'
+import { assoc, compose, last, map, split, traverse } from 'ramda'
 import { Future as Task } from 'ramda-fantasy'
 import { List } from 'immutable-ext'
 
@@ -7,10 +7,8 @@ import Expandable from 'components/Expandable'
 import Spinner from 'components/Spinner'
 import SwipeableViews from 'components/SwipeableViews'
 
-import Instruments from 'containers/Instruments'
 import Modal from 'containers/Modal'
 import Player from 'containers/Player'
-import Sequences from 'containers/Sequences'
 
 import { defaultAllowedLengths } from 'reducers/sequences'
 
@@ -25,13 +23,17 @@ import {
 import { isMobile } from 'utils/mobile'
 import { getHashQueryParam, logError, throttle } from 'utils/tools'
 
+let Instruments
+let Sequences
+
 export default class Main extends Component {
     static contextTypes = {
         router: React.PropTypes.object.isRequired
     }
     state = {
         activePageIndex: 0,
-        googleAPIHasLoaded: false
+        googleAPIHasLoaded: false,
+        childrenLoaded: false,
     }
 
     componentWillMount = () => {
@@ -40,11 +42,10 @@ export default class Main extends Component {
         const shareID = this.props.params.shareID
 
         handleGoogleAPI()
-            .then(() => {
+            .fork(logError, () => {
                 if (shareID) this.setupSharedItemsAndUpdate(shareID)
                 this.setState({ googleAPIHasLoaded: true })
             })
-            .catch(e => logError(e))
 
         if (!shareID) {
             const presetID = this.props.params.presetID || this.props.activePresetID
@@ -62,6 +63,20 @@ export default class Main extends Component {
 
     componentDidMount = () => {
         this.refreshOnWindowResize()
+        this.loadAdditionalViews()
+    }
+
+    loadAdditionalViews = () => {
+        require.ensure([
+            'containers/Instruments',
+            'containers/Sequences',
+        ], (require) => {
+            Instruments = require('containers/Instruments').default
+            Sequences = require('containers/Sequences').default
+            this.setState(() => ({
+                childrenLoaded: true,
+            }))
+        }, 'additional-views')
     }
 
     componentWillUpdate = (nextProps) => {
@@ -85,13 +100,17 @@ export default class Main extends Component {
         if (longURLs.size === 1 && longURLs.get(0).includes('-')) {
             return compose(this.setupSharedItems, last, split('/'))(longURLs.get(0))
         }
-        const sharedPresets = longURLs
-            .map(compose(this.dataStringToPreset, getHashQueryParam('share')))
 
-        this.props.actions.applyPreset(sharedPresets.get(0))
+        const sharedPresets = longURLs
+            .traverse(Task.of, this.urlToPreset)
+
+        sharedPresets
+            .fork(logError, (_sharedPresets) => {
+                this.props.actions.applyPreset(_sharedPresets.get(0))
+            })
 
         return sharedPresets
-            .traverse(Task.of, presetToPlaylistItem)
+            .chain(traverse(Task.of, presetToPlaylistItem))
             .map(map(assoc('isLocked', true)))
     }
 
@@ -103,10 +122,12 @@ export default class Main extends Component {
             })
     }
 
-    dataStringToPreset = dataString => compose(
-        this.insertSoundsIntoPresetInstruments,
-        preset => backwardsCompatibility(preset, defaultAllowedLengths),
+    // urlToPreset :: url -> Task Error Preset
+    urlToPreset = dataString => compose(
+        map(this.insertSoundsIntoPresetInstruments),
+        map(preset => backwardsCompatibility(preset, defaultAllowedLengths)),
         getPresetFromData,
+        getHashQueryParam('share')
     )(dataString)
 
     insertSoundsIntoPresetInstruments = (preset) => {
@@ -146,6 +167,60 @@ export default class Main extends Component {
         this.setActivePageIndex(index)
     }
 
+    getViews = (isMobileView) => {
+        const expandableTitleClass = 'title-primary u-txt-large dropdown-icon-before group-padding-x group-padding-x-small@mobile group-capped-x group-centered u-curp'
+        if (this.state.childrenLoaded) {
+            return isMobileView
+                ? (
+                    <SwipeableViews
+                        viewHeight={true}
+                        resistance={true}
+                        index={this.state.activePageIndex}
+                        onChangeIndex={i => this.changeActivePageIndex(i)}
+                    >
+                        <Player
+                            route={this.props.route}
+                            googleAPIHasLoaded={this.state.googleAPIHasLoaded}
+                        />
+                        <Sequences route={this.props.route} />
+                        <Instruments route={this.props.route} />
+                    </SwipeableViews>
+                )
+                : (
+                    <div>
+                        <Player
+                            route={this.props.route}
+                            googleAPIHasLoaded={this.state.googleAPIHasLoaded}
+                        />
+                        <div className="group-padding-y u-bdrb">
+                            <Expandable
+                                title="Sequences"
+                                titleClassName={expandableTitleClass}
+                                enableStateSave={true}
+                            >
+                                <Sequences route={this.props.route} />
+                            </Expandable>
+                        </div>
+                        <div className="group-padding-y u-bdrb">
+                            <Expandable
+                                title="Instruments"
+                                titleClassName={expandableTitleClass}
+                                enableStateSave={true}
+                            >
+                                <Instruments route={this.props.route} />
+                            </Expandable>
+                        </div>
+                    </div>
+                )
+        }
+        return (
+            <Player
+                route={this.props.route}
+                googleAPIHasLoaded={this.state.googleAPIHasLoaded}
+            />
+        )
+    }
+
     render = () => {
         const tabs = ['Player', 'Sequences', 'Instruments']
             .map((tabName, i) => (
@@ -159,7 +234,6 @@ export default class Main extends Component {
                     </div>
                 </div>
             ))
-        const isMobileView = isMobile()
         const headerContent =  (
             <div className="">
                 <div className="group-spacing-x">
@@ -178,49 +252,8 @@ export default class Main extends Component {
                 </div>
             </div>
         )
-        const expandableTitleClass = 'title-primary u-txt-large dropdown-icon-before group-padding-x group-padding-x-small@mobile group-capped-x group-centered u-curp'
-        const views = isMobileView
-            ? (
-                <SwipeableViews
-                    viewHeight={true}
-                    resistance={true}
-                    index={this.state.activePageIndex}
-                    onChangeIndex={i => this.changeActivePageIndex(i)}
-                >
-                    <Player
-                        route={this.props.route}
-                        googleAPIHasLoaded={this.state.googleAPIHasLoaded}
-                    />
-                    <Sequences route={this.props.route} />
-                    <Instruments route={this.props.route} />
-                </SwipeableViews>
-            )
-            : (
-                <div>
-                    <Player
-                        route={this.props.route}
-                        googleAPIHasLoaded={this.state.googleAPIHasLoaded}
-                    />
-                    <div className="group-padding-y u-bdrb">
-                        <Expandable
-                            title="Sequences"
-                            titleClassName={expandableTitleClass}
-                            enableStateSave={true}
-                        >
-                            <Sequences route={this.props.route} />
-                        </Expandable>
-                    </div>
-                    <div className="group-padding-y u-bdrb">
-                        <Expandable
-                            title="Instruments"
-                            titleClassName={expandableTitleClass}
-                            enableStateSave={true}
-                        >
-                            <Instruments route={this.props.route} />
-                        </Expandable>
-                    </div>
-                </div>
-            )
+        const isMobileView = isMobile()
+        const views = this.getViews(isMobileView)
 
         return (
             <section>

@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
-import InputBox from './InputBox';
+import InputBox from 'components/InputBox'
 
 class VolumeController extends Component {
-    shouldComponentUpdate = (nextProps) => nextProps.volume !== this.props.volume;
+    shouldComponentUpdate = nextProps => nextProps.volume !== this.props.volume
 
     onChange = (event) => {
-        const value = parseFloat(event.target.value) / 100;
-        this.props.actions.updateInstrumentVolume({ instrumentID: this.props.id, value });
+        const value = parseFloat(event.target.value) / 100
+        this.props.onUpdate(value)
     }
 
     render = () => {
@@ -22,12 +22,12 @@ class VolumeController extends Component {
             maxVal: 100,
             className: 'input-base input-base--bare input-base--large input-base--short',
             labelClassName: 'input-label',
-        };
+        }
 
         return (
             <InputBox { ...props } />
-        );
+        )
     }
 }
 
-export default VolumeController;
+export default VolumeController

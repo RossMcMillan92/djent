@@ -1,13 +1,5 @@
 import {
-    compose,
-    prop,
-} from 'ramda';
+    path,
+} from 'ramda'
 
-const getTargetValueFromEvent = compose(
-    prop('value'),
-    prop('target'),
-);
-
-export {
-    getTargetValueFromEvent,
-};
+export const getTargetValueFromEvent = path(['target', 'value'])

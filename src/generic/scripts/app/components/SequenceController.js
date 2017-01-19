@@ -1,27 +1,27 @@
-import React, { Component } from 'react';
-import { predefinedSequences } from 'utils/sequences';
+import React, { Component } from 'react'
+import { predefinedSequences } from 'utils/sequences'
 
 class SequenceController extends Component {
     onSequenceClick = ({ enabledSequences, sequenceID }) => {
-        const index = enabledSequences.indexOf(sequenceID);
+        const index = enabledSequences.indexOf(sequenceID)
         const newInstrumentSequences = index > -1
             ? [ ...enabledSequences.slice(0, index), ...enabledSequences.slice(index + 1, enabledSequences.length) ]
-            : [ ...enabledSequences, sequenceID ];
-        this.props.actions.updateInstrumentSequences(this.props.instrumentID, newInstrumentSequences);
+            : [ ...enabledSequences, sequenceID ]
+        this.props.onChange(newInstrumentSequences)
     }
 
     renderSequences = (sequences, enabledSequences) =>
         Object.keys(sequences)
             .map((sequenceID, i) => {
-                const sequence = sequences[sequenceID];
-                const isEnabled = enabledSequences.includes(sequenceID);
+                const sequence = sequences[sequenceID]
+                const isEnabled = enabledSequences.includes(sequenceID)
 
                 return (
                     <div className={`toggle-input ${isEnabled ? 'is-enabled' : ''}`} onClick={() => this.onSequenceClick({ enabledSequences, sequenceID })} key={i}>
                         { sequence.description ? unescape(sequence.description) : sequence.id }
                     </div>
-                );
-            });
+                )
+            })
 
     render = () => (
         <div>
@@ -34,7 +34,7 @@ class SequenceController extends Component {
                 { this.renderSequences(predefinedSequences, [ ...this.props.instrumentSequences ]) }
             </div>
         </div>
-    );
+    )
 }
 
-export default SequenceController;
+export default SequenceController

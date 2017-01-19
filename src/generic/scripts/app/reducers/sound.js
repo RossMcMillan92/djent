@@ -31,12 +31,6 @@ export default function sound(state = initialState, action) {
                 isPlaying: payload.isPlaying
             }
 
-        case 'UPDATE_CONTINUOUS_GENERATION':
-            return {
-                ...state,
-                loopMode: payload.continuousGeneration ? false : payload.loopMode
-            }
-
         case 'UPDATE_LOOPING_MODE':
             return {
                 ...state,

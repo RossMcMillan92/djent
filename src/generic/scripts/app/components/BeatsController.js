@@ -2,24 +2,23 @@ import React, { Component } from 'react'
 import deepEqual from 'deep-equal'
 
 import { capitalize } from 'utils/tools'
-import InputBox from './InputBox'
+import InputBox from 'components/InputBox'
 
 class BeatsController extends Component {
-    shouldComponentUpdate = (nextProps) => !deepEqual(nextProps.sequence, this.props.sequence)
+    shouldComponentUpdate = nextProps => !deepEqual(nextProps.sequence, this.props.sequence)
 
     onChange = (event, type) => {
-        const prop = type
         const value = parseFloat(event.target.value)
-        this.props.actions.updateSequence(this.props.sequence.id, prop, value)
+        this.props.onUpdate(this.props.sequence.id, type, value)
     }
 
     render = () => {
-        const getProps = (type) => ({
+        const getProps = type => ({
             type: 'number',
             id: `${this.props.sequence.id}-${type}`,
             label: capitalize((this.props.labelPrefix ? this.props.labelPrefix : '') + type),
             defaultValue : this.props.sequence[type],
-            onChange: (event) => this.onChange(event, type),
+            onChange: event => this.onChange(event, type),
             className: 'input-base input-base--bare input-base--large input-base--short',
             minVal: 1,
             maxVal: 16,

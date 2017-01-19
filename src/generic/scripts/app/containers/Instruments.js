@@ -1,11 +1,9 @@
-import React, { Component } from 'react';
 import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 
-import Instruments from 'routes/Instruments';
+import Instruments from 'routes/Instruments'
 
-import * as instrumentsActions from 'actions/instruments';
-import * as modalActions from 'actions/modal';
+import * as instrumentsActions from 'actions/instruments'
 
 function mapStateToProps(state) {
     return {
@@ -17,14 +15,13 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     const actions = {
         ...instrumentsActions,
-        ...modalActions,
     }
 
     return {
         actions: {
             ...bindActionCreators(actions, dispatch)
         }
-    };
+    }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Instruments);
+export default connect(mapStateToProps, mapDispatchToProps)(Instruments)

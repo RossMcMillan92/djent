@@ -9,7 +9,7 @@ const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
 const sourceDir     = '/src'
 const buildDir      = '/www'
 const entryJSFile   = `${sourceDir}/generic/scripts/app.js`
-const outputCSSFile = 'app.css'
+const outputCSSFile = 'app.[contenthash].css'
 
 const cssExtractor  = new ExtractTextPlugin({ filename: outputCSSFile, disable: false, allChunks: true })
 const cwd           = process.cwd()
@@ -102,7 +102,7 @@ const config = (env) => {
                 }
             }),
             new webpack.LoaderOptionsPlugin({
-                minimize: isProduction,
+                minimize: true,
                 debug: !isProduction,
                 options: {
                     postcss: [
@@ -115,7 +115,7 @@ const config = (env) => {
             isProduction
                 ? new webpack.optimize.UglifyJsPlugin({
                     compress: {
-                        warnings: true,
+                        warnings: false,
                         screw_ie8: true,
                         conditionals: true,
                         unused: true,

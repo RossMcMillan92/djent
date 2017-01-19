@@ -6,10 +6,8 @@ $push               : true!default
 $pull               : true!default
 $use-markup-fix     : true!default
 
-$breakpoints: ( 'palm' '(max-width: 400px)', 'lap' '(min-width: 601px) and (max-width: 1023px)', 'alpha' '(max-width: 500px)', 'beta' '(max-width: 640px)', 'gamma' '(max-width: 768px)', 'delta' '(max-width: 840px)', 'epsilon' '(max-width: 980px)', 'portable' '(max-width: 1023px)', 'desk' '(min-width: 1024px)' ) !default
-
-
-$breakpoint-has-widths: ( 'lap', 'portable', 'epsilon', 'delta', 'gamma', 'beta', 'alpha', 'palm', 'desk' ) !default
+$breakpoints: ('alpha' '(max-width: 500px)', 'beta' '(max-width: 640px)') !default
+$breakpoint-has-widths: ( 'alpha', 'beta' ) !default
 
 $class-type:            unquote(".")
 
@@ -61,59 +59,11 @@ $class-type:            unquote(".")
         word-spacing: normal
 
 
-#{$class-type}grid--rev
-    direction: rtl
-    text-align: left
-
-    & > #{$class-type}grid__item
-        direction: ltr
-        text-align: left
-
-#{$class-type}grid--full
-    margin-left: 0
-
-    & > #{$class-type}grid__item
-        padding-left: 0
-
-#{$class-type}grid--right
-    text-align: right
-
-    & > #{$class-type}grid__item
-        text-align: left
-
 #{$class-type}grid--center
     text-align: center
 
     & > #{$class-type}grid__item
         text-align: left
-
-#{$class-type}grid--middle
-
-    & > #{$class-type}grid__item
-        vertical-align: middle
-
-#{$class-type}grid--bottom
-
-    & > #{$class-type}grid__item
-        vertical-align: bottom
-
-#{$class-type}grid--narrow
-    margin-left: -($gutter / 2)
-
-    & > #{$class-type}grid__item
-        padding-left: $gutter / 2
-
-#{$class-type}grid--thin
-    margin-left: -(1px)
-
-    & > #{$class-type}grid__item
-        padding-left: 1px
-
-#{$class-type}grid--wide
-    margin-left: -($gutter * 2)
-
-    & > #{$class-type}grid__item
-        padding-left: $gutter * 2
 
 =device-type($namespace: "")
     #{$class-type}#{$namespace}w-auto

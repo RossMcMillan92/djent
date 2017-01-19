@@ -3,18 +3,5 @@
     padding: 0
     margin: 0
 
-.cleanlist,
-.list-hor
+.cleanlist
     +cleanlist
-
-.list-hor__item
-    display: inline-block
-    vertical-align: top
-
-    &:not(:last-of-type)
-        margin-right: $base-spacing-unit
-
-.list-hor--tight
-    .list-hor__item
-        &:not(:last-of-type)
-            margin-right: $base-spacing-unit / 2

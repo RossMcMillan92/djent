@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { assoc, compose, last, map, split } from 'ramda'
+import { assoc, compose, last, map, split, traverse } from 'ramda'
 import { Future as Task } from 'ramda-fantasy'
 import { List } from 'immutable-ext'
 
@@ -100,13 +100,17 @@ export default class Main extends Component {
         if (longURLs.size === 1 && longURLs.get(0).includes('-')) {
             return compose(this.setupSharedItems, last, split('/'))(longURLs.get(0))
         }
-        const sharedPresets = longURLs
-            .map(compose(this.dataStringToPreset, getHashQueryParam('share')))
 
-        this.props.actions.applyPreset(sharedPresets.get(0))
+        const sharedPresets = longURLs
+            .traverse(Task.of, this.urlToPreset)
+
+        sharedPresets
+            .fork(logError, (_sharedPresets) => {
+                this.props.actions.applyPreset(_sharedPresets.get(0))
+            })
 
         return sharedPresets
-            .traverse(Task.of, presetToPlaylistItem)
+            .chain(traverse(Task.of, presetToPlaylistItem))
             .map(map(assoc('isLocked', true)))
     }
 
@@ -118,10 +122,12 @@ export default class Main extends Component {
             })
     }
 
-    dataStringToPreset = dataString => compose(
-        this.insertSoundsIntoPresetInstruments,
-        preset => backwardsCompatibility(preset, defaultAllowedLengths),
+    // urlToPreset :: url -> Task Error Preset
+    urlToPreset = dataString => compose(
+        map(this.insertSoundsIntoPresetInstruments),
+        map(preset => backwardsCompatibility(preset, defaultAllowedLengths)),
         getPresetFromData,
+        getHashQueryParam('share')
     )(dataString)
 
     insertSoundsIntoPresetInstruments = (preset) => {
@@ -246,8 +252,8 @@ export default class Main extends Component {
                 </div>
             </div>
         )
-        const views = this.getViews(isMobileView)
         const isMobileView = isMobile()
+        const views = this.getViews(isMobileView)
 
         return (
             <section>

@@ -1,4 +1,4 @@
-import { decompress } from 'lzutf8'
+// import { decompress } from 'lzutf8'
 import { Future as Task } from 'ramda-fantasy'
 import { logError, loadScript } from './tools'
 
@@ -35,16 +35,21 @@ const getLongURLFromShareID = shareID =>
     })
 
 
-const getPresetFromData = (data) => {
-    if (!data) return
+//    getPresetFromData :: base64Data -> Task Preset
+const getPresetFromData = base64Data =>
+    Task((rej, res) => {
+        require.ensure('lzutf8', (require) => {
+            const decompress = require('lzutf8').decompress
+            if (!base64Data) rej(Error('No base64 data given'))
 
-    const decompressedData = data
-                          && data.length % 4 === 0
-                          && decompress(data, { inputEncoding: 'Base64' })
+            const decompressedData = base64Data
+                                  && base64Data.length % 4 === 0
+                                  && decompress(base64Data, { inputEncoding: 'Base64' })
 
-    const preset = /[A-Za-z0-9+/=]/.test(decompressedData) ? JSON.parse(decompressedData) : undefined
-    return preset
-}
+            const preset = /[A-Za-z0-9+/=]/.test(decompressedData) ? JSON.parse(decompressedData) : undefined
+            res(preset)
+        }, 'lzutf8')
+    })
 
 export {
     getLongURLFromShareID,

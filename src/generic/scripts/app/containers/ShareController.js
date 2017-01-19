@@ -1,10 +1,9 @@
 import { bindActionCreators } from 'redux'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { assoc, compose, concat, last, join, map, split } from 'ramda'
+import { assoc, chain, compose, concat, last, join, map, split } from 'ramda'
 import { Future as Task } from 'ramda-fantasy'
 import { List } from 'immutable-ext'
-import { compress } from 'lzutf8'
 
 import * as modalActions from 'actions/modal'
 
@@ -45,6 +44,18 @@ const compressShortMultiURL = (url) => {
         .map(shortURL => combineShortURLs([shortURL]))
 }
 
+//    getShareableURL :: preset -> Task url
+const getShareableURL = preset =>
+    Task((rej, res) => {
+        require.ensure(['lzutf8'], (require) => {
+            const compress = require('lzutf8').compress
+            const compressedPreset = compress(JSON.stringify(preset), { outputEncoding: 'Base64' })
+            const shareableURL = `djen.co/#share=${compressedPreset}`
+            if (shareableURL.length > 2048) logError('URL exceeds 2048 chars. May not succeed')
+            res(shareableURL)
+        }, 'lzutf8')
+    })
+
 class ShareController extends Component {
     state = {
         isEnabled: false,
@@ -54,8 +65,8 @@ class ShareController extends Component {
 
     // getShortURL :: preset -> Task Error url
     getShortURL = preset => compose(
-        getGoogleShortURL,
-        this.getShareableURL,
+        chain(getGoogleShortURL),
+        getShareableURL,
         createPreset,
         assoc('usePredefinedSettings', true),
     )(preset)
@@ -70,13 +81,6 @@ class ShareController extends Component {
                 this.launchModal(url)
                 this.setState({ isLoading: false })
             })
-    }
-
-    getShareableURL = (preset) => {
-        const compressedPreset = compress(JSON.stringify(preset), { outputEncoding: 'Base64' })
-        const shareableURL = `djen.co/#share=${compressedPreset}`
-        if (shareableURL.length > 2048) logError('URL exceeds 2048 chars. May not succeed')
-        return shareableURL
     }
 
     launchModal = (url) => {
@@ -106,6 +110,7 @@ const ShareBox = props => (
             type="text"
             value={props.url}
             onClick={e => e.target.select()}
+            readOnly={true}
         />
     </div>
 )

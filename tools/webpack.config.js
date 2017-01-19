@@ -1,21 +1,49 @@
-const autoprefixer               = require('autoprefixer')
 const path                       = require('path')
-const constants                  = require('./constants')
 const webpack                    = require('webpack')
+const autoprefixer               = require('autoprefixer')
 const ExtractTextPlugin          = require('extract-text-webpack-plugin')
 const CopyWebpackPlugin          = require('copy-webpack-plugin')
-const base                       = require('./webpack.base.config.js')
 const HtmlWebpackPlugin          = require('html-webpack-plugin')
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
 
-const outputCSSFile = constants.outputCSSFile
-const buildDir      = constants.buildDir
+const sourceDir     = '/src'
+const buildDir      = '/www'
+const entryJSFile   = `${sourceDir}/generic/scripts/app.js`
+const outputCSSFile = 'app.css'
 
-const cwd = process.cwd()
-const cssExtractor = new ExtractTextPlugin(outputCSSFile)
+const cssExtractor  = new ExtractTextPlugin({ filename: outputCSSFile, disable: false, allChunks: true })
+const cwd           = process.cwd()
 
-const config = env =>
-    Object.assign({}, base(env), {
+const config = (env) => {
+    const isProduction = env.isProduction === 'true'
+    const environment = isProduction
+        ? 'production'
+        : 'development'
+
+    return Object.assign({}, {
+        entry: {
+            main: path.join(cwd, entryJSFile),
+            vendorReact: ['react', 'react-dom', 'react-router', 'react-redux', 'redux'],
+            vendor: ['immutable-ext', 'ramda-fantasy']
+        },
+        output: {
+            filename: '[name].[chunkhash].js',
+            path: path.join(cwd, buildDir),
+            publicPath: '/',
+        },
+        resolve: {
+            extensions: ['.js', '.jsx', '.scss'],
+            alias: {
+                react: path.join(cwd, 'node_modules/react'),
+            },
+            modules: [
+                'node_modules',
+                path.join(cwd, `/src/${env.platform}/`),
+                path.join(cwd, `/src/${env.platform}/scripts/`),
+                path.join(cwd, `/src/${env.platform}/scripts/app/`),
+                path.join(cwd, `/src/${env.platform}/styles/styles/`),
+            ]
+        },
         module: {
             rules: [
                 {
@@ -65,15 +93,17 @@ const config = env =>
                 { from: 'src/generic/static/manifest.json' },
                 { from: 'src/generic/scripts/sw/sw.js' },
                 { from: 'src/generic/assets', to: 'assets' },
-                { from: 'node_modules/sw-toolbox/sw-toolbox.js', to: 'node_modules/sw-toolbox/assets' },
+                { from: 'node_modules/sw-toolbox/sw-toolbox.js', to: 'node_modules/sw-toolbox' },
             ]),
             new webpack.DefinePlugin({
-                NODE_ENV: JSON.stringify('development'),
+                NODE_ENV: JSON.stringify(environment),
                 'process.env': {
-                    NODE_ENV: JSON.stringify('development')
+                    NODE_ENV: JSON.stringify(environment)
                 }
             }),
             new webpack.LoaderOptionsPlugin({
+                minimize: isProduction,
+                debug: !isProduction,
                 options: {
                     postcss: [
                         autoprefixer({
@@ -82,6 +112,25 @@ const config = env =>
                     ]
                 }
             }),
+            isProduction
+                ? new webpack.optimize.UglifyJsPlugin({
+                    compress: {
+                        warnings: true,
+                        screw_ie8: true,
+                        conditionals: true,
+                        unused: true,
+                        comparisons: true,
+                        sequences: true,
+                        dead_code: true,
+                        evaluate: true,
+                        if_return: true,
+                        join_vars: true,
+                    },
+                    output: {
+                        comments: false
+                    },
+                })
+                : x => x,
             new webpack.optimize.CommonsChunkPlugin({
                 names: ['vendor', 'vendorReact', 'manifest']
             }),
@@ -95,5 +144,5 @@ const config = env =>
             cssExtractor,
         ],
     })
-
+}
 module.exports = config

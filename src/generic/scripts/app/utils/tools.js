@@ -4,8 +4,6 @@
 import deepExtend from 'deep-extend'
 import { curry } from 'ramda'
 
-export const arraySelector = selector => Array.from(document.querySelectorAll(selector))
-
 export const repeatArray = (arr, length) => {
 	if (length === 0) return []
 	if (arr.length === length || arr.length === 0) return arr
@@ -56,15 +54,6 @@ export const updateObjByID = ({ objs, id, prop, value }) =>
 		if (newObj.id === id) newObj[prop] = value
 		return newObj
 	})
-
-export const parseQueryString = (url = window.location.href) =>
-	!url.includes('?') ? {} : url
-	.split('?')[1]
-	.split('&')
-	.reduce((list, query) => {
-		const [ key, value ] = query.split('=')
-		return { ...list, [key]: value || '' }
-	}, {})
 
 export const getHashQueryParam = curry((param, url) => {
 	const paramPart1 = url.split(`${param}=`)[1]

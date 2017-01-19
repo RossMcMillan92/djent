@@ -1,4 +1,3 @@
-// import { decompress } from 'lzutf8'
 import { Future as Task } from 'ramda-fantasy'
 import { logError, loadScript } from './tools'
 

@@ -3,7 +3,6 @@
 import { roundToXPlaces } from 'utils/tools';
 
 
-(function() {
 	"use strict";
 
 	var MidiWriter = {
@@ -588,14 +587,15 @@ import { roundToXPlaces } from 'utils/tools';
 
 		return bytes;
 	};
-
-	// Node support
-	if( typeof exports !== 'undefined' ) {
-		if( typeof module !== 'undefined' && module.exports ) {
-	      exports = module.exports = MidiWriter;
-	    }
-
-    	exports.MidiWriterJS = MidiWriter;
-  	}
-
-}).call();
+const {
+    NoteEvent,
+    ProgramChangeEvent,
+    Track,
+    Writer,
+} = MidiWriter;
+export {
+    NoteEvent,
+    ProgramChangeEvent,
+    Track,
+    Writer,
+}

@@ -11,10 +11,10 @@
     color: $palette-base-text
     appearance: none
     transition: all .25s ease-in-out
+    box-shadow: 0 4px 3px -3px rgba(0, 0, 0, .07)
 
     &:hover,
     &:focus
-        box-shadow: 0 7px 5px -3px rgba(0, 0, 0, .07)
         outline: none
 
     &.is-invalid
@@ -23,7 +23,7 @@
 .input-base--large
     font-size: rem(18px)
     max-width: 100%
-    padding: 5px
+    padding: 8px 10px
 
 .input-base--short
     max-width: 100%
@@ -33,9 +33,9 @@
     width: 200px
 
 .input-base--bare
-    background: none
-    border: none
-    border-bottom: solid 1px $palette-base-ui
+    // background: none
+    // border: none
+    // border-bottom: solid 1px $palette-base-ui
 
     &:focus
         background-color: #fff

@@ -140,6 +140,7 @@ const config = (env) => {
                 template: './src/generic/static/index.ejs',
                 inject: 'body',
                 absolutePath: isPhoneGap ? '' : '/',
+                isProduction,
             }),
             new ScriptExtHtmlWebpackPlugin({
                 defaultAttribute: 'defer'

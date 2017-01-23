@@ -54,9 +54,11 @@ class NotePanel extends Component {
                         <button className="note-panel__btn note-panel__btn--down" title="Decrease chance" onClick={e => this.onLengthAmountChange(e, -1)}></button>
                     </div>
                 </div>
-                <div className="note-panel__checkbox-container">
-                    <div className={`toggle-input u-txt-small u-txt-light ${length.isTriplet ? 'is-enabled' : ''}`} onClick={() => this.onModifierClick('isTriplet', 'isDotted')} >Triplet</div>
-                    <div className={`toggle-input u-txt-small u-txt-light ${length.isDotted ? 'is-enabled' : ''}`} onClick={() => this.onModifierClick('isDotted', 'isTriplet')} >Dotted</div>
+                <div className="note-panel__checkbox-container u-flex-row u-flex-justify-center">
+                    <div>
+                        <div className={`toggle-input u-txt-small u-txt-light ${length.isTriplet ? 'is-enabled' : ''}`} onClick={() => this.onModifierClick('isTriplet', 'isDotted')} >Triplet</div>
+                        <div className={`toggle-input u-txt-small u-txt-light ${length.isDotted ? 'is-enabled' : ''}`} onClick={() => this.onModifierClick('isDotted', 'isTriplet')} >Dotted</div>
+                    </div>
                 </div>
 
             </div>

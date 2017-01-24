@@ -25,7 +25,7 @@ class RepeatingHitsController extends Component {
             step: 0.5,
             minVal: 0,
             maxVal: 200,
-            className: 'input-base input-base--bare input-base--large input-base--short',
+            className: 'input-base input-base--bare input-base--large input-base--short\@above-alpha',
             labelClassName: 'input-label',
         }
         return (

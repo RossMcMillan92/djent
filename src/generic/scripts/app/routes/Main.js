@@ -4,6 +4,7 @@ import { Future as Task } from 'ramda-fantasy'
 import { List } from 'immutable-ext'
 
 import Expandable from 'components/Expandable'
+import Panel from 'components/Panel'
 import Spinner from 'components/Spinner'
 import SwipeableViews from 'components/SwipeableViews'
 
@@ -172,7 +173,7 @@ export default class Main extends Component {
     }
 
     getViews = (isMobileView) => {
-        const expandableTitleClass = 'title-primary u-txt-large dropdown-icon-before group-padding-x group-padding-x-small@mobile group-capped-x group-centered u-curp'
+        const expandableTitleClass = 'title-primary u-txt-large dropdown-icon-before u-curp u-no-select'
         if (this.state.childrenLoaded) {
             return isMobileView
                 ? (
@@ -186,8 +187,12 @@ export default class Main extends Component {
                             route={this.props.route}
                             googleAPIHasLoaded={this.state.googleAPIHasLoaded}
                         />
-                        <Sequences route={this.props.route} />
-                        <Instruments route={this.props.route} />
+                        <Panel>
+                            <Sequences route={this.props.route} />
+                        </Panel>
+                        <Panel>
+                            <Instruments route={this.props.route} />
+                        </Panel>
                     </SwipeableViews>
                 )
                 : (
@@ -196,24 +201,25 @@ export default class Main extends Component {
                             route={this.props.route}
                             googleAPIHasLoaded={this.state.googleAPIHasLoaded}
                         />
-                        <div className="group-padding-y u-bdrb">
+                        <Panel className="u-bdrb">
                             <Expandable
                                 title="Sequences"
                                 titleClassName={expandableTitleClass}
                                 enableStateSave={true}
+                                isExpanded={true}
                             >
-                                <Sequences route={this.props.route} />
+                                <Sequences route={this.props.route} className="u-mt1" />
                             </Expandable>
-                        </div>
-                        <div className="group-padding-y u-bdrb">
+                        </Panel>
+                        <Panel>
                             <Expandable
                                 title="Instruments"
                                 titleClassName={expandableTitleClass}
                                 enableStateSave={true}
                             >
-                                <Instruments route={this.props.route} />
+                                <Instruments route={this.props.route} className="u-mt1" />
                             </Expandable>
-                        </div>
+                        </Panel>
                     </div>
                 )
         }

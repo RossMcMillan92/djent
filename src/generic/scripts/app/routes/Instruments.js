@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-
 import InstrumentList from 'components/InstrumentList'
-import Panel from 'components/Panel'
 
 export default class Instruments extends Component {
     static contextTypes = {
@@ -9,7 +7,7 @@ export default class Instruments extends Component {
     }
 
     render = () => (
-        <Panel>
+        <div className={ this.props.className }>
             <InstrumentList
                 onSoundToggle={ this.props.actions.updateInstrumentSound }
                 actions={{
@@ -22,6 +20,6 @@ export default class Instruments extends Component {
                 sequences={this.props.sequences}
                 instruments={this.props.instruments}
             />
-        </Panel>
+        </div>
     )
 }

@@ -22,7 +22,7 @@ class FadeOutDurationController extends Component {
             step: 25,
             minVal: 0,
             maxVal: 2000,
-            className: 'input-base input-base--bare input-base--large input-base--short',
+            className: 'input-base input-base--bare input-base--large input-base--short\@above-alpha',
             labelClassName: 'input-label',
         }
         return (

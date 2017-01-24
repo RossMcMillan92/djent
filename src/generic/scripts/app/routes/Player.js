@@ -25,7 +25,7 @@ export default class Player extends Component {
             <div>
                 <Panel sizeY="small">
                     <div className="u-flex-row u-flex-wrap u-flex-justify">
-                        <div className="group-spacing-y-small u-mr2">
+                        <div className="group-spacing-y-small u-mr2@above-alpha">
                             <PresetController
                                 activePresetID={ activePresetID }
                                 onUpdate={ actions.applyPreset }
@@ -33,20 +33,22 @@ export default class Player extends Component {
                             />
                         </div>
 
-                        <div className="group-spacing-y-small u-mr2">
-                            <BeatsController
-                                labelPrefix='Total '
-                                onUpdate={ actions.updateSequence }
-                                sequence={ totalSequence }
-                            />
-                        </div>
-
-                        <div className="group-spacing-y-small u-flex-row u-flex-end">
-                            <div className="u-mr1">
-                                <BPMController />
+                        <div className="u-flex-row u-flex-wrap">
+                            <div className="group-spacing-y-small u-mr2@above-alpha">
+                                <BeatsController
+                                    labelPrefix='Total '
+                                    onUpdate={ actions.updateSequence }
+                                    sequence={ totalSequence }
+                                />
                             </div>
-                            <div className="">
-                                <BPMTapper onUpdate={actions.updateBPM} />
+
+                            <div className="group-spacing-y-small u-flex-row u-flex-end">
+                                <div className="u-mr1">
+                                    <BPMController />
+                                </div>
+                                <div className="">
+                                    <BPMTapper onUpdate={actions.updateBPM} />
+                                </div>
                             </div>
                         </div>
                     </div>

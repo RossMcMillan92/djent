@@ -20,7 +20,7 @@ class VolumeController extends Component {
             step: 10,
             minVal: 0,
             maxVal: 100,
-            className: 'input-base input-base--bare input-base--large input-base--short',
+            className: 'input-base input-base--bare input-base--large input-base--short\@above-alpha',
             labelClassName: 'input-label',
         }
 

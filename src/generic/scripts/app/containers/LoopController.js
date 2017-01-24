@@ -18,12 +18,10 @@ const getLoopModeIconType = loopMode =>
 
 const LoopController = (props) => {
     const { actions, loopMode } = props
-    console.log('LOOPMODE', loopMode)
 
     const onClick = compose(
         map(actions.updateloopMode),
         setLocalStorageIO('loopMode'),
-        trace('loopMode:'),
         toggleLoopMode,
     )
 
@@ -35,7 +33,6 @@ const LoopController = (props) => {
 
     const loopModeIcon = getLoopModeIconType(loopMode)
     const iconClassName = `button-primary__svg-icon button-primary__svg-icon--large ${loopMode !== 0 ? 'u-txt-positive' : ''}`
-    console.log('ICONCLASSNAME', iconClassName)
     return (
         <button { ...inputProps }>
             <SVG icon={loopModeIcon} className={`${loopMode !== 0 ? 'lmao' : ''} ${iconClassName}`} />

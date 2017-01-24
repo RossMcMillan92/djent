@@ -51,15 +51,17 @@ class Expandable extends Component {
 
     constructor(props) {
         super()
-        const localStorageValue = getLSItemOrDefault(false, props.title)
+        const defaultValue = getLSItemOrDefault(props.isExpanded, props.title).runIO()
 
         this.state = {
-            isExpanded: props.isExpanded || (props.enableStateSave && localStorageValue.runIO())
+            isExpanded: defaultValue
         }
     }
 
     componentWillUpdate = (nextProps) => {
-        if (nextProps.isExpanded !== this.state.isExpanded && nextProps.isExpanded !== undefined && this.isPristine) {
+        const propsHaveChanged = nextProps.isExpanded !== this.props.isExpanded
+        const propsAreDifferent = nextProps.isExpanded !== this.state.isExpanded
+        if (propsHaveChanged && propsAreDifferent && nextProps.isExpanded !== undefined && this.isPristine) {
             this.setState({ isExpanded: nextProps.isExpanded })
         }
     }

@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { logError } from 'utils/tools'
 
 class SVG extends Component {
-    shouldComponentUpdate = nextProps => nextProps.icon !== this.props.icon
+    shouldComponentUpdate = nextProps =>
+        nextProps.icon !== this.props.icon
+        || nextProps.className !== this.props.className
 
     render = () => {
         const { icon, className } = this.props

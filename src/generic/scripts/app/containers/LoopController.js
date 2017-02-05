@@ -10,11 +10,19 @@ import SVG from 'components/SVG'
 //    toggleLoopMode :: loopMode -> loopMode
 const toggleLoopMode = loopMode => loopMode + 1 <= 2 ? loopMode + 1 : 0
 
-//    getLoopModeIcon :: loopMode -> String
+//    getLoopModeIconType :: loopMode -> String
 const getLoopModeIconType = loopMode =>
     loopMode < 2
         ? 'loop'
         : 'loop_single'
+
+//    getLoopModeLabel :: loopMode -> String
+const getLoopModeLabel = loopMode =>
+    loopMode === 0
+        ? 'Loop mode disabled'
+        : loopMode === 1
+            ? 'Loop mode enabled'
+            : 'Loop mode single track enabled'
 
 const LoopController = (props) => {
     const { actions, loopMode } = props
@@ -27,6 +35,7 @@ const LoopController = (props) => {
 
     const inputProps = {
         id: 'loop',
+        title: getLoopModeLabel(loopMode),
         className: 'button-primary button-primary--alpha-dark',
         onClick: () => onClick(loopMode).runIO(),
     }

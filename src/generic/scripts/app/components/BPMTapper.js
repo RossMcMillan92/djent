@@ -41,7 +41,7 @@ class BPMTapper extends Component {
 
     render = () => {
         const props = {
-            id: 'bpm',
+            id: 'bpm-tapper',
             label: 'BPM',
             type: 'number',
             className: 'button-primary button-primary--small',

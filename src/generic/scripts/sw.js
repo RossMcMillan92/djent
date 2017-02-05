@@ -16,6 +16,8 @@
 
     // The route for the assets
     toolbox.router.get('/assets/(.*)', global.toolbox.fastest)
+    toolbox.router.get('/index.html', global.toolbox.networkFirst)
+    toolbox.router.get('/sw.js', global.toolbox.networkFirst)
 
     global.toolbox.router.default = global.toolbox.fastest
 

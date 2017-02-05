@@ -71,8 +71,8 @@ class SequencePanel extends Component {
                         allowedLengths={this.props.sequence.allowedLengths}
                     />
 
-                    <div className="u-flex-row u-flex-row u-flex-wrap u-flex-justify">
-                        <div className="u-mr1 u-mb05">
+                    <div className="u-flex-row u-flex-row u-flex-wrap">
+                        <div className="u-mr2@above-alpha u-mb05">
                             <BeatsController
                                 onUpdate={ this.props.actions.updateSequence }
                                 sequence={ this.props.sequence }

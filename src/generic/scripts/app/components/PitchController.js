@@ -12,14 +12,14 @@ class PitchController extends Component {
     render = () => {
         const props = {
             label: 'Pitch',
-            id: 'pitch',
+            id: `pitch-${this.props.instrumentID}`,
             type: 'number',
             defaultValue: this.props.pitch ? this.props.pitch / 100 : 0,
             onChange: this.onChange,
             step: 1,
             minVal: -12,
             maxVal: 12,
-            className: 'input-base input-base--bare input-base--large input-base--short\@above-alpha',
+            className: 'input-base input-base--bare input-base--large input-base--short@above-alpha',
             labelClassName: 'input-label',
         }
         return (

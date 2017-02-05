@@ -49,7 +49,7 @@ class InputBox extends Component {
     throttledOnChange = this.props.onChange ? throttle(this.props.onChange, 100) : () => {}
 
     render = () => {
-        const defaultProps   = {
+        const props   = {
             id                 : '',
             type               : 'text',
             defaultValue       : '',
@@ -60,8 +60,8 @@ class InputBox extends Component {
             labelClassName     : 'input-label-base',
             ...this.props,
         }
-        const { containerClassName, labelClassName, label, labelTitle, id } = defaultProps
-        const inputProps = filterOutKeys(['containerClassName', 'labelClassName', 'labelTitle', 'minVal', 'maxVal'], defaultProps)
+        const { containerClassName, labelClassName, label, labelTitle, id } = props
+        const inputProps = filterOutKeys(['containerClassName', 'labelClassName', 'labelTitle', 'minVal', 'maxVal'], props)
 
         return (
             <div className={containerClassName}>

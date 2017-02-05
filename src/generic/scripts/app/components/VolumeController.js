@@ -13,14 +13,14 @@ class VolumeController extends Component {
     render = () => {
         const props = {
             label: 'Volume %',
-            id: 'volume',
+            id: `volume-${this.props.instrumentID}`,
             type: 'number',
             defaultValue: typeof this.props.volume !== 'undefined' ? this.props.volume * 100 : 100,
             onChange: this.onChange,
             step: 10,
             minVal: 0,
             maxVal: 100,
-            className: 'input-base input-base--bare input-base--large input-base--short\@above-alpha',
+            className: 'input-base input-base--bare input-base--large input-base--short@above-alpha',
             labelClassName: 'input-label',
         }
 

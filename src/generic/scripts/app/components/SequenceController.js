@@ -17,7 +17,7 @@ class SequenceController extends Component {
                 const isEnabled = enabledSequences.includes(sequenceID)
 
                 return (
-                    <div className={`toggle-input ${isEnabled ? 'is-enabled' : ''}`} onClick={() => this.onSequenceClick({ enabledSequences, sequenceID })} key={i}>
+                    <div className={`toggle-input u-txt-small ${isEnabled ? 'is-enabled' : ''}`} onClick={() => this.onSequenceClick({ enabledSequences, sequenceID })} key={i}>
                         { sequence.description ? unescape(sequence.description) : sequence.id }
                     </div>
                 )

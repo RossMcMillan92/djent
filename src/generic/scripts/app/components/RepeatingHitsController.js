@@ -18,14 +18,14 @@ class RepeatingHitsController extends Component {
         const props = {
             label: 'Repeating Hits',
             labelTitle: 'Each sample will repeat for x number of beats',
-            id: 'repeatHitTypeForXBeat',
+            id: `repeatHitTypeForXBeat-${this.props.instrumentID}`,
             type: 'number',
             defaultValue: this.props.repeatHitTypeForXBeat ? this.props.repeatHitTypeForXBeat : 0,
             onChange: this.onChange,
             step: 0.5,
             minVal: 0,
             maxVal: 200,
-            className: 'input-base input-base--bare input-base--large input-base--short\@above-alpha',
+            className: 'input-base input-base--bare input-base--large input-base--short@above-alpha',
             labelClassName: 'input-label',
         }
         return (

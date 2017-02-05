@@ -32,7 +32,7 @@ export default class Sequences extends Component {
             ))
 
         const addSequenceButton = this.sequences.length < 6
-            ? <button className="button-primary button-primary--full button-primary--gamma" onClick={this.addNewSequence}>Add New Sequence</button>
+            ? <button className="button-primary button-primary--full button-primary--gamma" onClick={this.addNewSequence}>Add Sequence</button>
             : null
 
         return (

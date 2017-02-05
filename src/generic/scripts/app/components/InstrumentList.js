@@ -22,6 +22,18 @@ const getCategoriesFromSounds = (cats, sound) => {
     return cats
 }
 
+const renderSound = (instrument, onSoundToggle) => sound => (
+    <div
+        onClick={() => onSoundToggle(sound.id, instrument.id)}
+        className="block-list__item"
+        key={sound.id}
+    >
+        <div className="block-list__body">
+            <div className={`toggle-input ${sound.enabled ? 'is-enabled' : ''}`}>{sound.description || sound.id}</div>
+        </div>
+    </div>
+)
+
 const renderSoundsInCategories = curry((instrument, onSoundToggle, id, catIndex, arr) => {
     const sounds = instrument.sounds
         .filter(sound => sound.category === id)
@@ -30,32 +42,23 @@ const renderSoundsInCategories = curry((instrument, onSoundToggle, id, catIndex,
         || `${(instrument.description
         || capitalize(instrument.id))}`
 
-    const renderSound = sound => (
-        <li
-            onClick={() => onSoundToggle(sound.id, instrument.id)}
-            className={`
-                toggle-input
-                ${sound.enabled ? 'is-enabled' : ''}`
-            }
-            key={sound.id}
-        >{sound.description || sound.id}</li>
-    )
+    const renderInsturmentSound = renderSound(instrument, onSoundToggle)
 
     return (
         <Expandable
             title={ title }
             className={`
-                expandable-list
+                expandable-panel
                 ${catIndex !== arr.length - 1 ? 'u-mb05' : ''}
             `}
-            titleClassName="expandable-list__title"
-            bodyClassName="expandable-list__body"
+            titleClassName="expandable-panel__title"
+            bodyClassName="expandable-panel__body"
             isExpanded={isExpanded}
             key={catIndex}
         >
-            <ul className="cleanlist">
-                { sounds.map(renderSound) }
-            </ul>
+            <div className="block-list block-list--compact">
+                { sounds.map(renderInsturmentSound) }
+            </div>
         </Expandable>
     )
 })
@@ -102,23 +105,27 @@ const renderSettingsPane = (instrument, actions) => {
         <div className="u-flex-row u-flex-wrap">
             <div className="u-mr1 u-mb05">
                 <VolumeController
+                    instrumentID={instrument.id}
                     volume={instrument.volume}
                     onUpdate={onInstrumentVolumeUpdate}
                 />
             </div>
             <div className="u-mr1 u-mb05">
                 <PitchController
+                    instrumentID={instrument.id}
                     pitch={instrument.pitch}
                     onUpdate={onPitchUpdate}
                 />
             </div>
             <div className="u-mr1 u-mb05">
                 <RepeatingHitsController
+                    instrumentID={instrument.id}
                     repeatHitTypeForXBeat={instrument.repeatHitTypeForXBeat}
                     onUpdate={onRepeatingHitsUpdate}
                 />
             </div>
             <FadeOutDurationController
+                instrumentID={instrument.id}
                 fadeOutDuration={ instrument.fadeOutDuration }
                 onUpdate={ onFadeOutDurationUpdate }
             />

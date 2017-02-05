@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<title>DJEN - Metal Generator</title>
 
+	<% if(true) { %>
 	<script>
 		if ('serviceWorker' in navigator) {
 			navigator.serviceWorker.register('/sw.js')
@@ -11,9 +12,10 @@
 				.catch(function (e) { console.log(e, 'sw.js NOT registered') });
 		}
 	</script>
+	<% } %>
 
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,600" rel="stylesheet" type="text/css"media="screen" async>
-	<link rel="manifest" href="/manifest.json">
+	<link rel="manifest" href="<%= htmlWebpackPlugin.options.absolutePath %>manifest.json">
 
 	<meta name="theme-color" content="#1e1e1e">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
@@ -45,19 +47,19 @@
 	<meta name="apple-mobile-web-app-title" content="DJEN">
 	<meta name="format-detection" content="telephone=no">
 
-	<link rel="apple-touch-icon" sizes="57x57" href="/assets/images/icons/57.png">
-	<link rel="apple-touch-icon" sizes="60x60" href="/assets/images/icons/60.png">
-	<link rel="apple-touch-icon" sizes="72x72" href="/assets/images/icons/72.png">
-	<link rel="apple-touch-icon" sizes="76x76" href="/assets/images/icons/76.png">
-	<link rel="apple-touch-icon" sizes="114x114" href="/assets/images/icons/114.png">
-	<link rel="apple-touch-icon" sizes="120x120" href="/assets/images/icons/120.png">
-	<link rel="apple-touch-icon" sizes="144x144" href="/assets/images/icons/144.png">
-	<link rel="apple-touch-icon" sizes="152x152" href="/assets/images/icons/152.png">
-	<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/icons/180.png">
-	<link rel="icon" type="image/png" sizes="192x192"  href="/assets/images/icons/192.png">
-	<link rel="icon" type="image/png" sizes="96x96" href="/assets/images/icons/96.png">
+	<link rel="apple-touch-icon" sizes="57x57" href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/180.png">
+	<link rel="icon" type="image/png" sizes="192x192"  href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/192.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/96.png">
 	<meta name="msapplication-TileColor" content="#1e1e1e">
-	<meta name="msapplication-TileImage" content="/assets/images/icons/144.png">
+	<meta name="msapplication-TileImage" content="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/144.png">
 </head>
 <body class="preload">
 	<div id="root"></div>

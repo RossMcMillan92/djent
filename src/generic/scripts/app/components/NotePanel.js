@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 
+import getAbsolutePath from 'modules/getAbsolutePath'
 import { capitalize } from 'utils/tools'
 
 const getNewAllowedLengths = (allowedLengths, id, prop, value) =>
@@ -9,6 +10,8 @@ const getNewAllowedLengths = (allowedLengths, id, prop, value) =>
         newObj[prop] = value
         return newObj
     })
+
+const absolutePath = getAbsolutePath()
 
 class NotePanel extends Component {
     onLengthAmountChange = (event, value) => {
@@ -43,7 +46,7 @@ class NotePanel extends Component {
 
         return (
             <div className={`note-panel ${isOn ? '' : 'note-panel--disabled'}`}>
-                <img className="note-panel__svg" src={`/assets/images/notes/${length.name}.svg`} alt={noteName} title={noteName} />
+                <img className="note-panel__svg" src={`${absolutePath}assets/images/notes/${length.name}.svg`} alt={noteName} title={noteName} />
                 <div className="note-panel__amount-container">
                     <span className="note-panel__amount" title="Chance">{percentage}%</span>
                     <div className="note-panel__btn-container">
@@ -51,9 +54,11 @@ class NotePanel extends Component {
                         <button className="note-panel__btn note-panel__btn--down" title="Decrease chance" onClick={e => this.onLengthAmountChange(e, -1)}></button>
                     </div>
                 </div>
-                <div className="note-panel__checkbox-container">
-                    <div className={`toggle-input u-txt-small u-txt-light ${length.isTriplet ? 'is-enabled' : ''}`} onClick={() => this.onModifierClick('isTriplet', 'isDotted')} >Triplet</div>
-                    <div className={`toggle-input u-txt-small u-txt-light ${length.isDotted ? 'is-enabled' : ''}`} onClick={() => this.onModifierClick('isDotted', 'isTriplet')} >Dotted</div>
+                <div className="note-panel__checkbox-container u-flex-row u-flex-justify-center">
+                    <div>
+                        <div className={`toggle-input u-txt-small u-txt-light ${length.isTriplet ? 'is-enabled' : ''}`} onClick={() => this.onModifierClick('isTriplet', 'isDotted')} >Triplet</div>
+                        <div className={`toggle-input u-txt-small u-txt-light ${length.isDotted ? 'is-enabled' : ''}`} onClick={() => this.onModifierClick('isDotted', 'isTriplet')} >Dotted</div>
+                    </div>
                 </div>
 
             </div>

@@ -1,18 +1,19 @@
-import settings from 'settings'
+import getAbsolutePath from 'modules/getAbsolutePath'
 
 const rootOctave = 1
 const getMidiNote = (note, octave) => note + (rootOctave + octave)
 
-const kickMidiNote = 'C2'
-const snareMidiNote = 'D2'
-const hihatMidiNote = 'A#2'
+const kickMidiNote   = 'C2'
+const snareMidiNote  = 'D2'
+const hihatMidiNote  = 'A#2'
 const crash1MidiNote = 'C#3'
 const crash2MidiNote = 'A3'
-const chinaMidiNote = 'E3'
+const chinaMidiNote  = 'E3'
 
-const getSoundURL = path => settings.useExternalSoundFiles
-    ? `https://raw.githubusercontent.com/RossMcMillan92/djent/master/src/generic${path}`
-    : path
+const absolutePath = getAbsolutePath()
+const getSoundURL = path => absolutePath === '/'
+    ? `https://raw.githubusercontent.com/RossMcMillan92/djent/master/src/generic/${path}`
+    : `${absolutePath}${path}`
 
 const getSound = (id, description, path, category, midi) => ({
     id,
@@ -46,7 +47,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-0-muted',
                 'Fret 0',
-                '/assets/audio/guitar/sixth-0-muted.mp3',
+                'assets/audio/guitar/sixth-0-muted.mp3',
                 'Sixth string [Muted]',
                 {
                     pitch: [ getMidiNote('G#', 0), getMidiNote('D#', 1), getMidiNote('G#', 1) ],
@@ -56,7 +57,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-1-muted',
                 'Fret 1',
-                '/assets/audio/guitar/sixth-1-muted.mp3',
+                'assets/audio/guitar/sixth-1-muted.mp3',
                 'Sixth string [Muted]',
                 {
                     pitch: [ getMidiNote('A', 0), getMidiNote('E', 1), getMidiNote('A', 1) ],
@@ -66,7 +67,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-2-muted',
                 'Fret 2',
-                '/assets/audio/guitar/sixth-2-muted.mp3',
+                'assets/audio/guitar/sixth-2-muted.mp3',
                 'Sixth string [Muted]',
                 {
                     pitch: [ getMidiNote('A#', 0), getMidiNote('F', 1), getMidiNote('A#', 1) ],
@@ -76,7 +77,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-3-muted',
                 'Fret 3',
-                '/assets/audio/guitar/sixth-3-muted.mp3',
+                'assets/audio/guitar/sixth-3-muted.mp3',
                 'Sixth string [Muted]',
                 {
                     pitch: [ getMidiNote('B', 0), getMidiNote('F#', 1), getMidiNote('B', 1) ],
@@ -86,7 +87,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-4-muted',
                 'Fret 4',
-                '/assets/audio/guitar/sixth-4-muted.mp3',
+                'assets/audio/guitar/sixth-4-muted.mp3',
                 'Sixth string [Muted]',
                 {
                     pitch: [ getMidiNote('C', 1), getMidiNote('G', 1), getMidiNote('C', 2) ],
@@ -96,7 +97,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-8-muted',
                 'Fret 8',
-                '/assets/audio/guitar/sixth-8-muted.mp3',
+                'assets/audio/guitar/sixth-8-muted.mp3',
                 'Sixth string [Muted]',
                 {
                     pitch: [ getMidiNote('E', 1), getMidiNote('B', 1), getMidiNote('E', 2) ],
@@ -106,7 +107,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-0-open',
                 'Fret 0',
-                '/assets/audio/guitar/sixth-0-open.mp3',
+                'assets/audio/guitar/sixth-0-open.mp3',
                 'Sixth string [Open]',
                 {
                     pitch: [ getMidiNote('G#', 0) ],
@@ -115,7 +116,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-1-open',
                 'Fret 1',
-                '/assets/audio/guitar/sixth-1-open.mp3',
+                'assets/audio/guitar/sixth-1-open.mp3',
                 'Sixth string [Open]',
                 {
                     pitch: [ getMidiNote('A', 0) ],
@@ -124,7 +125,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-2-open',
                 'Fret 2',
-                '/assets/audio/guitar/sixth-2-open.mp3',
+                'assets/audio/guitar/sixth-2-open.mp3',
                 'Sixth string [Open]',
                 {
                     pitch: [ getMidiNote('A#', 0) ],
@@ -133,7 +134,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-3-open',
                 'Fret 3',
-                '/assets/audio/guitar/sixth-3-open.mp3',
+                'assets/audio/guitar/sixth-3-open.mp3',
                 'Sixth string [Open]',
                 {
                     pitch: [ getMidiNote('B', 0) ],
@@ -142,7 +143,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-4-open',
                 'Fret 4',
-                '/assets/audio/guitar/sixth-4-open.mp3',
+                'assets/audio/guitar/sixth-4-open.mp3',
                 'Sixth string [Open]',
                 {
                     pitch: [ getMidiNote('C', 1) ],
@@ -151,7 +152,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-5-open',
                 'Fret 5',
-                '/assets/audio/guitar/sixth-5-open.mp3',
+                'assets/audio/guitar/sixth-5-open.mp3',
                 'Sixth string [Open]',
                 {
                     pitch: [ getMidiNote('C#', 1) ],
@@ -160,7 +161,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-6-open',
                 'Fret 6',
-                '/assets/audio/guitar/sixth-6-open.mp3',
+                'assets/audio/guitar/sixth-6-open.mp3',
                 'Sixth string [Open]',
                 {
                     pitch: [ getMidiNote('D', 1) ],
@@ -169,7 +170,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-7-open',
                 'Fret 7',
-                '/assets/audio/guitar/sixth-7-open.mp3',
+                'assets/audio/guitar/sixth-7-open.mp3',
                 'Sixth string [Open]',
                 {
                     pitch: [ getMidiNote('D#', 1) ],
@@ -178,7 +179,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-8-open',
                 'Fret 8',
-                '/assets/audio/guitar/sixth-8-open.mp3',
+                'assets/audio/guitar/sixth-8-open.mp3',
                 'Sixth string [Open]',
                 {
                     pitch: [ getMidiNote('E', 1) ],
@@ -187,7 +188,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-9-open',
                 'Fret 9',
-                '/assets/audio/guitar/sixth-9-open.mp3',
+                'assets/audio/guitar/sixth-9-open.mp3',
                 'Sixth string [Open]',
                 {
                     pitch: [ getMidiNote('F', 1) ],
@@ -196,7 +197,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-10-open',
                 'Fret 10',
-                '/assets/audio/guitar/sixth-10-open.mp3',
+                'assets/audio/guitar/sixth-10-open.mp3',
                 'Sixth string [Open]',
                 {
                     pitch: [ getMidiNote('F#', 1) ],
@@ -205,7 +206,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-11-open',
                 'Fret 11',
-                '/assets/audio/guitar/sixth-11-open.mp3',
+                'assets/audio/guitar/sixth-11-open.mp3',
                 'Sixth string [Open]',
                 {
                     pitch: [ getMidiNote('G', 1) ],
@@ -214,7 +215,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-12-open',
                 'Fret 12',
-                '/assets/audio/guitar/sixth-12-open.mp3',
+                'assets/audio/guitar/sixth-12-open.mp3',
                 'Sixth string [Open]',
                 {
                     pitch: [ getMidiNote('G#', 1) ],
@@ -223,7 +224,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-13-open',
                 'Fret 13',
-                '/assets/audio/guitar/sixth-13-open.mp3',
+                'assets/audio/guitar/sixth-13-open.mp3',
                 'Sixth string [Open]',
                 {
                     pitch: [ getMidiNote('A', 1) ],
@@ -232,7 +233,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-14-open',
                 'Fret 14',
-                '/assets/audio/guitar/sixth-14-open.mp3',
+                'assets/audio/guitar/sixth-14-open.mp3',
                 'Sixth string [Open]',
                 {
                     pitch: [ getMidiNote('A#', 1) ],
@@ -241,7 +242,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-15-open',
                 'Fret 15',
-                '/assets/audio/guitar/sixth-15-open.mp3',
+                'assets/audio/guitar/sixth-15-open.mp3',
                 'Sixth string [Open]',
                 {
                     pitch: [ getMidiNote('B', 1) ],
@@ -250,7 +251,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-0-chord',
                 'Fret 0',
-                '/assets/audio/guitar/sixth-0-chord.mp3',
+                'assets/audio/guitar/sixth-0-chord.mp3',
                 'Sixth string [Chord]',
                 {
                     pitch: [
@@ -266,7 +267,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-1-chord',
                 'Fret 1',
-                '/assets/audio/guitar/sixth-1-chord.mp3',
+                'assets/audio/guitar/sixth-1-chord.mp3',
                 'Sixth string [Chord]',
                 {
                     pitch: [
@@ -281,7 +282,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-2-chord',
                 'Fret 2',
-                '/assets/audio/guitar/sixth-2-chord.mp3',
+                'assets/audio/guitar/sixth-2-chord.mp3',
                 'Sixth string [Chord]',
                 {
                     pitch: [
@@ -296,7 +297,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-3-chord',
                 'Fret 3',
-                '/assets/audio/guitar/sixth-3-chord.mp3',
+                'assets/audio/guitar/sixth-3-chord.mp3',
                 'Sixth string [Chord]',
                 {
                     pitch: [
@@ -311,7 +312,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-4-chord',
                 'Fret 4',
-                '/assets/audio/guitar/sixth-4-chord.mp3',
+                'assets/audio/guitar/sixth-4-chord.mp3',
                 'Sixth string [Chord]',
                 {
                     pitch: [
@@ -326,7 +327,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-5-chord',
                 'Fret 5',
-                '/assets/audio/guitar/sixth-5-chord.mp3',
+                'assets/audio/guitar/sixth-5-chord.mp3',
                 'Sixth string [Chord]',
                 {
                     pitch: [
@@ -341,7 +342,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-6-chord',
                 'Fret 6',
-                '/assets/audio/guitar/sixth-6-chord.mp3',
+                'assets/audio/guitar/sixth-6-chord.mp3',
                 'Sixth string [Chord]',
                 {
                     pitch: [
@@ -356,7 +357,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-7-chord',
                 'Fret 7',
-                '/assets/audio/guitar/sixth-7-chord.mp3',
+                'assets/audio/guitar/sixth-7-chord.mp3',
                 'Sixth string [Chord]',
                 {
                     pitch: [
@@ -371,7 +372,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-8-chord',
                 'Fret 8',
-                '/assets/audio/guitar/sixth-8-chord.mp3',
+                'assets/audio/guitar/sixth-8-chord.mp3',
                 'Sixth string [Chord]',
                 {
                     pitch: [
@@ -386,7 +387,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-9-chord',
                 'Fret 9',
-                '/assets/audio/guitar/sixth-9-chord.mp3',
+                'assets/audio/guitar/sixth-9-chord.mp3',
                 'Sixth string [Chord]',
                 {
                     pitch: [
@@ -401,7 +402,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-10-chord',
                 'Fret 10',
-                '/assets/audio/guitar/sixth-10-chord.mp3',
+                'assets/audio/guitar/sixth-10-chord.mp3',
                 'Sixth string [Chord]',
                 {
                     pitch: [
@@ -416,7 +417,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-11-chord',
                 'Fret 11',
-                '/assets/audio/guitar/sixth-11-chord.mp3',
+                'assets/audio/guitar/sixth-11-chord.mp3',
                 'Sixth string [Chord]',
                 {
                     pitch: [
@@ -431,7 +432,7 @@ const defaultInstruments = [
             getSound(
                 'sixth-12-chord',
                 'Fret 12',
-                '/assets/audio/guitar/sixth-12-chord.mp3',
+                'assets/audio/guitar/sixth-12-chord.mp3',
                 'Sixth string [Chord]',
                 {
                     pitch: [
@@ -447,7 +448,7 @@ const defaultInstruments = [
             getSound(
                 'fifth-5-open',
                 'Fret 5',
-                '/assets/audio/guitar/fifth-5-open.mp3',
+                'assets/audio/guitar/fifth-5-open.mp3',
                 'Fifth string [Open]',
                 {
                     pitch: [ getMidiNote('G#', 1) ],
@@ -456,7 +457,7 @@ const defaultInstruments = [
             getSound(
                 'fifth-6-open',
                 'Fret 6',
-                '/assets/audio/guitar/fifth-6-open.mp3',
+                'assets/audio/guitar/fifth-6-open.mp3',
                 'Fifth string [Open]',
                 {
                     pitch: [ getMidiNote('A', 1) ],
@@ -465,7 +466,7 @@ const defaultInstruments = [
             getSound(
                 'fifth-7-open',
                 'Fret 7',
-                '/assets/audio/guitar/fifth-7-open.mp3',
+                'assets/audio/guitar/fifth-7-open.mp3',
                 'Fifth string [Open]',
                 {
                     pitch: [ getMidiNote('A#', 1) ],
@@ -474,7 +475,7 @@ const defaultInstruments = [
             getSound(
                 'fifth-8-open',
                 'Fret 8',
-                '/assets/audio/guitar/fifth-8-open.mp3',
+                'assets/audio/guitar/fifth-8-open.mp3',
                 'Fifth string [Open]',
                 {
                     pitch: [ getMidiNote('B', 1) ],
@@ -483,7 +484,7 @@ const defaultInstruments = [
             getSound(
                 'fifth-9-open',
                 'Fret 9',
-                '/assets/audio/guitar/fifth-9-open.mp3',
+                'assets/audio/guitar/fifth-9-open.mp3',
                 'Fifth string [Open]',
                 {
                     pitch: [ getMidiNote('C', 2) ],
@@ -492,7 +493,7 @@ const defaultInstruments = [
             getSound(
                 'fifth-10-open',
                 'Fret 10',
-                '/assets/audio/guitar/fifth-10-open.mp3',
+                'assets/audio/guitar/fifth-10-open.mp3',
                 'Fifth string [Open]',
                 {
                     pitch: [ getMidiNote('Db', 2) ],
@@ -501,7 +502,7 @@ const defaultInstruments = [
             getSound(
                 'fifth-11-open',
                 'Fret 11',
-                '/assets/audio/guitar/fifth-11-open.mp3',
+                'assets/audio/guitar/fifth-11-open.mp3',
                 'Fifth string [Open]',
                 {
                     pitch: [ getMidiNote('D', 2) ],
@@ -510,7 +511,7 @@ const defaultInstruments = [
             getSound(
                 'fifth-12-open',
                 'Fret 12',
-                '/assets/audio/guitar/fifth-12-open.mp3',
+                'assets/audio/guitar/fifth-12-open.mp3',
                 'Fifth string [Open]',
                 {
                     pitch: [ getMidiNote('Eb', 2) ],
@@ -520,7 +521,7 @@ const defaultInstruments = [
             getSound(
                 'third-7-open',
                 'Fret 7',
-                '/assets/audio/guitar/third-7-open.mp3',
+                'assets/audio/guitar/third-7-open.mp3',
                 'Third string [Open]',
                 {
                     pitch: [ getMidiNote('G#', 2) ],
@@ -529,7 +530,7 @@ const defaultInstruments = [
             getSound(
                 'third-8-open',
                 'Fret 8',
-                '/assets/audio/guitar/third-8-open.mp3',
+                'assets/audio/guitar/third-8-open.mp3',
                 'Third string [Open]',
                 {
                     pitch: [ getMidiNote('A', 2) ],
@@ -538,7 +539,7 @@ const defaultInstruments = [
             getSound(
                 'third-9-open',
                 'Fret 9',
-                '/assets/audio/guitar/third-9-open.mp3',
+                'assets/audio/guitar/third-9-open.mp3',
                 'Third string [Open]',
                 {
                     pitch: [ getMidiNote('A#', 2) ],
@@ -547,7 +548,7 @@ const defaultInstruments = [
             getSound(
                 'third-10-open',
                 'Fret 10',
-                '/assets/audio/guitar/third-10-open.mp3',
+                'assets/audio/guitar/third-10-open.mp3',
                 'Third string [Open]',
                 {
                     pitch: [ getMidiNote('B', 2) ],
@@ -557,7 +558,7 @@ const defaultInstruments = [
             getSound(
                 'third-7-bend',
                 'Fret 7',
-                '/assets/audio/guitar/third-7-bend.mp3',
+                'assets/audio/guitar/third-7-bend.mp3',
                 'Third string [Bend]',
                 {
                     pitch: [ getMidiNote('G#', 2) ],
@@ -566,7 +567,7 @@ const defaultInstruments = [
             getSound(
                 'third-8-bend',
                 'Fret 8',
-                '/assets/audio/guitar/third-8-bend.mp3',
+                'assets/audio/guitar/third-8-bend.mp3',
                 'Third string [Bend]',
                 {
                     pitch: [ getMidiNote('A', 2) ],
@@ -576,7 +577,7 @@ const defaultInstruments = [
             getSound(
                 'dissonance-10',
                 'Dissonance fret 10',
-                '/assets/audio/guitar/dissonance-10.mp3',
+                'assets/audio/guitar/dissonance-10.mp3',
                 'Misc',
                 {
                     pitch: [ getMidiNote('G#', 3), getMidiNote('G', 3) ],
@@ -586,7 +587,7 @@ const defaultInstruments = [
             getSound(
                 'dissonance-16',
                 'Dissonance fret 16',
-                '/assets/audio/guitar/dissonance-16.mp3',
+                'assets/audio/guitar/dissonance-16.mp3',
                 'Misc',
                 {
                     pitch: [ getMidiNote('G#', 3), getMidiNote('G', 3) ],
@@ -597,7 +598,7 @@ const defaultInstruments = [
             getSound(
                 'scratch',
                 'Scratch',
-                '/assets/audio/guitar/scratch.mp3',
+                'assets/audio/guitar/scratch.mp3',
                 'Misc',
                 {
                     pitch: [ getMidiNote('G#', 0), getMidiNote('D#', 1), getMidiNote('G#', 1) ],
@@ -617,7 +618,7 @@ const defaultInstruments = [
             getSound(
                 'gs3',
                 'G#3',
-                '/assets/audio/lead-guitar/lead-gs3.mp3',
+                'assets/audio/lead-guitar/lead-gs3.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('G#', 2) ],
@@ -626,7 +627,7 @@ const defaultInstruments = [
             getSound(
                 'a4',
                 'A4',
-                '/assets/audio/lead-guitar/lead-a4.mp3',
+                'assets/audio/lead-guitar/lead-a4.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('A', 3) ],
@@ -635,7 +636,7 @@ const defaultInstruments = [
             getSound(
                 'as4',
                 'A#4',
-                '/assets/audio/lead-guitar/lead-as4.mp3',
+                'assets/audio/lead-guitar/lead-as4.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('A#', 3) ],
@@ -644,7 +645,7 @@ const defaultInstruments = [
             getSound(
                 'b4',
                 'B4',
-                '/assets/audio/lead-guitar/lead-b4.mp3',
+                'assets/audio/lead-guitar/lead-b4.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('B', 3) ],
@@ -653,7 +654,7 @@ const defaultInstruments = [
             getSound(
                 'c4',
                 'C4',
-                '/assets/audio/lead-guitar/lead-c4.mp3',
+                'assets/audio/lead-guitar/lead-c4.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('C', 3) ],
@@ -662,7 +663,7 @@ const defaultInstruments = [
             getSound(
                 'cs4',
                 'C#4',
-                '/assets/audio/lead-guitar/lead-cs4.mp3',
+                'assets/audio/lead-guitar/lead-cs4.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('C#', 3) ],
@@ -671,7 +672,7 @@ const defaultInstruments = [
             getSound(
                 'd4',
                 'D4',
-                '/assets/audio/lead-guitar/lead-d4.mp3',
+                'assets/audio/lead-guitar/lead-d4.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('D', 3) ],
@@ -680,7 +681,7 @@ const defaultInstruments = [
             getSound(
                 'ds4',
                 'D#4',
-                '/assets/audio/lead-guitar/lead-ds4.mp3',
+                'assets/audio/lead-guitar/lead-ds4.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('D#', 3) ],
@@ -689,7 +690,7 @@ const defaultInstruments = [
             getSound(
                 'e4',
                 'E4',
-                '/assets/audio/lead-guitar/lead-e4.mp3',
+                'assets/audio/lead-guitar/lead-e4.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('E', 3) ],
@@ -698,7 +699,7 @@ const defaultInstruments = [
             getSound(
                 'f4',
                 'F4',
-                '/assets/audio/lead-guitar/lead-f4.mp3',
+                'assets/audio/lead-guitar/lead-f4.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('F', 3) ],
@@ -707,7 +708,7 @@ const defaultInstruments = [
             getSound(
                 'fs4',
                 'F#4',
-                '/assets/audio/lead-guitar/lead-fs4.mp3',
+                'assets/audio/lead-guitar/lead-fs4.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('F#', 3) ],
@@ -716,7 +717,7 @@ const defaultInstruments = [
             getSound(
                 'g4',
                 'G4',
-                '/assets/audio/lead-guitar/lead-g4.mp3',
+                'assets/audio/lead-guitar/lead-g4.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('G', 3) ],
@@ -725,7 +726,7 @@ const defaultInstruments = [
             getSound(
                 'gs4',
                 'G#4',
-                '/assets/audio/lead-guitar/lead-gs4.mp3',
+                'assets/audio/lead-guitar/lead-gs4.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('G#', 3) ],
@@ -734,7 +735,7 @@ const defaultInstruments = [
             getSound(
                 'a5',
                 'A5',
-                '/assets/audio/lead-guitar/lead-a5.mp3',
+                'assets/audio/lead-guitar/lead-a5.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('A', 4) ],
@@ -743,7 +744,7 @@ const defaultInstruments = [
             getSound(
                 'as5',
                 'A#5',
-                '/assets/audio/lead-guitar/lead-as5.mp3',
+                'assets/audio/lead-guitar/lead-as5.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('A#', 4) ],
@@ -752,7 +753,7 @@ const defaultInstruments = [
             getSound(
                 'b5',
                 'B5',
-                '/assets/audio/lead-guitar/lead-b5.mp3',
+                'assets/audio/lead-guitar/lead-b5.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('B', 4) ],
@@ -761,7 +762,7 @@ const defaultInstruments = [
             getSound(
                 'c5',
                 'C5',
-                '/assets/audio/lead-guitar/lead-c5.mp3',
+                'assets/audio/lead-guitar/lead-c5.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('C', 4) ],
@@ -770,7 +771,7 @@ const defaultInstruments = [
             getSound(
                 'cs5',
                 'C#5',
-                '/assets/audio/lead-guitar/lead-cs5.mp3',
+                'assets/audio/lead-guitar/lead-cs5.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('C#', 4) ],
@@ -779,7 +780,7 @@ const defaultInstruments = [
             getSound(
                 'd5',
                 'D5',
-                '/assets/audio/lead-guitar/lead-d5.mp3',
+                'assets/audio/lead-guitar/lead-d5.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('D', 4) ],
@@ -788,7 +789,7 @@ const defaultInstruments = [
             getSound(
                 'ds5',
                 'D#5',
-                '/assets/audio/lead-guitar/lead-ds5.mp3',
+                'assets/audio/lead-guitar/lead-ds5.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('D#', 4) ],
@@ -797,7 +798,7 @@ const defaultInstruments = [
             getSound(
                 'e5',
                 'E5',
-                '/assets/audio/lead-guitar/lead-e5.mp3',
+                'assets/audio/lead-guitar/lead-e5.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('E', 4) ],
@@ -806,7 +807,7 @@ const defaultInstruments = [
             getSound(
                 'f5',
                 'F5',
-                '/assets/audio/lead-guitar/lead-f5.mp3',
+                'assets/audio/lead-guitar/lead-f5.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('F', 4) ],
@@ -815,7 +816,7 @@ const defaultInstruments = [
             getSound(
                 'fs5',
                 'F#5',
-                '/assets/audio/lead-guitar/lead-fs5.mp3',
+                'assets/audio/lead-guitar/lead-fs5.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('F#', 4) ],
@@ -824,7 +825,7 @@ const defaultInstruments = [
             getSound(
                 'g5',
                 'G5',
-                '/assets/audio/lead-guitar/lead-g5.mp3',
+                'assets/audio/lead-guitar/lead-g5.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('G', 4) ],
@@ -833,7 +834,7 @@ const defaultInstruments = [
             getSound(
                 'gs5',
                 'G#5',
-                '/assets/audio/lead-guitar/lead-gs5.mp3',
+                'assets/audio/lead-guitar/lead-gs5.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('G#', 4) ],
@@ -842,7 +843,7 @@ const defaultInstruments = [
             getSound(
                 'a6',
                 'A6',
-                '/assets/audio/lead-guitar/lead-a6.mp3',
+                'assets/audio/lead-guitar/lead-a6.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('A', 5) ],
@@ -851,7 +852,7 @@ const defaultInstruments = [
             getSound(
                 'as6',
                 'A#6',
-                '/assets/audio/lead-guitar/lead-as6.mp3',
+                'assets/audio/lead-guitar/lead-as6.mp3',
                 'Upper Frets',
                 {
                     pitch: [ getMidiNote('A#', 5) ],
@@ -870,7 +871,7 @@ const defaultInstruments = [
             getSound(
                 'k',
                 'Basic kick',
-                '/assets/audio/mastered/kick.wav',
+                'assets/audio/mastered/kick.wav',
                 'Kick',
                 {
                     pitch: [ kickMidiNote ],
@@ -888,7 +889,7 @@ const defaultInstruments = [
             getSound(
                 's',
                 'Basic snare',
-                '/assets/audio/mastered/snare.wav',
+                'assets/audio/mastered/snare.wav',
                 'Snare',
                 {
                     pitch: [ snareMidiNote ],
@@ -907,7 +908,7 @@ const defaultInstruments = [
             getSound(
                 'h',
                 'Open hihat',
-                '/assets/audio/mastered/hihat-open.wav',
+                'assets/audio/mastered/hihat-open.wav',
                 'Hihat',
                 {
                     pitch: [ hihatMidiNote ],
@@ -916,7 +917,7 @@ const defaultInstruments = [
             getSound(
                 'hc',
                 'Closed hihat',
-                '/assets/audio/mastered/hihat-closed.wav',
+                'assets/audio/mastered/hihat-closed.wav',
                 'Hihat',
                 {
                     pitch: [ hihatMidiNote ],
@@ -935,7 +936,7 @@ const defaultInstruments = [
             getSound(
                 'crash-left',
                 'Crash left',
-                '/assets/audio/mastered/crash-left.wav',
+                'assets/audio/mastered/crash-left.wav',
                 'Crash',
                 {
                     pitch: [ crash1MidiNote ],
@@ -945,7 +946,7 @@ const defaultInstruments = [
             getSound(
                 'crash-right',
                 'Crash right',
-                '/assets/audio/mastered/crash-right.wav',
+                'assets/audio/mastered/crash-right.wav',
                 'Crash',
                 {
                     pitch: [ crash2MidiNote ],
@@ -955,7 +956,7 @@ const defaultInstruments = [
             getSound(
                 'china-left',
                 'China left',
-                '/assets/audio/mastered/china-left.wav',
+                'assets/audio/mastered/china-left.wav',
                 'China',
                 {
                     pitch: [ chinaMidiNote ],
@@ -976,19 +977,19 @@ const defaultInstruments = [
             getSound(
                 'drone-medium',
                 'Medium',
-                '/assets/audio/drones/drone-medium.mp3',
+                'assets/audio/drones/drone-medium.mp3',
                 'Drone'
             ),
             getSound(
                 'drone-high',
                 'High',
-                '/assets/audio/drones/drone-high.mp3',
+                'assets/audio/drones/drone-high.mp3',
                 'Drone'
             ),
             getSound(
                 'drone-high-2',
                 'Creepy',
-                '/assets/audio/drones/drone-high-2.mp3',
+                'assets/audio/drones/drone-high-2.mp3',
                 'Drone'
             )
         ]

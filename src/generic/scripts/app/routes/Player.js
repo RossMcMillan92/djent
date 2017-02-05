@@ -10,6 +10,8 @@ import PlaylistEditor from 'containers/PlaylistEditor'
 import SoundController from 'containers/SoundController'
 import Visualiser from 'containers/Visualiser'
 
+import presets from 'utils/presets'
+
 export default class Player extends Component {
     static contextTypes = {
         router: React.PropTypes.object.isRequired
@@ -21,37 +23,34 @@ export default class Player extends Component {
 
         return (
             <div>
-                <Panel theme="dark">
-                    <div className="u-flex-row u-flex-center">
-                        <h2 className="title-primary u-mr1 u-mb0">
-                            Preset:
-                        </h2>
-
-                        <PresetController
-                            activePresetID={ activePresetID }
-                            onUpdate={ actions.applyPreset }
-                        />
-                    </div>
-                </Panel>
-                <Panel>
-                    <div className="u-flex-row u-flex-wrap">
-                        <div className="group-spacing-y-small u-flex-row u-flex-end u-mr2">
-                            <div className="u-mr1">
-                                <BPMController />
-                            </div>
-                            <div className="">
-                                <BPMTapper onUpdate={actions.updateBPM} />
-                            </div>
-                        </div>
-
-                        <div className="group-spacing-y-small">
-                            <BeatsController
-                                labelPrefix='Total '
-                                onUpdate={ actions.updateSequence }
-                                sequence={ totalSequence }
+                <Panel sizeY="small">
+                    <div className="u-flex-row u-flex-wrap u-flex-justify">
+                        <div className="group-spacing-y-small u-mr2@above-alpha">
+                            <PresetController
+                                activePresetID={ activePresetID }
+                                onUpdate={ actions.applyPreset }
+                                presets={ presets }
                             />
                         </div>
 
+                        <div className="u-flex-row u-flex-wrap">
+                            <div className="group-spacing-y-small u-mr2@above-alpha">
+                                <BeatsController
+                                    labelPrefix='Total '
+                                    onUpdate={ actions.updateSequence }
+                                    sequence={ totalSequence }
+                                />
+                            </div>
+
+                            <div className="group-spacing-y-small u-flex-row u-flex-end">
+                                <div className="u-mr1">
+                                    <BPMController />
+                                </div>
+                                <div className="">
+                                    <BPMTapper onUpdate={actions.updateBPM} />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </Panel>
 

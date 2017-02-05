@@ -46,7 +46,7 @@ class ReorderableList extends Component {
             .map(this.renderListItem)
 
         return (
-            <ul className="block-list" ref={this.dragulaDecorator}>
+            <ul className="block-list block-list--dark" ref={this.dragulaDecorator}>
                 { listItems }
             </ul>
         )

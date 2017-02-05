@@ -4,9 +4,9 @@
     display: block
     border-style: solid
     border-width: 8.7px 5px 0 5px
-    border-color: $palette-base-text transparent transparent transparent
+    border-color: rgba($palette-base-text, .5) transparent transparent transparent
     pointer-events: none
-    transition: transform .25s ease-in-out
+    transition: transform .15s ease-in-out
 
     .expandable.is-expanded &
         transform: rotate(180deg)
@@ -17,6 +17,7 @@
     content: ""
     display: inline-block
     vertical-align: middle
+    top: -1px
 
 .dropdown-icon-before
     &::before

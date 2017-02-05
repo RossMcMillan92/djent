@@ -6,8 +6,10 @@ $block-list__inner-height : $block-list__font-size * $block-list__line-height
 $block-list__padding-y    : ($block-list__item-height - $block-list__inner-height) / 2
 $block-list__padding-x    : 12px
 
-$block-list__font-size--large   : 22px
-$block-list__line-height--large : ($block-list__item-height - ($block-list__padding-y * 2)) / $block-list__font-size--large
+$block-list__item-height--compact : 38px
+$block-list__font-size--compact   : 12px
+$block-list__padding-y--compact   : ($block-list__item-height--compact - $block-list__inner-height) / 2
+$block-list__line-height--compact : ($block-list__item-height--compact - ($block-list__padding-y--compact * 2)) / $block-list__font-size--compact
 
 .block-list
     list-style: none
@@ -16,14 +18,13 @@ $block-list__line-height--large : ($block-list__item-height - ($block-list__padd
 
 .block-list__item
     list-style: none
-    background-color: $palette-alpha-dark
     overflow: hidden
     cursor: pointer
     user-select: none
     -webkit-tap-highlight-color: transparent
 
     &:not(:last-of-type)
-        border-bottom: solid 1px $palette-alpha
+        border-bottom: solid 1px $palette-shade-gamma
 
 .block-list__content-spacing
     padding: $block-list__padding-y $block-list__padding-x
@@ -32,12 +33,7 @@ $block-list__line-height--large : ($block-list__item-height - ($block-list__padd
     height: $block-list__item-height
     font-size: rem($block-list__font-size)
     line-height: $block-list__line-height
-    color: #aaa
-    text-transform: uppercase
     padding: $block-list__padding-y $block-list__padding-x
-
-    .block-list__item.is-active &
-        color: #fff
 
     .block-list__item:not(.functionality-is-disabled).is-active &,
     .block-list__item:not(.functionality-is-disabled):hover &
@@ -99,3 +95,24 @@ $block-list__handle-arrow-color: rgba(255, 255, 255, .25)
     display: block
     width: $block-list__font-size
     height: $block-list__font-size
+
+
+.block-list--compact
+    .block-list__body
+        height: $block-list__item-height--compact
+        padding: $block-list__padding-y--compact $block-list__padding-x
+        font-size: rem($block-list__font-size--compact)
+        line-height: $block-list__line-height--compact
+
+.block-list--dark
+    .block-list__item
+        background-color: $palette-alpha-dark
+
+        &:not(:last-of-type)
+            border-bottom: solid 1px $palette-alpha
+
+    .block-list__body
+        color: #aaa
+
+    .block-list__item.is-active .block-list__body
+        color: #fff

@@ -155,7 +155,7 @@ class PlaylistEditor extends Component {
                             wrapperComponent='button'
                         >
                             <div className="u-flex-row u-flex-justify-center">
-                                <SVG className={`button-primary__svg-icon u-txt-light ${this.state.isLoading ? 'u-anim-spin' : ''}`} icon="plus" />
+                                Add Track
                             </div>
                         </Generator>
                     ) : null

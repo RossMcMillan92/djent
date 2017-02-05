@@ -4,11 +4,14 @@ import { Future as Task } from 'ramda-fantasy'
 import { List } from 'immutable-ext'
 
 import Expandable from 'components/Expandable'
+import Panel from 'components/Panel'
 import Spinner from 'components/Spinner'
 import SwipeableViews from 'components/SwipeableViews'
 
 import Modal from 'containers/Modal'
 import Player from 'containers/Player'
+
+import getAbsolutePath from 'modules/getAbsolutePath'
 
 import { defaultAllowedLengths } from 'reducers/sequences'
 
@@ -25,6 +28,8 @@ import { getHashQueryParam, logError, throttle } from 'utils/tools'
 
 let Instruments
 let Sequences
+
+const absolutePath = getAbsolutePath()
 
 export default class Main extends Component {
     static contextTypes = {
@@ -168,7 +173,7 @@ export default class Main extends Component {
     }
 
     getViews = (isMobileView) => {
-        const expandableTitleClass = 'title-primary u-txt-large dropdown-icon-before group-padding-x group-padding-x-small@mobile group-capped-x group-centered u-curp'
+        const expandableTitleClass = 'title-primary u-txt-large dropdown-icon-before u-curp u-no-select'
         if (this.state.childrenLoaded) {
             return isMobileView
                 ? (
@@ -182,8 +187,12 @@ export default class Main extends Component {
                             route={this.props.route}
                             googleAPIHasLoaded={this.state.googleAPIHasLoaded}
                         />
-                        <Sequences route={this.props.route} />
-                        <Instruments route={this.props.route} />
+                        <Panel>
+                            <Sequences route={this.props.route} />
+                        </Panel>
+                        <Panel>
+                            <Instruments route={this.props.route} />
+                        </Panel>
                     </SwipeableViews>
                 )
                 : (
@@ -192,24 +201,25 @@ export default class Main extends Component {
                             route={this.props.route}
                             googleAPIHasLoaded={this.state.googleAPIHasLoaded}
                         />
-                        <div className="group-padding-y u-bdrb">
+                        <Panel className="u-bdrb">
                             <Expandable
                                 title="Sequences"
                                 titleClassName={expandableTitleClass}
                                 enableStateSave={true}
+                                isExpanded={true}
                             >
-                                <Sequences route={this.props.route} />
+                                <Sequences route={this.props.route} className="u-mt1" />
                             </Expandable>
-                        </div>
-                        <div className="group-padding-y u-bdrb">
+                        </Panel>
+                        <Panel>
                             <Expandable
                                 title="Instruments"
                                 titleClassName={expandableTitleClass}
                                 enableStateSave={true}
                             >
-                                <Instruments route={this.props.route} />
+                                <Instruments route={this.props.route} className="u-mt1" />
                             </Expandable>
-                        </div>
+                        </Panel>
                     </div>
                 )
         }
@@ -238,11 +248,11 @@ export default class Main extends Component {
             <div className="">
                 <div className="group-spacing-x">
                     <div className="u-flex-row u-flex-justify">
-                        <img className="header__logo" src="/assets/images/logo.png" alt="DJEN metal generator logo" />
+                        <img className="header__logo" src={`${absolutePath}assets/images/logo.png`} alt="DJEN metal generator logo" />
                         <a className="" href="https://www.facebook.com/djenerationstation/" target="_blank" rel="noopener">
                             <img
                                 className="header__icon social-icon"
-                                src="/assets/images/F_icon.svg"
+                                src={`${absolutePath}assets/images/F_icon.svg`}
                                 width="39"
                                 height="39"
                                 alt="facebook icon"

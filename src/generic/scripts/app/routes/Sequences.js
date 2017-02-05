@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-
-import Panel from 'components/Panel'
 import SequencePanel from 'containers/SequencePanel'
 
 const getDescription = sequence => sequence.description ? unescape(sequence.description) : sequence.id
@@ -34,14 +32,14 @@ export default class Sequences extends Component {
             ))
 
         const addSequenceButton = this.sequences.length < 6
-            ? <button className="button-primary button-primary--full button-primary--gamma" onClick={this.addNewSequence}>Add New Sequence</button>
+            ? <button className="button-primary button-primary--full button-primary--gamma" onClick={this.addNewSequence}>Add Sequence</button>
             : null
 
         return (
-            <Panel>
+            <div className={ this.props.className }>
                 { sequences }
                 { addSequenceButton }
-            </Panel>
+            </div>
         )
     }
 }

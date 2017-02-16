@@ -12,6 +12,8 @@ import SVG from 'components/SVG'
 
 import LoopController from 'containers/LoopController'
 
+import * as Tracking from 'modules/tracking'
+
 import { playSound } from 'utils/audio'
 import audioContext from 'utils/audioContext'
 import { getTotalTimeLength } from 'utils/sequences'
@@ -211,6 +213,7 @@ class SoundController extends Component {
                             bpm={ this.props.bpm }
                             sequences={ this.props.sequences }
                             instruments={ this.props.instruments }
+                            onGenerationStart={ () => Tracking.sendGenerateEvent('main') }
                             onGenerationEnd={ this.onGenerationEnd }
                             disabled={currentPlaylistItemIsLocked}
                         />

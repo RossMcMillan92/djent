@@ -12,6 +12,7 @@ import Modal from 'containers/Modal'
 import Player from 'containers/Player'
 
 import getAbsolutePath from 'modules/getAbsolutePath'
+import * as Tracking from 'modules/tracking'
 
 import { defaultAllowedLengths } from 'reducers/sequences'
 
@@ -249,7 +250,7 @@ export default class Main extends Component {
                 <div className="group-spacing-x">
                     <div className="u-flex-row u-flex-justify">
                         <img className="header__logo" src={`${absolutePath}assets/images/logo.png`} alt="DJEN metal generator logo" />
-                        <a className="" href="https://www.facebook.com/djenerationstation/" target="_blank" rel="noopener">
+                        <a className="" href="https://www.facebook.com/djenerationstation/" target="_blank" rel="noopener" onClick={ () => Tracking.sendFacebookLinkEvent('icon') }>
                             <img
                                 className="header__icon social-icon"
                                 src={`${absolutePath}assets/images/F_icon.svg`}

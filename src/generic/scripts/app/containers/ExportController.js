@@ -5,6 +5,8 @@ import { connect } from 'react-redux'
 
 import * as modalActions from 'actions/modal'
 
+import * as Tracking from 'modules/tracking'
+
 import { renderAudioPlaylistItemToBuffer } from 'utils/audio'
 import { buildMidiDataURIFromInstruments } from 'utils/midi'
 import { saveAsFile } from 'utils/save'
@@ -48,8 +50,14 @@ const ExportModal = ({ onMIDISave, onWAVSave }) => (
 )
 
 const launchExportModal = (audioPlaylist, enableModal, disableModal) => {
-    const saveMIDI = () => buildAndSaveMidi(audioPlaylist)
-    const saveWAV = () => saveAudioPlaylistAsWav(audioPlaylist)
+    const saveMIDI = () => {
+        Tracking.sendSaveEvent('midi')
+        buildAndSaveMidi(audioPlaylist)
+    }
+    const saveWAV = () => {
+        Tracking.sendSaveEvent('wav')
+        saveAudioPlaylistAsWav(audioPlaylist)
+    }
     const content = (
         <ExportModal
             onMIDISave={ compose(disableModal, saveMIDI) }
@@ -61,10 +69,14 @@ const launchExportModal = (audioPlaylist, enableModal, disableModal) => {
 
 const ExportController = (props) => {
     const { audioPlaylist, actions } = props
+    const onClick = () => {
+        Tracking.sendSaveEvent('open')
+        launchExportModal(audioPlaylist, actions.enableModal, actions.disableModal)
+    }
     return (
         <button
             className="button-primary button-primary--alpha-dark button-primary--tiny"
-            onClick={() => launchExportModal(audioPlaylist, actions.enableModal, actions.disableModal)}
+            onClick={onClick}
             disabled={false}
         >
             Save

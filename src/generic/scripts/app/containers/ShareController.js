@@ -7,6 +7,8 @@ import { List } from 'immutable-ext'
 
 import * as modalActions from 'actions/modal'
 
+import * as Tracking from 'modules/tracking'
+
 import { createPreset } from 'utils/presets'
 import { logError } from 'utils/tools'
 
@@ -73,6 +75,7 @@ class ShareController extends Component {
 
     onClick = () => {
         this.setState({ isLoading: true })
+        Tracking.sendShareEvent('')
         List(this.props.audioPlaylist)
             .traverse(Task.of, this.getShortURL)
             .map(combineShortURLs)

@@ -6,7 +6,6 @@ import { insert, update, remove } from 'ramda'
 import Generator from 'components/Generator'
 import PlaylistTrack from 'components/PlaylistTrack'
 import ReorderableList from 'components/ReorderableList'
-import SVG from 'components/SVG'
 
 import {
     updateAudioPlaylist,
@@ -17,6 +16,8 @@ import {
 import {
     applyPreset
 } from 'actions/config'
+
+import * as Tracking from 'modules/tracking'
 
 import { createPreset } from 'utils/presets'
 import { createPlaylistItem } from 'utils/riffs'
@@ -104,6 +105,7 @@ class PlaylistEditor extends Component {
 
     onGenerationStart = () => {
         this.setState({ isLoading: true })
+        Tracking.sendGenerateEvent('add')
     }
 
     onGenerate = (playlistItem) => {

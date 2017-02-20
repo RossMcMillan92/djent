@@ -5,6 +5,7 @@ const ExtractTextPlugin          = require('extract-text-webpack-plugin')
 const CopyWebpackPlugin          = require('copy-webpack-plugin')
 const HtmlWebpackPlugin          = require('html-webpack-plugin')
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
+const LiveReloadPlugin           = require('webpack-livereload-plugin');
 
 const sourceDir     = '/src'
 const buildDir      = '/www'
@@ -144,6 +145,9 @@ const config = (env) => {
             }),
             new ScriptExtHtmlWebpackPlugin({
                 defaultAttribute: 'defer'
+            }),
+            new LiveReloadPlugin({
+                appendScriptTag: true
             }),
             cssExtractor,
         ],

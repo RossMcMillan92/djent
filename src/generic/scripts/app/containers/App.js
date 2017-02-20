@@ -14,6 +14,13 @@ export default class App extends Component {
         this.checkForHash()
     }
 
+    componentDidMount = () => {
+        const splashScreen = document.querySelector('[splash-screen]')
+        splashScreen
+            .classList
+            .add('is-disabled')
+    }
+
     // lol
     checkForHash = () => {
         // I started with hash urls instead of normal urls, and now I need to support both.

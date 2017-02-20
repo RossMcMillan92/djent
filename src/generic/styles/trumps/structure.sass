@@ -84,9 +84,17 @@
 .u-wsnw
     white-space: nowrap
 
-.u-flex-row
+=u-flex-row
     display: flex
     flex-direction: row
+
+.u-flex-row
+    +u-flex-row
+
+.u-flex-row\@above-alpha
+    @media screen and (min-width: 500px)
+        display: flex
+        flex-direction: row
 
 .u-flex-column
     display: flex

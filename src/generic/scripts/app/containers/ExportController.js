@@ -75,7 +75,7 @@ const ExportController = (props) => {
     }
     return (
         <button
-            className="button-primary button-primary--alpha-dark button-primary--tiny"
+            className="button-primary button-primary--alpha-dark"
             onClick={onClick}
             disabled={false}
         >

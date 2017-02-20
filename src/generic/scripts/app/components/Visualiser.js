@@ -2,9 +2,6 @@ import React, { Component } from 'react'
 
 import Waveform from 'components/Waveform'
 
-import ShareController from 'containers/ShareController'
-import ExportController from 'containers/ExportController'
-
 import audioContext from 'utils/audioContext'
 import { renderBuffer } from 'utils/audio'
 import { logError } from 'utils/tools'
@@ -69,14 +66,6 @@ class Visualiser extends Component {
                     height={75}
                     amplified={true}
                 />
-
-                <div className="visualiser__button-container">
-                    <div className="u-mr05">
-                        <ExportController buffer={ this.state.buffer } />
-                    </div>
-
-                    <ShareController googleAPIHasLoaded={this.props.googleAPIHasLoaded} />
-                </div>
             </div>
         </div>
     )

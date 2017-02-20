@@ -10,7 +10,9 @@ import * as soundActions from 'actions/sound'
 import Generator from 'components/Generator'
 import SVG from 'components/SVG'
 
+import ExportController from 'containers/ExportController'
 import LoopController from 'containers/LoopController'
+import ShareController from 'containers/ShareController'
 
 import * as Tracking from 'modules/tracking'
 
@@ -206,29 +208,40 @@ class SoundController extends Component {
         return (
             <div>
                 { this.state.error ? <p className="txt-error">{ this.state.error }</p> : null }
-                <div className="u-flex-row u-flex-wrap">
-                    <div className="visualiser-container__button u-mr05 u-mb0">
-                        <Generator
-                            audioPlaylist={ this.props.audioPlaylist }
-                            bpm={ this.props.bpm }
-                            sequences={ this.props.sequences }
-                            instruments={ this.props.instruments }
-                            onGenerationStart={ () => Tracking.sendGenerateEvent('main') }
-                            onGenerationEnd={ this.onGenerationEnd }
-                            disabled={currentPlaylistItemIsLocked}
-                        />
-                    </div>
+                <div className="u-flex-row@above-alpha u-flex-wrap">
+                    <div className="u-flex-row u-flex-justify-center u-flex-center u-mr2@above-alpha">
+                        <div className="visualiser-container__button u-mr05 u-mb05">
+                            <Generator
+                                audioPlaylist={ this.props.audioPlaylist }
+                                bpm={ this.props.bpm }
+                                sequences={ this.props.sequences }
+                                instruments={ this.props.instruments }
+                                onGenerationStart={ () => Tracking.sendGenerateEvent('main') }
+                                onGenerationEnd={ this.onGenerationEnd }
+                                disabled={currentPlaylistItemIsLocked}
+                            />
+                        </div>
 
-                    <div className="u-mr05 u-mb0">
-                        <PlayButton
-                            isDisabled={!this.props.audioPlaylist.length}
-                            isPlaying={this.props.isPlaying}
-                            onClick={this.togglePlay}
-                        />
-                    </div>
+                        <div className="u-mr05 u-mb05">
+                            <PlayButton
+                                isDisabled={!this.props.audioPlaylist.length}
+                                isPlaying={this.props.isPlaying}
+                                onClick={this.togglePlay}
+                            />
+                        </div>
 
-                    <div className="u-mr1 u-mb0">
-                        <LoopController />
+                        <div className="u-mb05">
+                            <LoopController />
+                        </div>
+                    </div>
+                    <div className="u-flex-row u-flex-justify-center u-flex-center">
+                        <div className="u-mr05 u-mb05">
+                            <ShareController googleAPIHasLoaded={this.props.googleAPIHasLoaded} />
+                        </div>
+
+                        <div className="u-mb05">
+                            <ExportController />
+                        </div>
                     </div>
                 </div>
             </div>

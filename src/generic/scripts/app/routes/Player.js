@@ -55,14 +55,14 @@ export default class Player extends Component {
                 </Panel>
 
                 <Panel theme="alpha">
-                    <div className={`visualiser-container ${this.props.hasAudioTemplate ? 'is-active' : ''} u-mb1`}>
+                    <div className={`visualiser-container ${this.props.hasAudioTemplate ? 'is-active' : ''} u-mb05`}>
                         <div className="visualiser-container__backdrop"></div>
                         <div className="u-mb1">
-                            <Visualiser googleAPIHasLoaded={this.props.googleAPIHasLoaded} />
+                            <Visualiser />
                         </div>
 
                         <div className="u-flex-row u-flex-justify-center u-flex-center u-flex-wrap">
-                            <SoundController />
+                            <SoundController googleAPIHasLoaded={this.props.googleAPIHasLoaded} />
                         </div>
                     </div>
                     <PlaylistEditor />

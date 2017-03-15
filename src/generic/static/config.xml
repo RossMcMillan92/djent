@@ -37,8 +37,11 @@
         <icon src="assets/images/icons/58.png" width="58" height="58" />
         <icon src="assets/images/icons/87.png" width="87" height="87" />
         <icon src="assets/images/icons/72.png" width="72" height="72" />
+        <icon src="assets/images/icons/76.png" width="76" height="76" />
         <icon src="assets/images/icons/114.png" width="114" height="114" />
+        <icon src="assets/images/icons/120.png" width="120" height="120" />
         <icon src="assets/images/icons/144.png" width="144" height="144" />
+        <icon src="assets/images/icons/152.png" width="152" height="152" />
         <splash src="assets/images/screens/320x480.png" width="320" height="480" />
         <splash src="assets/images/screens/480x320.png" width="480" height="320" />
         <splash src="assets/images/screens/640x960.png" width="640" height="960" />

@@ -1,15 +1,17 @@
-$spinner__size: 20px
-$spinner__size-large: 80px
-$spinner__border-width: 3px
-$spinner__border-width-large: 5px
+$spinner__size                  : 20px
+$spinner__size-large            : 80px
+$spinner__border-width          : 3px
+$spinner__border-width-large    : 5px
+$spinner__track-color     : $palette-alpha
+$spinner__highlight-color : $palette-base-ui
 
 .spinner
     display: block
     height: $spinner__size
     width: $spinner__size
     border-radius: $spinner__size
-    border: solid $spinner__border-width $palette-base-ui
-    border-color: $palette-base-ui $palette-base-ui $palette-base-ui $palette-alpha
+    border: solid $spinner__border-width $spinner__track-color
+    border-color: $spinner__track-color $spinner__track-color $spinner__track-color $spinner__highlight-color
     animation: spin 1s infinite linear
 
     &:after
@@ -18,6 +20,13 @@ $spinner__border-width-large: 5px
         left: 50%
         margin-top: -($spinner__size / 2)
         margin-left: -($spinner__size / 2)
+
+.spinner__subtext
+    margin-top: $base-spacing-unit
+    text-align: center
+    color: $palette-shade-gamma
+    font-size: rem(14px)
+
 
 .spinner--large
     height: $spinner__size-large
@@ -28,9 +37,3 @@ $spinner__border-width-large: 5px
     &:after
         margin-top: -($spinner__size-large / 2)
         margin-left: -($spinner__size-large / 2)
-
-.spinner__subtext
-    margin-top: $base-spacing-unit
-    text-align: center
-    color: $palette-shade-gamma
-    font-size: rem(14px)

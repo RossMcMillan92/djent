@@ -93,6 +93,7 @@
   "scripts": {
     "start": "node tools/wizard.js",
     "phonegap": "node node_modules/webpack/bin/webpack.js --config=webpack.config.js --env.platform=generic --env.isProduction=true --env.isPhoneGap=true --colors",
+    "phonegapdev": "node node_modules/webpack/bin/webpack.js --config=webpack.config.js --env.platform=generic --env.isProduction=false --env.isPhoneGap=true --colors --watch",
     "build": "node node_modules/webpack/bin/webpack.js --config=webpack.config.js --env.platform=generic --env.isProduction=true --colors",
     "dev": "node node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --watch --config=webpack.config.js --env.platform=generic --env.isProduction=false --colors",
     "analyse": "node node_modules/webpack/bin/webpack.js --config=webpack.config.js --env.platform=generic --colors --json | node node_modules/webpack-bundle-size-analyzer/webpack-bundle-size-analyzer",

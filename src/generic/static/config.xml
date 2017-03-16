@@ -13,11 +13,10 @@
     <preference name="StatusBarOverlaysWebView" value="false" />
     <preference name="StatusBarBackgroundColor" value="#101010" />
     <preference name="StatusBarStyle" value="blackopaque" />
-    <plugin name="cordova-plugin-file" source="npm" spec="~4.1.1" />
     <plugin name="cordova-plugin-statusbar" />
-    <plugin name="cordova-plugin-file-transfer" />
-    <plugin name="cordova-open" />
     <plugin name="cordova-plugin-whitelist" />
+    <plugin name="cordova-plugin-file" />
+    <plugin name="cordova-plugin-file-transfer" />
     <platform name="android">
         <icon density="ldpi" src="assets/images/icons/36.png" />
         <icon density="mdpi" src="assets/images/icons/48.png" />

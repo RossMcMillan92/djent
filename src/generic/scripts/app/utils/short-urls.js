@@ -2,6 +2,7 @@ import { Future as Task } from 'ramda-fantasy'
 import { logError, loadScript } from './tools'
 
 const googleAPIKey = 'AIzaSyCUN26hzVNf0P_ED_oALvsVx3ffmyzliOI'
+const pgAPIKey = 'AIzaSyAi4tg_orXCkGP-tU7nzfZv7JkbArnv4Rw'
 
 const handleGoogleAPI = () =>
     Task((rej, res) => {
@@ -15,7 +16,7 @@ const handleGoogleAPI = () =>
                 return setTimeout(handleClientLoad, 1000)
             }
 
-            window.gapi.client.setApiKey(googleAPIKey)
+            window.gapi.client.setApiKey(pgAPIKey)
             window.gapi.client.load('urlshortener', 'v1')
                 .then(res)
         }

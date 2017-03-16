@@ -11,12 +11,12 @@ const downloadAudioBuffer = (a, fileName, audioBuffer) => {
     downloadURL(a, fileName, url)
 
     setTimeout(() => {
+        console.log('release url')
         window.URL.revokeObjectURL(url)
     }, 0)
 }
 
 const downloadURL = curry((a, fileName, url) => {
-    saveyDavey(url)
     a.href = url
     a.download = fileName
     a.click()
@@ -35,34 +35,6 @@ const saveAsFile = curry((fileType, fileName, fileContents) => {
     const downloadFn = downloadFile[fileType]
     downloadFn(a, `${fileName}.${fileType}`, fileContents)
 })
-
-const saveyDavey = (file) => {
-    var savedFile;
-
-    window.resolveLocalFileSystemURL( cordova.file.cacheDirectory, function( dir ) {
-
-        dir.getFile( data.FileName, { create:true }, function( file_ ) {
-
-            savedFile = file_;
-            saveFile();
-
-        });
-    });
-
-    function saveFile(str) {
-        if( !savedFile ) return;
-
-        savedFile.createWriter(function(fileWriter) {
-
-            fileWriter.write( file );
-            cordova.plugins.disusered.open( savedFile.nativeURL );
-            console.log( "file " + savedFile.nativeURL + " opened" );
-
-        }, function( e ){
-            throw( 'createWriter Error error' + JSON.stringify( e ) );
-        });
-    }
-}
 
 export {
     saveAsFile,

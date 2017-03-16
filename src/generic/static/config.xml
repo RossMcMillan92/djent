@@ -17,7 +17,7 @@
     <plugin name="cordova-plugin-statusbar" />
     <plugin name="cordova-plugin-file-transfer" />
     <plugin name="cordova-open" />
-    <plugin name="cordova-plugin-whitelist" source="npm" spec="1.1.0" />
+    <plugin name="cordova-plugin-whitelist" />
     <platform name="android">
         <icon density="ldpi" src="assets/images/icons/36.png" />
         <icon density="mdpi" src="assets/images/icons/48.png" />
@@ -53,6 +53,9 @@
         <allow-intent href="itms-apps:*" />
     </platform>
     <access origin="*" />
+    <allow-navigation href="*" />
+    <allow-navigation href="blob:*" />
+    <allow-navigation href="data:*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -60,5 +63,4 @@
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
     <allow-intent href="*" />
-    <allow-navigation href="*" />
 </widget>

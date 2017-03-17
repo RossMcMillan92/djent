@@ -36,11 +36,6 @@ const saveAsFile = curry((fileType, fileName, fileContents) => {
     downloadFn(a, `${fileName}.${fileType}`, fileContents)
 })
 
-document.addEventListener("deviceready", onDeviceReady, false);
-function onDeviceReady() {
-    console.log('FileTransfer', FileTransfer);
-}
-
 export {
     saveAsFile,
 }

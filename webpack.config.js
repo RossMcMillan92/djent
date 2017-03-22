@@ -5,7 +5,7 @@ const ExtractTextPlugin          = require('extract-text-webpack-plugin')
 const CopyWebpackPlugin          = require('copy-webpack-plugin')
 const HtmlWebpackPlugin          = require('html-webpack-plugin')
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
-const LiveReloadPlugin           = require('webpack-livereload-plugin');
+const LiveReloadPlugin           = require('webpack-livereload-plugin')
 
 const sourceDir     = '/src'
 const buildDir      = '/www'
@@ -15,12 +15,22 @@ const outputCSSFile = 'app.[contenthash].css'
 const cssExtractor  = new ExtractTextPlugin({ filename: outputCSSFile, disable: false, allChunks: true })
 const cwd           = process.cwd()
 
+const getModules = platform => [
+    path.join(cwd, `/src/${platform}/`),
+    path.join(cwd, `/src/${platform}/scripts/`),
+    path.join(cwd, `/src/${platform}/scripts/app/`),
+    path.join(cwd, `/src/${platform}/styles/styles/`),
+]
+
 const config = (env) => {
     const isPhoneGap = env.isPhoneGap === 'true'
     const isProduction = env.isProduction === 'true'
     const environment = isProduction
         ? 'production'
         : 'development'
+    const assetPathPrepend = isPhoneGap
+        ? ''
+        : '/'
 
     return Object.assign({}, {
         entry: {
@@ -31,20 +41,14 @@ const config = (env) => {
         output: {
             filename: '[name].[chunkhash].js',
             path: path.join(cwd, buildDir),
-            publicPath: isPhoneGap ? '' : '/',
+            publicPath: assetPathPrepend,
         },
         resolve: {
             extensions: ['.js', '.jsx', '.scss'],
             alias: {
                 react: path.join(cwd, 'node_modules/react'),
             },
-            modules: [
-                'node_modules',
-                path.join(cwd, `/src/${env.platform}/`),
-                path.join(cwd, `/src/${env.platform}/scripts/`),
-                path.join(cwd, `/src/${env.platform}/scripts/app/`),
-                path.join(cwd, `/src/${env.platform}/styles/styles/`),
-            ]
+            modules: getModules(env.platform)
         },
         module: {
             rules: [
@@ -100,6 +104,7 @@ const config = (env) => {
             ]),
             new webpack.DefinePlugin({
                 NODE_ENV: JSON.stringify(environment),
+                IS_PHONEGAP: JSON.stringify(isPhoneGap),
                 'process.env': {
                     NODE_ENV: JSON.stringify(environment)
                 }
@@ -140,16 +145,22 @@ const config = (env) => {
             new HtmlWebpackPlugin({
                 template: './src/generic/static/index.ejs',
                 inject: 'body',
-                absolutePath: isPhoneGap ? '' : '/',
+                absolutePath: assetPathPrepend,
                 isProduction,
                 isPhoneGap
             }),
             new ScriptExtHtmlWebpackPlugin({
                 defaultAttribute: 'defer'
             }),
-            new LiveReloadPlugin({
-                appendScriptTag: true
-            }),
+            ...(
+                !isProduction
+                    ? [
+                        new LiveReloadPlugin({
+                            appendScriptTag: true
+                        }),
+                    ]
+                    : []
+            ),
             cssExtractor,
         ],
     })

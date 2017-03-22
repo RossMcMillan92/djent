@@ -11,7 +11,6 @@ const downloadAudioBuffer = (a, fileName, audioBuffer) => {
     downloadURL(a, fileName, url)
 
     setTimeout(() => {
-        console.log('release url')
         window.URL.revokeObjectURL(url)
     }, 0)
 }

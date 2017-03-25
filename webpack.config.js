@@ -6,6 +6,7 @@ const CopyWebpackPlugin          = require('copy-webpack-plugin')
 const HtmlWebpackPlugin          = require('html-webpack-plugin')
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
 const LiveReloadPlugin           = require('webpack-livereload-plugin');
+const BundleAnalyzerPlugin       = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const sourceDir     = '/src'
 const buildDir      = '/www'
@@ -151,6 +152,7 @@ const config = (env) => {
                 appendScriptTag: true
             }),
             cssExtractor,
+            // new BundleAnalyzerPlugin(),
         ],
     })
 }

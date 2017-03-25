@@ -11,7 +11,6 @@ const downloadAudioBuffer = (a, fileName, audioBuffer) => {
     downloadURL(a, fileName, url)
 
     setTimeout(() => {
-        console.log('release url')
         window.URL.revokeObjectURL(url)
     }, 0)
 }
@@ -35,11 +34,6 @@ const saveAsFile = curry((fileType, fileName, fileContents) => {
     const downloadFn = downloadFile[fileType]
     downloadFn(a, `${fileName}.${fileType}`, fileContents)
 })
-
-document.addEventListener("deviceready", onDeviceReady, false);
-function onDeviceReady() {
-    console.log('FileTransfer', FileTransfer);
-}
 
 export {
     saveAsFile,

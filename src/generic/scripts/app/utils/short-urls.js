@@ -2,7 +2,7 @@ import { Future as Task } from 'ramda-fantasy'
 import { logError, loadScript } from './tools'
 
 const googleAPIKey = 'AIzaSyCUN26hzVNf0P_ED_oALvsVx3ffmyzliOI'
-const pgAPIKey = 'AIzaSyAi4tg_orXCkGP-tU7nzfZv7JkbArnv4Rw'
+// const pgAPIKey = 'AIzaSyAi4tg_orXCkGP-tU7nzfZv7JkbArnv4Rw'
 
 const handleGoogleAPI = () =>
     Task((rej, res) => {
@@ -16,11 +16,28 @@ const handleGoogleAPI = () =>
                 return setTimeout(handleClientLoad, 1000)
             }
 
-            window.gapi.client.setApiKey(pgAPIKey)
+            window.gapi.client.setApiKey(googleAPIKey)
             window.gapi.client.load('urlshortener', 'v1')
                 .then(res)
         }
         window.handleClientLoad = handleClientLoad
+    })
+
+const shortURLCache = {}
+
+//    getGoogleShortURL :: url -> Task Error url
+const getGoogleShortURL = url =>
+    Task((rej, res) => {
+        if (shortURLCache[url]) return res(shortURLCache[url])
+
+        const onError = () => rej(Error(`Problem getting short URL: ${url}`))
+        window.gapi.client.urlshortener.url
+            .insert({ longUrl: url })
+            .then(({ result }) => {
+                const shortURL = result.id
+                shortURLCache[url] = shortURL
+                res(shortURL)
+            }, onError)
     })
 
 //    getLongURLFromShareID :: shareID -> Task Error LongURL
@@ -52,6 +69,7 @@ const getPresetFromData = base64Data =>
     })
 
 export {
+    getGoogleShortURL,
     getLongURLFromShareID,
     getPresetFromData,
     handleGoogleAPI,

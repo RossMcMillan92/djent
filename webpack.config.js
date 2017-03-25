@@ -16,12 +16,22 @@ const outputCSSFile = 'app.[contenthash].css'
 const cssExtractor  = new ExtractTextPlugin({ filename: outputCSSFile, disable: false, allChunks: true })
 const cwd           = process.cwd()
 
+const getModules = platform => [
+    path.join(cwd, `/src/${platform}/`),
+    path.join(cwd, `/src/${platform}/scripts/`),
+    path.join(cwd, `/src/${platform}/scripts/app/`),
+    path.join(cwd, `/src/${platform}/styles/styles/`),
+]
+
 const config = (env) => {
     const isPhoneGap = env.isPhoneGap === 'true'
     const isProduction = env.isProduction === 'true'
     const environment = isProduction
         ? 'production'
         : 'development'
+    const assetPathPrepend = isPhoneGap
+        ? ''
+        : '/'
 
     return Object.assign({}, {
         entry: {
@@ -32,7 +42,7 @@ const config = (env) => {
         output: {
             filename: '[name].[chunkhash].js',
             path: path.join(cwd, buildDir),
-            publicPath: isPhoneGap ? '' : '/',
+            publicPath: assetPathPrepend,
         },
         resolve: {
             extensions: ['.js', '.jsx', '.scss'],
@@ -41,10 +51,7 @@ const config = (env) => {
             },
             modules: [
                 'node_modules',
-                path.join(cwd, `/src/${env.platform}/`),
-                path.join(cwd, `/src/${env.platform}/scripts/`),
-                path.join(cwd, `/src/${env.platform}/scripts/app/`),
-                path.join(cwd, `/src/${env.platform}/styles/styles/`),
+                ...getModules(env.platform)
             ]
         },
         module: {
@@ -101,6 +108,7 @@ const config = (env) => {
             ]),
             new webpack.DefinePlugin({
                 NODE_ENV: JSON.stringify(environment),
+                IS_PHONEGAP: JSON.stringify(isPhoneGap),
                 'process.env': {
                     NODE_ENV: JSON.stringify(environment)
                 }
@@ -141,16 +149,22 @@ const config = (env) => {
             new HtmlWebpackPlugin({
                 template: './src/generic/static/index.ejs',
                 inject: 'body',
-                absolutePath: isPhoneGap ? '' : '/',
+                absolutePath: assetPathPrepend,
                 isProduction,
                 isPhoneGap
             }),
             new ScriptExtHtmlWebpackPlugin({
                 defaultAttribute: 'defer'
             }),
-            new LiveReloadPlugin({
-                appendScriptTag: true
-            }),
+            ...(
+                !isProduction
+                    ? [
+                        new LiveReloadPlugin({
+                            appendScriptTag: true
+                        }),
+                    ]
+                    : []
+            ),
             cssExtractor,
             // new BundleAnalyzerPlugin(),
         ],

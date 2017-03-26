@@ -12,6 +12,7 @@ import Modal from 'containers/Modal'
 import Player from 'containers/Player'
 
 import getAbsolutePath from 'modules/getAbsolutePath'
+import isPhoneGap from 'modules/phonegap'
 import * as Tracking from 'modules/tracking'
 
 import { defaultAllowedLengths } from 'reducers/sequences'
@@ -246,20 +247,33 @@ export default class Main extends Component {
                 </div>
             ))
         const headerContent =  (
-            <div className="">
-                <div className="group-spacing-x">
-                    <div className="u-flex-row u-flex-justify">
-                        <img className="header__logo" src={`${absolutePath}assets/images/logo.png`} alt="DJEN metal generator logo" />
-                        <a className="" href="https://www.facebook.com/djenerationstation/" target="_blank" rel="noopener" onClick={ () => Tracking.sendFacebookLinkEvent('icon') }>
-                            <img
-                                className="header__icon social-icon"
-                                src={`${absolutePath}assets/images/F_icon.svg`}
-                                width="39"
-                                height="39"
-                                alt="facebook icon"
-                            />
-                        </a>
-                    </div>
+            <div className="group-spacing-x">
+                <div className="u-flex-row u-flex-justify">
+                    <img className="header__logo" src={`${absolutePath}assets/images/logo.png`} alt="DJEN metal generator logo" />
+                    {
+                        isPhoneGap
+                            ? <div></div>
+                            : <div className="u-flex-row">
+                                <a className="u-mr05" href="https://itunes.apple.com/gb/app/djen-metal-breakdown-generator/id1218322408?mt=8" target="_blank" rel="noopener" onClick={ () => Tracking.sendFacebookLinkEvent('icon') }>
+                                    <img
+                                        className="header__icon social-icon social-icon--appstore"
+                                        src={`${absolutePath}assets/images/appstore.svg`}
+                                        width="135px"
+                                        height="39"
+                                        alt="facebook icon"
+                                    />
+                                </a>
+                                <a className="" href="https://www.facebook.com/djenerationstation/" target="_blank" rel="noopener" onClick={ () => Tracking.sendFacebookLinkEvent('icon') }>
+                                    <img
+                                        className="header__icon social-icon"
+                                        src={`${absolutePath}assets/images/F_icon.svg`}
+                                        width="39"
+                                        height="39"
+                                        alt="facebook icon"
+                                    />
+                                </a>
+                            </div>
+                    }
                 </div>
             </div>
         )
@@ -271,7 +285,7 @@ export default class Main extends Component {
                 <Modal />
                 <div className="site">
                     <div className="site__content" ref="content">
-                        <div className="header" ref="header">
+                        <div className={`header ${isPhoneGap ? 'header--nav-spaced' : ''}`} ref="header">
                             <div className="group-capped-x group-centered">
                                 { headerContent }
                             </div>

@@ -1,5 +1,3 @@
-import getCordova from 'modules/getCordova'
-
 const isOffline = !!window.location.href.includes('index.html')
 const getAbsolutePath = () =>
     isOffline

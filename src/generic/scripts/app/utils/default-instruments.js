@@ -1,4 +1,5 @@
 import getAbsolutePath from 'modules/getAbsolutePath'
+import isPhoneGap from 'modules/phonegap'
 
 const rootOctave = 1
 const getMidiNote = (note, octave) => note + (rootOctave + octave)
@@ -11,9 +12,9 @@ const crash2MidiNote = 'A3'
 const chinaMidiNote  = 'E3'
 
 const absolutePath = getAbsolutePath()
-const getSoundURL = path => absolutePath === '/'
-    ? `https://raw.githubusercontent.com/RossMcMillan92/djent/master/src/generic/${path}`
-    : `${absolutePath}${path}`
+const getSoundURL = path => isPhoneGap
+    ? `${absolutePath}${path}`
+    : `https://raw.githubusercontent.com/RossMcMillan92/djent/master/src/generic/${path}`
 
 const getSound = (id, description, path, category, midi) => ({
     id,

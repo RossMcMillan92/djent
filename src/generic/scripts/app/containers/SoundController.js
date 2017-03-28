@@ -15,6 +15,7 @@ import LoopController from 'containers/LoopController'
 import ShareController from 'containers/ShareController'
 
 import * as Tracking from 'modules/tracking'
+import isPhoneGap from 'modules/phonegap'
 
 import { playSound } from 'utils/audio'
 import audioContext from 'utils/audioContext'
@@ -234,15 +235,21 @@ class SoundController extends Component {
                             <LoopController />
                         </div>
                     </div>
-                    <div className="u-flex-row u-flex-justify-center u-flex-center">
-                        <div className="u-mr05 u-mb05">
-                            <ShareController googleAPIHasLoaded={this.props.googleAPIHasLoaded} />
-                        </div>
+                    {
+                        !isPhoneGap
+                            ? (
+                                <div className="u-flex-row u-flex-justify-center u-flex-center">
+                                    <div className="u-mr05 u-mb05">
+                                        <ShareController googleAPIHasLoaded={this.props.googleAPIHasLoaded} />
+                                    </div>
 
-                        <div className="u-mb05">
-                            <ExportController />
-                        </div>
-                    </div>
+                                    <div className="u-mb05">
+                                        <ExportController />
+                                    </div>
+                                </div>
+                            )
+                            : null
+                    }
                 </div>
             </div>
         )

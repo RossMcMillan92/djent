@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="co.djen.mdjen" version="1.0.0" xmlns="http://w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget id="co.djen.mdjen" version="1.0.1" xmlns="http://w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>DJEN</name>
     <description>
         Metal breakdown generator
@@ -10,11 +10,12 @@
     <content src="index.html" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="android-minSdkVersion" value="14" />
-    <preference name="StatusBarOverlaysWebView" value="false" />
     <preference name="StatusBarBackgroundColor" value="#101010" />
     <preference name="StatusBarStyle" value="blackopaque" />
-    <plugin name="cordova-plugin-file" source="npm" spec="~4.1.1" />
     <plugin name="cordova-plugin-statusbar" />
+    <plugin name="cordova-plugin-whitelist" />
+    <plugin name="cordova-plugin-file" />
+    <plugin name="cordova-plugin-file-transfer" />
     <platform name="android">
         <icon density="ldpi" src="assets/images/icons/36.png" />
         <icon density="mdpi" src="assets/images/icons/48.png" />
@@ -33,27 +34,71 @@
         <allow-intent href="market:*" />
     </platform>
     <platform name="ios">
+        <icon src="assets/images/icons/29.png" width="29" height="29" />
+        <icon src="assets/images/icons/36.png" width="36" height="36" />
+        <icon src="assets/images/icons/40.png" width="40" height="40" />
+        <icon src="assets/images/icons/48.png" width="48" height="48" />
+        <icon src="assets/images/icons/50.png" width="50" height="50" />
         <icon src="assets/images/icons/57.png" width="57" height="57" />
         <icon src="assets/images/icons/58.png" width="58" height="58" />
-        <icon src="assets/images/icons/87.png" width="87" height="87" />
+        <icon src="assets/images/icons/60.png" width="60" height="60" />
+        <icon src="assets/images/icons/70.png" width="70" height="70" />
         <icon src="assets/images/icons/72.png" width="72" height="72" />
         <icon src="assets/images/icons/76.png" width="76" height="76" />
+        <icon src="assets/images/icons/80.png" width="80" height="80" />
+        <icon src="assets/images/icons/87.png" width="87" height="87" />
+        <icon src="assets/images/icons/96.png" width="96" height="96" />
+        <icon src="assets/images/icons/100.png" width="100" height="100" />
         <icon src="assets/images/icons/114.png" width="114" height="114" />
         <icon src="assets/images/icons/120.png" width="120" height="120" />
         <icon src="assets/images/icons/144.png" width="144" height="144" />
+        <icon src="assets/images/icons/150.png" width="150" height="150" />
         <icon src="assets/images/icons/152.png" width="152" height="152" />
+        <icon src="assets/images/icons/167.png" width="167" height="167" />
+        <icon src="assets/images/icons/180.png" width="180" height="180" />
+        <icon src="assets/images/icons/192.png" width="192" height="192" />
+        <icon src="assets/images/icons/310.png" width="310" height="310" />
+        <splash src="assets/images/screens/200x320.png" width="200" height="320" />
+        <splash src="assets/images/screens/320x200.png" width="320" height="200" />
         <splash src="assets/images/screens/320x480.png" width="320" height="480" />
         <splash src="assets/images/screens/480x320.png" width="480" height="320" />
+        <splash src="assets/images/screens/480x800.png" width="480" height="800" />
         <splash src="assets/images/screens/640x960.png" width="640" height="960" />
+        <splash src="assets/images/screens/640x1136.png" width="640" height="1136" />
+        <splash src="assets/images/screens/720x1280.png" width="720" height="1280" />
+        <splash src="assets/images/screens/750x1134.png" width="750" height="1134" />
+        <splash src="assets/images/screens/768x1004.png" width="768" height="1004" />
+        <splash src="assets/images/screens/768x1024.png" width="768" height="1024" />
+        <splash src="assets/images/screens/800x480.png" width="800" height="480" />
         <splash src="assets/images/screens/960x640.png" width="960" height="640" />
+        <splash src="assets/images/screens/1024x748.png" width="1024" height="748" />
+        <splash src="assets/images/screens/1024x768.png" width="1024" height="768" />
+        <splash src="assets/images/screens/1136x640.png" width="1136" height="640" />
+        <splash src="assets/images/screens/1242x2048.png" width="1242" height="2048" />
+        <splash src="assets/images/screens/1242x2208.png" width="1242" height="2208" />
+        <splash src="assets/images/screens/1280x720.png" width="1280" height="720" />
+        <splash src="assets/images/screens/1134x750.png" width="1134" height="750" />
+        <splash src="assets/images/screens/1536x2008.png" width="1536" height="2008" />
+        <splash src="assets/images/screens/1536x2048.png" width="1536" height="2048" />
+        <splash src="assets/images/screens/2048x1242.png" width="2048" height="1242" />
+        <splash src="assets/images/screens/2048x1496.png" width="2048" height="1496" />
+        <splash src="assets/images/screens/2048x1536.png" width="2048" height="1536" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
+        <preference name="deployment-target" value="7.1.2" />
     </platform>
+    <feature name="StatusBar">
+        <param name="ios-package" value="CDVStatusBar" onload="true" />
+    </feature>
     <access origin="*" />
+    <allow-navigation href="*" />
+    <allow-navigation href="blob:*" />
+    <allow-navigation href="data:*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <allow-intent href="*" />
 </widget>

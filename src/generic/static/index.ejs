@@ -61,6 +61,11 @@
 	<meta name="msapplication-TileColor" content="#1e1e1e">
 	<meta name="msapplication-TileImage" content="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/144.png">
 
+	<meta http-equiv="Content-Security-Policy"
+	         content="default-src * blob:;
+	                  style-src * 'self' 'unsafe-inline' 'unsafe-eval';
+	                  script-src * 'self' 'unsafe-inline' 'unsafe-eval';
+	                  worker-src * blob: 'self' 'unsafe-inline' 'unsafe-eval';">
 	<noscript>
 		<style> .js { display: none !important } </style>
 	</noscript>

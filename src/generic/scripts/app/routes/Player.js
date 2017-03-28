@@ -10,6 +10,7 @@ import PlaylistEditor from 'containers/PlaylistEditor'
 import SoundController from 'containers/SoundController'
 import Visualiser from 'containers/Visualiser'
 
+import isPhoneGap from 'modules/phonegap'
 import presets from 'utils/presets'
 
 export default class Player extends Component {
@@ -55,7 +56,7 @@ export default class Player extends Component {
                 </Panel>
 
                 <Panel theme="alpha">
-                    <div className={`visualiser-container ${this.props.hasAudioTemplate ? 'is-active' : ''} u-mb05`}>
+                    <div className={`visualiser-container ${isPhoneGap ? 'visualiser-container--phonegap' : ''} ${this.props.hasAudioTemplate ? 'is-active' : ''} u-mb05`}>
                         <div className="visualiser-container__backdrop"></div>
                         <div className="u-mb1">
                             <Visualiser />

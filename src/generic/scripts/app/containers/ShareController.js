@@ -11,24 +11,9 @@ import * as Tracking from 'modules/tracking'
 
 import { createPreset } from 'utils/presets'
 import { logError } from 'utils/tools'
+import { getGoogleShortURL } from 'utils/short-urls'
 
 const domain = `${window.location.protocol}//${window.location.host}`
-const shortURLCache = {}
-
-//    getGoogleShortURL :: url -> Task Error url
-const getGoogleShortURL = url =>
-    Task((rej, res) => {
-        if (shortURLCache[url]) return res(shortURLCache[url])
-
-        const onError = () => rej(Error(`Problem getting short URL: ${url}`))
-        window.gapi.client.urlshortener.url
-            .insert({ longUrl: url })
-            .then(({ result }) => {
-                const shortURL = result.id
-                shortURLCache[url] = shortURL
-                res(shortURL)
-            }, onError)
-    })
 
 const getIDFromGoogleURL = compose(last, split('/'))
 

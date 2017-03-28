@@ -14,4 +14,5 @@ import 'styles/app.sass'
 
 import 'libraries/HackTimer'
 
+import 'app/phonegap'
 import 'app/index'

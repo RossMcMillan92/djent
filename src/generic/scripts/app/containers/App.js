@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import listenForKonami from 'modules/listenForKonami'
+import { logError, log } from 'utils/tools'
 
 export default class App extends Component {
     static contextTypes = {
@@ -19,6 +21,9 @@ export default class App extends Component {
         splashScreen
             .classList
             .add('is-disabled')
+
+        listenForKonami()
+            .fork(logError, () => log('konamiiiiii'))
     }
 
     // lol

@@ -19,7 +19,7 @@ class BeatsController extends Component {
             label: capitalize((this.props.labelPrefix ? this.props.labelPrefix : '') + type),
             defaultValue : this.props.sequence[type],
             onChange: event => this.onChange(event, type),
-            className: 'input-base input-base--bare input-base--large input-base--short\@above-alpha',
+            className: 'input-base input-base--bare input-base--large input-base--short@above-alpha',
             minVal: 1,
             maxVal: 16,
             labelClassName: 'input-label',

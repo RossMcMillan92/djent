@@ -11,7 +11,7 @@ import VolumeController from 'components/VolumeController'
 
 import { capitalize } from 'utils/tools'
 
-//    getCategoriesFromSounds :: [] -> sound -> [sounds]
+//    getCategoriesFromSounds :: [cat] -> sound -> [sound]
 const getCategoriesFromSounds = (cats, sound) => {
     if (!cats.includes(sound.category)) {
         return [

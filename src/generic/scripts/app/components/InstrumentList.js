@@ -9,6 +9,8 @@ import SequenceController from 'components/SequenceController'
 import Tabgroup, { Tabpane } from 'components/Tabgroup'
 import VolumeController from 'components/VolumeController'
 
+import getPercentage from 'modules/getPercentage'
+
 import { capitalize } from 'utils/tools'
 
 //    getCategoriesFromSounds :: [cat] -> sound -> [sound]
@@ -22,7 +24,7 @@ const getCategoriesFromSounds = (cats, sound) => {
     return cats
 }
 
-const renderSound = (instrument, onSoundToggle) => sound => (
+const renderSound = (instrument, onSoundToggle, totalSoundsAmount) => sound => (
     <div
         onClick={() => onSoundToggle(sound.id, instrument.id)}
         className="block-list__item"
@@ -30,7 +32,7 @@ const renderSound = (instrument, onSoundToggle) => sound => (
     >
         <div className="block-list__body">
             <div className={`toggle-input ${sound.amount ? 'is-enabled' : ''}`}>
-                {`${sound.description || sound.id} - ${sound.amount}`}
+                {`${sound.description || sound.id} - ${getPercentage(totalSoundsAmount, sound.amount)}%`}
             </div>
         </div>
     </div>
@@ -43,6 +45,8 @@ const renderSoundsInCategories = curry((instrument, onSoundToggle, id, catIndex,
     const title = id
         || `${(instrument.description
         || capitalize(instrument.id))}`
+    const totalSoundsAmount = instrument.sounds
+        .reduce((total, sound) => total + sound.amount, 0)
 
     return (
         <Expandable
@@ -57,7 +61,7 @@ const renderSoundsInCategories = curry((instrument, onSoundToggle, id, catIndex,
             key={catIndex}
         >
             <div className="block-list block-list--compact">
-                { sounds.map(renderSound(instrument, onSoundToggle)) }
+                { sounds.map(renderSound(instrument, onSoundToggle, totalSoundsAmount)) }
             </div>
         </Expandable>
     )

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import getAbsolutePath from 'modules/getAbsolutePath'
+import getPercentage from 'modules/getPercentage'
 import { capitalize } from 'utils/tools'
 
 const getNewAllowedLengths = (allowedLengths, id, prop, value) =>
@@ -41,7 +42,7 @@ class NotePanel extends Component {
     render = () => {
         const { length, totalAmount } = this.props
         const noteName = `${capitalize(length.name)} note`
-        const percentage = totalAmount ? Math.round((length.amount / totalAmount) * 100) : 0
+        const percentage = totalAmount ? getPercentage(totalAmount, length.amount) : 0
         const isOn = length.amount > 0
 
         return (

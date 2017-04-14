@@ -14,10 +14,6 @@ import isPhoneGap from 'modules/phonegap'
 import presets from 'utils/presets'
 
 export default class Player extends Component {
-    static contextTypes = {
-        router: React.PropTypes.object.isRequired
-    }
-
     render = () => {
         const { actions, activePresetID } = this.props
         const totalSequence = this.props.sequences.find(sequence => sequence.id === 'total')

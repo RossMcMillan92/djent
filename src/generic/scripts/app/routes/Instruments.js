@@ -2,10 +2,6 @@ import React, { Component } from 'react'
 import InstrumentList from 'components/InstrumentList'
 
 export default class Instruments extends Component {
-    static contextTypes = {
-        router: React.PropTypes.object.isRequired
-    }
-
     render = () => (
         <div className={ this.props.className }>
             <InstrumentList

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="co.djen.mdjen" version="1.0.1" xmlns="http://w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget id="co.djen.mdjen" version="1.0.2" xmlns="http://w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>DJEN</name>
     <description>
         Metal breakdown generator
@@ -16,6 +16,7 @@
     <plugin name="cordova-plugin-whitelist" />
     <plugin name="cordova-plugin-file" />
     <plugin name="cordova-plugin-file-transfer" />
+    <plugin name="nl.kingsquare.cordova.background-audio" />
     <platform name="android">
         <icon density="ldpi" src="assets/images/icons/36.png" />
         <icon density="mdpi" src="assets/images/icons/48.png" />

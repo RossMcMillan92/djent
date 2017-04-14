@@ -53,9 +53,8 @@ class SequencePanel extends Component {
                 />
             </div>
             {
-                this.props.isDeletable
-                ? <button className="button-primary button-primary--tiny button-primary--negative" onClick={ this.launchDeleteModal } >Delete</button>
-                : null
+                this.props.isDeletable &&
+                    <button className="button-primary button-primary--tiny button-primary--negative" onClick={ this.launchDeleteModal } >Delete</button>
             }
         </div>
     )

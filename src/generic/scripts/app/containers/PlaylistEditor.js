@@ -144,8 +144,8 @@ class PlaylistEditor extends Component {
                     />
                 </div>
                 {
-                    audioPlaylist.length > 0 && (audioPlaylist.length < this.trackLimit)
-                    ? (
+                    audioPlaylist.length > 0 &&
+                    audioPlaylist.length < this.trackLimit &&
                         <Generator
                             audioPlaylist={ this.props.audioPlaylist }
                             bpm={ this.props.bpm }
@@ -160,7 +160,6 @@ class PlaylistEditor extends Component {
                                 Add Track
                             </div>
                         </Generator>
-                    ) : null
                 }
 
             </div>
@@ -177,18 +176,17 @@ const mapStateToProps = state => ({
     instruments         : state.instruments,
 })
 
-const mapDispatchToProps = (dispatch) => {
-    const actions = {
-        applyPreset,
-        updateAudioPlaylist,
-        updateActivePlaylistIndex,
-        updateIsPlaying,
-    }
-    return {
-        actions: {
-            ...bindActionCreators(actions, dispatch)
-        }
-    }
+const actions = {
+    applyPreset,
+    updateAudioPlaylist,
+    updateActivePlaylistIndex,
+    updateIsPlaying,
 }
+
+const mapDispatchToProps = dispatch => ({
+    actions: {
+        ...bindActionCreators(actions, dispatch)
+    }
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlaylistEditor)

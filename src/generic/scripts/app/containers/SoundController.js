@@ -208,7 +208,7 @@ class SoundController extends Component {
 
         return (
             <div>
-                { this.state.error ? <p className="txt-error">{ this.state.error }</p> : null }
+                { this.state.error && <p className="txt-error">{ this.state.error }</p> }
                 <div className="u-flex-row@above-alpha u-flex-wrap">
                     <div className="u-flex-row u-flex-justify-center u-flex-center u-mr2@above-alpha">
                         <div className="visualiser-container__button u-mr05 u-mb05">
@@ -236,19 +236,16 @@ class SoundController extends Component {
                         </div>
                     </div>
                     {
-                        !isPhoneGap
-                            ? (
-                                <div className="u-flex-row u-flex-justify-center u-flex-center">
-                                    <div className="u-mr05 u-mb05">
-                                        <ShareController googleAPIHasLoaded={this.props.googleAPIHasLoaded} />
-                                    </div>
-
-                                    <div className="u-mb05">
-                                        <ExportController />
-                                    </div>
+                        !isPhoneGap &&
+                            <div className="u-flex-row u-flex-justify-center u-flex-center">
+                                <div className="u-mr05 u-mb05">
+                                    <ShareController googleAPIHasLoaded={this.props.googleAPIHasLoaded} />
                                 </div>
-                            )
-                            : null
+
+                                <div className="u-mb05">
+                                    <ExportController />
+                                </div>
+                            </div>
                     }
                 </div>
             </div>

@@ -66,11 +66,8 @@ class InputBox extends Component {
         return (
             <div className={containerClassName}>
                 {
-                    label
-                    ? (
-                        <label className={ labelClassName } htmlFor={ id } title={ labelTitle }>{ label }:</label>
-                    )
-                    : null
+                    label &&
+                    <label className={ labelClassName } htmlFor={ id } title={ labelTitle }>{ label }:</label>
                 }
                 <input ref="input" { ...inputProps } className={`${inputProps.className ? inputProps.className : ''} ${this.state.isValid ? 'is-valid' : 'is-invalid'}`} onChange={ this.onChange } onBlur={this.onBlur} onFocus={this.onFocus} />
             </div>

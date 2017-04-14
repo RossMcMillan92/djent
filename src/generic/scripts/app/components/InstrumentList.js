@@ -29,7 +29,9 @@ const renderSound = (instrument, onSoundToggle) => sound => (
         key={sound.id}
     >
         <div className="block-list__body">
-            <div className={`toggle-input ${sound.amount ? 'is-enabled' : ''}`}>{sound.description || sound.id}</div>
+            <div className={`toggle-input ${sound.amount ? 'is-enabled' : ''}`}>
+                {`${sound.description || sound.id} - ${sound.amount}`}
+            </div>
         </div>
     </div>
 )
@@ -41,8 +43,6 @@ const renderSoundsInCategories = curry((instrument, onSoundToggle, id, catIndex,
     const title = id
         || `${(instrument.description
         || capitalize(instrument.id))}`
-
-    const renderInsturmentSound = renderSound(instrument, onSoundToggle)
 
     return (
         <Expandable
@@ -57,7 +57,7 @@ const renderSoundsInCategories = curry((instrument, onSoundToggle, id, catIndex,
             key={catIndex}
         >
             <div className="block-list block-list--compact">
-                { sounds.map(renderInsturmentSound) }
+                { sounds.map(renderSound(instrument, onSoundToggle)) }
             </div>
         </Expandable>
     )

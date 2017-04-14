@@ -34,13 +34,13 @@ const getBufferFromURL = (context, url) =>
 
 //    filterInstrumentsWithSounds :: [Instrument] -> [Instrument]
 const filterInstrumentsWithSounds = instrument =>
-    instrument.sounds.filter(sound => sound.enabled).length
+    instrument.sounds.filter(sound => sound.amount).length
 
 //    getBufferFromInstrument :: audioContext -> Instrument -> Task Error [Instrument]
 const getBufferFromInstrument = curry((context, instrument) => {
     const newInstrument = { ...instrument }
     const enabledSounds = newInstrument.sounds
-        .filter(sound => sound.enabled)
+        .filter(sound => sound.amount)
     newInstrument.buffers = {}
 
     return Task((rej, res) => {

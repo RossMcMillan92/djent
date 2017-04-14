@@ -22,7 +22,7 @@ const getSound = (id, description, path, category, midi) => ({
     path: getSoundURL(path),
     category,
     midi,
-    enabled: false,
+    amount: 0,
 })
 
 const getInstrument = (id, description, sequences, sounds, fadeOutDuration = 0, ringout = false) => ({

@@ -29,7 +29,7 @@ const renderSound = (instrument, onSoundToggle) => sound => (
         key={sound.id}
     >
         <div className="block-list__body">
-            <div className={`toggle-input ${sound.enabled ? 'is-enabled' : ''}`}>{sound.description || sound.id}</div>
+            <div className={`toggle-input ${sound.amount ? 'is-enabled' : ''}`}>{sound.description || sound.id}</div>
         </div>
     </div>
 )
@@ -37,7 +37,7 @@ const renderSound = (instrument, onSoundToggle) => sound => (
 const renderSoundsInCategories = curry((instrument, onSoundToggle, id, catIndex, arr) => {
     const sounds = instrument.sounds
         .filter(sound => sound.category === id)
-    const isExpanded = !!sounds.find(sound => sound.enabled)
+    const isExpanded = !!sounds.find(sound => sound.amount)
     const title = id
         || `${(instrument.description
         || capitalize(instrument.id))}`
@@ -137,9 +137,11 @@ export default class InstrumentList extends Component {
     onSoundToggle = (soundID, parentID) => {
         const currentValue = this.props.instruments
             .find(i => i.id === parentID).sounds
-            .find(s => s.id === soundID).enabled
-        const prop = 'enabled'
-        const value = !currentValue
+            .find(s => s.id === soundID).amount
+        const prop = 'amount'
+        const value = currentValue === 0
+            ? 1
+            : 0
 
         this.props.onSoundToggle({ soundID, parentID, prop, value })
     }

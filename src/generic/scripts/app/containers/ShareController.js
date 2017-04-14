@@ -104,7 +104,7 @@ const ShareBox = props => (
 )
 
 const mapStateToProps = state => ({
-    audioPlaylist       : state.sound.audioPlaylist,
+    audioPlaylist : state.sound.audioPlaylist,
 })
 
 const actions = {

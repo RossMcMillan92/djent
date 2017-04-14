@@ -12,9 +12,9 @@ const mapStateToProps = (state) => {
         : audioContext.currentTime
 
     return {
-        bpm            : currentPlaylistItem ? currentPlaylistItem.bpm : 0,
-        isPlaying      : sound.isPlaying,
-        sequences      : currentPlaylistItem ? currentPlaylistItem.sequences : sequences,
+        bpm       : currentPlaylistItem ? currentPlaylistItem.bpm : 0,
+        isPlaying : sound.isPlaying,
+        sequences : currentPlaylistItem ? currentPlaylistItem.sequences : sequences,
         audioStartTime,
         currentPlaylistItem,
     }

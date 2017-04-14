@@ -30,8 +30,8 @@ const BPMController = (props) => {
 }
 
 const mapStateToProps = state => ({
-    bpm: state.config.bpm,
-    preset: presets.find(preset => preset.id === state.config.activePresetID),
+    bpm    : state.config.bpm,
+    preset : presets.find(preset => preset.id === state.config.activePresetID),
 })
 
 const actions = {

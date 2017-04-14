@@ -265,9 +265,9 @@ const PlayButton = ({ isPlaying, onClick, isDisabled }) => {
 
 const mapStateToProps = state => ({
     ...state.sound,
-    bpm                  : state.config.bpm,
-    sequences            : state.sequences,
-    instruments          : state.instruments,
+    bpm         : state.config.bpm,
+    sequences   : state.sequences,
+    instruments : state.instruments,
 })
 
 const actions = {

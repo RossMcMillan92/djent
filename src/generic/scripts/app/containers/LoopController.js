@@ -49,22 +49,18 @@ const LoopController = (props) => {
     )
 }
 
-function mapStateToProps(state) {
-    return {
-        loopMode: state.sound.loopMode,
-    }
+const mapStateToProps = state => ({
+    loopMode: state.sound.loopMode,
+})
+
+const actions = {
+    updateloopMode
 }
 
-function mapDispatchToProps(dispatch) {
-    const actions = {
-        updateloopMode
+const mapDispatchToProps = dispatch => ({
+    actions: {
+        ...bindActionCreators(actions, dispatch)
     }
-
-    return {
-        actions: {
-            ...bindActionCreators(actions, dispatch)
-        }
-    }
-}
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoopController)

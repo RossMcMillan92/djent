@@ -103,22 +103,18 @@ const ShareBox = props => (
     </div>
 )
 
-function mapStateToProps(state) {
-    return {
-        audioPlaylist       : state.sound.audioPlaylist,
-    }
+const mapStateToProps = state => ({
+    audioPlaylist       : state.sound.audioPlaylist,
+})
+
+const actions = {
+    ...modalActions
 }
 
-function mapDispatchToProps(dispatch) {
-    const actions = {
-        ...modalActions
+const mapDispatchToProps = dispatch => ({
+    actions: {
+        ...bindActionCreators(actions, dispatch)
     }
-
-    return {
-        actions: {
-            ...bindActionCreators(actions, dispatch)
-        }
-    }
-}
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShareController)

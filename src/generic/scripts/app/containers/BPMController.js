@@ -22,7 +22,7 @@ const BPMController = (props) => {
         minVal: 50,
         maxVal: 300,
         step: 5,
-        className: 'input-base input-base--bare input-base--large input-base--short\@above-alpha',
+        className: 'input-base input-base--bare input-base--large input-base--short@above-alpha',
         labelClassName: 'input-label',
     }
 
@@ -34,15 +34,14 @@ const mapStateToProps = state => ({
     preset: presets.find(preset => preset.id === state.config.activePresetID),
 })
 
-const mapDispatchToProps = (dispatch) => {
-    const actions = {
-        updateBPM,
-    }
-    return {
-        actions: {
-            ...bindActionCreators(actions, dispatch)
-        }
-    }
+const actions = {
+    updateBPM,
 }
+
+const mapDispatchToProps = dispatch => ({
+    actions: {
+        ...bindActionCreators(actions, dispatch)
+    }
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(BPMController)

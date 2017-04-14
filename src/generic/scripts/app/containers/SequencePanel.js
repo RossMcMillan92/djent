@@ -88,17 +88,15 @@ class SequencePanel extends Component {
     )
 }
 
-function mapDispatchToProps(dispatch) {
-    const actions = {
-        ...sequencesActions,
-        ...modalActions,
-    }
-
-    return {
-        actions: {
-            ...bindActionCreators(actions, dispatch)
-        }
-    }
+const actions = {
+    ...sequencesActions,
+    ...modalActions,
 }
+
+const mapDispatchToProps = dispatch => ({
+    actions: {
+        ...bindActionCreators(actions, dispatch)
+    }
+})
 
 export default connect(null, mapDispatchToProps)(SequencePanel)

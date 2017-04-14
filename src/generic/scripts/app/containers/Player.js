@@ -6,7 +6,7 @@ import Player from 'routes/Player'
 import { applyPreset, updateBPM } from 'actions/config'
 import { updateSequence } from 'actions/sequences'
 
-function mapStateToProps(state) {
+const mapStateToProps = (state) => {
     const { config, sequences, sound } = state
     return {
         activePresetID   : config.activePresetID,
@@ -15,18 +15,16 @@ function mapStateToProps(state) {
     }
 }
 
-function mapDispatchToProps(dispatch) {
-    const actions = {
-        applyPreset,
-        updateBPM,
-        updateSequence
-    }
-
-    return {
-        actions: {
-            ...bindActionCreators(actions, dispatch)
-        }
-    }
+const actions = {
+    applyPreset,
+    updateBPM,
+    updateSequence
 }
+
+const mapDispatchToProps = dispatch => ({
+    actions: {
+        ...bindActionCreators(actions, dispatch)
+    }
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Player)

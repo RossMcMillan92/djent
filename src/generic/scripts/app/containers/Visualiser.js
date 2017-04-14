@@ -20,15 +20,14 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    const actions = {
-        ...soundActions,
-    }
-    return {
-        actions: {
-            ...bindActionCreators(actions, dispatch)
-        }
-    }
+const actions = {
+    ...soundActions,
 }
+
+const mapDispatchToProps = dispatch => ({
+    actions: {
+        ...bindActionCreators(actions, dispatch)
+    }
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Visualiser)

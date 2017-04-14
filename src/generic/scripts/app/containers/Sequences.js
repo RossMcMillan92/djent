@@ -5,22 +5,18 @@ import Sequences from 'routes/Sequences'
 
 import { addSequence } from 'actions/sequences'
 
-function mapStateToProps(state) {
-    return {
-        sequences : state.sequences,
-    }
+const mapStateToProps = state => ({
+    sequences : state.sequences,
+})
+
+const actions = {
+    addSequence
 }
 
-function mapDispatchToProps(dispatch) {
-    const actions = {
-        addSequence
+const mapDispatchToProps = dispatch => ({
+    actions: {
+        ...bindActionCreators(actions, dispatch)
     }
-
-    return {
-        actions: {
-            ...bindActionCreators(actions, dispatch)
-        }
-    }
-}
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sequences)

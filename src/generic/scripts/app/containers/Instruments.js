@@ -5,23 +5,19 @@ import Instruments from 'routes/Instruments'
 
 import * as instrumentsActions from 'actions/instruments'
 
-function mapStateToProps(state) {
-    return {
-        sequences   : state.sequences,
-        instruments : state.instruments,
-    }
+const mapStateToProps = state => ({
+    sequences   : state.sequences,
+    instruments : state.instruments,
+})
+
+const actions = {
+    ...instrumentsActions,
 }
 
-function mapDispatchToProps(dispatch) {
-    const actions = {
-        ...instrumentsActions,
+const mapDispatchToProps = dispatch => ({
+    actions: {
+        ...bindActionCreators(actions, dispatch)
     }
-
-    return {
-        actions: {
-            ...bindActionCreators(actions, dispatch)
-        }
-    }
-}
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Instruments)

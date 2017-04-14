@@ -270,17 +270,16 @@ const mapStateToProps = state => ({
     instruments          : state.instruments,
 })
 
-const mapDispatchToProps = (dispatch) => {
-    const actions = {
-        ...instrumentsActions,
-        ...modalActions,
-        ...soundActions,
-    }
-    return {
-        actions: {
-            ...bindActionCreators(actions, dispatch)
-        }
-    }
+const actions = {
+    ...instrumentsActions,
+    ...modalActions,
+    ...soundActions,
 }
+
+const mapDispatchToProps = dispatch => ({
+    actions: {
+        ...bindActionCreators(actions, dispatch)
+    }
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(SoundController)

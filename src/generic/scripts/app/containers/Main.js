@@ -7,26 +7,22 @@ import { applyPreset } from 'actions/config'
 import { disableModal, enableModal } from 'actions/modal'
 import { updateAudioPlaylist } from 'actions/sound'
 
-function mapStateToProps(state) {
-    return {
-        activePresetID       : state.config.activePresetID,
-        instruments          : state.instruments,
-    }
+const mapStateToProps = state => ({
+    activePresetID : state.config.activePresetID,
+    instruments    : state.instruments,
+})
+
+const actions = {
+    applyPreset,
+    disableModal,
+    enableModal,
+    updateAudioPlaylist
 }
 
-function mapDispatchToProps(dispatch) {
-    const actions = {
-        applyPreset,
-        disableModal,
-        enableModal,
-        updateAudioPlaylist
+const mapDispatchToProps = dispatch => ({
+    actions: {
+        ...bindActionCreators(actions, dispatch)
     }
-
-    return {
-        actions: {
-            ...bindActionCreators(actions, dispatch)
-        }
-    }
-}
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main)

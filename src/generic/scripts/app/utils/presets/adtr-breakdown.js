@@ -35,15 +35,14 @@ const preset = {
         instruments: [
             {
                 id: 'g',
-                repeatHitTypeForXBeat: 2,
                 sounds: [
                     {
                         id: 'sixth-3-muted',
-                        enabled: true,
+                        amount: 9,
                     },
                     {
                         id: 'sixth-4-muted',
-                        enabled: true,
+                        amount: 1,
                     },
                 ],
             },
@@ -52,7 +51,7 @@ const preset = {
                 sounds: [
                     {
                         id: 'k',
-                        enabled: true,
+                        amount: 1,
                     }
                 ],
             },
@@ -61,7 +60,7 @@ const preset = {
                 sounds: [
                     {
                         id: 's',
-                        enabled: true,
+                        amount: 1,
                     }
                 ],
             },
@@ -71,7 +70,7 @@ const preset = {
                 sounds: [
                     {
                         id: 'china-left',
-                        enabled: true,
+                        amount: 1,
                     }
                 ],
             },

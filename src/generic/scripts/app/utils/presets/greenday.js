@@ -41,15 +41,15 @@ const preset = {
                 sounds: [
                     {
                         id: 'fifth-5-open',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'fifth-7-open',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'fifth-12-open',
-                        enabled: true,
+                        amount: 1,
                     },
                 ],
                 predefinedHitTypes: [
@@ -84,7 +84,7 @@ const preset = {
                 sounds: [
                     {
                         id: 'k',
-                        enabled: true,
+                        amount: 1,
                     }
                 ],
                 predefinedHitTypes: [
@@ -120,7 +120,7 @@ const preset = {
                 sounds: [
                     {
                         id: 's',
-                        enabled: true,
+                        amount: 1,
                     }
                 ],
                 predefinedHitTypes: [
@@ -137,7 +137,7 @@ const preset = {
                 sounds: [
                     {
                         id: 'h',
-                        enabled: true,
+                        amount: 1,
                     },
                 ],
                 predefinedHitTypes: [

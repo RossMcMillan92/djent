@@ -250,7 +250,7 @@ export default class Main extends Component {
                     {
                         !isPhoneGap &&
                         <div className="u-flex-row">
-                            <a className="u-mr05" href="https://itunes.apple.com/gb/app/djen-metal-breakdown-generator/id1218322408?mt=8" target="_blank" rel="noopener" onClick={ () => Tracking.sendFacebookLinkEvent('icon') }>
+                            <a className="u-mr05" href="https://itunes.apple.com/gb/app/djen-metal-breakdown-generator/id1218322408?mt=8" target="_blank" rel="noopener" onClick={ () => Tracking.sendItunesLinkEvent('icon') }>
                                 <img
                                     className="header__icon social-icon social-icon--appstore"
                                     src={`${absolutePath}assets/images/appstore.svg`}

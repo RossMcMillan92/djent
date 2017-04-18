@@ -41,35 +41,35 @@ const preset = {
                 sounds: [
                     {
                         id: 'sixth-0-open',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'sixth-0-muted',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'sixth-1-open',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'sixth-1-muted',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'fifth-6-open',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'third-7-bend',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'third-8-bend',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'dissonance-10',
-                        enabled: true,
+                        amount: 1,
                     },
                 ],
             },
@@ -78,7 +78,7 @@ const preset = {
                 sounds: [
                     {
                         id: 'k',
-                        enabled: true,
+                        amount: 1,
                     }
                 ],
             },
@@ -87,7 +87,7 @@ const preset = {
                 sounds: [
                     {
                         id: 's',
-                        enabled: true,
+                        amount: 1,
                     }
                 ],
             },
@@ -97,15 +97,15 @@ const preset = {
                 sounds: [
                     {
                         id: 'crash-left',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'crash-right',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'china-left',
-                        enabled: true,
+                        amount: 1,
                     }
                 ],
             },

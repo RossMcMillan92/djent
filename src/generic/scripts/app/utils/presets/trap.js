@@ -91,7 +91,7 @@ const preset = {
                     {
                         id: 'sixth-3-muted',
                         path: '/assets/audio/trap/hit3.wav',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'sixth-4-muted',
@@ -109,7 +109,7 @@ const preset = {
                 sounds: [
                     {
                         id: 'k',
-                        enabled: true,
+                        amount: 1,
                         path: '/assets/audio/trap/bass.wav',
                     }
                 ],
@@ -120,7 +120,7 @@ const preset = {
                     {
                         id: 's',
                         path: '/assets/audio/trap/snare.wav',
-                        enabled: true,
+                        amount: 1,
                     }
                 ],
             },
@@ -129,11 +129,11 @@ const preset = {
                 sounds: [
                     {
                         id: 'crash-left',
-                        // enabled: true,
+                        // amount: 1,
                     },
                     {
                         id: 'crash-right',
-                        // enabled: true,
+                        // amount: 1,
                     },
                 ],
             },
@@ -146,12 +146,12 @@ const preset = {
                     {
                         id: 'h',
                         path: '/assets/audio/trap/hihat-open.wav',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'hc',
                         path: '/assets/audio/trap/hihat-closed.wav',
-                        enabled: true,
+                        amount: 1,
                     },
                 ],
             },

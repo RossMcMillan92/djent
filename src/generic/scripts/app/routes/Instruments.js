@@ -5,7 +5,7 @@ export default class Instruments extends Component {
     render = () => (
         <div className={ this.props.className }>
             <InstrumentList
-                onSoundToggle={ this.props.actions.updateInstrumentSound }
+                onSoundAmountChange={ this.props.actions.updateInstrumentSound }
                 actions={{
                     updateInstrumentPitch: this.props.actions.updateInstrumentPitch,
                     updateInstrumentVolume: this.props.actions.updateInstrumentVolume,

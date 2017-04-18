@@ -32,23 +32,23 @@ const preset = {
                 sounds: [
                     {
                         id: 'fifth-5-open',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'fifth-6-open',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'fifth-9-open',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'fifth-10-open',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'fifth-12-open',
-                        enabled: true,
+                        amount: 1,
                     },
                 ],
             },
@@ -61,7 +61,7 @@ const preset = {
                 sounds: [
                     {
                         id: 'k',
-                        enabled: true,
+                        amount: 1,
                     }
                 ],
             },
@@ -74,7 +74,7 @@ const preset = {
                 sounds: [
                     {
                         id: 's',
-                        enabled: true,
+                        amount: 1,
                     }
                 ],
             },
@@ -86,15 +86,15 @@ const preset = {
                 sounds: [
                     {
                         id: 'crash-left',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'crash-right',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'china-left',
-                        enabled: true,
+                        amount: 1,
                     },
                 ],
             },
@@ -106,7 +106,7 @@ const preset = {
                 sounds: [
                     {
                         id: 'h',
-                        enabled: true,
+                        amount: 1,
                     },
                 ],
             },

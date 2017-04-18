@@ -39,27 +39,27 @@ const preset = {
                 sounds: [
                     {
                         id: 'sixth-0-muted',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'sixth-0-open',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'sixth-1-muted',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'sixth-1-open',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'sixth-3-muted',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'dissonance-10',
-                        enabled: true,
+                        amount: 1,
                     },
                 ],
             },
@@ -68,7 +68,7 @@ const preset = {
                 sounds: [
                     {
                         id: 'k',
-                        enabled: true,
+                        amount: 1,
                     }
                 ],
             },
@@ -77,7 +77,7 @@ const preset = {
                 sounds: [
                     {
                         id: 's',
-                        enabled: true,
+                        amount: 1,
                     }
                 ],
             },
@@ -86,7 +86,7 @@ const preset = {
                 sounds: [
                     {
                         id: 'h',
-                        enabled: true,
+                        amount: 1,
                     }
                 ],
             },
@@ -96,15 +96,15 @@ const preset = {
                 sounds: [
                     {
                         id: 'crash-left',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'crash-right',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'china-left',
-                        enabled: true,
+                        amount: 1,
                     }
                 ],
             },
@@ -113,11 +113,11 @@ const preset = {
                 sounds: [
                     {
                         id: 'drone-high',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'drone-medium',
-                        enabled: true,
+                        amount: 1,
                     },
                 ],
             },

@@ -24,21 +24,36 @@ const getCategoriesFromSounds = (cats, sound) => {
     return cats
 }
 
-const renderSound = (instrument, onSoundToggle, totalSoundsAmount) => sound => (
+const renderSound = (instrument, onSoundAmountChange, totalSoundsAmount) => sound => (
     <div
-        onClick={() => onSoundToggle(sound.id, instrument.id)}
-        className="block-list__item"
+        className="block-list__item u-flex-row"
         key={sound.id}
     >
-        <div className="block-list__body">
+        <div
+            className="block-list__body u-flex-grow-1"
+            onClick={() => onSoundAmountChange(sound.id, instrument.id, sound.amount === 0 ? 1 : 0)}
+        >
             <div className={`toggle-input ${sound.amount ? 'is-enabled' : ''}`}>
-                {`${sound.description || sound.id} - ${getPercentage(totalSoundsAmount, sound.amount)}%`}
+                {`${sound.description || sound.id}`}
+            </div>
+        </div>
+        <div className="block-list__body u-flex-row">
+            <div
+                onClick={() => onSoundAmountChange(sound.id, instrument.id, sound.amount + 1)}
+            >
+                Up
+            </div>
+            {`${getPercentage(totalSoundsAmount, sound.amount)}%`}
+            <div
+                onClick={() => onSoundAmountChange(sound.id, instrument.id, sound.amount - 1)}
+            >
+                Down
             </div>
         </div>
     </div>
 )
 
-const renderSoundsInCategories = curry((instrument, onSoundToggle, id, catIndex, arr) => {
+const renderSoundsInCategories = curry((instrument, onSoundAmountChange, id, catIndex, arr) => {
     const sounds = instrument.sounds
         .filter(sound => sound.category === id)
     const isExpanded = !!sounds.find(sound => sound.amount)
@@ -61,16 +76,16 @@ const renderSoundsInCategories = curry((instrument, onSoundToggle, id, catIndex,
             key={catIndex}
         >
             <div className="block-list block-list--compact">
-                { sounds.map(renderSound(instrument, onSoundToggle, totalSoundsAmount)) }
+                { sounds.map(renderSound(instrument, onSoundAmountChange, totalSoundsAmount)) }
             </div>
         </Expandable>
     )
 })
 
-const renderSoundsPane = (instrument, onSoundToggle) => {
+const renderSoundsPane = (instrument, onSoundAmountChange) => {
     const categories = instrument.sounds
         .reduce(getCategoriesFromSounds, [])
-        .map(renderSoundsInCategories(instrument, onSoundToggle))
+        .map(renderSoundsInCategories(instrument, onSoundAmountChange))
 
     return categories
 }
@@ -138,16 +153,16 @@ const renderSettingsPane = (instrument, actions) => {
 }
 
 export default class InstrumentList extends Component {
-    onSoundToggle = (soundID, parentID) => {
+    onSoundAmountChange = (soundID, parentID, value) => {
         const currentValue = this.props.instruments
             .find(i => i.id === parentID).sounds
             .find(s => s.id === soundID).amount
         const prop = 'amount'
-        const value = currentValue === 0
-            ? 1
-            : 0
+        // const value = currentValue === 0
+        //     ? 1
+        //     : 0
 
-        this.props.onSoundToggle({ soundID, parentID, prop, value })
+        this.props.onSoundAmountChange({ soundID, parentID, prop, value })
     }
 
     render = () => {
@@ -159,7 +174,7 @@ export default class InstrumentList extends Component {
                     </h3>
                     <Tabgroup>
                         <Tabpane title="Sounds">
-                            { renderSoundsPane(instrument, this.onSoundToggle) }
+                            { renderSoundsPane(instrument, this.onSoundAmountChange) }
                         </Tabpane>
                         <Tabpane title="Sequences">
                             { renderSequencesPane(instrument, this.props.sequences, this.props.actions.updateInstrumentSequences) }

@@ -75,3 +75,9 @@ export const sendFacebookLinkEvent = compose(
     addGAEventToQueue,
     sendOutputEvent('facebookLink')
 )
+
+//    sendItunesLinkEvent :: label -> IO gaEvent
+export const sendItunesLinkEvent = compose(
+    addGAEventToQueue,
+    sendOutputEvent('itunesLink')
+)

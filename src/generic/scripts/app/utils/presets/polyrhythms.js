@@ -55,23 +55,23 @@ const preset = {
                 sounds: [
                     {
                         id: 'sixth-0-muted',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'sixth-1-muted',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'sixth-0-open',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'sixth-1-open',
-                        enabled: true,
+                        amount: 1,
                     },
                     {
                         id: 'fifth-4-open',
-                        enabled: true,
+                        amount: 1,
                     },
                 ],
             },
@@ -80,7 +80,7 @@ const preset = {
                 sounds: [
                     {
                         id: 'k',
-                        enabled: true,
+                        amount: 1,
                     }
                 ],
             },
@@ -94,7 +94,7 @@ const preset = {
                 sounds: [
                     {
                         id: 's',
-                        enabled: true,
+                        amount: 1,
                     }
                 ],
             },
@@ -107,7 +107,7 @@ const preset = {
                 sounds: [
                     {
                         id: 'hc',
-                        enabled: true,
+                        amount: 1,
                     }
                 ],
             },
@@ -119,7 +119,7 @@ const preset = {
                 sounds: [
                     {
                         id: 'china-left',
-                        enabled: true,
+                        amount: 1,
                     }
                 ],
             },

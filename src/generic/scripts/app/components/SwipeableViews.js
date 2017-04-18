@@ -127,8 +127,8 @@ class SwipeableViews extends Component {
 
         const pastSpeedThreshold = (Math.abs(this.vx) > this.props.threshold)
         const roundingType = pastSpeedThreshold
-                           ? (this.vx > 0) ? 'floor' : 'ceil'
-                           : 'round'
+            ? (this.vx > 0) ? 'floor' : 'ceil'
+            : 'round'
 
         const index  = getFinalIndex(roundingType, this.props.children.length - 1, this.index)
         const percent = roundToXPlaces(2, index * -100)

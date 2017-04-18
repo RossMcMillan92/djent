@@ -13,7 +13,7 @@ import getPercentage from 'modules/getPercentage'
 
 import { capitalize } from 'utils/tools'
 
-//    getCategoriesFromSounds :: [cat] -> sound -> [sound]
+//    getCategoriesFromSounds :: [cat] -> sound -> [cat]
 const getCategoriesFromSounds = (cats, sound) => {
     if (!cats.includes(sound.category)) {
         return [
@@ -37,18 +37,22 @@ const renderSound = (instrument, onSoundAmountChange, totalSoundsAmount) => soun
                 {`${sound.description || sound.id}`}
             </div>
         </div>
-        <div className="block-list__body u-flex-row">
-            <div
+        <div className=" u-flex-row">
+            <button
+                className="button-primary button-primary--tiny button-primary--dark"
                 onClick={() => onSoundAmountChange(sound.id, instrument.id, sound.amount + 1)}
             >
-                Up
+                <div className="arrow arrow--down"></div>
+            </button>
+            <div className="block-list__body u-flex-row">
+                {`${getPercentage(totalSoundsAmount, sound.amount)}%`}
             </div>
-            {`${getPercentage(totalSoundsAmount, sound.amount)}%`}
-            <div
-                onClick={() => onSoundAmountChange(sound.id, instrument.id, sound.amount - 1)}
+            <button
+                className="button-primary button-primary--tiny button-primary--dark"
+                onClick={() => onSoundAmountChange(sound.id, instrument.id, sound.amount - 1 >= 0 ? sound.amount - 1 : 0)}
             >
-                Down
-            </div>
+                <div className="arrow arrow--up"></div>
+            </button>
         </div>
     </div>
 )
@@ -158,9 +162,6 @@ export default class InstrumentList extends Component {
             .find(i => i.id === parentID).sounds
             .find(s => s.id === soundID).amount
         const prop = 'amount'
-        // const value = currentValue === 0
-        //     ? 1
-        //     : 0
 
         this.props.onSoundAmountChange({ soundID, parentID, prop, value })
     }

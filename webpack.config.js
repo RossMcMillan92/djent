@@ -77,7 +77,7 @@ const config = (env) => {
         },
         devServer: {
             inline: false,
-            compress: false,
+            compress: isProduction,
             port: 3002,
             host: '0.0.0.0',
             publicPath: '/',

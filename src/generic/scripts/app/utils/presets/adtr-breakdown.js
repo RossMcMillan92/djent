@@ -74,15 +74,6 @@ const preset = {
                     }
                 ],
             },
-            {
-                id: 'd',
-                sounds: [
-                    {
-                        id: 'drone-high',
-                        enabled: false,
-                    },
-                ],
-            },
         ]
     }
 }

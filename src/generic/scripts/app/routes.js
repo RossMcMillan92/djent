@@ -1,12 +1,10 @@
 import React from 'react'
 import { Route, IndexRoute, Redirect } from 'react-router'
 
-/* containers */
-import App from './containers/App'
 import Main from './containers/Main'
 
 export default (
-    <Route path="/" component={App}>
+    <Route path="/">
         <IndexRoute component={Main} />
         <Redirect from='/**/share/:shareID' to='share/:shareID' />
         <Route path="share/:shareID" component={Main} id="share" />

@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 
 export default class App extends Component {
-    static contextTypes = {
-        router: React.PropTypes.object.isRequired
-    }
     hasLoaded = false
 
     componentDidMount = () => {

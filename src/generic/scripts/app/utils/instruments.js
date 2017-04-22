@@ -35,7 +35,6 @@ const generateInstrumentHitTypes = (instrument, usePredefinedSettings) => {
 
     let hitTypes = []
 
-    console.log('ACTIVESOUNDS', activeSounds)
     if (activeSounds.length) {
         let beatCount = 0
         let currentHitType = false

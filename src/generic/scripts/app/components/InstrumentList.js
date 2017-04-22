@@ -24,36 +24,44 @@ const getCategoriesFromSounds = (cats, sound) => {
     return cats
 }
 
+const PercentageViewer = ({ amount, onAmountChange, totalAmount }) => (
+    <div className="u-flex-row u-flex-center group-spacing-x-med">
+        <button
+            className="button-primary button-primary--tiny button-primary--rounded button-primary--dark u-txt-small"
+            onClick={() => onAmountChange(amount - 1 >= 0 ? amount - 1 : 0)}
+        >
+            <div className="arrow arrow--up"></div>
+        </button>
+        <div className="group-padding-y-med group-padding-x-med u-w-3 u-tac u-txt-small">
+            {`${getPercentage(totalAmount, amount)}%`}
+        </div>
+        <button
+            className="button-primary button-primary--tiny button-primary--rounded button-primary--dark u-txt-small"
+            onClick={() => onAmountChange(amount + 1)}
+        >
+            <div className="arrow arrow--down"></div>
+        </button>
+    </div>
+)
+
 const renderSound = (instrument, onSoundAmountChange, totalSoundsAmount) => sound => (
     <div
         className="block-list__item u-flex-row"
         key={sound.id}
     >
         <div
-            className="block-list__body u-flex-grow-1"
+            className="group-padding-y-med group-padding-x-med u-txt-small u-flex-grow-1"
             onClick={() => onSoundAmountChange(sound.id, instrument.id, sound.amount === 0 ? 1 : 0)}
         >
             <div className={`toggle-input ${sound.amount ? 'is-enabled' : ''}`}>
                 {`${sound.description || sound.id}`}
             </div>
         </div>
-        <div className=" u-flex-row">
-            <button
-                className="button-primary button-primary--tiny button-primary--dark"
-                onClick={() => onSoundAmountChange(sound.id, instrument.id, sound.amount + 1)}
-            >
-                <div className="arrow arrow--down"></div>
-            </button>
-            <div className="block-list__body u-flex-row">
-                {`${getPercentage(totalSoundsAmount, sound.amount)}%`}
-            </div>
-            <button
-                className="button-primary button-primary--tiny button-primary--dark"
-                onClick={() => onSoundAmountChange(sound.id, instrument.id, sound.amount - 1 >= 0 ? sound.amount - 1 : 0)}
-            >
-                <div className="arrow arrow--up"></div>
-            </button>
-        </div>
+        <PercentageViewer
+            amount={sound.amount}
+            totalAmount={totalSoundsAmount}
+            onAmountChange={onSoundAmountChange(sound.id, instrument.id)}
+        />
     </div>
 )
 
@@ -157,14 +165,14 @@ const renderSettingsPane = (instrument, actions) => {
 }
 
 export default class InstrumentList extends Component {
-    onSoundAmountChange = (soundID, parentID, value) => {
+    onSoundAmountChange = curry((soundID, parentID, value) => {
         const currentValue = this.props.instruments
             .find(i => i.id === parentID).sounds
             .find(s => s.id === soundID).amount
         const prop = 'amount'
 
         this.props.onSoundAmountChange({ soundID, parentID, prop, value })
-    }
+    })
 
     render = () => {
         const instrumentViews = this.props.instruments

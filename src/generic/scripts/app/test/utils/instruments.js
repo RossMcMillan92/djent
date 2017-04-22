@@ -25,9 +25,11 @@ describe('Instruments', () => {
                 'crash-left',
             ])
 
-            expect(results.find(result => result.id === 'crash-left')).to.have.property('enabled')
+            expect(results.find(result => result.id === 'crash-left'))
+                .to.have.property('enabled')
                 .and.to.equal(true)
-            expect(results.find(result => result.id === 'crash-right')).to.have.property('enabled')
+            expect(results.find(result => result.id === 'crash-right'))
+                .to.have.property('enabled')
                 .and.to.equal(true)
             expect(results.length).to.equal(2);
         })

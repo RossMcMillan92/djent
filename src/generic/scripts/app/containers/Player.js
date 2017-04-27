@@ -5,6 +5,7 @@ import Player from 'routes/Player'
 
 import { applyPreset, updateBPM } from 'actions/config'
 import { updateSequence } from 'actions/sequences'
+import * as modalActions from 'actions/modal'
 
 const mapStateToProps = (state) => {
     const { config, sequences, sound } = state
@@ -16,9 +17,10 @@ const mapStateToProps = (state) => {
 }
 
 const actions = {
+    ...modalActions,
     applyPreset,
     updateBPM,
-    updateSequence
+    updateSequence,
 }
 
 const mapDispatchToProps = dispatch => ({

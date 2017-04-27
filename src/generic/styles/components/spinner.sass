@@ -1,9 +1,14 @@
 $spinner__size                  : 20px
 $spinner__size-large            : 80px
+$spinner__text-width            : 110px
 $spinner__border-width          : 3px
 $spinner__border-width-large    : 5px
 $spinner__track-color     : $palette-alpha
 $spinner__highlight-color : $palette-base-ui
+$spinner__track-color--dark     : $palette-base-ui
+$spinner__highlight-color--dark : $palette-alpha
+
+$spinner-container__margin-y : $spinner__text-width - $spinner__size-large - $base-spacing-unit
 
 .spinner
     display: block
@@ -21,11 +26,8 @@ $spinner__highlight-color : $palette-base-ui
         margin-top: -($spinner__size / 2)
         margin-left: -($spinner__size / 2)
 
-.spinner__subtext
-    margin-top: $base-spacing-unit
-    text-align: center
-    color: $palette-shade-gamma
-    font-size: rem(14px)
+.spinner--dark
+    border-color: $spinner__track-color--dark $spinner__track-color--dark $spinner__track-color--dark $spinner__highlight-color--dark
 
 
 .spinner--large
@@ -37,3 +39,16 @@ $spinner__highlight-color : $palette-base-ui
     &:after
         margin-top: -($spinner__size-large / 2)
         margin-left: -($spinner__size-large / 2)
+
+
+.spinner-container
+    margin-top: $spinner-container__margin-y
+    margin-bottom: $spinner-container__margin-y
+
+.spinner-container__subtext
+    margin-top: $base-spacing-unit
+    text-align: center
+    color: $palette-shade-gamma
+    font-size: rem(14px)
+    line-height: 1.4
+    width: $spinner__text-width

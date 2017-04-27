@@ -1,27 +1,56 @@
-import adtrBreakdown from './presets/adtr-breakdown'
-import blackDahlia from './presets/black-dahlia'
-import contortionist from './presets/contortionist'
-import meshuggah from './presets/meshuggah'
-import polyrhythms from './presets/polyrhythms'
-import swornIn from './presets/sworn-in'
-import thallBuster from './presets/thall-buster'
-import thallBuster2 from './presets/thall-buster-2'
-import thallTriplets from './presets/thall-triplets'
+import { Future as Task } from 'ramda-fantasy'
+import promiseToTask from 'modules/promiseToTask'
+
+const presets = [
+    {
+        id: 'adtr',
+        description: 'ADTR Breakdown',
+        load: promiseToTask(() => import(/* webpackChunkName: "presets.adtr-breakdown" */ './presets/adtr-breakdown'))
+    },
+    {
+        id: 'black-dahlia',
+        description: 'Blast Beats',
+        load: promiseToTask(() => import(/* webpackChunkName: "presets.black-dahlia" */ './presets/black-dahlia'))
+    },
+    {
+        id: 'contortionist',
+        description: 'Poly Chords & Melody',
+        load: promiseToTask(() => import(/* webpackChunkName: "presets.contortionist" */ './presets/contortionist'))
+    },
+    {
+        id: 'meshuggah',
+        description: 'Meshuggah',
+        load: promiseToTask(() => import(/* webpackChunkName: "presets.meshuggah" */ './presets/meshuggah'))
+    },
+    {
+        id: 'polyrhythms',
+        description: 'Polyrhythms',
+        load: promiseToTask(() => import(/* webpackChunkName: "presets.polyrhythms" */ './presets/polyrhythms'))
+    },
+    {
+        id: 'sworn-in',
+        description: 'Sworn In',
+        load: promiseToTask(() => import(/* webpackChunkName: "presets.sworn-in" */ './presets/sworn-in'))
+    },
+    {
+        id: 'thall',
+        description: 'Thall I',
+        load: promiseToTask(() => import(/* webpackChunkName: "presets.thall-buster-2" */ './presets/thall-buster-2'))
+    },
+    {
+        id: 'thall-buster',
+        description: 'Thall II',
+        load: promiseToTask(() => import(/* webpackChunkName: "presets.thall-buster" */ './presets/thall-buster'))
+    },
+    {
+        id: 'thall-triplets',
+        description: 'Thall III',
+        load: promiseToTask(() => import(/* webpackChunkName: "presets.thall-triplets" */ './presets/thall-triplets'))
+    },
+]
 
 import { getAllowedLengthsFromSequence } from './sequences'
 import { deepClone } from './tools'
-
-const presets = [
-    adtrBreakdown,
-    blackDahlia,
-    meshuggah,
-    polyrhythms,
-    contortionist,
-    swornIn,
-    thallBuster2,
-    thallBuster,
-    thallTriplets,
-]
 
 const createPreset = ({ id, instruments, sequences, bpm, usePredefinedSettings }) => ({
     id,

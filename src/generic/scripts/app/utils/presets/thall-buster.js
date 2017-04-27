@@ -1,6 +1,5 @@
 const preset = {
     id: 'thall-buster',
-    description: 'Thall II',
     settings: {
         config: {
             bpm       : 65,

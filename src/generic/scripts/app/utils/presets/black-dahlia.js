@@ -1,6 +1,5 @@
 const preset = {
     id: 'black-dahlia',
-    description: 'Blast Beats',
     settings: {
         config: {
             bpm            : 212,

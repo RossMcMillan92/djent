@@ -1,6 +1,5 @@
 const preset = {
     id: 'contortionist',
-    description: 'Poly Chords & Melody',
     settings: {
         config: {
             bpm            : 90,

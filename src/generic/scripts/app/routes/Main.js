@@ -52,16 +52,21 @@ export default class Main extends Component {
         if (!shareID) {
             const presetID = this.props.params.presetID || this.props.activePresetID
             const preset = presets.find(p => p.id === presetID)
-                         || presets.find(p => p.id === this.props.activePresetID)
-            return this.props.actions.applyPreset(preset)
-        }
+                        || presets.find(p => p.id === this.props.activePresetID)
 
-        this.props.actions.enableModal({
-            content: (<Spinner subtext="Loading..." />),
-            isCloseable: false,
-            className: 'modal--auto-width',
-        })
+            this.loadAndApplyPreset(preset)
+        } else {
+            this.props.actions.enableModal({
+                content: (<Spinner subtext="Loading..." />),
+                isCloseable: false,
+                className: 'modal--auto-width',
+            })
+        }
     }
+
+    loadAndApplyPreset = (preset) =>
+        preset.load
+            .fork(logError, ({ default: fullPreset }) => this.props.actions.applyPreset(fullPreset))
 
     componentDidMount = () => {
         this.refreshOnWindowResize()

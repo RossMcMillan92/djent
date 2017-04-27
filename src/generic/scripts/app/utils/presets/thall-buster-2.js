@@ -1,6 +1,5 @@
 const preset = {
     id: 'thall',
-    description: 'Thall I',
     settings: {
         config: {
             bpm       : 87,

@@ -1,6 +1,5 @@
 const preset = {
     id: 'sworn-in',
-    description: 'Sworn In',
     settings: {
         config: {
             bpm            : 90,

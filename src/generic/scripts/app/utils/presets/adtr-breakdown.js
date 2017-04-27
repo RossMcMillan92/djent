@@ -1,6 +1,5 @@
 const preset = {
     id: 'adtr',
-    description: 'ADTR Breakdown',
     settings: {
         config: {
             bpm            : 90,

@@ -1,6 +1,5 @@
 const preset = {
     id: 'thall-triplets',
-    description: 'Thall III',
     settings: {
         config: {
             bpm       : 104,

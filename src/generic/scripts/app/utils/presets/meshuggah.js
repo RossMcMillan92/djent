@@ -1,6 +1,5 @@
 const preset = {
     id: 'meshuggah',
-    description: 'Meshuggah',
     settings: {
         config: {
             bpm : 90,

@@ -1,6 +1,5 @@
 const preset = {
     id: 'polyrhythms',
-    description: 'Polyrhythms',
     settings: {
         config: {
             bpm       : 112,

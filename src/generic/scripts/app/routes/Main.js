@@ -31,8 +31,6 @@ import { getHashQueryParam, logError, throttle } from 'utils/tools'
 let Instruments
 let Sequences
 
-const absolutePath = getAbsolutePath()
-
 export default class Main extends Component {
     state = {
         activePageIndex: 0,
@@ -173,61 +171,65 @@ export default class Main extends Component {
 
     getViews = (isMobileView) => {
         const expandableTitleClass = 'title-primary u-txt-large dropdown-icon-before u-curp u-no-select'
-        if (this.state.childrenLoaded) {
-            return isMobileView
-                ? (
-                    <SwipeableViews
-                        viewHeight={true}
-                        resistance={true}
-                        index={this.state.activePageIndex}
-                        onChangeIndex={i => this.changeActivePageIndex(i)}
-                    >
-                        <Player
-                            route={this.props.route}
-                            googleAPIHasLoaded={this.state.googleAPIHasLoaded}
-                        />
-                        <Panel>
-                            <Sequences route={this.props.route} />
-                        </Panel>
-                        <Panel>
-                            <Instruments route={this.props.route} />
-                        </Panel>
-                    </SwipeableViews>
-                )
-                : (
-                    <div>
-                        <Player
-                            route={this.props.route}
-                            googleAPIHasLoaded={this.state.googleAPIHasLoaded}
-                        />
-                        <Panel className="u-bdrb">
-                            <Expandable
-                                title="Sequences"
-                                titleClassName={expandableTitleClass}
-                                enableStateSave={true}
-                                isExpanded={true}
-                            >
-                                <Sequences route={this.props.route} className="u-mt1" />
-                            </Expandable>
-                        </Panel>
-                        <Panel>
-                            <Expandable
-                                title="Instruments"
-                                titleClassName={expandableTitleClass}
-                                enableStateSave={true}
-                            >
-                                <Instruments route={this.props.route} className="u-mt1" />
-                            </Expandable>
-                        </Panel>
-                    </div>
-                )
-        }
-        return (
-            <Player
-                route={this.props.route}
-                googleAPIHasLoaded={this.state.googleAPIHasLoaded}
-            />
-        )
+        return isMobileView
+            ? (
+                <SwipeableViews
+                    viewHeight={true}
+                    resistance={true}
+                    index={this.state.activePageIndex}
+                    onChangeIndex={i => this.changeActivePageIndex(i)}
+                >
+                    <Player
+                        route={this.props.route}
+                        googleAPIHasLoaded={this.state.googleAPIHasLoaded}
+                    />
+                        {
+                            this.state.childrenLoaded &&
+                                <Panel>
+                                    <Sequences route={this.props.route} />
+                                </Panel>
+                        }
+                        {
+                            this.state.childrenLoaded &&
+                                <Panel>
+                                    <Instruments route={this.props.route} />
+                                </Panel>
+                        }
+                    }
+                </SwipeableViews>
+            )
+            : (
+                <div>
+                    <Player
+                        route={this.props.route}
+                        googleAPIHasLoaded={this.state.googleAPIHasLoaded}
+                    />
+                    {
+                        this.state.childrenLoaded &&
+                        [
+                            <Panel key="sequences" className="u-bdrb">
+                                <Expandable
+                                    title="Sequences"
+                                    titleClassName={expandableTitleClass}
+                                    enableStateSave={true}
+                                    isExpanded={true}
+                                >
+                                    <Sequences route={this.props.route} className="u-mt1" />
+                                </Expandable>
+                            </Panel>,
+                            <Panel key="instruments">
+                                <Expandable
+                                    title="Instruments"
+                                    titleClassName={expandableTitleClass}
+                                    enableStateSave={true}
+                                >
+                                    <Instruments route={this.props.route} className="u-mt1" />
+                                </Expandable>
+                            </Panel>
+                        ]
+                    }
+                </div>
+            )
     }
 
     render = () => {
@@ -243,36 +245,6 @@ export default class Main extends Component {
                     </div>
                 </div>
             ))
-        const headerContent =  (
-            <div className="group-spacing-x">
-                <div className="u-flex-row u-flex-justify">
-                    <img className="header__logo" src={`${absolutePath}assets/images/logo.png`} alt="DJEN metal generator logo" />
-                    {
-                        !isPhoneGap &&
-                        <div className="u-flex-row">
-                            <a className="u-mr05" href="https://itunes.apple.com/gb/app/djen-metal-breakdown-generator/id1218322408?mt=8" target="_blank" rel="noopener" onClick={ () => Tracking.sendItunesLinkEvent('icon') }>
-                                <img
-                                    className="header__icon social-icon social-icon--appstore"
-                                    src={`${absolutePath}assets/images/appstore.svg`}
-                                    width="135px"
-                                    height="39"
-                                    alt="facebook icon"
-                                />
-                            </a>
-                            <a className="" href="https://www.facebook.com/djenerationstation/" target="_blank" rel="noopener" onClick={ () => Tracking.sendFacebookLinkEvent('icon') }>
-                                <img
-                                    className="header__icon social-icon"
-                                    src={`${absolutePath}assets/images/F_icon.svg`}
-                                    width="39"
-                                    height="39"
-                                    alt="facebook icon"
-                                />
-                            </a>
-                        </div>
-                    }
-                </div>
-            </div>
-        )
         const isMobileView = isMobile()
         const views = this.getViews(isMobileView)
 
@@ -280,12 +252,6 @@ export default class Main extends Component {
             <div className="site">
                 <Modal />
                 <div className="site__content" ref="content">
-                    <div className={`header ${isPhoneGap ? 'header--nav-spaced' : ''}`} ref="header">
-                        <div className="group-capped-x group-centered">
-                            { headerContent }
-                        </div>
-                    </div>
-
                     { views }
                 </div>
 

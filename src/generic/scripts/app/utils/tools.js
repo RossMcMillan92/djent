@@ -103,17 +103,8 @@ export const isDevEnv = () => NODE_ENV === 'development'
 
 export const log = (...args) => {
 	if (isDevEnv()) console.log(...args)
-	return args[0]
 }
 
 export const logError = (...args) => {
 	if (isDevEnv()) (console.error || console.log).apply(console, args)
-	return args[0]
 }
-
-export const trace = curry((tag, d) => {
-	log(tag, d)
-	return d
-})
-
-if (isDevEnv()) window.trace = trace

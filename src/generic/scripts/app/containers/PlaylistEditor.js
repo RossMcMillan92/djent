@@ -156,9 +156,7 @@ class PlaylistEditor extends Component {
                             wrapperClass="button-primary button-primary--full button-primary--gamma"
                             wrapperComponent='button'
                         >
-                            <div className="u-flex-row u-flex-justify-center">
-                                Add Track
-                            </div>
+                            Add Track
                         </Generator>
                 }
 

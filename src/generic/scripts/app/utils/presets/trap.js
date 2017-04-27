@@ -30,22 +30,20 @@ const preset = {
             },
             {
                 id          : 'CUSTOM_SEQUENCE_2',
-                description : 'Bass drum',
-                bars        : 1,
+                description : 'Bass Line',
+                bars        : 2,
                 beats       : 4,
-                hitChance   : 0.8,
+                hitChance   : 0.9,
                 allowedLengths : [
                     {
                         id: '1',
                         amount: 4,
+                        isDotted: true,
                     },
                     {
                         id: '2',
-                        amount: 2,
-                    },
-                    {
-                        id: '4',
                         amount: 1,
+                        isDotted: true,
                     },
                 ],
             },
@@ -73,30 +71,23 @@ const preset = {
         ],
         instruments: [
             {
-                id: 'g',
-                // repeatHitTypeForXBeat: 8,
-                ringout: true,
+                id: 'b',
                 pitch: 600,
+                sequences: [
+                    'CUSTOM_SEQUENCE_2',
+                ],
                 sounds: [
                     {
-                        id: 'sixth-1-muted',
-                        path: '/assets/audio/trap/hit.wav',
-                        enabled: false,
+                        id: 'a',
+                        amount: 4,
                     },
                     {
-                        id: 'sixth-2-muted',
-                        path: '/assets/audio/trap/hit2.wav',
-                        enabled: false,
-                    },
-                    {
-                        id: 'sixth-3-muted',
-                        path: '/assets/audio/trap/hit3.wav',
+                        id: 'as',
                         amount: 1,
                     },
                     {
-                        id: 'sixth-4-muted',
-                        path: '/assets/audio/trap/hit4.wav',
-                        enabled: false,
+                        id: 'c',
+                        amount: 1,
                     },
                 ],
             },
@@ -110,7 +101,6 @@ const preset = {
                     {
                         id: 'k',
                         amount: 1,
-                        path: '/assets/audio/trap/bass.wav',
                     }
                 ],
             },
@@ -119,7 +109,6 @@ const preset = {
                 sounds: [
                     {
                         id: 's',
-                        path: '/assets/audio/trap/snare.wav',
                         amount: 1,
                     }
                 ],
@@ -145,13 +134,11 @@ const preset = {
                 sounds: [
                     {
                         id: 'h',
-                        path: '/assets/audio/trap/hihat-open.wav',
                         amount: 1,
                     },
                     {
                         id: 'hc',
-                        path: '/assets/audio/trap/hihat-closed.wav',
-                        amount: 1,
+                        amount: 6,
                     },
                 ],
             },

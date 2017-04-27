@@ -12,9 +12,7 @@ const crash2MidiNote = 'A3'
 const chinaMidiNote  = 'E3'
 
 const absolutePath = getAbsolutePath()
-const getSoundURL = path => isPhoneGap
-    ? `${absolutePath}${path}`
-    : `https://raw.githubusercontent.com/RossMcMillan92/djent/master/src/generic/${path}`
+const getSoundURL = path => `${absolutePath}${path}`
 
 const getSound = (id, description, path, category, midi) => ({
     id,
@@ -25,7 +23,7 @@ const getSound = (id, description, path, category, midi) => ({
     amount: 0,
 })
 
-const getInstrument = (id, description, sequences, sounds, fadeOutDuration = 0, ringout = false) => ({
+const getInstrument = (id, description, sequences, sounds, fadeOutDuration = 0, ringout = false, volume = 1) => ({
     id,
     description,
     sequences,
@@ -33,581 +31,126 @@ const getInstrument = (id, description, sequences, sounds, fadeOutDuration = 0, 
     fadeOutDuration,
     ringout,
     pitch: 0,
-    volume: 1,
+    volume: volume,
     repeatHitTypeForXBeat: 0,
 })
 
 const defaultInstruments = [
     getInstrument(
-        'g',
-        'Rythm Guitar/Bass (Drop G#)',
+        'b',
+        '808 Bass',
         [
             'CUSTOM_SEQUENCE_1',
         ],
         [
             getSound(
-                'sixth-0-muted',
-                'Fret 0',
-                'assets/audio/guitar/sixth-0-muted.mp3',
-                'Sixth string [Muted]',
-                {
-                    pitch: [ getMidiNote('G#', 0), getMidiNote('D#', 1), getMidiNote('G#', 1) ],
-                    muted: true,
-                },
-            ),
-            getSound(
-                'sixth-1-muted',
-                'Fret 1',
-                'assets/audio/guitar/sixth-1-muted.mp3',
-                'Sixth string [Muted]',
-                {
-                    pitch: [ getMidiNote('A', 0), getMidiNote('E', 1), getMidiNote('A', 1) ],
-                    muted: true,
-                },
-            ),
-            getSound(
-                'sixth-2-muted',
-                'Fret 2',
-                'assets/audio/guitar/sixth-2-muted.mp3',
-                'Sixth string [Muted]',
-                {
-                    pitch: [ getMidiNote('A#', 0), getMidiNote('F', 1), getMidiNote('A#', 1) ],
-                    muted: true,
-                },
-            ),
-            getSound(
-                'sixth-3-muted',
-                'Fret 3',
-                'assets/audio/guitar/sixth-3-muted.mp3',
-                'Sixth string [Muted]',
-                {
-                    pitch: [ getMidiNote('B', 0), getMidiNote('F#', 1), getMidiNote('B', 1) ],
-                    muted: true,
-                },
-            ),
-            getSound(
-                'sixth-4-muted',
-                'Fret 4',
-                'assets/audio/guitar/sixth-4-muted.mp3',
-                'Sixth string [Muted]',
-                {
-                    pitch: [ getMidiNote('C', 1), getMidiNote('G', 1), getMidiNote('C', 2) ],
-                    muted: true,
-                },
-            ),
-            getSound(
-                'sixth-8-muted',
-                'Fret 8',
-                'assets/audio/guitar/sixth-8-muted.mp3',
-                'Sixth string [Muted]',
-                {
-                    pitch: [ getMidiNote('E', 1), getMidiNote('B', 1), getMidiNote('E', 2) ],
-                    muted: true,
-                },
-            ),
-            getSound(
-                'sixth-0-open',
-                'Fret 0',
-                'assets/audio/guitar/sixth-0-open.mp3',
-                'Sixth string [Open]',
-                {
-                    pitch: [ getMidiNote('G#', 0) ],
-                },
-            ),
-            getSound(
-                'sixth-1-open',
-                'Fret 1',
-                'assets/audio/guitar/sixth-1-open.mp3',
-                'Sixth string [Open]',
+                'a',
+                'A',
+                'assets/audio/trap/mastered/808-a.mp3',
+                '808',
                 {
                     pitch: [ getMidiNote('A', 0) ],
                 },
             ),
             getSound(
-                'sixth-2-open',
-                'Fret 2',
-                'assets/audio/guitar/sixth-2-open.mp3',
-                'Sixth string [Open]',
+                'as',
+                'A#',
+                'assets/audio/trap/mastered/808-as.mp3',
+                '808',
                 {
                     pitch: [ getMidiNote('A#', 0) ],
                 },
             ),
             getSound(
-                'sixth-3-open',
-                'Fret 3',
-                'assets/audio/guitar/sixth-3-open.mp3',
-                'Sixth string [Open]',
+                'b',
+                'B',
+                'assets/audio/trap/mastered/808-b.mp3',
+                '808',
                 {
                     pitch: [ getMidiNote('B', 0) ],
                 },
             ),
             getSound(
-                'sixth-4-open',
-                'Fret 4',
-                'assets/audio/guitar/sixth-4-open.mp3',
-                'Sixth string [Open]',
+                'c',
+                'C',
+                'assets/audio/trap/mastered/808-c.mp3',
+                '808',
                 {
                     pitch: [ getMidiNote('C', 1) ],
                 },
             ),
             getSound(
-                'sixth-5-open',
-                'Fret 5',
-                'assets/audio/guitar/sixth-5-open.mp3',
-                'Sixth string [Open]',
+                'cs',
+                'C#',
+                'assets/audio/trap/mastered/808-cs.mp3',
+                '808',
                 {
                     pitch: [ getMidiNote('C#', 1) ],
                 },
             ),
             getSound(
-                'sixth-6-open',
-                'Fret 6',
-                'assets/audio/guitar/sixth-6-open.mp3',
-                'Sixth string [Open]',
+                'd',
+                'D',
+                'assets/audio/trap/mastered/808-d.mp3',
+                '808',
                 {
                     pitch: [ getMidiNote('D', 1) ],
                 },
             ),
             getSound(
-                'sixth-7-open',
-                'Fret 7',
-                'assets/audio/guitar/sixth-7-open.mp3',
-                'Sixth string [Open]',
+                'ds',
+                'D#',
+                'assets/audio/trap/mastered/808-ds.mp3',
+                '808',
                 {
                     pitch: [ getMidiNote('D#', 1) ],
                 },
             ),
             getSound(
-                'sixth-8-open',
-                'Fret 8',
-                'assets/audio/guitar/sixth-8-open.mp3',
-                'Sixth string [Open]',
+                'e',
+                'E',
+                'assets/audio/trap/mastered/808-e.mp3',
+                '808',
                 {
                     pitch: [ getMidiNote('E', 1) ],
                 },
             ),
             getSound(
-                'sixth-9-open',
-                'Fret 9',
-                'assets/audio/guitar/sixth-9-open.mp3',
-                'Sixth string [Open]',
+                'f',
+                'F',
+                'assets/audio/trap/mastered/808-f.mp3',
+                '808',
                 {
                     pitch: [ getMidiNote('F', 1) ],
                 },
             ),
             getSound(
-                'sixth-10-open',
-                'Fret 10',
-                'assets/audio/guitar/sixth-10-open.mp3',
-                'Sixth string [Open]',
+                'fs',
+                'F#',
+                'assets/audio/trap/mastered/808-fs.mp3',
+                '808',
                 {
                     pitch: [ getMidiNote('F#', 1) ],
                 },
             ),
             getSound(
-                'sixth-11-open',
-                'Fret 11',
-                'assets/audio/guitar/sixth-11-open.mp3',
-                'Sixth string [Open]',
+                'g',
+                'G',
+                'assets/audio/trap/mastered/808-g.mp3',
+                '808',
                 {
                     pitch: [ getMidiNote('G', 1) ],
                 },
             ),
             getSound(
-                'sixth-12-open',
-                'Fret 12',
-                'assets/audio/guitar/sixth-12-open.mp3',
-                'Sixth string [Open]',
+                'gs',
+                'G#',
+                'assets/audio/trap/mastered/808-gs.mp3',
+                '808',
                 {
                     pitch: [ getMidiNote('G#', 1) ],
                 },
             ),
-            getSound(
-                'sixth-13-open',
-                'Fret 13',
-                'assets/audio/guitar/sixth-13-open.mp3',
-                'Sixth string [Open]',
-                {
-                    pitch: [ getMidiNote('A', 1) ],
-                },
-            ),
-            getSound(
-                'sixth-14-open',
-                'Fret 14',
-                'assets/audio/guitar/sixth-14-open.mp3',
-                'Sixth string [Open]',
-                {
-                    pitch: [ getMidiNote('A#', 1) ],
-                },
-            ),
-            getSound(
-                'sixth-15-open',
-                'Fret 15',
-                'assets/audio/guitar/sixth-15-open.mp3',
-                'Sixth string [Open]',
-                {
-                    pitch: [ getMidiNote('B', 1) ],
-                },
-            ),
-            getSound(
-                'sixth-0-chord',
-                'Fret 0',
-                'assets/audio/guitar/sixth-0-chord.mp3',
-                'Sixth string [Chord]',
-                {
-                    pitch: [
-                        getMidiNote('G#', 0),
-                        getMidiNote('D#', 1),
-                        getMidiNote('G#', 1),
-                        getMidiNote('D#', 2),
-                        getMidiNote('G#', 2),
-                        getMidiNote('D#', 3),
-                    ],
-                },
-            ),
-            getSound(
-                'sixth-1-chord',
-                'Fret 1',
-                'assets/audio/guitar/sixth-1-chord.mp3',
-                'Sixth string [Chord]',
-                {
-                    pitch: [
-                        getMidiNote('A', 1),
-                        getMidiNote('E', 1),
-                        getMidiNote('A', 2),
-                        getMidiNote('E', 2),
-                        getMidiNote('A', 3),
-                    ],
-                },
-            ),
-            getSound(
-                'sixth-2-chord',
-                'Fret 2',
-                'assets/audio/guitar/sixth-2-chord.mp3',
-                'Sixth string [Chord]',
-                {
-                    pitch: [
-                        getMidiNote('A#', 1),
-                        getMidiNote('F', 1),
-                        getMidiNote('A#', 2),
-                        getMidiNote('F', 2),
-                        getMidiNote('A#', 3),
-                    ],
-                },
-            ),
-            getSound(
-                'sixth-3-chord',
-                'Fret 3',
-                'assets/audio/guitar/sixth-3-chord.mp3',
-                'Sixth string [Chord]',
-                {
-                    pitch: [
-                        getMidiNote('B', 1),
-                        getMidiNote('F#', 1),
-                        getMidiNote('B', 2),
-                        getMidiNote('F#', 2),
-                        getMidiNote('B', 3),
-                    ],
-                },
-            ),
-            getSound(
-                'sixth-4-chord',
-                'Fret 4',
-                'assets/audio/guitar/sixth-4-chord.mp3',
-                'Sixth string [Chord]',
-                {
-                    pitch: [
-                        getMidiNote('C', 1),
-                        getMidiNote('G', 1),
-                        getMidiNote('C', 2),
-                        getMidiNote('G', 2),
-                        getMidiNote('C', 3),
-                    ],
-                },
-            ),
-            getSound(
-                'sixth-5-chord',
-                'Fret 5',
-                'assets/audio/guitar/sixth-5-chord.mp3',
-                'Sixth string [Chord]',
-                {
-                    pitch: [
-                        getMidiNote('C#', 1),
-                        getMidiNote('G#', 1),
-                        getMidiNote('C#', 2),
-                        getMidiNote('G#', 2),
-                        getMidiNote('C#', 3),
-                    ],
-                },
-            ),
-            getSound(
-                'sixth-6-chord',
-                'Fret 6',
-                'assets/audio/guitar/sixth-6-chord.mp3',
-                'Sixth string [Chord]',
-                {
-                    pitch: [
-                        getMidiNote('D', 1),
-                        getMidiNote('A', 2),
-                        getMidiNote('D', 2),
-                        getMidiNote('A', 3),
-                        getMidiNote('D', 3),
-                    ],
-                },
-            ),
-            getSound(
-                'sixth-7-chord',
-                'Fret 7',
-                'assets/audio/guitar/sixth-7-chord.mp3',
-                'Sixth string [Chord]',
-                {
-                    pitch: [
-                        getMidiNote('D#', 1),
-                        getMidiNote('A#', 2),
-                        getMidiNote('D#', 2),
-                        getMidiNote('A#', 3),
-                        getMidiNote('D#', 3),
-                    ],
-                },
-            ),
-            getSound(
-                'sixth-8-chord',
-                'Fret 8',
-                'assets/audio/guitar/sixth-8-chord.mp3',
-                'Sixth string [Chord]',
-                {
-                    pitch: [
-                        getMidiNote('E', 1),
-                        getMidiNote('B', 2),
-                        getMidiNote('E', 2),
-                        getMidiNote('B', 3),
-                        getMidiNote('E', 3),
-                    ],
-                },
-            ),
-            getSound(
-                'sixth-9-chord',
-                'Fret 9',
-                'assets/audio/guitar/sixth-9-chord.mp3',
-                'Sixth string [Chord]',
-                {
-                    pitch: [
-                        getMidiNote('F', 1),
-                        getMidiNote('C', 2),
-                        getMidiNote('F', 2),
-                        getMidiNote('C', 3),
-                        getMidiNote('F', 3),
-                    ],
-                },
-            ),
-            getSound(
-                'sixth-10-chord',
-                'Fret 10',
-                'assets/audio/guitar/sixth-10-chord.mp3',
-                'Sixth string [Chord]',
-                {
-                    pitch: [
-                        getMidiNote('F#', 1),
-                        getMidiNote('C#', 2),
-                        getMidiNote('F#', 2),
-                        getMidiNote('C#', 3),
-                        getMidiNote('F#', 3),
-                    ],
-                },
-            ),
-            getSound(
-                'sixth-11-chord',
-                'Fret 11',
-                'assets/audio/guitar/sixth-11-chord.mp3',
-                'Sixth string [Chord]',
-                {
-                    pitch: [
-                        getMidiNote('G', 1),
-                        getMidiNote('D', 2),
-                        getMidiNote('G', 2),
-                        getMidiNote('D', 3),
-                        getMidiNote('G', 3),
-                    ],
-                },
-            ),
-            getSound(
-                'sixth-12-chord',
-                'Fret 12',
-                'assets/audio/guitar/sixth-12-chord.mp3',
-                'Sixth string [Chord]',
-                {
-                    pitch: [
-                        getMidiNote('G#', 1),
-                        getMidiNote('D#', 2),
-                        getMidiNote('G#', 2),
-                        getMidiNote('D#', 3),
-                        getMidiNote('G#', 3),
-                    ],
-                },
-            ),
-
-            getSound(
-                'fifth-5-open',
-                'Fret 5',
-                'assets/audio/guitar/fifth-5-open.mp3',
-                'Fifth string [Open]',
-                {
-                    pitch: [ getMidiNote('G#', 1) ],
-                },
-            ),
-            getSound(
-                'fifth-6-open',
-                'Fret 6',
-                'assets/audio/guitar/fifth-6-open.mp3',
-                'Fifth string [Open]',
-                {
-                    pitch: [ getMidiNote('A', 1) ],
-                },
-            ),
-            getSound(
-                'fifth-7-open',
-                'Fret 7',
-                'assets/audio/guitar/fifth-7-open.mp3',
-                'Fifth string [Open]',
-                {
-                    pitch: [ getMidiNote('A#', 1) ],
-                },
-            ),
-            getSound(
-                'fifth-8-open',
-                'Fret 8',
-                'assets/audio/guitar/fifth-8-open.mp3',
-                'Fifth string [Open]',
-                {
-                    pitch: [ getMidiNote('B', 1) ],
-                },
-            ),
-            getSound(
-                'fifth-9-open',
-                'Fret 9',
-                'assets/audio/guitar/fifth-9-open.mp3',
-                'Fifth string [Open]',
-                {
-                    pitch: [ getMidiNote('C', 2) ],
-                },
-            ),
-            getSound(
-                'fifth-10-open',
-                'Fret 10',
-                'assets/audio/guitar/fifth-10-open.mp3',
-                'Fifth string [Open]',
-                {
-                    pitch: [ getMidiNote('Db', 2) ],
-                },
-            ),
-            getSound(
-                'fifth-11-open',
-                'Fret 11',
-                'assets/audio/guitar/fifth-11-open.mp3',
-                'Fifth string [Open]',
-                {
-                    pitch: [ getMidiNote('D', 2) ],
-                },
-            ),
-            getSound(
-                'fifth-12-open',
-                'Fret 12',
-                'assets/audio/guitar/fifth-12-open.mp3',
-                'Fifth string [Open]',
-                {
-                    pitch: [ getMidiNote('Eb', 2) ],
-                },
-            ),
-
-            getSound(
-                'third-7-open',
-                'Fret 7',
-                'assets/audio/guitar/third-7-open.mp3',
-                'Third string [Open]',
-                {
-                    pitch: [ getMidiNote('G#', 2) ],
-                },
-            ),
-            getSound(
-                'third-8-open',
-                'Fret 8',
-                'assets/audio/guitar/third-8-open.mp3',
-                'Third string [Open]',
-                {
-                    pitch: [ getMidiNote('A', 2) ],
-                },
-            ),
-            getSound(
-                'third-9-open',
-                'Fret 9',
-                'assets/audio/guitar/third-9-open.mp3',
-                'Third string [Open]',
-                {
-                    pitch: [ getMidiNote('A#', 2) ],
-                },
-            ),
-            getSound(
-                'third-10-open',
-                'Fret 10',
-                'assets/audio/guitar/third-10-open.mp3',
-                'Third string [Open]',
-                {
-                    pitch: [ getMidiNote('B', 2) ],
-                },
-            ),
-
-            getSound(
-                'third-7-bend',
-                'Fret 7',
-                'assets/audio/guitar/third-7-bend.mp3',
-                'Third string [Bend]',
-                {
-                    pitch: [ getMidiNote('G#', 2) ],
-                },
-            ),
-            getSound(
-                'third-8-bend',
-                'Fret 8',
-                'assets/audio/guitar/third-8-bend.mp3',
-                'Third string [Bend]',
-                {
-                    pitch: [ getMidiNote('A', 2) ],
-                },
-            ),
-
-            getSound(
-                'dissonance-10',
-                'Dissonance fret 10',
-                'assets/audio/guitar/dissonance-10.mp3',
-                'Misc',
-                {
-                    pitch: [ getMidiNote('G#', 3), getMidiNote('G', 3) ],
-                    muted: true,
-                },
-            ),
-            getSound(
-                'dissonance-16',
-                'Dissonance fret 16',
-                'assets/audio/guitar/dissonance-16.mp3',
-                'Misc',
-                {
-                    pitch: [ getMidiNote('G#', 3), getMidiNote('G', 3) ],
-                    muted: true,
-                },
-            ),
-
-            getSound(
-                'scratch',
-                'Scratch',
-                'assets/audio/guitar/scratch.mp3',
-                'Misc',
-                {
-                    pitch: [ getMidiNote('G#', 0), getMidiNote('D#', 1), getMidiNote('G#', 1) ],
-                    duration: 0.125,
-                    muted: true,
-                },
-            ),
-
         ],
         0.025,
     ),
@@ -863,6 +406,24 @@ const defaultInstruments = [
         0.025,
     ),
     getInstrument(
+        'fx',
+        'FX',
+        [
+            'CUSTOM_SEQUENCE_1',
+        ],
+        [
+            getSound(
+                't',
+                'Tweet',
+                'assets/audio/trap/tweet.wav',
+                'Tweet',
+                {
+                    pitch: [ kickMidiNote ],
+                },
+            )
+        ],
+    ),
+    getInstrument(
         'k',
         'Kick',
         [
@@ -872,7 +433,7 @@ const defaultInstruments = [
             getSound(
                 'k',
                 'Basic kick',
-                'assets/audio/mastered/kick.wav',
+                'assets/audio/trap/mastered/kick1.mp3',
                 'Kick',
                 {
                     pitch: [ kickMidiNote ],
@@ -890,7 +451,7 @@ const defaultInstruments = [
             getSound(
                 's',
                 'Basic snare',
-                'assets/audio/mastered/snare.wav',
+                'assets/audio/trap/mastered/snare1.mp3',
                 'Snare',
                 {
                     pitch: [ snareMidiNote ],
@@ -909,7 +470,7 @@ const defaultInstruments = [
             getSound(
                 'h',
                 'Open hihat',
-                'assets/audio/mastered/hihat-open.wav',
+                'assets/audio/trap/mastered/hho1.mp3',
                 'Hihat',
                 {
                     pitch: [ hihatMidiNote ],
@@ -918,7 +479,7 @@ const defaultInstruments = [
             getSound(
                 'hc',
                 'Closed hihat',
-                'assets/audio/mastered/hihat-closed.wav',
+                'assets/audio/trap/mastered/hhc1.mp3',
                 'Hihat',
                 {
                     pitch: [ hihatMidiNote ],
@@ -930,8 +491,7 @@ const defaultInstruments = [
         'c',
         'Cymbal',
         [
-            'steadyHalfs',
-            'steadyQuarters',
+            'steadyWholes',
         ],
         [
             getSound(
@@ -967,33 +527,7 @@ const defaultInstruments = [
         ],
         0,
         true,
-    ),
-    getInstrument(
-        'd',
-        'Drone',
-        [
-            'twoBars',
-        ],
-        [
-            getSound(
-                'drone-medium',
-                'Medium',
-                'assets/audio/drones/drone-medium.mp3',
-                'Drone'
-            ),
-            getSound(
-                'drone-high',
-                'High',
-                'assets/audio/drones/drone-high.mp3',
-                'Drone'
-            ),
-            getSound(
-                'drone-high-2',
-                'Creepy',
-                'assets/audio/drones/drone-high-2.mp3',
-                'Drone'
-            )
-        ]
+        0.5,
     ),
 ]
 

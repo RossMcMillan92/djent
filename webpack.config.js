@@ -5,15 +5,14 @@ const ExtractTextPlugin          = require('extract-text-webpack-plugin')
 const CopyWebpackPlugin          = require('copy-webpack-plugin')
 const HtmlWebpackPlugin          = require('html-webpack-plugin')
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
-const LiveReloadPlugin           = require('webpack-livereload-plugin');
-// const BundleAnalyzerPlugin       = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const LiveReloadPlugin           = require('webpack-livereload-plugin')
+// const BundleAnalyzerPlugin       = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 const sourceDir     = '/src'
 const buildDir      = '/www'
 const entryJSFile   = `${sourceDir}/generic/scripts/app.js`
 const outputCSSFile = 'app.[contenthash].css'
-
-const cssExtractor  = new ExtractTextPlugin({ filename: outputCSSFile, disable: false, allChunks: true })
+const externalCSS   = new ExtractTextPlugin({ filename: outputCSSFile, disable: false, allChunks: true })
 const cwd           = process.cwd()
 
 const getModules = platform => [
@@ -58,12 +57,12 @@ const config = (env) => {
             rules: [
                 {
                     test: /\.js$/,
-                    loader: 'babel-loader',
+                    use: 'babel-loader',
                     exclude: /.*node_modules((?!immutable-ext).)*$/,
                 },
                 {
-                    test: /\.sass$/,
-                    loader: cssExtractor.extract({ loader: 'css-loader!postcss-loader!sass-loader' }),
+                    test: /app.sass/,
+                    use: externalCSS.extract({ use: 'css-loader!postcss-loader!sass-loader' }),
                 },
                 {
                     test: /\.((?!scss|sass|js|json).)*$/,
@@ -165,7 +164,7 @@ const config = (env) => {
                     ]
                     : []
             ),
-            cssExtractor,
+            externalCSS,
             // new BundleAnalyzerPlugin(),
         ],
     }

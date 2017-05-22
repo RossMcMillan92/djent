@@ -1,26 +1,25 @@
 {
-  "env": {
-    "prod": {
-        "plugins": [
-            "ramda",
-            "transform-class-properties"
-        ],
-        "presets": [
-            ["es2015", { "modules": false }],
-            "react",
-            "stage-0"
-        ],
-    },
-    "test": {
-        "plugins": [
-            "ramda",
-            "transform-class-properties"
-        ],
-        "presets": [
-            ["es2015"],
-            "react",
-            "stage-0"
-        ],
+    "plugins": [
+        "ramda",
+        "transform-class-properties"
+    ],
+    "presets": [
+        ["es2015", { "modules": false }],
+        "react",
+        "stage-0"
+    ],
+    "env": {
+        "test": {
+            "plugins": [
+                "ramda",
+                "transform-class-properties",
+                "syntax-dynamic-import"
+            ],
+            "presets": [
+                ["es2015"],
+                "react",
+                "stage-0"
+            ],
+        }
     }
-  }
 }

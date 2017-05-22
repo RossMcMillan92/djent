@@ -17,31 +17,36 @@ describe('Beats reducer:', () => {
                             id: '0.25',
                             name: 'whole',
                             amount: 0,
-                            isTriplet: false
+                            isDotted: false,
+                            isTriplet: false,
                         },
                         {
                             id: '0.5',
                             name: 'half',
                             amount: 0,
-                            isTriplet: false
+                            isDotted: false,
+                            isTriplet: false,
                         },
                         {
                             id: '1',
                             name: 'quarter',
                             amount: 0,
-                            isTriplet: false
+                            isDotted: false,
+                            isTriplet: false,
                         },
                         {
                             id: '2',
                             name: 'eighth',
                             amount: 0,
-                            isTriplet: true
+                            isDotted: false,
+                            isTriplet: true,
                         },
                         {
                             id: '4',
                             name: 'sixteenth',
                             amount: 0,
-                            isTriplet: false
+                            isDotted: false,
+                            isTriplet: false,
                         },
                     ]
                 }
@@ -59,31 +64,36 @@ describe('Beats reducer:', () => {
                             id: '0.25',
                             name: 'whole',
                             amount: 1,
-                            isTriplet: false
+                            isDotted: true,
+                            isTriplet: false,
                         },
                         {
                             id: '0.5',
                             name: 'half',
                             amount: 0,
-                            isTriplet: false
+                            isDotted: false,
+                            isTriplet: false,
                         },
                         {
                             id: '1',
                             name: 'quarter',
                             amount: 2,
-                            isTriplet: false
+                            isDotted: false,
+                            isTriplet: false,
                         },
                         {
                             id: '2',
                             name: 'eighth',
                             amount: 0,
-                            isTriplet: true
+                            isDotted: false,
+                            isTriplet: true,
                         },
                         {
                             id: '4',
                             name: 'sixteenth',
                             amount: 0,
-                            isTriplet: false
+                            isDotted: false,
+                            isTriplet: false,
                         },
                     ]
                 }
@@ -101,14 +111,13 @@ describe('Beats reducer:', () => {
                                             id: '0.25',
                                             name: 'whole',
                                             amount: 1,
-                                            isTriplet: false
+                                            isDotted: true
                                         },
 
                                         {
                                             id: '1',
                                             name: 'quarter',
                                             amount: 2,
-                                            isTriplet: false
                                         },
                                         {
                                             id: '2',

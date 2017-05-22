@@ -85,14 +85,16 @@
     "webpack-watch-livereload-plugin": "^0.0.1"
   },
   "scripts": {
-    "start": "node tools/wizard.js",
-    "phonegap": "node node_modules/webpack/bin/webpack.js --config=webpack.config.js --env.platform=generic --env.isProduction=true --env.isPhoneGap=true --colors",
-    "phonegapdev": "node node_modules/webpack/bin/webpack.js --config=webpack.config.js --env.platform=generic --env.isProduction=false --env.isPhoneGap=true --colors --watch",
-    "build": "node node_modules/webpack/bin/webpack.js --config=webpack.config.js --env.platform=generic --env.isProduction=true --colors",
-    "dev": "node node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --watch --config=webpack.config.js --env.platform=generic --env.isPhoneGap=false --env.isProduction=false --colors",
-    "prod": "node node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --watch --config=webpack.config.js --env.platform=generic --env.isPhoneGap=false --env.isProduction=true --colors",
-    "analyse": "node node_modules/webpack/bin/webpack.js --config=webpack.config.js --env.platform=generic --colors --json | node node_modules/webpack-bundle-size-analyzer/webpack-bundle-size-analyzer",
-    "test": "node node_modules/mocha/bin/mocha ./src/generic/scripts/app/test/* --require babel-core/register --watch"
+    "start": "BABEL_ENV=prod node tools/wizard.js",
+    "phonegap": "BABEL_ENV=prod node node_modules/webpack/bin/webpack.js --config=webpack.config.js --env.platform=generic --env.isProduction=true --env.isPhoneGap=true --colors",
+    "phonegapdev": "BABEL_ENV=prod node node_modules/webpack/bin/webpack.js --config=webpack.config.js --env.platform=generic --env.isProduction=false --env.isPhoneGap=true --colors --watch",
+    "build": "BABEL_ENV=prod node node_modules/webpack/bin/webpack.js --config=webpack.config.js --env.platform=generic --env.isProduction=true --colors",
+    "build:win": "set BABEL_ENV=prod&&node node_modules/webpack/bin/webpack.js --config=webpack.config.js --env.platform=generic --env.isProduction=true --colors",
+    "dev": "BABEL_ENV=prod node node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --watch --config=webpack.config.js --env.platform=generic --env.isPhoneGap=false --env.isProduction=false --colors",
+    "dev:win": "set BABEL_ENV=prod&&node node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --watch --config=webpack.config.js --env.platform=generic --env.isPhoneGap=false --env.isProduction=false --colors",
+    "prod": "BABEL_ENV=prod node node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --watch --config=webpack.config.js --env.platform=generic --env.isPhoneGap=false --env.isProduction=true --colors",
+    "analyse": "BABEL_ENV=prod node node_modules/webpack/bin/webpack.js --config=webpack.config.js --env.platform=generic --colors --json | node node_modules/webpack-bundle-size-analyzer/webpack-bundle-size-analyzer",
+    "test": "BABEL_ENV=test NODE_PATH=./src/generic/scripts/app node node_modules/mocha/bin/mocha ./src/generic/scripts/app/test/* --require babel-core/register --watch --es_staging"
   },
   "license": "ISC"
 }

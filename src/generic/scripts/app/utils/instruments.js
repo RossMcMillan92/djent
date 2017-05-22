@@ -1,3 +1,5 @@
+import { update } from 'ramda'
+
 import {
     loopSequence,
     generateTimeMap,
@@ -59,8 +61,12 @@ const generateInstrumentHitTypes = (instrument, usePredefinedSettings) => {
 
 const getActiveSoundsFromHitTypes = hitTypes =>
     (!hitTypes ? [] : hitTypes)
-        .reduce((newArr, hit) => newArr.includes(hit) ? newArr : [ ...newArr, hit ], [])
-        .map(hit => ({ id: hit, amount: 1 }))
+        .reduce((newArr, hit) => {
+            const hitInArray = newArr.find(h => h.id === hit)
+            return hitInArray
+                ? update(newArr.indexOf(hitInArray), { ...hitInArray, amount: hitInArray.amount + 1 }, newArr)
+                : [ ...newArr, { id: hit, amount: 1 } ]
+        }, [])
 
 //    renderAudioTemplateAtTempo :: instruments -> bpmMultiplier -> AudioTemplate
 const renderAudioTemplateAtTempo = (instruments, bpmMultiplier) => instruments

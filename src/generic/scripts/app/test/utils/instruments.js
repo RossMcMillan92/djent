@@ -33,7 +33,6 @@ describe('Instruments', () => {
                 .to.have.property('amount')
                 .and.to.equal(3)
             expect(results.length).to.equal(3);
-            expect(true).to.equal(false);
         })
     })
 })

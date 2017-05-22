@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+- 7.10.0
+install: npm install -g yarn && yarn
+script: yarn test
+cache:
+  yarn: true
+  directories:
+  - node_modules
+sudo: false
+branches:
+  only:
+  - master

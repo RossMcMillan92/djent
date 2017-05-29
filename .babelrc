@@ -11,9 +11,8 @@
     "env": {
         "test": {
             "plugins": [
-                "ramda",
                 "transform-class-properties",
-                "syntax-dynamic-import"
+                "dynamic-import-node"
             ],
             "presets": [
                 ["es2015"],

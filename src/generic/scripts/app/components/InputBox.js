@@ -69,7 +69,7 @@ class InputBox extends Component {
                     label &&
                     <label className={ labelClassName } htmlFor={ id } title={ labelTitle }>{ label }:</label>
                 }
-                <input { ...inputProps } className={`${inputProps.className ? inputProps.className : ''} ${this.state.isValid ? 'is-valid' : 'is-invalid'}`} onChange={ this.onChange } onBlur={this.onBlur} onFocus={this.onFocus} />
+                <input ref="input" { ...inputProps } className={`${inputProps.className ? inputProps.className : ''} ${this.state.isValid ? 'is-valid' : 'is-invalid'}`} onChange={ this.onChange } onBlur={this.onBlur} onFocus={this.onFocus} />
             </div>
         )
     }

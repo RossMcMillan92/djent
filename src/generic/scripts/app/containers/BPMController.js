@@ -3,8 +3,6 @@ import { bindActionCreators } from 'redux'
 import { compose } from 'ramda'
 import { connect } from 'react-redux'
 import { updateBPM } from 'actions/config'
-import presets from 'utils/presets'
-
 import { getTargetValueFromEvent } from 'modules/events'
 import InputBox from 'components/InputBox'
 
@@ -30,8 +28,7 @@ const BPMController = (props) => {
 }
 
 const mapStateToProps = state => ({
-    bpm    : state.config.bpm,
-    preset : presets.find(preset => preset.id === state.config.activePresetID),
+    bpm: state.config.bpm,
 })
 
 const actions = {

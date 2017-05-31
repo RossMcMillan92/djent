@@ -13,7 +13,7 @@ const defaultAllowedLength = {
 }
 const noteName = 'half'
 
-describe.only('<NotePanel />', () => {
+describe('<NotePanel />', () => {
     it('renders the correct percentage', () => {
         const onUpdate = sinon.spy()
         const length = defaultAllowedLength

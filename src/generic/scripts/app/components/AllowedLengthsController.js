@@ -1,20 +1,27 @@
 import React, { Component } from 'react'
 import deepEqual from 'deep-equal'
+import { update } from 'ramda'
 
 import NotePanel from 'components/NotePanel'
 
 class AllowedLengthsController extends Component {
     shouldComponentUpdate = nextProps => !deepEqual(nextProps.allowedLengths, this.props.allowedLengths)
 
-    render = () => {
+    onLengthUpdate = (newLength) => {
         const { allowedLengths, onUpdate } = this.props
-        const totalAmount = allowedLengths.reduce((a, b) => a + b.amount, 0)
+        const newLengthIndex = allowedLengths.indexOf(allowedLengths.find(l => newLength.id === l.id))
+        const newAllowedLengths = update(newLengthIndex, newLength, allowedLengths)
+        onUpdate(newAllowedLengths)
+    }
+
+    render = () => {
+        const { allowedLengths } = this.props
+        const totalAmount = allowedLengths
+            .reduce((acc, next) => acc + next.amount, 0)
         const notePanelProps = {
-            onUpdate,
-            allowedLengths,
+            onUpdate: this.onLengthUpdate,
             totalAmount,
         }
-
         const lengths = allowedLengths
             .map((length, i) => (
                     <div className="grid__item one-fifth alpha--one-third" key={i} >

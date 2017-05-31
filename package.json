@@ -100,8 +100,8 @@
     "dev": "node node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --watch --config=webpack.config.js --env.platform=generic --env.isPhoneGap=false --env.isProduction=false --colors",
     "prod": "node node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --watch --config=webpack.config.js --env.platform=generic --env.isPhoneGap=false --env.isProduction=true --colors",
     "analyse": "node node_modules/webpack/bin/webpack.js --config=webpack.config.js --env.platform=generic --colors --json | node node_modules/webpack-bundle-size-analyzer/webpack-bundle-size-analyzer",
-    "test": "BABEL_ENV=test NODE_PATH=./src/generic/scripts/app node node_modules/mocha/bin/mocha ./src/generic/scripts/app/spec/* --require babel-core/register --es_staging",
-    "test:watch": "BABEL_ENV=test NODE_PATH=./src/generic/scripts/app node node_modules/mocha/bin/mocha ./src/generic/scripts/app/spec/* --require babel-core/register --watch --es_staging"
+    "spec": "BABEL_ENV=test NODE_PATH=./src/generic/scripts/app node node_modules/mocha/bin/mocha ./src/generic/scripts/app/spec/* --require babel-core/register --require ./src/generic/scripts/app/spec/setup.js --es_staging",
+    "spec:watch": "BABEL_ENV=test NODE_PATH=./src/generic/scripts/app node node_modules/mocha/bin/mocha ./src/generic/scripts/app/spec/* --require babel-core/register --require ./src/generic/scripts/app/spec/setup.js --watch --es_staging"
   },
   "license": "ISC"
 }

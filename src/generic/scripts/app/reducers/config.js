@@ -1,8 +1,8 @@
 import { extendObjectArrayByID } from 'utils/tools'
 
 const initialState = {
-    activePresetID       : 'meshuggah',
-    bpm                  : 50,
+    activePresetID : 'meshuggah',
+    bpm            : 50,
 }
 
 export default function config(state = { ...initialState }, action) {

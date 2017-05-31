@@ -2,7 +2,7 @@ language: node_js
 node_js:
 - 7.10.0
 install: npm install -g yarn && yarn
-script: yarn test
+script: yarn spec
 cache:
   yarn: true
   directories:

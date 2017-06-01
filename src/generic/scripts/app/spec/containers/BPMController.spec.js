@@ -19,11 +19,6 @@ describe('<BPMController />', () => {
     it('fires actions.updateBPM with new bpm when onChange is fired', (done) => {
         const newBPM = 95
         const updateBPM = sinon.spy()
-        const assertions = () => {
-            expect(updateBPM.calledWith(newBPM))
-                .to.equal(true)
-            done()
-        }
         const props = {
             bpm: 90,
             actions: {
@@ -33,5 +28,10 @@ describe('<BPMController />', () => {
         const wrapper = mount(<BPMController {...props} />)
             .find('input')
             .simulate('change', {target: {value: 95}})
+        function assertions() {
+            expect(updateBPM.calledWith(newBPM))
+                .to.equal(true)
+            done()
+        }
     })
 })

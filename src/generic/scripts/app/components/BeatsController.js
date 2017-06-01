@@ -27,11 +27,11 @@ class BeatsController extends Component {
 
         return (
             <div className="u-flex-row u-flex-center">
-                <div className="">
+                <div>
                     <InputBox { ...getProps('bars') } />
                 </div>
                 <span className="group-spacing-x-small u-mt1">&times;</span>
-                <div className="">
+                <div>
                     <InputBox { ...getProps('beats') } />
                 </div>
             </div>

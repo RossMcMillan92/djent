@@ -7,6 +7,10 @@ class InputBox extends Component {
         isValid: true
     }
 
+    componentDidMount = () => {
+        this.errorCheck(this.props.defaultValue)
+    }
+
     componentWillUpdate = (nextProps) => {
         if (!this.isFocused) this.updateValue(nextProps.defaultValue)
     }
@@ -49,7 +53,7 @@ class InputBox extends Component {
     throttledOnChange = this.props.onChange ? throttle(this.props.onChange, 100) : () => {}
 
     render = () => {
-        const props   = {
+        const props = {
             id                 : '',
             type               : 'text',
             defaultValue       : '',
@@ -61,15 +65,40 @@ class InputBox extends Component {
             ...this.props,
         }
         const { containerClassName, labelClassName, label, labelTitle, id } = props
-        const inputProps = filterOutKeys(['containerClassName', 'labelClassName', 'labelTitle', 'minVal', 'maxVal'], props)
+        const inputProps = filterOutKeys([
+            'containerClassName',
+            'labelClassName',
+            'labelTitle',
+            'minVal',
+            'maxVal'
+        ], props)
+        const inputClass = inputProps.className
+            ? inputProps.className
+            : ''
+        const validInputClass = this.state.isValid
+            ? 'is-valid'
+            : 'is-invalid'
 
         return (
             <div className={containerClassName}>
                 {
                     label &&
-                    <label className={ labelClassName } htmlFor={ id } title={ labelTitle }>{ label }:</label>
+                    <label
+                        className={ labelClassName }
+                        htmlFor={ id }
+                        title={ labelTitle }
+                    >
+                        { label }:
+                    </label>
                 }
-                <input ref="input" { ...inputProps } className={`${inputProps.className ? inputProps.className : ''} ${this.state.isValid ? 'is-valid' : 'is-invalid'}`} onChange={ this.onChange } onBlur={this.onBlur} onFocus={this.onFocus} />
+                <input
+                    ref="input"
+                    { ...inputProps }
+                    className={`${inputClass} ${validInputClass}`}
+                    onChange={this.onChange}
+                    onBlur={this.onBlur}
+                    onFocus={this.onFocus}
+                />
             </div>
         )
     }

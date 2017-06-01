@@ -39,7 +39,6 @@ describe('<BeatsController />', () => {
             .simulate('change', {target: {value: newVal}})
 
         function assertions() {
-            const returnedArguments = onUpdate.args
             expect(onUpdate.calledWith(sequence.id, 'bars', newVal))
                 .to.equal(true)
             done()
@@ -58,7 +57,6 @@ describe('<BeatsController />', () => {
             .simulate('change', {target: {value: newVal}})
 
         function assertions() {
-            const returnedArguments = onUpdate.args
             expect(onUpdate.calledWith(sequence.id, 'beats', newVal))
                 .to.equal(true)
             done()

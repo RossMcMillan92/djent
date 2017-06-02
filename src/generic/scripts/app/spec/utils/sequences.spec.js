@@ -155,6 +155,22 @@ describe('Sequences', () => {
 
             expect(result).to.deep.equal([0.75, 0.75])
         })
+
+        it('should divide IDs by 1.5 if isDotted is true', () => {
+            let allowedLengths = [
+                {
+                    id: "0.5",
+                    name: 'half',
+                    amount: 2,
+                    isDotted: true
+                },
+            ]
+
+            let result = convertAllowedLengthsToArray(allowedLengths);
+            let finalID = 0.5 / 1.5
+
+            expect(result).to.deep.equal([finalID, finalID])
+        })
     })
 
     describe('loopSequence()', () => {

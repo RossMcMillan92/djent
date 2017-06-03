@@ -47,7 +47,14 @@ const presets = [
         description: 'Thall III',
         load: promiseToTask(() => import(/* webpackChunkName: "presets.thall-triplets" */ './presets/thall-triplets'))
     },
+    {
+        id: 'trap',
+        description: 'Trap',
+        load: promiseToTask(() => import(/* webpackChunkName: "presets.trap" */ './presets/trap'))
+    },
 ]
+
+const initialPreset = 'trap'
 
 import { getAllowedLengthsFromSequence } from './sequences'
 import { deepClone } from './tools'
@@ -100,4 +107,5 @@ export default presets
 export {
     backwardsCompatibility,
     createPreset,
+    initialPreset,
 }

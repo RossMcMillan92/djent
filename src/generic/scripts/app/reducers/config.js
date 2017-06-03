@@ -1,7 +1,8 @@
+import { initialPreset } from 'utils/presets'
 import { extendObjectArrayByID } from 'utils/tools'
 
 const initialState = {
-    activePresetID : 'meshuggah',
+    activePresetID : initialPreset,
     bpm            : 50,
 }
 

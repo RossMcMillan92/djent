@@ -1,8 +1,8 @@
 const preset = {
-    id: 'thall-buster',
+    id: 'thall-chicken',
     settings: {
         config: {
-            bpm       : 65,
+            bpm       : 75,
         },
         sequences: [
             {
@@ -14,42 +14,50 @@ const preset = {
                 id    : 'CUSTOM_SEQUENCE_1',
                 bars  : 2,
                 beats : 4,
+                description : 'Guitars',
+                hitChance : .8,
+                allowedLengths: [
+                    {
+                        id: '2',
+                        amount:1,
+                        isDotted: true
+                    },
+                    {
+                        id: '4',
+                        amount:3,
+                    },
+                ],
+            },
+            {
+                id    : 'CUSTOM_SEQUENCE_2',
+                bars  : 2,
+                beats : 4,
+                description : 'Cymbal',
                 hitChance : 1,
                 allowedLengths: [
-                        {
-                            id: '1',
-                            amount:2,
-                            isTriplet: false
-                        },
-                        {
-                            id: '2',
-                            amount:1,
-                            isTriplet: false
-                        },
-                        {
-                            id: '4',
-                            amount:2,
-                            isTriplet: false
-                        },
+                    {
+                        id: '2',
+                        amount:1,
+                        isDotted: true
+                    },
                 ],
             },
         ],
         instruments: [
             {
                 id: 'g',
-                pitch: -200,
                 sounds: [
                     {
-                        id: 'sixth-0-muted',
-                        amount: 2,
+                        id: 'sixth-0-open',
+                        amount: 1,
                     },
                     {
-                        id: 'sixth-1-muted',
+                        id: 'sixth-0-muted',
                         amount: 1,
                     },
                     {
                         id: 'scratch',
-                        amount: 1,
+                        amount: 3,
                     },
                 ],
             },
@@ -73,6 +81,11 @@ const preset = {
             },
             {
                 id: 'c',
+                sequences: [
+                    'CUSTOM_SEQUENCE_2',
+                    'steadyQuarters',
+                    'steadyHalfs',
+                ],
                 sounds: [
                     {
                         id: 'crash-left',

@@ -30,7 +30,7 @@ const getGoogleShortURL = url =>
     Task((rej, res) => {
         if (shortURLCache[url]) return res(shortURLCache[url])
 
-        const onError = () => rej(Error(`Problem getting short URL: ${url}`))
+        const onError = (e) => rej(Error(`Problem getting short URL: ${e.result.error.message} - ${url}`))
         window.gapi.client.urlshortener.url
             .insert({ longUrl: url })
             .then(({ result }) => {

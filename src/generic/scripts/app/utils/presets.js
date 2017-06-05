@@ -1,57 +1,90 @@
 import promiseToTask from 'modules/promiseToTask'
+import { getAllowedLengthsFromSequence } from './sequences'
 
 const presets = [
     {
-        id: 'adtr',
-        description: 'ADTR Breakdown',
-        load: promiseToTask(() => import(/* webpackChunkName: "presets.adtr-breakdown" */ './presets/adtr-breakdown'))
-    },
-    {
-        id: 'black-dahlia',
-        description: 'Blast Beats',
-        load: promiseToTask(() => import(/* webpackChunkName: "presets.black-dahlia" */ './presets/black-dahlia'))
-    },
-    {
-        id: 'contortionist',
-        description: 'Poly Chords & Melody',
-        load: promiseToTask(() => import(/* webpackChunkName: "presets.contortionist" */ './presets/contortionist'))
-    },
-    {
         id: 'meshuggah',
         description: 'Meshuggah',
-        load: promiseToTask(() => import(/* webpackChunkName: "presets.meshuggah" */ './presets/meshuggah'))
-    },
-    {
-        id: 'polyrhythms',
-        description: 'Polyrhythms',
-        load: promiseToTask(() => import(/* webpackChunkName: "presets.polyrhythms" */ './presets/polyrhythms'))
+        group: 'Artists',
+        load: promiseToTask(() =>
+            import(/* webpackChunkName: "presets.meshuggah" */ './presets/meshuggah')
+        )
     },
     {
         id: 'sworn-in',
         description: 'Sworn In',
-        load: promiseToTask(() => import(/* webpackChunkName: "presets.sworn-in" */ './presets/sworn-in'))
-    },
-    {
-        id: 'thall',
-        description: 'Thall I',
-        load: promiseToTask(() => import(/* webpackChunkName: "presets.thall-buster-2" */ './presets/thall-buster-2'))
+        group: 'Artists',
+        load: promiseToTask(() =>
+            import(/* webpackChunkName: "presets.sworn-in" */ './presets/sworn-in')
+        )
     },
     {
         id: 'thall-buster',
-        description: 'Thall II',
-        load: promiseToTask(() => import(/* webpackChunkName: "presets.thall-buster" */ './presets/thall-buster'))
+        description: 'Scratchy heavy',
+        group: 'Djent',
+        load: promiseToTask(() =>
+            import(/* webpackChunkName: "presets.thall-buster" */ './presets/thall-buster')
+        )
+    },
+    {
+        id: 'thall-chicken',
+        description: 'Scratchy groovy',
+        group: 'Djent',
+        load: promiseToTask(() =>
+            import(/* webpackChunkName: "presets.thall-chicken" */ './presets/thall-chicken')
+        )
+    },
+    {
+        id: 'thall',
+        description: 'Thall',
+        group: 'Djent',
+        load: promiseToTask(() =>
+            import(/* webpackChunkName: "presets.thall" */ './presets/thall')
+        )
     },
     {
         id: 'thall-triplets',
-        description: 'Thall III',
-        load: promiseToTask(() => import(/* webpackChunkName: "presets.thall-triplets" */ './presets/thall-triplets'))
+        description: 'Thall (triplets)',
+        group: 'Djent',
+        load: promiseToTask(() =>
+            import(/* webpackChunkName: "presets.thall-triplets" */ './presets/thall-triplets')
+        )
+    },
+    {
+        id: 'black-dahlia',
+        description: 'Blast Beats',
+        group: 'Heavy',
+        load: promiseToTask(() =>
+            import(/* webpackChunkName: "presets.black-dahlia" */ './presets/black-dahlia')
+        )
+    },
+    {
+        id: 'adtr',
+        description: 'Breakdown',
+        group: 'Pop Punk',
+        load: promiseToTask(() =>
+            import(/* webpackChunkName: "presets.adtr-breakdown" */ './presets/adtr-breakdown')
+        )
+    },
+    {
+        id: 'contortionist',
+        description: 'Poly Chords & Melody',
+        group: 'Progressive',
+        load: promiseToTask(() =>
+            import(/* webpackChunkName: "presets.contortionist" */ './presets/contortionist')
+        )
+    },
+    {
+        id: 'polyrhythms',
+        description: 'Polyrhythms',
+        group: 'Progressive',
+        load: promiseToTask(() =>
+            import(/* webpackChunkName: "presets.polyrhythms" */ './presets/polyrhythms')
+        )
     },
 ]
 
-const initialPreset = 'meshuggah'
-
-import { getAllowedLengthsFromSequence } from './sequences'
-import { deepClone } from './tools'
+const initialPreset = 'thall-chicken'
 
 const createPreset = ({ id, instruments, sequences, bpm, usePredefinedSettings }) => ({
     id,
@@ -59,7 +92,7 @@ const createPreset = ({ id, instruments, sequences, bpm, usePredefinedSettings }
         config: {
             bpm,
         },
-        sequences: deepClone(sequences),
+        sequences,
         instruments: usePredefinedSettings
             ? instruments
                 .map(instrument => ({

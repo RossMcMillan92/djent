@@ -40,7 +40,7 @@ const preset = {
                 sounds : [
                     {
                         id: 'sixth-0-open',
-                        amount: 10,
+                        amount: 8,
                     },
                     {
                         id: 'sixth-12-open',

@@ -108,3 +108,10 @@ export const log = (...args) => {
 export const logError = (...args) => {
 	if (isDevEnv()) (console.error || console.log).apply(console, args)
 }
+
+export const trace = curry((tag, d) => {
+	console.log(tag, d)
+	return d
+})
+
+window.trace = trace

@@ -18,14 +18,10 @@ export default function config(state = { ...initialState }, action) {
 
         case 'APPLY_PRESET':
             const { preset } = payload
-            const { bpm, allowedLengths, hitChance } = preset.settings.config
+            const { bpm } = preset.settings.config
             const newState = { ...initialState }
 
             if (bpm) newState.bpm = bpm
-            if (hitChance) newState.hitChance = hitChance
-            if (allowedLengths) {
-                newState.allowedLengths = extendObjectArrayByID(newState.allowedLengths, [ ...allowedLengths ])
-            }
 
             return {
                 ...newState,

@@ -1,7 +1,7 @@
 import { bindActionCreators } from 'redux'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { assoc, chain, compose, concat, last, join, map, split } from 'ramda'
+import { assoc, chain, compose, concat, head, last, join, map, split } from 'ramda'
 import { Future as Task } from 'ramda-fantasy'
 import { List } from 'immutable-ext'
 
@@ -43,6 +43,14 @@ const getShareableURL = preset =>
         }, 'lzutf8')
     })
 
+//    getShortURL :: preset -> Task Error url
+const getShortURL = preset => compose(
+    chain(getGoogleShortURL),
+    getShareableURL,
+    createPreset,
+    assoc('usePredefinedSettings', true),
+)(preset)
+
 class ShareController extends Component {
     state = {
         isEnabled: false,
@@ -50,19 +58,19 @@ class ShareController extends Component {
         shortURL: ''
     }
 
-    // getShortURL :: preset -> Task Error url
-    getShortURL = preset => compose(
-        chain(getGoogleShortURL),
-        getShareableURL,
-        createPreset,
-        assoc('usePredefinedSettings', true),
-    )(preset)
-
     onClick = () => {
         this.setState({ isLoading: true })
         Tracking.sendShareEvent('share')
+
+        const result = compose(
+            createPreset,
+            head,
+        )
+
+        console.log('result', result(this.props.audioPlaylist))
+
         List(this.props.audioPlaylist)
-            .traverse(Task.of, this.getShortURL)
+            .traverse(Task.of, getShortURL)
             .map(combineShortURLs)
             .chain(compressShortMultiURL)
             .fork(logError, (url) => {

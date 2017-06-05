@@ -95,9 +95,6 @@ const renderBuffer = ({ sequences, bpm, audioTemplate }) => {
     return getBufferFromAudioTemplate(audioTemplate, duration)
 }
 
-//    audioPlaylistItemToRenderable :: audioPlaylistItem -> renderable
-const audioPlaylistItemToRenderable = ({ sequences, bpm, audioTemplate }) => ({ sequences, bpm, audioTemplate })
-
 //    combineAudioBuffers :: [audioBuffer] -> Task audioBuffer
 const combineAudioBuffers = (audioBuffers) => {
     let totalDuration = 0
@@ -120,7 +117,6 @@ const combineAudioBuffers = (audioBuffers) => {
 const renderAudioPlaylistItemToBuffer = compose(
     chain(combineAudioBuffers),
     traverse(Task.of, renderBuffer),
-    map(audioPlaylistItemToRenderable),
 )
 
 //    getPitchPlaybackRatio :: Integer -> Integer
@@ -161,7 +157,6 @@ const playSound = (context, buffer, time, duration, volume, pitchAmount = 0, fad
 }
 
 export {
-    audioPlaylistItemToRenderable,
     combineAudioBuffers,
     getBufferFromAudioTemplate,
     loadInstrumentBuffers,

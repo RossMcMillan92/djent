@@ -54,31 +54,6 @@ describe('Config reducer:', () => {
             expect(config(initialState, action))
                 .to.deep.equal(stateAfterAdd);
         });
-
-        it('should update hitChance', () => {
-            const stateAfterAdd = {
-                ...initialState,
-                activePresetID: 'newpreset',
-                hitChance: .5,
-            };
-            const payload = {
-                preset: {
-                    id: 'newpreset',
-                    settings: {
-                        config: {
-                            hitChance: .5,
-                        }
-                    }
-                }
-            };
-            const action = {
-                type: 'APPLY_PRESET',
-                payload,
-            };
-
-            expect(config(initialState, action))
-                .to.deep.equal(stateAfterAdd);
-        });
     });
 
     describe('Action type: UPDATE_BPM', () => {

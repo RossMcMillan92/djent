@@ -15,7 +15,7 @@ import getAbsolutePath from 'modules/getAbsolutePath'
 import isPhoneGap from 'modules/phonegap'
 import * as Tracking from 'modules/tracking'
 
-import { defaultAllowedLengths } from 'reducers/sequences'
+import { defaultAllowedLengths } from 'reducers/sequences.initial-state'
 
 import presets, { backwardsCompatibility } from 'utils/presets'
 import { getActiveSoundsFromHitTypes } from 'utils/instruments'

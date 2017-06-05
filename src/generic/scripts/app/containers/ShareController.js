@@ -66,8 +66,8 @@ class ShareController extends Component {
             createPreset,
             head,
         )
-
-        console.log('result', result(this.props.audioPlaylist))
+        console.log('THIS.PROPS.AUDIOPLAYLIST', this.props.audioPlaylist)
+        console.log('RESULT', result(this.props.audioPlaylist))
 
         List(this.props.audioPlaylist)
             .traverse(Task.of, getShortURL)

@@ -1,10 +1,6 @@
 import { initialPreset } from 'utils/presets'
 import { extendObjectArrayByID } from 'utils/tools'
-
-const initialState = {
-    activePresetID : initialPreset,
-    bpm            : 50,
-}
+import initialState from './config.initial-state'
 
 export default function config(state = { ...initialState }, action) {
     const { type, payload } = action

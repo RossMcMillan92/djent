@@ -1,4 +1,8 @@
+import deepEqual from 'deep-equal'
 import promiseToTask from 'modules/promiseToTask'
+import configInitialState from 'reducers/config.initial-state'
+import sequencesInitialState from 'reducers/sequences.initial-state'
+import instrumentsInitialState from 'utils/default-instruments'
 import { getAllowedLengthsFromSequence } from './sequences'
 
 const presets = [
@@ -84,17 +88,34 @@ const presets = [
     },
 ]
 
-const initialPreset = 'thall-chicken'
+const createPresetFactory = ({
+    configInitialState: _configInitialState,
+    instrumentsInitialState: _instrumentsInitialState,
+    sequencesInitialState: _sequencesInitialState
+}) =>
+    ({ bpm, description, id, instruments, sequences, usePredefinedSettings }) => {
+        const newPreset = {}
+        const configObj = {}
 
-const createPreset = ({ id, instruments, sequences, bpm, usePredefinedSettings }) => ({
-    id,
-    settings: {
-        config: {
-            bpm,
-        },
-        sequences,
-        instruments: usePredefinedSettings
-            ? instruments
+        if (description) newPreset.description = description
+        if (id) newPreset.id = id
+        if (bpm && _configInitialState.bpm !== bpm) configObj.bpm = bpm
+
+        const settingsObj = {
+            ...(
+                Object.keys(configObj).length
+                    ? { config: configObj }
+                    : {}
+            ),
+            ...(
+                sequences && sequences.length && !deepEqual(sequences, _sequencesInitialState)
+                    ? { sequences }
+                    : {}
+            ),
+        }
+
+        if (usePredefinedSettings) {
+            settingsObj.instruments = instruments
                 .map(instrument => ({
                     id: instrument.id,
                     pitch: instrument.pitch,
@@ -105,9 +126,69 @@ const createPreset = ({ id, instruments, sequences, bpm, usePredefinedSettings }
                     fadeOutDuration: instrument.fadeOutDuration,
                     repeatHitTypeForXBeat: instrument.repeatHitTypeForXBeat,
                 }))
-            : instruments,
+        } else if (instruments && instruments.length) {
+            const newInstruments =  instruments
+                .reduce((_newInstruments, instrument) => {
+                    const originalInstrument = _instrumentsInitialState
+                        .find(i => i.id === instrument.id)
+
+                    if (!originalInstrument) return _newInstruments
+
+                    const newInstrument = { id: instrument.id }
+                    if (!deepEqual(instrument.sequences, originalInstrument.sequences)) {
+                        newInstrument.sequences = instrument.sequences
+                    }
+                    if (!deepEqual(instrument.sounds, originalInstrument.sounds)) {
+                        newInstrument.sounds = instrument.sounds
+                            .reduce((newSounds, sound) => {
+                                const originalSound = originalInstrument.sounds
+                                    .find(s => s.id === sound.id)
+
+                                if (!originalSound) return [ ...newSounds, sound ]
+
+                                const newSound = { id: sound.id }
+                                if (sound.amount !== originalSound.amount) {
+                                    newSound.amount = sound.amount
+                                }
+
+                                return [ ...newSounds, newSound]
+                            }, [])
+                    }
+                    if (instrument.fadeOutDuration !== originalInstrument.fadeOutDuration) {
+                        newInstrument.fadeOutDuration = instrument.fadeOutDuration
+                    }
+                    if (instrument.ringout !== originalInstrument.ringout) {
+                        newInstrument.ringout = instrument.ringout
+                    }
+                    if (instrument.pitch !== originalInstrument.pitch) {
+                        newInstrument.pitch = instrument.pitch
+                    }
+                    if (instrument.volume !== originalInstrument.volume) {
+                        newInstrument.volume = instrument.volume
+                    }
+                    if (instrument.repeatHitTypeForXBeat !== originalInstrument.repeatHitTypeForXBeat) {
+                        newInstrument.repeatHitTypeForXBeat = instrument.repeatHitTypeForXBeat
+                    }
+
+                    return [ ..._newInstruments, ...(Object.keys(newInstrument).length > 1 ? [newInstrument] : []) ]
+                }, [])
+
+            if (newInstruments.length) {
+                settingsObj.instruments = newInstruments
+            }
+        }
+
+        return {
+            ...newPreset,
+            ...(
+                settingsObj && Object.keys(settingsObj).length
+                    ? { settings: settingsObj }
+                    : {}
+            )
+        }
     }
-})
+
+const createPreset = createPresetFactory({ configInitialState, instrumentsInitialState, sequencesInitialState })
 
 const backwardsCompatibility = (preset, allowedLengths) => {
     if (preset.settings.beats && preset.settings.beats.length) {
@@ -133,6 +214,6 @@ export default presets
 
 export {
     backwardsCompatibility,
+    createPresetFactory,
     createPreset,
-    initialPreset,
 }

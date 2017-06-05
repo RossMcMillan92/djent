@@ -2,7 +2,7 @@ const preset = {
     id: 'adtr',
     settings: {
         config: {
-            bpm            : 90,
+            bpm: 90,
         },
         sequences: [
             {
@@ -14,18 +14,18 @@ const preset = {
                 id        : 'CUSTOM_SEQUENCE_1',
                 bars      : 2,
                 beats     : 4,
-                hitChance : .8,
+                hitChance : 0.8,
                 allowedLengths : [
                     {
-                        id: "1",
+                        id: '1',
                         amount:1,
                     },
                     {
-                        id: "2",
+                        id: '2',
                         amount: 1,
                     },
                     {
-                        id: "4",
+                        id: '4',
                         amount: 2,
                     },
                 ],
@@ -77,4 +77,4 @@ const preset = {
     }
 }
 
-export default preset;
+export default preset

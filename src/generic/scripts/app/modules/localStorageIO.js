@@ -17,6 +17,7 @@ const setLocalStorageIO = curry((key, value) =>
         return value
     }))
 
+//    safeGetLocalStorageIO :: key -> Maybe IO String
 const safeGetLocalStorageIO = compose(map(Maybe), getLocalStorageIO)
 
 export {

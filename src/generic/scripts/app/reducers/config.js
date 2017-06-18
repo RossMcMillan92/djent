@@ -12,7 +12,10 @@ export default function config(state = { ...initialState }, action) {
 
         case 'APPLY_PRESET':
             const { preset } = payload
-            const { bpm } = preset.settings.config
+            const config = preset.settings.config
+            const bpm = !preset.settings.config || !preset.settings.config.bpm
+                ? initialState.bpm
+                : preset.settings.config.bpm
             const newState = { ...initialState }
 
             if (bpm) newState.bpm = bpm

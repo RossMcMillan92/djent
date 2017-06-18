@@ -5,6 +5,7 @@ import {
     compose,
     curry,
     flip,
+    identity,
     map,
 } from 'ramda'
 
@@ -30,7 +31,7 @@ const getLSItemFromTitle = curry(compose(
 
 //    getLSItemOrDefault :: Boolean -> String -> IO Boolean
 const getLSItemOrDefault = curry((defaultVal, title) => compose(
-    map(maybe(defaultVal, x => x)),
+    map(maybe(defaultVal, identity)),
     map(map(toBoolean)),
     map(Maybe),
     getLSItemFromTitle,

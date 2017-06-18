@@ -10,6 +10,7 @@ import { updateAudioPlaylist } from 'actions/sound'
 const mapStateToProps = state => ({
     activePresetID : state.config.activePresetID,
     instruments    : state.instruments,
+    presets        : state.presets,
 })
 
 const actions = {

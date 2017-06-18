@@ -13,7 +13,7 @@ import Player from 'containers/Player'
 
 import { defaultAllowedLengths } from 'reducers/sequences.initial-state'
 
-import presets, { backwardsCompatibility } from 'utils/presets'
+import { backwardsCompatibility } from 'utils/presets'
 import { getActiveSoundsFromHitTypes } from 'utils/instruments'
 import { getLongURLFromShareID, getPresetFromData, handleGoogleAPI } from 'utils/short-urls'
 
@@ -36,8 +36,9 @@ export default class Main extends Component {
 
     componentWillMount = () => {
         this.setupBackButtonController()
-
-        const shareID = this.props.params.shareID
+        const { params, presets } = this.props
+        console.log('PRESETS', presets)
+        const shareID = params.shareID
 
         handleGoogleAPI()
             .fork(logError, () => {

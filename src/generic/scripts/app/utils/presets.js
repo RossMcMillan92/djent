@@ -1,92 +1,9 @@
+import { isNil } from 'ramda'
 import deepEqual from 'deep-equal'
-import promiseToTask from 'modules/promiseToTask'
 import configInitialState from 'reducers/config.initial-state'
 import sequencesInitialState from 'reducers/sequences.initial-state'
 import instrumentsInitialState from 'utils/default-instruments'
-import { getAllowedLengthsFromSequence } from './sequences'
-
-const presets = [
-    {
-        id: 'meshuggah',
-        description: 'Meshuggah',
-        group: 'Artists',
-        load: promiseToTask(() =>
-            import(/* webpackChunkName: "presets.meshuggah" */ './presets/meshuggah')
-        )
-    },
-    {
-        id: 'sworn-in',
-        description: 'Sworn In',
-        group: 'Artists',
-        load: promiseToTask(() =>
-            import(/* webpackChunkName: "presets.sworn-in" */ './presets/sworn-in')
-        )
-    },
-    {
-        id: 'thall-buster',
-        description: 'Scratchy heavy',
-        group: 'Djent',
-        load: promiseToTask(() =>
-            import(/* webpackChunkName: "presets.thall-buster" */ './presets/thall-buster')
-        )
-    },
-    {
-        id: 'thall-chicken',
-        description: 'Scratchy groovy',
-        group: 'Djent',
-        load: promiseToTask(() =>
-            import(/* webpackChunkName: "presets.thall-chicken" */ './presets/thall-chicken')
-        )
-    },
-    {
-        id: 'thall',
-        description: 'Thall',
-        group: 'Djent',
-        load: promiseToTask(() =>
-            import(/* webpackChunkName: "presets.thall" */ './presets/thall')
-        )
-    },
-    {
-        id: 'thall-triplets',
-        description: 'Thall (triplets)',
-        group: 'Djent',
-        load: promiseToTask(() =>
-            import(/* webpackChunkName: "presets.thall-triplets" */ './presets/thall-triplets')
-        )
-    },
-    {
-        id: 'black-dahlia',
-        description: 'Blast Beats',
-        group: 'Heavy',
-        load: promiseToTask(() =>
-            import(/* webpackChunkName: "presets.black-dahlia" */ './presets/black-dahlia')
-        )
-    },
-    {
-        id: 'adtr',
-        description: 'Breakdown',
-        group: 'Pop Punk',
-        load: promiseToTask(() =>
-            import(/* webpackChunkName: "presets.adtr-breakdown" */ './presets/adtr-breakdown')
-        )
-    },
-    {
-        id: 'contortionist',
-        description: 'Poly Chords & Melody',
-        group: 'Progressive',
-        load: promiseToTask(() =>
-            import(/* webpackChunkName: "presets.contortionist" */ './presets/contortionist')
-        )
-    },
-    {
-        id: 'polyrhythms',
-        description: 'Polyrhythms',
-        group: 'Progressive',
-        load: promiseToTask(() =>
-            import(/* webpackChunkName: "presets.polyrhythms" */ './presets/polyrhythms')
-        )
-    },
-]
+import { getAllowedLengthsFromSequence } from 'utils/sequences'
 
 const createPresetFactory = ({
     configInitialState: _configInitialState,
@@ -98,7 +15,7 @@ const createPresetFactory = ({
         const configObj = {}
 
         if (description) newPreset.description = description
-        if (id) newPreset.id = id
+        if (!isNil(id)) newPreset.id = id
         if (bpm && _configInitialState.bpm !== bpm) configObj.bpm = bpm
 
         const settingsObj = {
@@ -155,19 +72,19 @@ const createPresetFactory = ({
                                 return [ ...newSounds, newSound]
                             }, [])
                     }
-                    if (instrument.fadeOutDuration != null && instrument.fadeOutDuration !== originalInstrument.fadeOutDuration) {
+                    if (!isNil(instrument.fadeOutDuration) && instrument.fadeOutDuration !== originalInstrument.fadeOutDuration) {
                         newInstrument.fadeOutDuration = instrument.fadeOutDuration
                     }
-                    if (instrument.ringout != null && instrument.ringout !== originalInstrument.ringout) {
+                    if (!isNil(instrument.ringout) && instrument.ringout !== originalInstrument.ringout) {
                         newInstrument.ringout = instrument.ringout
                     }
-                    if (instrument.pitch != null && instrument.pitch !== originalInstrument.pitch) {
+                    if (!isNil(instrument.pitch) && instrument.pitch !== originalInstrument.pitch) {
                         newInstrument.pitch = instrument.pitch
                     }
-                    if (instrument.volume != null && instrument.volume !== originalInstrument.volume) {
+                    if (!isNil(instrument.volume) && instrument.volume !== originalInstrument.volume) {
                         newInstrument.volume = instrument.volume
                     }
-                    if (instrument.repeatHitTypeForXBeat != null && instrument.repeatHitTypeForXBeat !== originalInstrument.repeatHitTypeForXBeat) {
+                    if (!isNil(instrument.repeatHitTypeForXBeat) && instrument.repeatHitTypeForXBeat !== originalInstrument.repeatHitTypeForXBeat) {
                         newInstrument.repeatHitTypeForXBeat = instrument.repeatHitTypeForXBeat
                     }
 
@@ -210,8 +127,6 @@ const backwardsCompatibility = (preset, allowedLengths) => {
     }
     return preset
 }
-
-export default presets
 
 export {
     backwardsCompatibility,

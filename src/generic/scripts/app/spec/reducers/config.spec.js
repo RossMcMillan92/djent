@@ -1,4 +1,4 @@
-import { expect, assert } from 'chai'
+import { expect } from 'chai'
 import config from '../../reducers/config'
 import initialState from '../../reducers/config.initial-state'
 

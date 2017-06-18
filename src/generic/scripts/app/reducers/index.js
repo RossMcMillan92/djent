@@ -3,6 +3,7 @@ import config from './config'
 import sequences from './sequences'
 import instruments from './instruments'
 import modal from './modal'
+import presets from './presets'
 import sound from './sound'
 
 const rootReducer = combineReducers({
@@ -10,6 +11,7 @@ const rootReducer = combineReducers({
     sequences,
     instruments,
     modal,
+    presets,
     sound,
 })
 

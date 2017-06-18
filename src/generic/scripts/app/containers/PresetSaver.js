@@ -80,7 +80,9 @@ const PresetSaver = (props) => {
         launchSaveModal(actions.enableModal, actions.disableModal)
         .fork(() => {}, (description) => {
             console.log('DESCRIPTION', description)
-            const newPreset = createPreset({ bpm, description, id, instruments, sequences, usePredefinedSettings })
+            const id = 0
+            const newPreset = createPreset({ bpm, description, id, instruments, sequences })
+            console.log('NEWPRESET', newPreset)
         })
     }
 

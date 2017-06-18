@@ -32,7 +32,7 @@ describe('Sequences', () => {
 
             expect(resultSum).to.equal(4)
 
-            result = generateSequence({ totalBeats, allowedLengths: [2,4], hitChance })
+            result = generateSequence({ totalBeats, allowedLengths: [2, 4], hitChance })
             resultSum = result.reduce(sumBeats, 0)
 
             expect(resultSum).to.equal(4)

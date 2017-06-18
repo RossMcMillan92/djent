@@ -1,4 +1,4 @@
-import { chain, compose, curry, filter,  map, traverse } from 'ramda'
+import { chain, compose, curry, filter, traverse } from 'ramda'
 import { Future as Task } from 'ramda-fantasy'
 
 import {

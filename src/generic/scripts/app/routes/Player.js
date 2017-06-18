@@ -8,6 +8,7 @@ import Spinner from 'components/Spinner'
 
 import BPMController from 'containers/BPMController'
 import PlaylistEditor from 'containers/PlaylistEditor'
+import PresetSaver from 'containers/PresetSaver'
 import SoundController from 'containers/SoundController'
 import Visualiser from 'containers/Visualiser'
 
@@ -37,12 +38,14 @@ export default class Player extends Component {
             <div>
                 <Panel sizeY="small">
                     <div className="u-flex-row u-flex-wrap u-flex-justify">
-                        <div className="group-spacing-y-small u-mr2@above-alpha">
+                        <div className="u-flex-row group-spacing-y-small u-mr2@above-alpha">
                             <PresetController
                                 activePresetID={ activePresetID }
                                 onUpdate={ this.loadAndApplyPreset }
                                 presets={ presets }
-                            />
+                            >
+                                <PresetSaver />
+                            </PresetController>
                         </div>
 
                         <div className="u-flex-row u-flex-wrap">

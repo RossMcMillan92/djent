@@ -1,5 +1,3 @@
-import { initialPreset } from 'utils/presets'
-import { extendObjectArrayByID } from 'utils/tools'
 import initialState from './config.initial-state'
 
 export default function config(state = { ...initialState }, action) {
@@ -27,8 +25,4 @@ export default function config(state = { ...initialState }, action) {
         default:
             return state
   }
-}
-
-export {
-    initialState
 }

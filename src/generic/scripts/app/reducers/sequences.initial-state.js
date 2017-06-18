@@ -1,11 +1,3 @@
-import deepExtend from 'deep-extend'
-
-import {
-    deepClone,
-    extendObjectArrayByID,
-    updateObjByID
-} from 'utils/tools'
-
 const defaultAllowedLengths = [
     {
         id: '0.25',
@@ -66,5 +58,4 @@ export default initialState
 export {
     defaultAllowedLengths,
     initialCustomSequence,
-    initialState,
 }

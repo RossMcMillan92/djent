@@ -5,11 +5,11 @@ import {
     Writer,
 } from 'libraries/MidiWriter'
 
-const convertBPMtoMidi = (bpm) => (bpm / 60) * 250
+const convertBPMtoMidi = bpm => (bpm / 60) * 250
 
 const getMidiDataFromHitTypes = (sounds, hitTypes) => hitTypes.map((hitType) => sounds.find(s => s.id === hitType).midi)
 
-const convertBeatLengthToMidiDuration = (beatLength) => 4 / (beatLength * 4)
+const convertBeatLengthToMidiDuration = beatLength => 4 / (beatLength * 4)
 
 const getTrackFromInstrument = (midiData, sequence, channel) => {
     const durations = sequence.map(({ beat }) => convertBeatLengthToMidiDuration(beat))
@@ -50,7 +50,7 @@ const getTrackFromInstrument = (midiData, sequence, channel) => {
         }, [])
 }
 
-const getTimemapFromTrack = track => {
+const getTimemapFromTrack = (track) => {
     let accumulatedTime = 0
     return track
         .reduce((newArr, note, i, notes) => {
@@ -108,7 +108,7 @@ const getMidiTrack = (name, bpm, track, instrumentNumber) =>
             ...track.map(note => new NoteEvent(note)),
         ])
 
-const getMidiDataURIFromInstruments = (tracks) => new Writer(tracks).dataUri()
+const getMidiDataURIFromInstruments = tracks => new Writer(tracks).dataUri()
 
 const getInstrumentTrack = (instruments, instrumentID, channel) => {
     const instrument = instruments.find(i => i.id === instrumentID)

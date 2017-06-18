@@ -77,7 +77,6 @@ const ExportController = (props) => {
         <button
             className="button-primary button-primary--alpha-dark"
             onClick={onClick}
-            disabled={false}
         >
             Save
         </button>

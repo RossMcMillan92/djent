@@ -144,6 +144,7 @@ const createPresetFactory = ({
                                 const originalSound = originalInstrument.sounds
                                     .find(s => s.id === sound.id)
 
+                                if (!sound.amount) return newSounds
                                 if (!originalSound) return [ ...newSounds, sound ]
 
                                 const newSound = { id: sound.id }
@@ -154,19 +155,19 @@ const createPresetFactory = ({
                                 return [ ...newSounds, newSound]
                             }, [])
                     }
-                    if (instrument.fadeOutDuration !== originalInstrument.fadeOutDuration) {
+                    if (instrument.fadeOutDuration != null && instrument.fadeOutDuration !== originalInstrument.fadeOutDuration) {
                         newInstrument.fadeOutDuration = instrument.fadeOutDuration
                     }
-                    if (instrument.ringout !== originalInstrument.ringout) {
+                    if (instrument.ringout != null && instrument.ringout !== originalInstrument.ringout) {
                         newInstrument.ringout = instrument.ringout
                     }
-                    if (instrument.pitch !== originalInstrument.pitch) {
+                    if (instrument.pitch != null && instrument.pitch !== originalInstrument.pitch) {
                         newInstrument.pitch = instrument.pitch
                     }
-                    if (instrument.volume !== originalInstrument.volume) {
+                    if (instrument.volume != null && instrument.volume !== originalInstrument.volume) {
                         newInstrument.volume = instrument.volume
                     }
-                    if (instrument.repeatHitTypeForXBeat !== originalInstrument.repeatHitTypeForXBeat) {
+                    if (instrument.repeatHitTypeForXBeat != null && instrument.repeatHitTypeForXBeat !== originalInstrument.repeatHitTypeForXBeat) {
                         newInstrument.repeatHitTypeForXBeat = instrument.repeatHitTypeForXBeat
                     }
 

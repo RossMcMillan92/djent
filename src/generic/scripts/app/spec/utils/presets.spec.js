@@ -110,7 +110,7 @@ const createPreset = createPresetFactory({
     sequencesInitialState
 })
 
-describe.only('Presets', () => {
+describe('Presets', () => {
     describe('createPresetFactory', () => {
         it('doesn\'t add unnecessary props', () => {
             const propsInput = {}
@@ -160,7 +160,7 @@ describe.only('Presets', () => {
                       fadeOutDuration: 1,
                       ringout: true,
                       pitch: 100,
-                      volume: .4,
+                      volume: 0.4,
                       repeatHitTypeForXBeat: 4
                     }
                 ],
@@ -191,7 +191,7 @@ describe.only('Presets', () => {
                           fadeOutDuration: 1,
                           ringout: true,
                           pitch: 100,
-                          volume: .4,
+                          volume: 0.4,
                           repeatHitTypeForXBeat: 4
                         }
                     ]
@@ -209,6 +209,84 @@ describe.only('Presets', () => {
                 sequences: sequencesInitialState
             }
             const presetOutput = {}
+            const result = createPreset(propsInput)
+
+            expect(result)
+                .to.deep.equal(presetOutput)
+        })
+        it('doesn\'t add instruments without any sounds amounts', () => {
+            const propsInput = {
+                description: 'Preset description',
+                bpm: 40,
+                instruments: [
+                    {
+                      id: 'h',
+                      description: 'Hihat',
+                      sequences: [
+                        'steadyHalfs',
+                      ],
+                      sounds: [
+                        {
+                          id: 'h',
+                          description: 'Open hihat',
+                          path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/src/generic/assets/audio/mastered/hihat-open.wav',
+                          category: 'Hihat',
+                          midi: {
+                            pitch: [
+                              'A#2'
+                            ]
+                          },
+                          amount: 1
+                        },
+                        {
+                          id: 'hc',
+                          description: 'Closed hihat',
+                          path: 'https://raw.githubusercontent.com/RossMcMillan92/djent/master/src/generic/assets/audio/mastered/hihat-closed.wav',
+                          category: 'Hihat',
+                          midi: {
+                            pitch: [
+                              'A#2'
+                            ]
+                          },
+                          amount: 0
+                        }
+                      ],
+                      fadeOutDuration: 1,
+                      ringout: true,
+                      pitch: 100,
+                      volume: 0.4,
+                      repeatHitTypeForXBeat: 4
+                    }
+                ],
+            }
+
+            const presetOutput = {
+                description: 'Preset description',
+                settings: {
+                    config: {
+                        bpm: 40
+                    },
+                    instruments: [
+                        {
+                          id: 'h',
+                          sequences: [
+                            'steadyHalfs',
+                          ],
+                          sounds: [
+                            {
+                              id: 'h',
+                              amount: 1,
+                            },
+                          ],
+                          fadeOutDuration: 1,
+                          ringout: true,
+                          pitch: 100,
+                          volume: 0.4,
+                          repeatHitTypeForXBeat: 4
+                        }
+                    ]
+                }
+            }
             const result = createPreset(propsInput)
 
             expect(result)

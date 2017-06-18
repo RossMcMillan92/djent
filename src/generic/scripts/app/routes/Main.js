@@ -11,10 +11,6 @@ import SwipeableViews from 'components/SwipeableViews'
 import Modal from 'containers/Modal'
 import Player from 'containers/Player'
 
-import getAbsolutePath from 'modules/getAbsolutePath'
-import isPhoneGap from 'modules/phonegap'
-import * as Tracking from 'modules/tracking'
-
 import { defaultAllowedLengths } from 'reducers/sequences.initial-state'
 
 import presets, { backwardsCompatibility } from 'utils/presets'
@@ -64,9 +60,8 @@ export default class Main extends Component {
         }
     }
 
-    loadAndApplyPreset = (preset) =>
-        preset.load
-            .fork(logError, ({ default: fullPreset }) => this.props.actions.applyPreset(fullPreset))
+    loadAndApplyPreset = preset => preset.load
+        .fork(logError, ({ default: fullPreset }) => this.props.actions.applyPreset(fullPreset))
 
     componentDidMount = () => {
         this.refreshOnWindowResize()

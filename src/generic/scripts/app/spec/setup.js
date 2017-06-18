@@ -1,9 +1,10 @@
 import 'jsdom-global/register'
 import chai from 'chai'
 import chaiEnzyme from 'chai-enzyme'
+import { JSDOM } from 'jsdom'
+
 chai.use(chaiEnzyme())
 
-const { JSDOM } = require('jsdom')
 const jsdom = new JSDOM('<!doctype html><html><body></body></html>')
 const { window } = jsdom
 

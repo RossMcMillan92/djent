@@ -1,15 +1,16 @@
-import { expect, assert } from 'chai';
-import sequences, { initialState } from '../../reducers/sequences';
+import { expect, assert } from 'chai'
+import sequences from '../../reducers/sequences'
+import initialState from '../../reducers/sequences.initial-state'
 
-describe('Beats reducer:', () => {
+describe('sequences reducer:', () => {
     it('should return the initial state', () => {
         expect(sequences(initialState, {}))
-            .to.deep.equal(initialState);
-    });
+            .to.deep.equal(initialState)
+    })
 
     describe('Action type: APPLY_PRESET', () => {
         it('should update allowedLengths', () => {
-            const initialState = [
+            const _initialState = [
                 {
                     id: 'CUSTOM_SEQUENCE_1',
                     allowedLengths: [
@@ -50,7 +51,7 @@ describe('Beats reducer:', () => {
                         },
                     ]
                 }
-            ];
+            ]
 
             const stateAfterAdd = [
                 {
@@ -97,7 +98,7 @@ describe('Beats reducer:', () => {
                         },
                     ]
                 }
-            ];
+            ]
 
             const payload = {
                 preset: {
@@ -130,15 +131,15 @@ describe('Beats reducer:', () => {
                         ]
                     }
                 }
-            };
+            }
+
             const action = {
                 type: 'APPLY_PRESET',
                 payload,
-            };
+            }
 
-            expect(sequences(initialState, action))
-                .to.deep.equal(stateAfterAdd);
-        });
-    });
-
-});
+            expect(sequences(_initialState, action))
+                .to.deep.equal(stateAfterAdd)
+        })
+    })
+})

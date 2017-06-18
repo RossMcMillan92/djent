@@ -62,13 +62,6 @@ class ShareController extends Component {
         this.setState({ isLoading: true })
         Tracking.sendShareEvent('share')
 
-        const result = compose(
-            createPreset,
-            head,
-        )
-        console.log('THIS.PROPS.AUDIOPLAYLIST', this.props.audioPlaylist)
-        console.log('RESULT', result(this.props.audioPlaylist))
-
         List(this.props.audioPlaylist)
             .traverse(Task.of, getShortURL)
             .map(combineShortURLs)

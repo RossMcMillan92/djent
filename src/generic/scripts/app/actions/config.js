@@ -1,3 +1,5 @@
+import { setLocalStorageIO } from 'modules/localStorageIO'
+
 export function updateBPM(bpm) {
     if (!bpm)       bpm = 100
     if (bpm < 50)   bpm = 50
@@ -10,6 +12,9 @@ export function updateBPM(bpm) {
 }
 
 export function applyPreset(preset) {
+    const storedActivePresetId = setLocalStorageIO('activePresetID', preset.id)
+        .runIO()
+
     return {
         type: 'APPLY_PRESET',
         payload: { preset },

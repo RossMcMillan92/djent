@@ -88,11 +88,9 @@ const initialPresets = [
 
 const initialState = safeGetLocalStorageIO('presets')
     .map(Maybe.maybe([], JSON.parse))
-    .map(trace('after parse'))
     .map(map(assoc('group', 'Custom')))
     .map(map(preset => assoc('load', Task.of({ default: preset }), preset)))
     .map(ps => initialPresets.concat(ps))
-    .map(trace('after concat'))
     .runIO()
 
 export default initialState

@@ -10,12 +10,13 @@ const createPresetFactory = ({
     instrumentsInitialState: _instrumentsInitialState,
     sequencesInitialState: _sequencesInitialState
 }) =>
-    ({ bpm, description, id, instruments, sequences, usePredefinedSettings }) => {
+    ({ bpm, description, group, id, instruments, sequences, usePredefinedSettings }) => {
         const newPreset = {}
         const configObj = {}
 
         if (description) newPreset.description = description
         if (!isNil(id)) newPreset.id = id
+        if (!isNil(group)) newPreset.group = group
         if (bpm && _configInitialState.bpm !== bpm) configObj.bpm = bpm
 
         const settingsObj = {

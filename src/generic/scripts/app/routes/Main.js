@@ -37,7 +37,6 @@ export default class Main extends Component {
     componentWillMount = () => {
         this.setupBackButtonController()
         const { params, presets } = this.props
-        console.log('PRESETS', presets)
         const shareID = params.shareID
 
         handleGoogleAPI()

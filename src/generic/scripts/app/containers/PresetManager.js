@@ -28,15 +28,13 @@ class PresetManager extends Component {
         const { activePresetID, presets } = this.props
 
         return (
-            <div className="u-flex-row group-spacing-y-small u-mr2@above-alpha">
-                <PresetController
-                    activePresetID={ activePresetID }
-                    onUpdate={ this.loadAndApplyPreset }
-                    presets={ presets }
-                >
-                    <PresetSaver />
-                </PresetController>
-            </div>
+            <PresetController
+                activePresetID={ activePresetID }
+                onUpdate={ this.loadAndApplyPreset }
+                presets={ presets }
+            >
+                <PresetSaver />
+            </PresetController>
         )
     }
 }

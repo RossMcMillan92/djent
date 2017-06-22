@@ -18,25 +18,23 @@ export default class Player extends Component {
         return (
             <div>
                 <Panel sizeY="small">
-                    <div className="u-flex-row u-flex-wrap u-flex-justify">
-                        <PresetManager />
+                    <PresetManager />
 
-                        <div className="u-flex-row u-flex-wrap">
-                            <div className="group-spacing-y-small u-mr2@above-alpha">
-                                <BeatsController
-                                    labelPrefix='Total '
-                                    onUpdate={ actions.updateSequence }
-                                    sequence={ totalSequence }
-                                />
+                    <div className="u-flex-row u-flex-wrap">
+                        <div className="group-spacing-y-small u-mr2@above-alpha">
+                            <BeatsController
+                                labelPrefix='Total '
+                                onUpdate={ actions.updateSequence }
+                                sequence={ totalSequence }
+                            />
+                        </div>
+
+                        <div className="group-spacing-y-small u-flex-row u-flex-end">
+                            <div className="u-mr1">
+                                <BPMController />
                             </div>
-
-                            <div className="group-spacing-y-small u-flex-row u-flex-end">
-                                <div className="u-mr1">
-                                    <BPMController />
-                                </div>
-                                <div className="">
-                                    <BPMTapper onUpdate={actions.updateBPM} />
-                                </div>
+                            <div className="">
+                                <BPMTapper onUpdate={actions.updateBPM} />
                             </div>
                         </div>
                     </div>

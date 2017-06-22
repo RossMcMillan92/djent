@@ -6,13 +6,28 @@ import { getTargetValueFromEvent } from 'modules/events'
 const getPresetFromID = curry((presets, presetID) => presets.find(preset => preset.id === presetID))
 
 //    presetToOption :: preset -> JSX
-const presetToOption = preset => (
-    <option value={preset.id} key={preset.id} data-group={preset.group}>{ preset.description || preset.id }</option>
+const presetToOption = onClick => preset => (
+    <button
+        value={preset.id}
+        key={preset.id}
+        data-group={preset.group}
+        className="grouped-list__item"
+        onClick={() => onClick(preset.id)}
+    >
+        { preset.description || preset.id }
+    </button>
 )
 
 //    presetGroupToOptgroup :: presetGroup -> index -> JSX
 const presetGroupToOptgroup = (presetGroup, i) => (
-    <optgroup label={presetGroup[0].props['data-group']} key={i}>{ presetGroup }</optgroup>
+    <div key={i} className="grouped-list">
+        <div className="grouped-list__group-header">
+            { presetGroup[0].props['data-group'] }
+        </div>
+        <div className="grouped-list__items">
+            { presetGroup }
+        </div>
+    </div>
 )
 
 //    groupPresets :: [preset] -> [[preset]]
@@ -43,37 +58,25 @@ class PresetController extends Component {
     onChange = event => compose(
         this.props.onUpdate,
         getPresetFromID(this.props.presets),
-        getTargetValueFromEvent,
     )(event)
 
     render = () => {
         const { children, presets } = this.props
         const activePreset = presets.find(preset => preset.id === this.props.activePresetID)
         const presetItems = groupPresets(presets)
-            .map(map(presetToOption))
+            .map(map(presetToOption(this.onChange)))
             .map(presetGroupToOptgroup)
 
         if (!activePreset) presetItems.push(<option value='custom' key={presetItems.length}>Custom</option>)
 
         return (
             <div>
-                <label htmlFor="preset-dropdown" className="input-label">
-                    Preset:
-                </label>
-                <div className="u-flex-row">
-                    <div className="input-container u-mr1">
-                        <select
-                            className="input-base input-base--dropdown input-base--bare input-base--large"
-                            id="preset-dropdown"
-                            onChange={this.onChange}
-                            value={activePreset ? this.props.activePresetID : 'custom'}
-                        >
-                            { presetItems }
-                        </select>
-                        <div className="input-dropdown-icon"></div>
-                    </div>
-                    { children }
+                <div>
+                    Active Preset: &nbsp;
+                    { activePreset.group } > { activePreset.description }
                 </div>
+                { presetItems }
+                { children }
             </div>
         )
     }

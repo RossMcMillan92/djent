@@ -1,0 +1,30 @@
+$group-list__bg-color: #d7d7d7
+$group-list__item-spacing-y: 8px
+$group-list__item-spacing-x: 12px
+
+.grouped-list
+    background-color: $group-list__bg-color
+
+.grouped-list__group-header
+    background-color: $palette-shade-epsilon
+    color: $palette-shade-alpha
+    padding: $group-list__item-spacing-y $group-list__item-spacing-x
+    font-size: rem(12px)
+    text-transform: uppercase
+
+.grouped-list__items
+    display: flex
+    flex-wrap: wrap
+
+.grouped-list__item
+    appearance: none
+    flex-basis: (100% / 3)
+    padding: $group-list__item-spacing-y $group-list__item-spacing-x
+    border: solid 1px $group-list__bg-color
+    font-size: rem(14px)
+    background-color: #ddd
+    cursor: pointer
+    white-space: nowrap
+
+    &:focus
+        outline: none

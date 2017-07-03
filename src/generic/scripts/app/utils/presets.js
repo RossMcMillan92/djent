@@ -1,4 +1,3 @@
-import { Future as Task } from 'ramda-fantasy'
 import promiseToTask from 'modules/promiseToTask'
 
 const presets = [
@@ -47,14 +46,9 @@ const presets = [
         description: 'Thall III',
         load: promiseToTask(() => import(/* webpackChunkName: "presets.thall-triplets" */ './presets/thall-triplets'))
     },
-    {
-        id: 'trap',
-        description: 'Trap',
-        load: promiseToTask(() => import(/* webpackChunkName: "presets.trap" */ './presets/trap'))
-    },
 ]
 
-const initialPreset = 'trap'
+const initialPreset = 'meshuggah'
 
 import { getAllowedLengthsFromSequence } from './sequences'
 import { deepClone } from './tools'

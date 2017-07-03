@@ -123,6 +123,7 @@ const config = (env) => {
                     ]
                 }
             }),
+            new webpack.optimize.ModuleConcatenationPlugin(),
             isProduction
                 ? new webpack.optimize.UglifyJsPlugin({
                     compress: {

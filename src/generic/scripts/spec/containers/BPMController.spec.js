@@ -1,6 +1,4 @@
 import React from 'react'
-import sinon from 'sinon'
-import { expect } from 'chai'
 import { mount } from 'enzyme'
 import { BPMController } from 'containers/BPMController'
 
@@ -13,12 +11,12 @@ describe('<BPMController />', () => {
             }
         }
         const wrapper = mount(<BPMController {...props} />)
-        expect(wrapper.find('input')).to.have.value('90')
+        expect(wrapper.find('input').node.value).toBe('90')
     })
 
     it('fires actions.updateBPM with new bpm when onChange is fired', (done) => {
         const newBPM = 95
-        const updateBPM = sinon.spy()
+        const updateBPM = jest.fn()
         const props = {
             bpm: 90,
             actions: {
@@ -29,8 +27,7 @@ describe('<BPMController />', () => {
             .find('input')
             .simulate('change', {target: {value: 95}})
         function assertions() {
-            expect(updateBPM.calledWith(newBPM))
-                .to.equal(true)
+            expect(updateBPM).toHaveBeenCalledWith(newBPM)
             done()
         }
     })

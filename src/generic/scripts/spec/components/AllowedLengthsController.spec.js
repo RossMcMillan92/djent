@@ -1,6 +1,4 @@
 import React from 'react'
-import sinon from 'sinon'
-import { expect } from 'chai'
 import { mount } from 'enzyme'
 import AllowedLengthsController from 'components/AllowedLengthsController'
 
@@ -45,7 +43,7 @@ const defaultAllowedLengths = [
 describe('<AllowedLengthsController />', () => {
     it('fires onUpdate with updated allowedLengths when up button is clicked', () => {
         const noteName = 'half'
-        const onUpdate = sinon.spy()
+        const onUpdate = jest.fn()
         const allowedLengths = defaultAllowedLengths
         const props = {
             allowedLengths,
@@ -54,16 +52,15 @@ describe('<AllowedLengthsController />', () => {
         const wrapper = mount(<AllowedLengthsController {...props} />)
             .find(`.note-panel__btn--${noteName}.note-panel__btn--up`)
             .simulate('click')
-        const returnedAllowedLengths = onUpdate.args[0][0]
+        const returnedAllowedLengths = onUpdate.mock.calls[0][0]
         const alteredLength = returnedAllowedLengths.find(l => l.name === noteName)
 
-        expect(alteredLength.amount)
-            .to.equal(1)
+        expect(alteredLength.amount).toBe(1)
     })
     describe('when down button is clicked', () => {
         it('fires onUpdate with updated allowedLengths ', () => {
             const noteName = 'whole'
-            const onUpdate = sinon.spy()
+            const onUpdate = jest.fn()
             const allowedLengths = defaultAllowedLengths
                 .map(l => Object.assign({}, l, { amount: 1 }))
             const props = {
@@ -73,15 +70,14 @@ describe('<AllowedLengthsController />', () => {
             const wrapper = mount(<AllowedLengthsController {...props} />)
                 .find(`.note-panel__btn--${noteName}.note-panel__btn--down`)
                 .simulate('click')
-            const returnedAllowedLengths = onUpdate.args[0][0]
+            const returnedAllowedLengths = onUpdate.mock.calls[0][0]
             const alteredLength = returnedAllowedLengths.find(l => l.name === noteName)
 
-            expect(alteredLength.amount)
-                .to.equal(0)
+            expect(alteredLength.amount).toBe(0)
         })
         it('doesnt fire onUpdate when the note amount is at 0', () => {
             const noteName = 'whole'
-            const onUpdate = sinon.spy()
+            const onUpdate = jest.fn()
             const allowedLengths = defaultAllowedLengths
             const props = {
                 allowedLengths,
@@ -91,8 +87,7 @@ describe('<AllowedLengthsController />', () => {
                 .find(`.note-panel__btn--${noteName}.note-panel__btn--down`)
                 .simulate('click')
 
-            expect(onUpdate.notCalled)
-                .to.equal(true)
+            expect(onUpdate).not.toHaveBeenCalled()
         })
     })
 })

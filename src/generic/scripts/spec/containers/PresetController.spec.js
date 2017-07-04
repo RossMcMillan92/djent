@@ -1,10 +1,6 @@
 import React from 'react'
-import sinon from 'sinon'
-import { expect } from 'chai'
 import { mount } from 'enzyme'
 import { groupPresets, PresetController } from 'containers/PresetController'
-
-PresetController.prototype.loadAndApplyPreset = sinon.spy()
 
 const load = id => ({
     fork: (rej, res) => res({ default: id })
@@ -70,9 +66,9 @@ const presets = [
 describe('<PresetController />', () => {
     it('fires applyPreset with selected preset when changed', () => {
         const activePresetID = 'thall'
-        const enableModal = sinon.spy()
-        const applyPreset = sinon.spy()
-        const disableModal = sinon.spy()
+        const enableModal = jest.fn()
+        const applyPreset = jest.fn()
+        const disableModal = jest.fn()
         const props = {
             actions: { applyPreset, disableModal, enableModal },
             activePresetID,
@@ -82,14 +78,14 @@ describe('<PresetController />', () => {
         wrapper
             .find('[value="thall"]')
             .simulate('click', { target: { value: activePresetID } })
-        const returnedAllowedLength = applyPreset.args[0][0]
+        const returnedAllowedLength = applyPreset.mock.calls[0][0]
 
         expect(returnedAllowedLength)
-            .to.equal(activePresetID)
+            .toBe(activePresetID)
     })
     it('renders groups of presets in <div> tags', () => {
         const activePresetID = 'thall'
-        const onUpdate = sinon.spy()
+        const onUpdate = jest.fn()
         const props = {
             activePresetID,
             onUpdate,
@@ -102,13 +98,13 @@ describe('<PresetController />', () => {
             .find('div[data-group="Progressive"]')
 
         expect(groupDjent.exists())
-            .to.equal(true)
+            .toBe(true)
         expect(groupProgressive.exists())
-            .to.equal(true)
+            .toBe(true)
     })
     it('renders the correct presets inside the <div> tags', () => {
         const activePresetID = 'thall'
-        const onUpdate = sinon.spy()
+        const onUpdate = jest.fn()
         const props = {
             activePresetID,
             onUpdate,
@@ -123,9 +119,9 @@ describe('<PresetController />', () => {
             .find('[value="meshuggah"]')
 
         expect(thallPreset.exists())
-            .to.equal(true)
+            .toBe(true)
         expect(meshuggahPreset.exists())
-            .to.equal(true)
+            .toBe(true)
     })
 })
 
@@ -152,7 +148,6 @@ describe('groupPresets function', () => {
             ],
         ]
 
-        expect(groupPresets(startingArray))
-            .to.deep.equal(expectedResult)
+        expect(groupPresets(startingArray)).toEqual(expectedResult)
     })
 })

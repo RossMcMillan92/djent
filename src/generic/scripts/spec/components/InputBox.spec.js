@@ -1,6 +1,4 @@
 import React from 'react'
-import sinon from 'sinon'
-import { expect } from 'chai'
 import { mount } from 'enzyme'
 import InputBox from 'components/InputBox'
 
@@ -8,21 +6,20 @@ describe('<InputBox />', () => {
     it('fires onChange with an event holding the new value', (done) => {
         const value = 5
         const newVal = 10
-        const onChange = sinon.spy()
+        const onChange = jest.fn()
         const props = {
             defaultValue: value,
             onChange: (...args) => onChange(...args) || assertions(),
         }
         const wrapper = mount(<InputBox {...props} />)
         const input = wrapper.find('input')
-            .simulate('change', {target: {value: newVal}})
+            .simulate('change', { target: { value: newVal } })
 
         function assertions() {
-            const returnedArgument = onChange.args[0][0]
-            expect(input)
-                .to.have.value(value.toString())
-            expect(returnedArgument.target.value)
-                .to.equal(newVal)
+            const returnedArgument = onChange.mock.calls[0][0]
+            expect(input.node.value)
+                .toBe(value.toString())
+            expect(returnedArgument.target.value).toBe(newVal)
             done()
         }
     })
@@ -39,8 +36,8 @@ describe('<InputBox />', () => {
 
         wrapper.setProps({ defaultValue: newVal })
 
-        expect(input)
-            .to.have.value(value.toString())
+        expect(input.node.value)
+            .toBe(value.toString())
     })
 
     it('updates value via new props when the input isn\'t focused', () => {
@@ -54,8 +51,8 @@ describe('<InputBox />', () => {
 
         wrapper.setProps({ defaultValue: newVal })
 
-        expect(input)
-            .to.have.value(newVal.toString())
+        expect(input.node.value)
+            .toBe(newVal.toString())
     })
 
     it('adds a className to the input', () => {
@@ -68,8 +65,8 @@ describe('<InputBox />', () => {
         const wrapper = mount(<InputBox {...props} />)
         const input = wrapper.find('input')
 
-        expect(input)
-            .to.have.className(className)
+        expect(input.hasClass(className))
+            .toBe(true)
     })
 
     it('adds a "is-valid"/"is-invalid" className to the input', () => {
@@ -82,20 +79,20 @@ describe('<InputBox />', () => {
         const wrapper = mount(<InputBox {...props} />)
         const input = wrapper.find('input')
 
-        expect(input)
-            .to.have.className('is-valid')
+        expect(input.hasClass('is-valid'))
+            .toBe(true)
 
         wrapper
             .setProps({ defaultValue: -1 })
 
-        expect(input)
-            .to.have.className('is-invalid')
+        expect(input.hasClass('is-invalid'))
+            .toBe(true)
 
         wrapper
             .setProps({ defaultValue: 15 })
 
-        expect(input)
-            .to.have.className('is-invalid')
+        expect(input.hasClass('is-invalid'))
+            .toBe(true)
     })
 
     it('adds a label element when label is passed as a prop', () => {
@@ -110,13 +107,11 @@ describe('<InputBox />', () => {
         const wrapper = mount(<InputBox {...props} />)
         const labelElement = wrapper.find('label')
 
-        expect(labelElement.exists())
-            .to.equal(true)
+        expect(labelElement.exists()).toBe(true)
 
-        expect(labelElement.text())
-            .to.equal(`${label}:`)
+        expect(labelElement.text()).toBe(`${label}:`)
 
-        expect(labelElement)
-            .to.have.className(labelClassName)
+        expect(labelElement.hasClass(labelClassName))
+            .toBe(true)
     })
 })

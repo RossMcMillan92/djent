@@ -1,12 +1,17 @@
 import React, { Component } from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import { compose, curry, map, reduce, update } from 'ramda'
-import { getTargetValueFromEvent } from 'modules/events'
+import { applyPreset } from 'actions/config'
+import * as modalActions from 'actions/modal'
+import Spinner from 'components/Spinner'
+import { logError } from 'utils/tools'
 
 //    getPresetFromID :: [preset] -> String -> preset
 const getPresetFromID = curry((presets, presetID) => presets.find(preset => preset.id === presetID))
 
-//    presetToOption :: preset -> JSX
-const presetToOption = onClick => preset => (
+//    getPresetJSX :: preset -> JSX
+const getPresetJSX = curry((onClick, preset) => (
     <button
         value={preset.id}
         key={preset.id}
@@ -16,11 +21,11 @@ const presetToOption = onClick => preset => (
     >
         { preset.description || preset.id }
     </button>
-)
+))
 
-//    presetGroupToOptgroup :: presetGroup -> index -> JSX
-const presetGroupToOptgroup = (presetGroup, i) => (
-    <div key={i} className="grouped-list">
+//    getPresetGroupJSX :: presetGroup -> index -> JSX
+const getPresetGroupJSX = (presetGroup, i) => (
+    <div key={i} data-group={presetGroup[0].props['data-group']} className="grouped-list">
         <div className="grouped-list__group-header">
             { presetGroup[0].props['data-group'] }
         </div>
@@ -55,8 +60,24 @@ const groupPresets = reduce((groups, preset) => {
 class PresetController extends Component {
     shouldComponentUpdate = nextProps => nextProps.activePresetID !== this.props.activePresetID
 
+    loadAndApplyPreset = (preset) => {
+        const { actions } = this.props
+
+        actions.enableModal({
+            content: (<Spinner subtext={`Loading preset: ${preset.description}`} />),
+            isCloseable: false,
+            className: 'modal--auto-width',
+        })
+
+        preset.load
+            .fork(logError, ({ default: fullPreset }) => {
+                actions.applyPreset(fullPreset)
+                actions.disableModal()
+            })
+    }
+
     onChange = event => compose(
-        this.props.onUpdate,
+        this.loadAndApplyPreset,
         getPresetFromID(this.props.presets),
     )(event)
 
@@ -64,8 +85,8 @@ class PresetController extends Component {
         const { children, presets } = this.props
         const activePreset = presets.find(preset => preset.id === this.props.activePresetID)
         const presetItems = groupPresets(presets)
-            .map(map(presetToOption(this.onChange)))
-            .map(presetGroupToOptgroup)
+            .map(map(getPresetJSX(this.onChange)))
+            .map(getPresetGroupJSX)
 
         if (!activePreset) presetItems.push(<option value='custom' key={presetItems.length}>Custom</option>)
 
@@ -82,7 +103,28 @@ class PresetController extends Component {
     }
 }
 
-export default PresetController
+const mapStateToProps = (state) => {
+    const { config, presets } = state
+    return {
+        activePresetID   : config.activePresetID,
+        presets,
+    }
+}
+
+const actions = {
+    ...modalActions,
+    applyPreset,
+}
+
+const mapDispatchToProps = dispatch => ({
+    actions: {
+        ...bindActionCreators(actions, dispatch)
+    }
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(PresetController)
+
 export {
-    groupPresets
+    groupPresets,
+    PresetController
 }

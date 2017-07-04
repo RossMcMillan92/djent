@@ -2,6 +2,7 @@ import 'jsdom-global/register'
 import chai from 'chai'
 import chaiEnzyme from 'chai-enzyme'
 import { JSDOM } from 'jsdom'
+import sinon from 'sinon'
 
 chai.use(chaiEnzyme())
 
@@ -15,10 +16,15 @@ function copyProps(src, target) {
   Object.defineProperties(target, props)
 }
 
+window.localStorage = {
+    getItem: sinon.spy(),
+    setItem: sinon.spy(),
+}
+
 global.IS_PHONEGAP = false
 global.window = window
 global.document = window.document
 global.navigator = {
-  userAgent: 'node.js'
+    userAgent: 'node.js'
 }
 copyProps(window, global)

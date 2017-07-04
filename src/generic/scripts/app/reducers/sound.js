@@ -1,19 +1,18 @@
 import { compose, identity, map } from 'ramda'
 import { Maybe } from 'ramda-fantasy'
+import { LOOP_MODE, LOOP_MODE_DEFAULT } from 'constants/localStorage'
 import { safeGetLocalStorageIO } from 'modules/localStorageIO'
 
-const loopModeDefault = 1
-
 //    getLoopModeValue :: Key -> IO Maybe a
-const getLoopModeValue = compose(
+const getLoopModeValue = loopModeDefault => compose(
     map(Maybe.maybe(loopModeDefault, identity)),
     map(map(Number)),
-    safeGetLocalStorageIO,
-)
+    () => safeGetLocalStorageIO(LOOP_MODE),
+)()
 
 const initialState =  {
     isPlaying            : false,
-    loopMode             : getLoopModeValue('loopMode').runIO(),
+    loopMode             : getLoopModeValue(LOOP_MODE_DEFAULT).runIO(),
     generationState      : undefined,
     currentAudioTemplate : undefined,
     audioPlaylist        : [],

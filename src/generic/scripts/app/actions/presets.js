@@ -1,10 +1,10 @@
-import { safeGetLocalStorageIO, setLocalStorageIO } from 'modules/localStorageIO'
 import { map, update } from 'ramda'
 import { Identity, Maybe } from 'ramda-fantasy'
-
+import { PRESETS } from 'constants/localStorage'
+import { safeGetLocalStorageIO, setLocalStorageIO } from 'modules/localStorageIO'
 
 export function addPreset(preset) {
-    const storedPresets = safeGetLocalStorageIO('presets')
+    const storedPresets = safeGetLocalStorageIO(PRESETS)
         .map(Maybe.maybe([], JSON.parse))
         .runIO()
 
@@ -17,6 +17,8 @@ export function addPreset(preset) {
         ))
         .map(JSON.stringify)
         .map(setLocalStorageIO('presets'))
+
+    newStoredPresets
         .map(p => p.runIO())
 
     return {

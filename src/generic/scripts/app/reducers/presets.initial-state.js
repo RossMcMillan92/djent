@@ -1,5 +1,6 @@
 import { assoc, map } from 'ramda'
 import { Maybe, Future as Task } from 'ramda-fantasy'
+import { PRESETS } from 'constants/localStorage'
 import { safeGetLocalStorageIO } from 'modules/localStorageIO'
 import promiseToTask from 'modules/promiseToTask'
 
@@ -86,7 +87,7 @@ const initialPresets = [
     },
 ]
 
-const initialState = safeGetLocalStorageIO('presets')
+const initialState = safeGetLocalStorageIO(PRESETS)
     .map(Maybe.maybe([], JSON.parse))
     .map(map(assoc('group', 'Custom')))
     .map(map(preset => assoc('load', Task.of({ default: preset }), preset)))

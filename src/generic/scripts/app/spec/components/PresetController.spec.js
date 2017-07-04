@@ -2,73 +2,92 @@ import React from 'react'
 import sinon from 'sinon'
 import { expect } from 'chai'
 import { mount } from 'enzyme'
-import PresetController, { groupPresets } from 'components/PresetController'
+import { groupPresets, PresetController } from 'containers/PresetController'
+
+PresetController.prototype.loadAndApplyPreset = sinon.spy()
+
+const load = id => ({
+    fork: (rej, res) => res({ default: id })
+})
 
 const presets = [
     {
         id: 'adtr',
         description: 'ADTR Breakdown',
         group: 'Pop Punk',
+        load: load('adtr'),
     },
     {
         id: 'black-dahlia',
         description: 'Blast Beats',
         group: 'Heavy',
+        load: load('black-dahlia'),
     },
     {
         id: 'contortionist',
         description: 'Poly Chords & Melody',
         group: 'Progressive',
+        load: load('contortionist'),
     },
     {
         id: 'polyrhythms',
         description: 'Polyrhythms',
         group: 'Progressive',
+        load: load('polyrhythms'),
     },
     {
         id: 'sworn-in',
         description: 'Sworn In',
+        group: 'Artist',
+        load: load('sworn-in'),
     },
     {
         id: 'meshuggah',
         description: 'Meshuggah',
         group: 'Djent',
+        load: load('meshuggah'),
     },
     {
         id: 'thall',
         description: 'Thall I',
         group: 'Djent',
+        load: load('thall'),
     },
     {
         id: 'thall-buster',
         description: 'Thall II',
         group: 'Djent',
+        load: load('thall-buster'),
     },
     {
         id: 'thall-triplets',
         description: 'Thall III',
         group: 'Djent',
+        load: load('thall-triplets'),
     },
 ]
 
 describe('<PresetController />', () => {
-    it('fires onUpdate with selected preset when changed', () => {
+    it('fires applyPreset with selected preset when changed', () => {
         const activePresetID = 'thall'
-        const onUpdate = sinon.spy()
+        const enableModal = sinon.spy()
+        const applyPreset = sinon.spy()
+        const disableModal = sinon.spy()
         const props = {
+            actions: { applyPreset, disableModal, enableModal },
             activePresetID,
-            onUpdate,
             presets,
         }
         const wrapper = mount(<PresetController {...props} />)
-            .find('select')
-            .simulate('change', {target: {value: activePresetID}})
-        const returnedAllowedLength = onUpdate.args[0][0]
+        wrapper
+            .find('[value="thall"]')
+            .simulate('click', { target: { value: activePresetID } })
+        const returnedAllowedLength = applyPreset.args[0][0]
 
-        expect(presets.find(p => p.id === activePresetID))
-            .to.deep.equal(returnedAllowedLength)
+        expect(returnedAllowedLength)
+            .to.equal(activePresetID)
     })
-    it('renders groups of presets in <optgroup> tags', () => {
+    it('renders groups of presets in <div> tags', () => {
         const activePresetID = 'thall'
         const onUpdate = sinon.spy()
         const props = {
@@ -78,16 +97,16 @@ describe('<PresetController />', () => {
         }
         const wrapper = mount(<PresetController {...props} />)
         const groupDjent = wrapper
-            .find('optgroup[label="Djent"]')
+            .find('div[data-group="Djent"]')
         const groupProgressive = wrapper
-            .find('optgroup[label="Progressive"]')
+            .find('div[data-group="Progressive"]')
 
         expect(groupDjent.exists())
             .to.equal(true)
         expect(groupProgressive.exists())
             .to.equal(true)
     })
-    it('renders the correct presets inside the <optgroup> tags', () => {
+    it('renders the correct presets inside the <div> tags', () => {
         const activePresetID = 'thall'
         const onUpdate = sinon.spy()
         const props = {
@@ -97,7 +116,7 @@ describe('<PresetController />', () => {
         }
         const wrapper = mount(<PresetController {...props} />)
         const groupDjent = wrapper
-            .find('optgroup[label="Djent"]')
+            .find('div[data-group="Djent"]')
         const thallPreset = groupDjent
             .find('[value="thall"]')
         const meshuggahPreset = groupDjent

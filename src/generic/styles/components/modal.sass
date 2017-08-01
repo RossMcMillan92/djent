@@ -5,12 +5,12 @@
     left: 0
     right: 0
     z-index: 10
-    transition: all 0.5s ease-in-out, z-index 0s ease 0.5s
+    transition: all 0.25s ease-in-out, z-index 0s ease 0.25s
     opacity: 0
     z-index: -1
 
     &.is-active
-        transition: all 0.5s ease-in-out
+        transition: all 0.25s ease-in-out
         opacity: 1
         pointer-events: all
         z-index: 10
@@ -33,12 +33,13 @@
     padding: $base-spacing-unit / 2
     opacity: 0
     will-change: transform
-    transform: translate3d(-50%, -30%, 0)
-    transition: opacity 0.75s ease-in-out, transform 0.75s ease-in-out
+    transform-origin: left
+    transform: scale(.9) translate3d(-50%, -50%, 0)
+    transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out
 
     .modal.is-active &
         opacity: 1
-        transform: translate3d(-50%, -50%, 0)
+        transform: scale(1) translate3d(-50%, -50%, 0)
 
     .modal--auto-width &
         width: auto

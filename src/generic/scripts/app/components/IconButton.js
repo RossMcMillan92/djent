@@ -5,7 +5,7 @@ import SVG from 'components/SVG'
 import { capitalize } from 'utils/tools'
 
 class IconButton extends Component {
-    componentShouldUpdate = nextProps => (
+    shouldComponentUpdate = nextProps => (
         nextProps.children !== this.props.children ||
         nextProps.icon !== this.props.icon ||
         nextProps.isDisabled !== this.props.isDisabled ||

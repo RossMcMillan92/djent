@@ -5,7 +5,7 @@ import { compose, curry, map, reduce, update } from 'ramda'
 import { applyPreset } from 'actions/config'
 import * as modalActions from 'actions/modal'
 import Spinner from 'components/Spinner'
-import { logError } from 'utils/tools'
+import { capitalize, logError } from 'utils/tools'
 
 //    getPresetFromID :: [preset] -> String -> preset
 const getPresetFromID = curry((presets, presetID) => presets.find(preset => preset.id === presetID))
@@ -82,10 +82,10 @@ class PresetController extends Component {
     )(event)
 
     launchModal = () => {
-    const { actions, presets } = this.props
-    const presetItems = groupPresets(presets)
-        .map(map(getPresetJSX(this.onChange)))
-        .map(getPresetGroupJSX)
+        const { actions, presets } = this.props
+        const presetItems = groupPresets(presets)
+            .map(map(getPresetJSX(this.onChange)))
+            .map(getPresetGroupJSX)
 
         actions.enableModal({
             isCloseable: true,
@@ -99,14 +99,18 @@ class PresetController extends Component {
     }
 
     render = () => {
-        const { children, presets } = this.props
-        const activePreset = presets.find(preset => preset.id === this.props.activePresetID)
+        const { activePresetID, children, presets } = this.props
+        const activePreset = presets.find(preset => preset.id === activePresetID)
 
         return (
             <div className="u-flex-row">
                 <div className="u-mr1" onClick={this.launchModal}>
                     Active Preset: &nbsp;
-                    { activePreset.group } > { activePreset.description }
+                    {
+                        activePreset
+                            ? `${activePreset.group} > ${activePreset.description}`
+                            : capitalize(activePresetID)
+                    }
                 </div>
                 { children }
             </div>

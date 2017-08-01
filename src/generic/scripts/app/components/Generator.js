@@ -43,6 +43,9 @@ class Generator extends Component {
         const wrapperProps = {
             onClick: () => this.generateEvent(),
             disabled: this.props.disabled,
+            title: this.props.disabled
+                ? 'Can\'t generate while the track is locked'
+                : 'Generate' ,
             className: this.props.wrapperClass
                 ? this.props.wrapperClass
                 : `button-primary button-primary--alpha-dark button-primary--small-icon ${this.props.buttonClassAppended ? this.props.buttonClassAppended : ''} ${this.state.isLoading ? '' : 'icon-is-hidden'}`,

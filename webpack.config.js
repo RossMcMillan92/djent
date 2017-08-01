@@ -53,6 +53,9 @@ const config = (env) => {
                 ...getModules(env.platform)
             ]
         },
+        devtool: isProduction
+            ? 'source-map'
+            : 'eval-cheap-module-source-map',
         module: {
             rules: [
                 {

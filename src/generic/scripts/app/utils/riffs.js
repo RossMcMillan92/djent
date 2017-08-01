@@ -43,6 +43,7 @@ const generateRiff = ({ context, totalBeatsProduct, instruments, usePredefinedSe
 
 //    generateNewRiff :: audioSettings -> Task Error [Instrument]
 const generateNewRiff = ({ context, sequences, usePredefinedSettings, instruments, totalBeatsProduct }) => {
+    console.log('USEPREDEFINEDSETTINGS', usePredefinedSettings)
     const generatedSequences    = {}
     const getInstrumentSequence = getSequence({
         sequences,
@@ -79,6 +80,7 @@ const createPlaylistItem = (genID, audioTemplate, instruments, sequences, bpm, i
 
 //    generatePlaylistItem :: audioSettings -> Task Error PlaylistItem
 const generatePlaylistItem = (genID, bpm, sequences, instruments, usePredefinedSettings) => {
+    console.log('USEPREDEFINEDSETTINGS', usePredefinedSettings)
     const generationState   = { bpm, sequences, instruments, usePredefinedSettings }
     const totalBeatsProduct = getTotalBeatsLength(sequences)
 

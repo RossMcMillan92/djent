@@ -104,6 +104,7 @@ export default class Main extends Component {
 
     // updatePresetAndGetPlaylist :: List longURLs -> Task Error audioPlaylist
     updatePresetAndGetPlaylist = (longURLs) => {
+        console.log('LONGURLS.GET(0)', longURLs.get(0))
         if (longURLs.size === 1 && longURLs.get(0).includes('-')) {
             return compose(this.setupSharedItems, last, split('/'))(longURLs.get(0))
         }

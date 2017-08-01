@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-
 import InputBox from 'components/InputBox'
 
 class HitChanceController extends Component {

@@ -81,22 +81,33 @@ class PresetController extends Component {
         getPresetFromID(this.props.presets),
     )(event)
 
+    launchModal = () => {
+    const { actions, presets } = this.props
+    const presetItems = groupPresets(presets)
+        .map(map(getPresetJSX(this.onChange)))
+        .map(getPresetGroupJSX)
+
+        actions.enableModal({
+            isCloseable: true,
+            title: 'Preset Manager',
+            content: (
+                <div>
+                    { presetItems }
+                </div>
+            )
+        })
+    }
+
     render = () => {
         const { children, presets } = this.props
         const activePreset = presets.find(preset => preset.id === this.props.activePresetID)
-        const presetItems = groupPresets(presets)
-            .map(map(getPresetJSX(this.onChange)))
-            .map(getPresetGroupJSX)
-
-        if (!activePreset) presetItems.push(<option value='custom' key={presetItems.length}>Custom</option>)
 
         return (
-            <div>
-                <div>
+            <div className="u-flex-row">
+                <div className="u-mr1" onClick={this.launchModal}>
                     Active Preset: &nbsp;
                     { activePreset.group } > { activePreset.description }
                 </div>
-                { presetItems }
                 { children }
             </div>
         )

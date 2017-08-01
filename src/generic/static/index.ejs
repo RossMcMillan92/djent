@@ -14,8 +14,16 @@
 	</script>
 	<% } %>
 
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,600" rel="stylesheet" type="text/css" media="screen" async>
-	<link rel="manifest" href="<%= htmlWebpackPlugin.options.absolutePath %>manifest.json">
+	<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+	<script>
+	 WebFont.load({
+	    google: {
+	      families: ['Open Sans:400300']
+	    }
+	  });
+	</script>
+
+	<link rel="manifest" href="<%= htmlWebpackPlugin.options.absolutePath %>manifest.json" async>
 
 	<meta name="theme-color" content="#1e1e1e">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
@@ -64,7 +72,7 @@
 	<meta http-equiv="Content-Security-Policy"
 	         content="default-src * blob:;
 	                  style-src * 'self' 'unsafe-inline' 'unsafe-eval';
-	                  script-src * 'self' 'unsafe-inline' 'unsafe-eval';
+	                  script-src * 'self' 'unsafe-inline' 'unsafe-eval' data:;
 	                  worker-src * blob: 'self' 'unsafe-inline' 'unsafe-eval';">
 	<noscript>
 		<style> .js { display: none !important } </style>

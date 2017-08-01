@@ -4,6 +4,17 @@
 	"description": "A metal breakdown generator.",
 	"author": "Ross McMillan - @RossMcMillan92",
 	"main": "",
+	"scripts": {
+		"spec": "jest --verbose --colors --verbose --coverage",
+		"spec:watch": "jest --watch --colors",
+		"start": "node tools/wizard.js",
+		"phonegap": "NODE_ENV=production node node_modules/webpack/bin/webpack.js --config=webpack.config.js --env.platform=generic --env.isPhoneGap=true --colors",
+		"phonegapdev": "NODE_ENV=development node node_modules/webpack/bin/webpack.js --config=webpack.config.js --env.platform=generic --env.isPhoneGap=true --colors --watch",
+		"build": "NODE_ENV=production node node_modules/webpack/bin/webpack.js --config=webpack.config.js --env.platform=generic --colors",
+		"dev": "NODE_ENV=development node node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --watch --hot --inline --config=webpack.config.js --env.platform=generic --env.isPhoneGap=false --colors",
+		"prod": "NODE_ENV=production node node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --watch --config=webpack.config.js --env.platform=generic --env.isPhoneGap=false --colors",
+		"analyse": "node node_modules/webpack/bin/webpack.js --config=webpack.config.js --env.platform=generic --colors --json | node node_modules/webpack-bundle-size-analyzer/webpack-bundle-size-analyzer"
+	},
 	"dependencies": {
 		"audiobuffer-to-wav": "^1.0.0",
 		"babel-plugin-dynamic-import-node": "^1.0.2",
@@ -53,6 +64,7 @@
 		"babelify": "^7.2.0",
 		"chai": "^4.1.0",
 		"colors": "^1.1.2",
+		"css-hot-loader": "^1.3.0",
 		"css-loader": "^0.28.4",
 		"deep-extend": "^0.4.1",
 		"del": "^3.0.0",
@@ -76,14 +88,16 @@
 		"postcss-cssnext": "^2.11.0",
 		"postcss-import": "^9.0.0",
 		"postcss-loader": "^1.3.3",
+		"prop-types": "^15.5.10",
 		"react": "next",
 		"react-dom": "next",
 		"react-dragula": "^1.1.17",
-		"react-hot-loader": "^1.3.0",
+		"react-hot-loader": "next",
 		"react-jsx": "^1.0.0",
 		"react-redux": "^5.0.5",
 		"react-router": "^3.0.0",
 		"react-test-renderer": "^15.6.1",
+		"redbox-react": "^1.4.3",
 		"redux": "^3.7.2",
 		"redux-thunk": "^2.0.1",
 		"sass-loader": "^6.0.6",
@@ -93,17 +107,6 @@
 		"webpack": "^3.4.1",
 		"webpack-dev-server": "^2.6.1",
 		"webpack-watch-livereload-plugin": "^0.0.1"
-	},
-	"scripts": {
-		"spec": "jest --verbose --colors --verbose --coverage",
-		"spec:watch": "jest --watch --colors",
-		"start": "node tools/wizard.js",
-		"phonegap": "node node_modules/webpack/bin/webpack.js --config=webpack.config.js --env.platform=generic --env.isProduction=true --env.isPhoneGap=true --colors",
-		"phonegapdev": "node node_modules/webpack/bin/webpack.js --config=webpack.config.js --env.platform=generic --env.isProduction=false --env.isPhoneGap=true --colors --watch",
-		"build": "node node_modules/webpack/bin/webpack.js --config=webpack.config.js --env.platform=generic --env.isProduction=true --colors",
-		"dev": "node node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --watch --config=webpack.config.js --env.platform=generic --env.isPhoneGap=false --env.isProduction=false --colors",
-		"prod": "node node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --watch --config=webpack.config.js --env.platform=generic --env.isPhoneGap=false --env.isProduction=true --colors",
-		"analyse": "node node_modules/webpack/bin/webpack.js --config=webpack.config.js --env.platform=generic --colors --json | node node_modules/webpack-bundle-size-analyzer/webpack-bundle-size-analyzer"
 	},
 	"jest": {
 		"modulePaths": [

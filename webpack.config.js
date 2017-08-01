@@ -1,19 +1,23 @@
-const path                       = require('path')
-const webpack                    = require('webpack')
-const autoprefixer               = require('autoprefixer')
-const ExtractTextPlugin          = require('extract-text-webpack-plugin')
-const CopyWebpackPlugin          = require('copy-webpack-plugin')
-const HtmlWebpackPlugin          = require('html-webpack-plugin')
+const path = require('path')
+const webpack = require('webpack')
+const autoprefixer = require('autoprefixer')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
-const LiveReloadPlugin           = require('webpack-livereload-plugin')
-// const BundleAnalyzerPlugin       = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
-const sourceDir     = '/src'
-const buildDir      = '/www'
-const entryJSFile   = `${sourceDir}/generic/scripts/app.js`
+const nodeEnv = process.env.NODE_ENV
+const isProduction = nodeEnv === 'production'
+
+const sourceDir = '/src'
+const buildDir = '/www'
+const entryJSFile = `${sourceDir}/generic/scripts/app.js`
+const outputJSFile = '[name].[chunkhash].js'
+const outputJSFileDev = '[name].js'
 const outputCSSFile = 'app.[contenthash].css'
-const externalCSS   = new ExtractTextPlugin({ filename: outputCSSFile, disable: false, allChunks: true })
-const cwd           = process.cwd()
+const outputCSSFileDev = 'app.css'
+const externalCSS = new ExtractTextPlugin({ filename: isProduction ? outputCSSFile : outputCSSFileDev, disable: false, allChunks: true })
+const cwd = process.cwd()
 
 const getModules = platform => [
     path.join(cwd, `/src/${platform}/`),
@@ -24,22 +28,23 @@ const getModules = platform => [
 
 const config = (env) => {
     const isPhoneGap = env.isPhoneGap === 'true'
-    const isProduction = env.isProduction === 'true'
-    const environment = isProduction
-        ? 'production'
-        : 'development'
     const assetPathPrepend = isPhoneGap
         ? ''
         : '/'
 
     return {
         entry: {
-            main: path.join(cwd, entryJSFile),
+            main: [
+                'react-hot-loader/patch',
+                path.join(cwd, entryJSFile)
+            ],
             vendorReact: ['react', 'react-dom', 'react-router', 'react-redux', 'redux'],
             vendor: ['immutable-ext', 'ramda-fantasy']
         },
         output: {
-            filename: '[name].[chunkhash].js',
+            filename: isProduction
+                ? outputJSFile
+                : outputJSFileDev,
             path: path.join(cwd, buildDir),
             publicPath: assetPathPrepend,
         },
@@ -57,12 +62,14 @@ const config = (env) => {
             rules: [
                 {
                     test: /\.js$/,
-                    use: 'babel-loader',
+                    use: ['babel-loader'],
                     exclude: /.*node_modules((?!immutable-ext).)*$/,
                 },
                 {
                     test: /app.sass/,
-                    use: externalCSS.extract({ use: 'css-loader!postcss-loader!sass-loader' }),
+                    use:  ["css-hot-loader"].concat(
+                        externalCSS.extract({ use: 'css-loader!postcss-loader!sass-loader' })
+                    ),
                 },
                 {
                     test: /\.((?!scss|sass|js|json).)*$/,
@@ -75,13 +82,14 @@ const config = (env) => {
             ]
         },
         devServer: {
-            inline: false,
             compress: isProduction,
             port: 3002,
             host: '0.0.0.0',
             publicPath: '/',
             contentBase: path.join(cwd, buildDir),
             historyApiFallback: true,
+            hot: true,
+            inline: true,
             stats: {
                 assets: true,
                 children: false,
@@ -98,6 +106,7 @@ const config = (env) => {
             },
         },
         plugins: [
+            new webpack.NamedModulesPlugin(),
             new CopyWebpackPlugin([
                 { from: 'src/generic/static/config.xml' },
                 { from: 'src/generic/static/manifest.json' },
@@ -106,10 +115,10 @@ const config = (env) => {
                 { from: 'node_modules/sw-toolbox/sw-toolbox.js', to: 'node_modules/sw-toolbox' },
             ]),
             new webpack.DefinePlugin({
-                NODE_ENV: JSON.stringify(environment),
+                NODE_ENV: JSON.stringify(nodeEnv),
                 IS_PHONEGAP: JSON.stringify(isPhoneGap),
                 'process.env': {
-                    NODE_ENV: JSON.stringify(environment)
+                    NODE_ENV: JSON.stringify(nodeEnv)
                 }
             }),
             new webpack.LoaderOptionsPlugin({
@@ -156,15 +165,6 @@ const config = (env) => {
             new ScriptExtHtmlWebpackPlugin({
                 defaultAttribute: 'defer'
             }),
-            ...(
-                !isProduction
-                    ? [
-                        new LiveReloadPlugin({
-                            appendScriptTag: true
-                        }),
-                    ]
-                    : []
-            ),
             externalCSS,
             // new BundleAnalyzerPlugin(),
         ],

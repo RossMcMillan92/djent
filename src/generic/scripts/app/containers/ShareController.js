@@ -4,11 +4,9 @@ import { connect } from 'react-redux'
 import { assoc, chain, compose, concat, head, last, join, map, split } from 'ramda'
 import { Future as Task } from 'ramda-fantasy'
 import { List } from 'immutable-ext'
-
 import * as modalActions from 'actions/modal'
-
+import IconButton from 'components/IconButton'
 import * as Tracking from 'modules/tracking'
-
 import { createPreset } from 'utils/presets'
 import { logError } from 'utils/tools'
 import { getGoogleShortURL } from 'utils/short-urls'
@@ -80,14 +78,15 @@ class ShareController extends Component {
     render = () => {
         const isDisabled = !this.props.googleAPIHasLoaded
         return (
-            <div className="">
-                <button className={`button-primary button-primary--alpha-dark u-flex-row ${this.state.isLoading ? '' : 'icon-is-hidden'}`} onClick={this.onClick} disabled={isDisabled}>
-                    <span className="button-primary__inner">Share</span>
-                    <span className="button-primary__icon">
-                        <span className="spinner" />
-                    </span>
-                </button>
-            </div>
+            <IconButton
+                icon="share"
+                isDisabled={isDisabled}
+                isLoading={this.state.isLoading}
+                onClick={this.onClick}
+                theme="alpha-dark"
+            >
+                Share
+            </IconButton>
         )
     }
 }

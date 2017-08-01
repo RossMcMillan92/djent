@@ -29,7 +29,7 @@ class SaveModal extends Component {
                 Preset Name:
             </label>
             <div className="u-flex-row">
-                <div className="input-container u-mr1">
+                <div className="input-container u-mr1 u-flex-grow-1">
                     <InputBox
                         className="input-base input-base--bare input-base--large"
                         id="preset-description"

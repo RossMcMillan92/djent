@@ -7,8 +7,8 @@ import * as instrumentsActions from 'actions/instruments'
 import * as modalActions from 'actions/modal'
 import * as soundActions from 'actions/sound'
 
+import IconButton from 'components/IconButton'
 import Generator from 'components/Generator'
-import SVG from 'components/SVG'
 
 import ExportController from 'containers/ExportController'
 import LoopController from 'containers/LoopController'
@@ -257,9 +257,12 @@ const PlayButton = ({ isPlaying, onClick, isDisabled }) => {
     const eventName = isPlaying ? 'stop' : 'play'
 
     return (
-        <button className="button-primary button-primary--alpha-dark" title={ capitalize(eventName) } onClick={onClick} disabled={isDisabled}>
-            <SVG icon={ eventName } className="button-primary__svg-icon" />
-        </button>
+        <IconButton
+            icon={eventName}
+            onClick={onClick}
+            theme="alpha-dark"
+            disabled={isDisabled}
+        />
     )
 }
 

@@ -25,7 +25,7 @@ class Modal extends Component {
                 <div className="modal__box-container">
                     { title }
                     <div className="panel">
-                        <div className="group-padding-x group-padding-y">
+                        <div className="group-padding-x-med group-padding-y-med">
                             { this.props.content }
                         </div>
                     </div>

@@ -2,11 +2,9 @@ import React from 'react'
 import { compose, map } from 'ramda'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-
 import * as modalActions from 'actions/modal'
-
+import IconButton from 'components/IconButton'
 import * as Tracking from 'modules/tracking'
-
 import { renderAudioPlaylistItemToBuffer } from 'utils/audio'
 import { buildMidiDataURIFromInstruments } from 'utils/midi'
 import { saveAsFile } from 'utils/save'
@@ -74,12 +72,13 @@ const ExportController = (props) => {
         launchExportModal(audioPlaylist, actions.enableModal, actions.disableModal)
     }
     return (
-        <button
-            className="button-primary button-primary--alpha-dark"
+        <IconButton
+            icon="save"
             onClick={onClick}
+            theme="alpha-dark"
         >
             Save
-        </button>
+        </IconButton>
     )
 }
 

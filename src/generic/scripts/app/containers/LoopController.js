@@ -4,8 +4,8 @@ import { connect } from 'react-redux'
 import { compose, map } from 'ramda'
 
 import { updateloopMode } from 'actions/sound'
+import IconButton from 'components/IconButton'
 import { setLocalStorageIO } from 'modules/localStorageIO'
-import SVG from 'components/SVG'
 
 //    toggleLoopMode :: loopMode -> loopMode
 const toggleLoopMode = loopMode => loopMode + 1 <= 2 ? loopMode + 1 : 0
@@ -26,26 +26,23 @@ const getLoopModeLabel = loopMode =>
 
 const LoopController = (props) => {
     const { actions, loopMode } = props
-
     const onClick = compose(
         map(actions.updateloopMode),
         setLocalStorageIO('loopMode'),
         toggleLoopMode,
     )
-
-    const inputProps = {
-        id: 'loop',
-        title: getLoopModeLabel(loopMode),
-        className: 'button-primary button-primary--alpha-dark',
-        onClick: () => onClick(loopMode).runIO(),
-    }
-
     const loopModeIcon = getLoopModeIconType(loopMode)
-    const iconClassName = `button-primary__svg-icon button-primary__svg-icon--large ${loopMode !== 0 ? 'u-txt-positive' : ''}`
+    const iconClassName = `button-primary__svg-icon--large ${loopMode !== 0 ? 'u-txt-positive' : ''}`
     return (
-        <button { ...inputProps }>
-            <SVG icon={loopModeIcon} className={`${loopMode !== 0 ? 'lmao' : ''} ${iconClassName}`} />
-        </button>
+        <IconButton
+            className="button-primary button-primary--alpha-dark"
+            id="loop"
+            icon={ loopModeIcon }
+            iconClassName={ iconClassName }
+            onClick={ () => onClick(loopMode).runIO() }
+            theme="alpha-dark"
+            title={ getLoopModeLabel(loopMode) }
+        />
     )
 }
 

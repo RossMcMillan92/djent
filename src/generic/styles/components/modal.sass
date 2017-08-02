@@ -1,5 +1,8 @@
 .modal
     position: fixed
+    display: flex
+    align-items: center
+    justify-content: center
     top: 0
     bottom: 0
     left: 0
@@ -25,24 +28,29 @@
     z-index: 0
 
 .modal__box-container
-    position: absolute
-    left: 50%
-    top: 50%
-    width: 100%
     max-width: 500px
+    max-height: 100%
     padding: $base-spacing-unit / 2
     opacity: 0
+    overflow: auto
     will-change: transform
-    transform-origin: left
-    transform: scale(.9) translate3d(-50%, -50%, 0)
+    transform: scale(.9)
     transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out
 
     .modal.is-active &
         opacity: 1
-        transform: scale(1) translate3d(-50%, -50%, 0)
+        transform: scale(1)
 
     .modal--auto-width &
         width: auto
+
+    .modal--small &
+        width: 281px
+
+.modal__header
+    background-color: $palette-shade-zeta
+    color: $palette-shade-alpha
+    user-select: none
 
 .modal__close-button
     font-size: rem(20px)

@@ -14,7 +14,8 @@ import { createPreset } from 'utils/presets'
 
 class SaveModal extends Component {
     state = {
-        currentDescription: ''
+        currentDescription: '',
+        hasErrored: false,
     }
 
     onChange = event => compose(
@@ -23,33 +24,43 @@ class SaveModal extends Component {
         getTargetValueFromEvent,
     )(event)
 
+    onSubmit = (e) => {
+        e.preventDefault()
+        const { currentDescription } = this.state
+        const hasLength = currentDescription.length !== 0
+        if (hasLength) this.props.onSave(this.state.currentDescription)
+    }
+
     render = () => (
         <div>
-            <label htmlFor="preset-description" className="input-label">
+            <label htmlFor="preset-description" className="input-container__label">
                 Preset Name:
             </label>
-            <div className="u-flex-row">
-                <div className="input-container u-mr1 u-flex-grow-1">
+            <form className="u-flex-row u-flex-wrap" onSubmit={this.onSubmit}>
+                <div className="group-spacing-y-small input-container u-mr1 u-flex-grow-1">
                     <InputBox
-                        className="input-base input-base--bare input-base--large"
+                        className="input-container__input input-container__input--bare input-container__input--large"
                         id="preset-description"
                         onChange={this.onChange}
                         defaultValue={this.state.currentDescription}
+                        maxLength="35"
                     />
                 </div>
-                <button
-                    className="button-primary button-primary--small u-mr05"
-                    onClick={() => this.props.onSave(this.state.currentDescription)}
-                >
-                    Done
-                </button>
-                <button
-                    className="button-primary button-primary--small"
-                    onClick={this.props.onCancel}
-                >
-                    Cancel
-                </button>
-            </div>
+                <div className="group-spacing-y-small">
+                    <button
+                        className="button-primary button-primary--small u-mr05"
+                        type="submit"
+                    >
+                        Done
+                    </button>
+                    <button
+                        className="button-primary button-primary--small"
+                        onClick={this.props.onCancel}
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </form>
         </div>
     )
 }
@@ -94,7 +105,7 @@ const PresetSaver = (props) => {
 
     return (
         <button
-            className="button-primary button-primary--small"
+            className="button-primary button-primary--gamma button-primary--v-full button-primary--small"
             onClick={onClick}
         >
             Save New

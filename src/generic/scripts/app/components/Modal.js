@@ -12,7 +12,7 @@ class Modal extends Component {
             </div>
 
         const title = this.props.title &&
-            <div className="panel panel--dark">
+            <div className="modal__header">
                 <div className="group-padding-x group-padding-y-med u-flex-row u-flex-justify">
                     { this.props.title }
                     { closeButton }

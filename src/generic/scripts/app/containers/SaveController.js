@@ -23,7 +23,7 @@ const buildAndSaveMidi = compose(
 const saveAudioPlaylistAsWav = audioPlaylist => renderAudioPlaylistItemToBuffer(audioPlaylist)
     .fork(logError, saveAsFile('wav', 'djen'))
 
-const ExportModal = ({ onMIDISave, onWAVSave }) => (
+const SaveModal = ({ onMIDISave, onWAVSave }) => (
     <div>
         <p className="u-mb1 u-txt-small">Note: Saving as MIDI will download all tracks separately. Saving as WAV will combine all tracks.</p>
         <div className="u-flex-row u-flex-wrap">
@@ -47,7 +47,7 @@ const ExportModal = ({ onMIDISave, onWAVSave }) => (
     </div>
 )
 
-const launchExportModal = (audioPlaylist, enableModal, disableModal) => {
+const launchSaveModal = (audioPlaylist, enableModal, disableModal) => {
     const saveMIDI = () => {
         Tracking.sendSaveEvent('midi')
         buildAndSaveMidi(audioPlaylist)
@@ -57,23 +57,25 @@ const launchExportModal = (audioPlaylist, enableModal, disableModal) => {
         saveAudioPlaylistAsWav(audioPlaylist)
     }
     const content = (
-        <ExportModal
+        <SaveModal
             onMIDISave={ compose(disableModal, saveMIDI) }
             onWAVSave={ compose(disableModal, saveWAV) }
         />
     )
-    enableModal({ content, isCloseable: true, title: 'Export' })
+    enableModal({ className: 'modal--small', content, isCloseable: true, title: 'Save' })
 }
 
-const ExportController = (props) => {
+const SaveController = (props) => {
     const { audioPlaylist, actions } = props
+    const isDisabled = !audioPlaylist.length
     const onClick = () => {
         Tracking.sendSaveEvent('open')
-        launchExportModal(audioPlaylist, actions.enableModal, actions.disableModal)
+        launchSaveModal(audioPlaylist, actions.enableModal, actions.disableModal)
     }
     return (
         <IconButton
             icon="save"
+            isDisabled={isDisabled}
             onClick={onClick}
             theme="alpha-dark"
         >
@@ -96,4 +98,4 @@ const mapDispatchToProps = dispatch => ({
     }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ExportController)
+export default connect(mapStateToProps, mapDispatchToProps)(SaveController)

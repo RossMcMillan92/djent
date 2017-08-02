@@ -48,7 +48,7 @@ class Generator extends Component {
                 : 'Generate' ,
             className: this.props.wrapperClass
                 ? this.props.wrapperClass
-                : `button-primary button-primary--alpha-dark button-primary--small-icon ${this.props.buttonClassAppended ? this.props.buttonClassAppended : ''} ${this.state.isLoading ? '' : 'icon-is-hidden'}`,
+                : `button-primary button-primary--gamma button-primary--small-icon ${this.props.buttonClassAppended ? this.props.buttonClassAppended : ''} ${this.state.isLoading ? '' : 'icon-is-hidden'}`,
         }
 
         const children = this.props.children
@@ -57,7 +57,7 @@ class Generator extends Component {
                 <span>
                     <span className="button-primary__inner">{ this.props.innerText || 'Generate' }</span>
                     <span className="button-primary__icon">
-                        <span className="spinner" />
+                        <span className="spinner spinner--light" />
                     </span>
                 </span>
             )

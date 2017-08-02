@@ -48,8 +48,8 @@ class SequencePanel extends Component {
                     maxLength="25"
                     defaultValue={this.props.description}
                     onChange={e => this.props.actions.updateSequenceDescription(this.props.sequence.id, escape(e.target.value))}
-                    className='input-base input-base--bare input-base--large'
-                    labelClassName='input-label'
+                    className='input-container__input input-container__input--bare input-container__input--large'
+                    labelClassName='input-container__label'
                 />
             </div>
             {

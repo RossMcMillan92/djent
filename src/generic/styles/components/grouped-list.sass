@@ -11,22 +11,27 @@ $group-list__item-spacing-x: 12px
     padding: $group-list__item-spacing-y $group-list__item-spacing-x
     font-size: rem(12px)
     text-transform: uppercase
+    user-select: none
 
 .grouped-list__items
     display: flex
     flex-wrap: wrap
+    border: solid 1px darken($group-list__bg-color, 20%)
+    border-width: 1px 1px 0 0
 
 .grouped-list__item
     appearance: none
-    // flex-basis: (100% / 3)
+    flex-basis: (100% / 2)
     flex-grow: 1
     padding: $group-list__item-spacing-y $group-list__item-spacing-x
-    border: solid 1px $group-list__bg-color
+    border: solid 1px darken($group-list__bg-color, 20%)
+    border-width: 0 0 1px 1px
     font-size: rem(14px)
     background-color: #ddd
     cursor: pointer
-    white-space: nowrap
     text-align: left
+    word-break: break-word
+    user-select: none
 
     &:focus
         outline: none

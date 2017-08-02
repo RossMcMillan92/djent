@@ -1,5 +1,5 @@
-import { map, update } from 'ramda'
-import { Identity, Maybe } from 'ramda-fantasy'
+import { assoc, map, update } from 'ramda'
+import { Identity, Maybe, Future as Task } from 'ramda-fantasy'
 import { PRESETS } from 'constants/localStorage'
 import { safeGetLocalStorageIO, setLocalStorageIO } from 'modules/localStorageIO'
 
@@ -21,8 +21,13 @@ export function addPreset(preset) {
     newStoredPresets
         .map(p => p.runIO())
 
+    const newPreset = Identity
+        .of(preset)
+        .map(assoc('group', 'Custom'))
+        .map(p => assoc('load', Task.of({ default: p }), p))
+
     return {
         type: 'ADD_PRESET',
-        payload: { ...preset, group: 'Custom' },
+        payload: newPreset.get(),
     }
 }

@@ -62,11 +62,27 @@ const initialPresets = [
         )
     },
     {
+        id: 'doom',
+        description: 'Doom',
+        group: 'Heavy',
+        load: promiseToTask(() =>
+            import(/* webpackChunkName: "presets.doom" */ 'utils/presets/doom')
+        )
+    },
+    {
         id: 'adtr',
         description: 'Breakdown',
         group: 'Pop Punk',
         load: promiseToTask(() =>
             import(/* webpackChunkName: "presets.adtr-breakdown" */ 'utils/presets/adtr-breakdown')
+        )
+    },
+    {
+        id: 'pop-punk-chorus',
+        description: 'Chorus',
+        group: 'Pop Punk',
+        load: promiseToTask(() =>
+            import(/* webpackChunkName: "presets.pop-punk-chorus" */ 'utils/presets/pop-punk-chorus')
         )
     },
     {

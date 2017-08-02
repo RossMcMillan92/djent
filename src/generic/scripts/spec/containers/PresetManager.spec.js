@@ -1,6 +1,6 @@
 import React from 'react'
-import { mount } from 'enzyme'
-import { groupPresets, PresetController } from 'containers/PresetController'
+import { shallow } from 'enzyme'
+import { groupPresets, PresetModal } from 'containers/PresetManager'
 
 const load = id => ({
     fork: (rej, res) => res({ default: id })
@@ -63,35 +63,30 @@ const presets = [
     },
 ]
 
-describe('<PresetController />', () => {
-    it('fires applyPreset with selected preset when changed', () => {
+describe('<PresetModal />', () => {
+    it('fires onChange with selected preset when changed', () => {
         const activePresetID = 'thall'
-        const enableModal = jest.fn()
-        const applyPreset = jest.fn()
-        const disableModal = jest.fn()
+        const onChange = jest.fn()
         const props = {
-            actions: { applyPreset, disableModal, enableModal },
-            activePresetID,
+            onChange,
             presets,
         }
-        const wrapper = mount(<PresetController {...props} />)
+        const wrapper = shallow(<PresetModal {...props} />)
         wrapper
             .find('[value="thall"]')
             .simulate('click', { target: { value: activePresetID } })
-        const returnedAllowedLength = applyPreset.mock.calls[0][0]
+        const returnedAllowedLength = onChange.mock.calls[0][0]
 
         expect(returnedAllowedLength)
             .toBe(activePresetID)
     })
     it('renders groups of presets in <div> tags', () => {
-        const activePresetID = 'thall'
-        const onUpdate = jest.fn()
+        const onChange = jest.fn()
         const props = {
-            activePresetID,
-            onUpdate,
+            onChange,
             presets,
         }
-        const wrapper = mount(<PresetController {...props} />)
+        const wrapper = shallow(<PresetModal {...props} />)
         const groupDjent = wrapper
             .find('div[data-group="Djent"]')
         const groupProgressive = wrapper
@@ -103,14 +98,12 @@ describe('<PresetController />', () => {
             .toBe(true)
     })
     it('renders the correct presets inside the <div> tags', () => {
-        const activePresetID = 'thall'
-        const onUpdate = jest.fn()
+        const onChange = jest.fn()
         const props = {
-            activePresetID,
-            onUpdate,
+            onChange,
             presets,
         }
-        const wrapper = mount(<PresetController {...props} />)
+        const wrapper = shallow(<PresetModal {...props} />)
         const groupDjent = wrapper
             .find('div[data-group="Djent"]')
         const thallPreset = groupDjent

@@ -11,13 +11,11 @@ import { createPreset } from 'utils/presets'
 import { logError } from 'utils/tools'
 import { getGoogleShortURL } from 'utils/short-urls'
 
-const domain = `${window.location.protocol}//${window.location.host}`
-
 const getIDFromGoogleURL = compose(last, split('/'))
 
 //    combineShortURLs :: [url] -> url
 const combineShortURLs = compose(
-    concat(`${domain}/share/`),
+    concat(`${window.location.host}/share/`),
     join('-'),
     map(getIDFromGoogleURL),
 )
@@ -72,11 +70,12 @@ class ShareController extends Component {
 
     launchModal = (url) => {
         const content = (<ShareBox url={url} />)
-        this.props.actions.enableModal({ content, title: 'Share URL', isCloseable: true, className: 'modal--auto-width' })
+        this.props.actions.enableModal({ className: 'modal--small', content, title: 'Share URL', isCloseable: true })
     }
 
     render = () => {
-        const isDisabled = !this.props.googleAPIHasLoaded
+        const { googleAPIHasLoaded, audioPlaylist } = this.props
+        const isDisabled = !googleAPIHasLoaded || !audioPlaylist.length
         return (
             <IconButton
                 icon="share"
@@ -92,12 +91,12 @@ class ShareController extends Component {
 }
 
 const ShareBox = props => (
-    <div>
+    <div className="u-flex-row u-flex-justify-center">
         <input
-            className="input-base input-base--bare input-base--large input-base--long"
+            className="input-container__input input-container__input--bare input-container__input--large input-container__input--long u-tac"
             type="text"
             value={props.url}
-            onClick={e => e.target.select()}
+            onFocus={e => e.target.select()}
             readOnly={true}
         />
     </div>

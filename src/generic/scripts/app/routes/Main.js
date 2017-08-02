@@ -38,7 +38,6 @@ export default class Main extends Component {
         this.setupBackButtonController()
         const { params, presets } = this.props
         const shareID = params.shareID
-        console.log('SHAREID', shareID)
 
         handleGoogleAPI()
             .fork(logError, () => {
@@ -48,13 +47,10 @@ export default class Main extends Component {
 
         if (!shareID) {
             const presetID = this.props.params.presetID || this.props.activePresetID
-            console.log('THIS.PROPS.ACTIVEPRESETID', this.props.activePresetID)
-            console.log('THIS.PROPS.PARAMS.PRESETID', this.props.params.presetID)
-            console.log('PRESETID', presetID)
             const preset = presets.find(p => p.id === presetID)
                         || presets.find(p => p.id === this.props.activePresetID)
+                        || presets[0]
 
-                        console.log('PRESET', preset)
             this.loadAndApplyPreset(preset)
         } else {
             this.props.actions.enableModal({
@@ -113,7 +109,6 @@ export default class Main extends Component {
 
         sharedPresets
             .fork(logError, (_sharedPresets) => {
-                console.log('_SHAREDPRESETS.GET(0)', _sharedPresets.get(0))
                 this.props.actions.applyPreset(_sharedPresets.get(0))
             })
 

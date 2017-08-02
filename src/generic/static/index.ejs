@@ -4,7 +4,6 @@
 	<meta charset="UTF-8">
 	<title>DJEN - Metal Generator</title>
 
-	<% if (htmlWebpackPlugin.options.isProduction) { %>
 	<script>
 		if ('serviceWorker' in navigator) {
 			navigator.serviceWorker.register('/sw.js')
@@ -12,7 +11,6 @@
 				.catch(function (e) { console.log(e, 'sw.js NOT registered') });
 		}
 	</script>
-	<% } %>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
 	<script>

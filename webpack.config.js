@@ -67,7 +67,7 @@ const config = (env) => {
                 },
                 {
                     test: /app.sass/,
-                    use:  ["css-hot-loader"].concat(
+                    use:  ['css-hot-loader'].concat(
                         externalCSS.extract({ use: 'css-loader!postcss-loader!sass-loader' })
                     ),
                 },
@@ -132,9 +132,10 @@ const config = (env) => {
                     ]
                 }
             }),
-            new webpack.optimize.ModuleConcatenationPlugin(),
-            isProduction
-                ? new webpack.optimize.UglifyJsPlugin({
+            isProduction &&
+                new webpack.optimize.ModuleConcatenationPlugin(),
+            isProduction &&
+                new webpack.optimize.UglifyJsPlugin({
                     compress: {
                         warnings: false,
                         screw_ie8: true,
@@ -150,8 +151,7 @@ const config = (env) => {
                     output: {
                         comments: false
                     },
-                })
-                : x => x,
+                }),
             new webpack.optimize.CommonsChunkPlugin({
                 names: ['vendor', 'vendorReact', 'manifest']
             }),
@@ -167,7 +167,7 @@ const config = (env) => {
             }),
             externalCSS,
             // new BundleAnalyzerPlugin(),
-        ],
+        ].filter(Boolean),
     }
 }
 

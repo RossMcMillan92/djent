@@ -1,60 +1,29 @@
-$visualiser__height: 75px
-$visualiser__bg-color: $palette-alpha
-
-.visualiser-container
-    position: relative
-
-.visualiser-container__backdrop
-    position: absolute
-    background-color: $visualiser__bg-color
-    z-index: 3
-    width: 100%
-    top: -$base-spacing-unit
-    bottom: 0
-    left: 0
-    transition: all .5s ease-in-out
-
-    .visualiser-container.is-active &
-        pointer-events: none
-        opacity: 0
-
-.visualiser-container__button
-    position: relative
-    transition: all .35s ease-in-out
-    z-index: 3
-    transform: translate(64%, -40%) scale(1.3)
-
-    @media screen and (min-width: 500px)
-        transform: translate(152%, -100%) scale(1.3)
-
-    .visualiser-container.is-active &
-        transform: translate(0, 0) scale(1)
-
-.visualiser-container--phonegap
-
-    .visualiser-container__button
-        transform: translate(64%, -96%) scale(1.3)
-
-        @media screen and (min-width: 500px)
-            transform: translate(82%, -100%) scale(1.3)
-
-
 .visualiser
     position: relative
-    left: 0
-    top: 0
-    right: 0
-    background-color: $visualiser__bg-color
-    opacity: 1
-    transition: all .25s ease-in-out
+    cursor: default
     user-select: none
-
-    &:not(.is-active)
-        transform: translateY(10%)
-        opacity: 0
 
 .visualiser__canvas
     position: relative
     display: block
     width: 100%
     z-index: 1
+
+.visualiser__idle-msg-bg
+    position: absolute
+    top: 0
+    right: 0
+    bottom: 0
+    left: 0
+    z-index: 2
+    transition: opacity .2s ease-in-out
+    opacity: 0
+
+    &.is-active
+        opacity: 1
+
+.visualiser__idle-msg
+    background-color: rgba(0, 0, 0, .8)
+    color: $palette-shade-alpha
+    font-size: rem(13px)
+    padding: 5px 10px

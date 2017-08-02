@@ -19,8 +19,8 @@ class PitchController extends Component {
             step: 1,
             minVal: -12,
             maxVal: 12,
-            className: 'input-base input-base--bare input-base--large input-base--short@above-alpha',
-            labelClassName: 'input-label',
+            className: 'input-container__input input-container__input--bare input-container__input--large input-container__input--short@above-alpha',
+            labelClassName: 'input-container__label',
         }
         return (
             <InputBox { ...props } />

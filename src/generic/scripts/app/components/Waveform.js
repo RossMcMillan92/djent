@@ -10,7 +10,7 @@ const incrementBySpeed = (val, targetVal, dist) => val + (dist * (targetVal - va
 
 const Level = (x, y, w, h, targetColor) => {
     let lastUpdateTime = 0
-    const vy = 1.5 // px/s
+    const vy = 3 // px/s
     const oldState = {}
     let state = {
         x,
@@ -72,7 +72,6 @@ const createInitialLevels = (levelAmount, height, resolution) => Array(levelAmou
 
 export default class Waveform extends Component {
     iteration = 0
-    loopIsEnabled = false
     ctx
     levels = []
     backgroundColor = colorScheme[0]
@@ -81,11 +80,14 @@ export default class Waveform extends Component {
     shouldComponentUpdate = nextProps =>
         this.props.isPlaying !== nextProps.isPlaying
         || this.props.isLoading !== nextProps.isLoading
+        || this.props.isIdle !== nextProps.isIdle
         || this.props.buffer !== nextProps.buffer
+        || this.props.width !== nextProps.width
         || this.props.audioStartTime !== nextProps.audioStartTime
 
     componentDidMount = () => {
         this.initialise(this.props)
+        this.loop()
     }
 
     componentWillUpdate = (nextProps) => {
@@ -96,15 +98,8 @@ export default class Waveform extends Component {
 
     componentDidUpdate = () => {
         if (!this.props.buffer) return
-
         const data = this.props.buffer.getChannelData(0)
-
         this.updateLevels(data)
-
-        if (!this.loopIsEnabled) {
-            this.loop()
-            this.loopIsEnabled = true
-        }
     }
 
     initialise = (props) => {
@@ -115,7 +110,6 @@ export default class Waveform extends Component {
 
     createInitialLevelsFromWidth = (width, height) => {
         const levelAmount = Math.floor(width / RESOLUTION)
-
         if (this.levels.length !== levelAmount) {
             this.levels = createInitialLevels(levelAmount, height, RESOLUTION)
         }
@@ -139,8 +133,12 @@ export default class Waveform extends Component {
 
     loop = (t) => {
         const ctx = this.ctx
-        const { isPlaying, audioContext, audioStartTime, timeLength } = this.props
-        const currentTime = !isPlaying ? 0 : audioContext ? audioContext.currentTime - audioStartTime : false
+        const { audioContext, audioStartTime, height, isIdle, isPlaying, timeLength } = this.props
+        const currentTime = isIdle
+            ? (t / 1000)
+            : isPlaying && audioContext
+                ? audioContext.currentTime - audioStartTime
+                : false
         const duration = timeLength
         const iteration = duration === 0 || currentTime <= 0 ? 0 : Math.floor(currentTime / duration)
         const percentPassed = (currentTime - (duration * iteration)) / duration
@@ -148,8 +146,11 @@ export default class Waveform extends Component {
 
         this.levels.forEach((level, i) => {
             const levelColor = currentTime && i <= indexThreshold ? this.activeColor : this.backgroundColor
+            const state = isIdle
+                ? { targetColor: this.backgroundColor, targety: Math.abs(Math.sin((currentTime) + (i))) * (height) }
+                : { targetColor: levelColor }
             level.draw(ctx)
-            level.updateState({ targetColor: levelColor })
+            level.updateState(state)
             level.update(t)
         })
 

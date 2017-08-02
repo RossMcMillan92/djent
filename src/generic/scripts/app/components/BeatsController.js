@@ -13,16 +13,18 @@ class BeatsController extends Component {
     }
 
     render = () => {
+        const { labelPrefix, sequence, theme } = this.props
         const getProps = type => ({
             type: 'number',
-            id: `${this.props.sequence.id}-${type}`,
-            label: capitalize((this.props.labelPrefix ? this.props.labelPrefix : '') + type),
-            defaultValue : this.props.sequence[type],
+            id: `${sequence.id}-${type}`,
+            label: capitalize((labelPrefix || '') + type),
+            defaultValue : sequence[type],
             onChange: event => this.onChange(event, type),
-            className: 'input-base input-base--bare input-base--large input-base--short@above-alpha',
             minVal: 1,
             maxVal: 16,
-            labelClassName: 'input-label',
+            containerClassName: `input-container ${theme ? `input-container--${theme}` : ''}`,
+            labelClassName: 'input-container__label',
+            className: 'input-container__input input-container__input--bare input-container__input--large input-container__input--short@above-alpha',
         })
 
         return (
@@ -30,7 +32,7 @@ class BeatsController extends Component {
                 <div>
                     <InputBox { ...getProps('bars') } />
                 </div>
-                <span className="group-spacing-x-small u-mt1">&times;</span>
+                <span className={`group-spacing-x-small u-mt1 ${theme === 'light' ? 'u-txt-light' : ''}`}>&times;</span>
                 <div>
                     <InputBox { ...getProps('beats') } />
                 </div>

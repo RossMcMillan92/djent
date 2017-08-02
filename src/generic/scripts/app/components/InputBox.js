@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { isNil } from 'ramda'
 import { filterOutKeys, throttle } from 'utils/tools'
 
 class InputBox extends Component {
@@ -38,11 +39,12 @@ class InputBox extends Component {
     errorCheck = (value) => {
         if (!value) return
 
-        const { minVal, maxVal } = this.props
+        const { hasErrored, minVal, maxVal } = this.props
 
         if (
-            (typeof minVal !== 'undefined' && value < minVal)
-            || (typeof maxVal !== 'undefined' && value > maxVal)
+               (!isNil(minVal) && value < minVal)
+            || (!isNil(maxVal) && value > maxVal)
+            || (hasErrored)
         ) {
             if (this.state.isValid) this.setState({ isValid: false })
         } else if (!this.state.isValid) {
@@ -50,23 +52,26 @@ class InputBox extends Component {
         }
     }
 
-    throttledOnChange = this.props.onChange ? throttle(this.props.onChange, 100) : () => {}
+    throttledOnChange = this.props.onChange
+        ? throttle(this.props.onChange, 100)
+        : () => {}
 
     render = () => {
         const props = {
-            id                 : '',
-            type               : 'text',
-            defaultValue       : '',
-            defaultChecked     : '',
-            onChange           : '',
-            className          : 'input-base',
-            containerClassName : 'input-container',
-            labelClassName     : 'input-label-base',
+            id: '',
+            type: 'text',
+            defaultValue: '',
+            defaultChecked: '',
+            onChange: '',
+            className: 'input-container__input',
+            containerClassName: 'input-container',
+            labelClassName: 'input-container__label',
             ...this.props,
         }
         const { containerClassName, labelClassName, label, labelTitle, id } = props
         const inputProps = filterOutKeys([
             'containerClassName',
+            'hasErrored',
             'labelClassName',
             'labelTitle',
             'minVal',

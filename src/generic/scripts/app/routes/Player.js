@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import BeatsController from 'components/BeatsController'
 import BPMTapper from 'components/BPMTapper'
 import Panel from 'components/Panel'
@@ -9,23 +9,24 @@ import SoundController from 'containers/SoundController'
 import Visualiser from 'containers/Visualiser'
 import isPhoneGap from 'modules/phonegap'
 
-export default class Player extends Component {
+const Player = ({ actions, hasAudioTemplate, googleAPIHasLoaded, sequences }) => {
+    const totalSequence = sequences.find(sequence => sequence.id === 'total')
 
-    render = () => {
-        const { actions } = this.props
-        const totalSequence = this.props.sequences.find(sequence => sequence.id === 'total')
+    return (
+        <div>
+            <Panel theme="alpha" sizeY="none">
+                <div className="u-flex-row u-flex-wrap u-flex-justify">
+                    <div className="group-spacing-y u-flex-grow-1 u-mr2@above-alpha">
+                        <PresetManager />
+                    </div>
 
-        return (
-            <div>
-                <Panel sizeY="small">
-                    <PresetManager />
-
-                    <div className="u-flex-row u-flex-wrap">
+                    <div className="group-spacing-y-small u-flex-row u-flex-wrap">
                         <div className="group-spacing-y-small u-mr2@above-alpha">
                             <BeatsController
                                 labelPrefix='Total '
                                 onUpdate={ actions.updateSequence }
                                 sequence={ totalSequence }
+                                theme="light"
                             />
                         </div>
 
@@ -38,22 +39,21 @@ export default class Player extends Component {
                             </div>
                         </div>
                     </div>
-                </Panel>
+                </div>
+            </Panel>
 
-                <Panel theme="alpha">
-                    <div className={`visualiser-container ${isPhoneGap ? 'visualiser-container--phonegap' : ''} ${this.props.hasAudioTemplate ? 'is-active' : ''} u-mb05`}>
-                        <div className="visualiser-container__backdrop"></div>
-                        <div className="u-mb1">
-                            <Visualiser />
-                        </div>
+            <Panel theme="alpha">
+                <div className="u-mb1">
+                    <Visualiser />
+                </div>
 
-                        <div className="u-flex-row u-flex-justify-center u-flex-center u-flex-wrap">
-                            <SoundController googleAPIHasLoaded={this.props.googleAPIHasLoaded} />
-                        </div>
-                    </div>
-                    <PlaylistEditor />
-                </Panel>
-            </div>
-        )
-    }
+                <div className="u-flex-row u-flex-justify-center u-flex-center u-flex-wrap">
+                    <SoundController googleAPIHasLoaded={googleAPIHasLoaded} />
+                </div>
+                <PlaylistEditor />
+            </Panel>
+        </div>
+    )
 }
+
+export default Player

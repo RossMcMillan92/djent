@@ -3,25 +3,20 @@ import ReactDOM from 'react-dom'
 import { browserHistory } from 'react-router'
 import { AppContainer } from 'react-hot-loader'
 import configureStore from 'store/configureStore'
-import RootContainer from './components/App'
+import App from './components/App'
 
 const store = configureStore()
-const App = (
-    <AppContainer>
-        <Component store={store} history={browserHistory} />
-    </AppContainer>
-)
 const render = (Component) => {
   ReactDOM.render(
-    <App />,
+    <AppContainer>
+      <Component store={store} history={browserHistory} />
+    </AppContainer>,
     document.getElementById('root')
   )
 }
 
-render(RootContainer)
+render(App)
 
 if (module.hot) {
-  module.hot.accept('./components/App', () => { render(RootContainer) })
+  module.hot.accept('./components/App', () => { render(App) })
 }
-
-export default App

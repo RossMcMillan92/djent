@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Enabled HMR
 - Added Preset Manager
 - Update button styles + Added icons
+- Update player section UI, including visualiser
 
 ## [1.0.0] - 2017-06-20
 ### Added

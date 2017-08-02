@@ -1,0 +1,90 @@
+.input-container
+    position: relative
+
+.input-container__input
+    position: relative
+    border: solid 1px rgba(0, 0, 0, .2)
+    border-radius: 0
+    padding: $base-spacing-unit / 2
+    background-color: #fff
+    width: 100%
+    color: $palette-base-text-input
+    appearance: none
+    transition: all .15s ease-in-out
+    box-shadow: 0 4px 3px -3px rgba(0, 0, 0, .05)
+
+    &:hover,
+    &:focus
+        outline: none
+        box-shadow: 0 7px 5px -3px rgba(0, 0, 0, .05)
+
+    &.is-invalid
+        border-color: $palette-beta
+
+.input-container__input--large
+    font-size: rem(18px)
+    max-width: 100%
+    padding: 8px 10px
+
+=input-container__input--short
+    max-width: 100%
+    width: 80px
+
+.input-container__input--short
+    +input-container__input--short
+
+.input-container__input--short\@above-alpha
+    @media screen and (min-width: 500px)
+        +input-container__input--short
+
+.input-container__input--long
+    width: 280px
+
+.input-container__input--bare
+    border: none
+    background: none
+    border-bottom: solid 1px $palette-base-ui
+
+    &:focus
+        background-color: #fff
+
+.input-container__input--dropdown
+    padding-right: 30px
+    word-break: break-word
+
+.input-container__label
+    display: block
+    color: $palette-shade-delta
+    font-size: 12px
+    font-weight: 400
+    text-transform: uppercase
+    margin-bottom: $base-spacing-unit / 4
+    user-select: none
+
+.input-container__dropdown-icon
+    position: absolute
+    top: 50%
+    right: $base-spacing-unit / 1.5
+    transform: translateY(-50%)
+    width: 0
+    height: 0
+    border-style: solid
+    display: block
+    border-width: 8.7px 5px 0 5px
+    border-color: rgba(0, 0, 0, .1) transparent transparent transparent
+    pointer-events: none
+
+.input-container--light
+
+    .input-container__input
+        color: $palette-shade-alpha
+        border-color: darken($palette-shade-alpha, 20%)
+
+        &:focus
+            color: $palette-shade-zeta
+
+    .input-container__label
+        color: darken($palette-shade-alpha, 20%)
+
+    .input-container__dropdown-icon
+        border-color: $palette-shade-alpha transparent transparent transparent

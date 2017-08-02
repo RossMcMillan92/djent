@@ -8,6 +8,7 @@
     importScripts('node_modules/sw-toolbox/sw-toolbox.js')
 
     global.toolbox.options.debug = false
+    global.toolbox.router.default = global.toolbox.fastest
 
     // The route for any requests from the googleapis origin
     toolbox.router.get('/(.*)', global.toolbox.fastest, {
@@ -15,11 +16,8 @@
     })
 
     // The route for the assets
-    toolbox.router.get('/assets/(.*)', global.toolbox.fastest)
-    toolbox.router.get('/index.html', global.toolbox.networkFirst)
-    toolbox.router.get('/sw.js', global.toolbox.networkFirst)
-
-    global.toolbox.router.default = global.toolbox.fastest
+    toolbox.router.get('/', global.toolbox.networkFirst)
+    toolbox.router.get('sw.js', global.toolbox.networkFirst)
 
     // Ensure that our service worker takes control of the page as soon as possible.
     global.addEventListener('install', event => event.waitUntil(global.skipWaiting()))

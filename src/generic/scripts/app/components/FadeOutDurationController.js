@@ -22,8 +22,8 @@ class FadeOutDurationController extends Component {
             step: 25,
             minVal: 0,
             maxVal: 2000,
-            className: 'input-base input-base--bare input-base--large input-base--short@above-alpha',
-            labelClassName: 'input-label',
+            className: 'input-container__input input-container__input--bare input-container__input--large input-container__input--short@above-alpha',
+            labelClassName: 'input-container__label',
         }
         return (
             <InputBox { ...props } />

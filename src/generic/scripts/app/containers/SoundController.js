@@ -10,7 +10,7 @@ import * as soundActions from 'actions/sound'
 import IconButton from 'components/IconButton'
 import Generator from 'components/Generator'
 
-import ExportController from 'containers/ExportController'
+import SaveController from 'containers/SaveController'
 import LoopController from 'containers/LoopController'
 import ShareController from 'containers/ShareController'
 
@@ -211,7 +211,7 @@ class SoundController extends Component {
                 { this.state.error && <p className="txt-error">{ this.state.error }</p> }
                 <div className="u-flex-row@above-alpha u-flex-wrap">
                     <div className="u-flex-row u-flex-justify-center u-flex-center u-mr2@above-alpha">
-                        <div className="visualiser-container__button u-mr05 u-mb05">
+                        <div className="u-mr05 u-mb05">
                             <Generator
                                 audioPlaylist={ this.props.audioPlaylist }
                                 bpm={ this.props.bpm }
@@ -243,7 +243,7 @@ class SoundController extends Component {
                                 </div>
 
                                 <div className="u-mb05">
-                                    <ExportController />
+                                    <SaveController />
                                 </div>
                             </div>
                     }
@@ -261,7 +261,7 @@ const PlayButton = ({ isPlaying, onClick, isDisabled }) => {
             icon={eventName}
             onClick={onClick}
             theme="alpha-dark"
-            disabled={isDisabled}
+            isDisabled={isDisabled}
         />
     )
 }

@@ -1,5 +1,6 @@
-import { isNil } from 'ramda'
 import deepEqual from 'deep-equal'
+import { __, compose, curry, indexOf, isNil, map, update } from 'ramda'
+import { Maybe } from 'ramda-fantasy'
 import configInitialState from 'reducers/config.initial-state'
 import sequencesInitialState from 'reducers/sequences.initial-state'
 import instrumentsInitialState from 'utils/default-instruments'
@@ -129,8 +130,34 @@ const backwardsCompatibility = (preset, allowedLengths) => {
     return preset
 }
 
+//    getIndexOfPreset :: [preset] -> preset -> Maybe Integer
+const getIndexOfPreset = curry((presets, preset) => compose(
+    map(indexOf(__, presets)),
+    Maybe,
+)(preset))
+
+//    getIndexOfPresetById :: [preset] -> presetId -> Maybe Integer
+const getIndexOfPresetById = curry((presets, presetId) => compose(
+    getIndexOfPreset(presets),
+    pId => presets.find(p => p.id === pId),
+)(presetId))
+
+//    updatePresetsByIndex :: [preset] -> [preset] -> Maybe Integer -> [preset]
+const updatePresetsByIndex = curry((presets, preset, index) => Maybe.maybe(
+    presets.concat(preset),
+    update(__, preset, presets),
+    index
+))
+
+//    updatePresets :: [preset] -> preset -> presetId -> [preset]
+const updatePresets = curry((presets, preset) => compose(
+    updatePresetsByIndex(presets, preset),
+    getIndexOfPresetById(presets),
+)(preset.id))
+
 export {
     backwardsCompatibility,
     createPresetFactory,
     createPreset,
+    updatePresets
 }

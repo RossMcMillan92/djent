@@ -28,7 +28,7 @@ class SaveModal extends Component {
         e.preventDefault()
         const { currentDescription } = this.state
         const hasLength = currentDescription.length !== 0
-        if (hasLength) this.props.onSave(this.state.currentDescription)
+        if (hasLength) this.props.onSave(currentDescription)
     }
 
     render = () => (
@@ -92,8 +92,8 @@ const PresetSaver = (props) => {
         launchSaveModal(actions.enableModal, actions.disableModal)
             .map(description => createPreset({
                 bpm,
-                description,
-                id: toKebabCase(description),
+                description: escape(description),
+                id: `custom-${escape(toKebabCase(description))}`,
                 instruments,
                 sequences
             }))

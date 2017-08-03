@@ -1,33 +1,39 @@
-import { assoc, map, update } from 'ramda'
+import { assoc, compose } from 'ramda'
 import { Identity, Maybe, Future as Task } from 'ramda-fantasy'
 import { PRESETS } from 'constants/localStorage'
 import { safeGetLocalStorageIO, setLocalStorageIO } from 'modules/localStorageIO'
+import { updatePresets } from 'utils/presets'
 
-export function addPreset(preset) {
-    const storedPresets = safeGetLocalStorageIO(PRESETS)
+//    storePresetsInLS :: [preset] -> IO [preset]
+const storePresetsInLS = compose(
+    setLocalStorageIO(PRESETS),
+    JSON.stringify
+)
+
+//    storePresetInLS :: preset -> IO [preset]
+const storePresetInLS = (preset) => {
+    const presetsFromLS = safeGetLocalStorageIO(PRESETS)
         .map(Maybe.maybe([], JSON.parse))
         .runIO()
+    const newPresetsToStore = updatePresets(presetsFromLS, preset)
+    return Identity.of(newPresetsToStore)
+        .map(storePresetsInLS)
+        .get()
+}
 
-    const newStoredPresets = Identity
-        .of(Maybe(storedPresets.find(p => p.id === preset.id)))
-        .map(map(x => storedPresets.indexOf(x)))
-        .map(Maybe.maybe(
-            storedPresets.concat(preset),
-            index => update(index, preset, storedPresets)
-        ))
-        .map(JSON.stringify)
-        .map(setLocalStorageIO('presets'))
+//    preparePresetForStore :: preset -> preset
+const preparePresetForStore = compose(
+    p => assoc('load', Task.of({ default: p }), p),
+    assoc('group', 'Custom'),
+)
 
-    newStoredPresets
-        .map(p => p.runIO())
-
-    const newPreset = Identity
-        .of(preset)
-        .map(assoc('group', 'Custom'))
-        .map(p => assoc('load', Task.of({ default: p }), p))
+export function addPreset(preset) {
+    storePresetInLS(preset)
+        .runIO()
+    const newPreset = preparePresetForStore(preset)
 
     return {
         type: 'ADD_PRESET',
-        payload: newPreset.get(),
+        payload: newPreset,
     }
 }

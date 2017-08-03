@@ -101,6 +101,14 @@ const initialPresets = [
             import(/* webpackChunkName: "presets.polyrhythms" */ 'utils/presets/polyrhythms')
         )
     },
+    {
+        id: 'high-tremolo',
+        description: 'High Tremolo',
+        group: 'Rock',
+        load: promiseToTask(() =>
+            import(/* webpackChunkName: "presets.high-tremolo" */ 'utils/presets/high-tremolo')
+        )
+    },
 ]
 
 const initialState = safeGetLocalStorageIO(PRESETS)

@@ -20,7 +20,7 @@ const getPresetJSX = curry((onClick, preset) => (
         className="grouped-list__item"
         onClick={() => onClick(preset.id)}
     >
-        { preset.description || preset.id }
+        { unescape(preset.description) || preset.id }
     </button>
 ))
 
@@ -122,7 +122,7 @@ class PresetManager extends Component {
                 <div className="input-container__input input-container__input--dropdown input-container__input--bare input-container__input--large">
                 {
                     activePreset
-                        ? <span>{activePreset.group} {arrow} {activePreset.description}</span>
+                        ? <span>{activePreset.group} {arrow} {unescape(activePreset.description)}</span>
                         : capitalize(activePresetID)
                 }
                     <div className="input-container__dropdown-icon" />

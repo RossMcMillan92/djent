@@ -79,10 +79,8 @@ class Visualiser extends Component {
                     height={75}
                     amplified={true}
                 />
-                <div className={`visualiser__idle-msg-bg ${this.state.isEmpty ? 'is-active' : ''} u-flex-row u-flex-center u-flex-justify-center`}>
-                    <div className="visualiser__idle-msg">
-                        Hit the Generate button to begin!
-                    </div>
+                <div className={`visualiser__idle-msg ${this.state.isEmpty ? 'is-active' : ''}`}>
+                    Hit the Generate button to begin!
                 </div>
             </div>
         )

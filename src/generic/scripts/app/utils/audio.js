@@ -1,5 +1,5 @@
 import { chain, compose, curry, filter, traverse } from 'ramda'
-import { Future as Task } from 'ramda-fantasy'
+import { IO, Future as Task } from 'ramda-fantasy'
 
 import {
     getTotalTimeLength,
@@ -8,7 +8,7 @@ import {
 const bufferCache = {}
 
 //    getBufferFromURL :: context -> url -> Task Error Buffer
-const getBufferFromURL = (context, url) =>
+const getBufferFromURL = curry((context, url) =>
     Task((rej, res) => {
         if (bufferCache[url]) return res(bufferCache[url])
         const onError = () => rej(Error(`Error decoding file data: ${url}`))
@@ -30,7 +30,7 @@ const getBufferFromURL = (context, url) =>
             )
         request.onerror = onError
         request.send()
-    })
+    }))
 
 //    filterInstrumentsWithSounds :: [Instrument] -> [Instrument]
 const filterInstrumentsWithSounds = instrument =>
@@ -151,16 +151,30 @@ const playSound = (context, buffer, time, duration, volume, pitchAmount = 0, fad
         gainNode.gain.setValueAtTime(volume, time + duration)
         gainNode.gain.linearRampToValueAtTime(0, time + duration + fadeOutDuration)
     }
-
     source.start(time, 0, (duration + fadeOutDuration) * durationMultiplier)
     return source
+}
+
+//    playSoundSimple :: audioContext -> buffer -> IO source
+const playSoundSimple = curry((context, buffer) => IO(() =>
+    playSound(context, buffer, 0, buffer.duration, 1)))
+
+const stopSource = (src) => {
+    if (src) {
+        src.onended = () => {}
+        src.stop(0)
+        return src
+    }
 }
 
 export {
     combineAudioBuffers,
     getBufferFromAudioTemplate,
+    getBufferFromURL,
     loadInstrumentBuffers,
     playSound,
+    playSoundSimple,
     renderAudioPlaylistItemToBuffer,
     renderBuffer,
+    stopSource,
 }

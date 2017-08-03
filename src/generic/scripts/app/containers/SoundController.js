@@ -17,19 +17,9 @@ import ShareController from 'containers/ShareController'
 import * as Tracking from 'modules/tracking'
 import isPhoneGap from 'modules/phonegap'
 
-import { playSound } from 'utils/audio'
+import { playSound, stopSource } from 'utils/audio'
 import audioContext from 'utils/audioContext'
 import { getTotalTimeLength } from 'utils/sequences'
-import { capitalize } from 'utils/tools'
-
-const stop = (src) => {
-    if (src) {
-        const newSrc = src
-        newSrc.onended = () => {}
-        newSrc.stop(0)
-        return newSrc
-    }
-}
 
 class SoundController extends Component {
     generationCount = 0
@@ -149,7 +139,7 @@ class SoundController extends Component {
         if (this.props.isPlaying) {
             this.clearTimeouts()
             this.currentlyPlayingSources
-                .map(src => stop(src))
+                .map(src => stopSource(src))
             this.currentlyPlayingSources = []
 
             if (sendAction && this.props.isPlaying) this.props.actions.updateIsPlaying(false)

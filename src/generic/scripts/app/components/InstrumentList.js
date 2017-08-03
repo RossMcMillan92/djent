@@ -1,17 +1,20 @@
 import React, { Component } from 'react'
-import { curry } from 'ramda'
+import { compose, curry, map, prop } from 'ramda'
 
 import Expandable from 'components/Expandable'
 import FadeOutDurationController from 'components/FadeOutDurationController'
 import PitchController from 'components/PitchController'
 import RepeatingHitsController from 'components/RepeatingHitsController'
 import SequenceController from 'components/SequenceController'
+import SVG from 'components/SVG'
 import Tabgroup, { Tabpane } from 'components/Tabgroup'
 import VolumeController from 'components/VolumeController'
 
 import getPercentage from 'modules/getPercentage'
 
-import { capitalize } from 'utils/tools'
+import { getBufferFromURL, playSoundSimple, stopSource } from 'utils/audio'
+import audioContext from 'utils/audioContext'
+import { capitalize, logError } from 'utils/tools'
 
 //    getCategoriesFromSounds :: [cat] -> sound -> [cat]
 const getCategoriesFromSounds = (cats, sound) => {
@@ -44,13 +47,26 @@ const PercentageViewer = ({ amount, onAmountChange, totalAmount }) => (
     </div>
 )
 
-const renderSound = (instrument, onSoundAmountChange, totalSoundsAmount) => sound => (
+const SoundRow = ({
+    instrument,
+    isPlaying,
+    onSoundAmountChange,
+    onSoundPlayButtonClick,
+    totalSoundsAmount,
+    sound
+}) => (
     <div
         className="block-list__item u-flex-row"
         key={sound.id}
     >
         <div
-            className="group-padding-y-med group-padding-x-med u-txt-small u-flex-grow-1"
+          className="sound-row__icon group-padding-y-med group-padding-x-med"
+          onClick={() => onSoundPlayButtonClick(sound)}
+        >
+            <SVG className="sound-row__icon-svg" icon={ isPlaying ? 'stop' : 'play' } />
+        </div>
+        <div
+            className="group-padding-y-med group-padding-x-med u-pl0 u-txt-small u-flex-grow-1"
             onClick={() => onSoundAmountChange(sound.id, instrument.id, sound.amount === 0 ? 1 : 0)}
         >
             <div className={`toggle-input ${sound.amount ? 'is-enabled' : ''}`}>
@@ -65,7 +81,7 @@ const renderSound = (instrument, onSoundAmountChange, totalSoundsAmount) => soun
     </div>
 )
 
-const renderSoundsInCategories = curry((instrument, onSoundAmountChange, id, catIndex, arr) => {
+const renderSoundsInCategories = curry((instrument, onSoundAmountChange, onSoundPlayButtonClick, currentlyPlayingSoundId) => (id, catIndex, arr) => {
     const sounds = instrument.sounds
         .filter(sound => sound.category === id)
     const isExpanded = !!sounds.find(sound => sound.amount)
@@ -88,18 +104,32 @@ const renderSoundsInCategories = curry((instrument, onSoundAmountChange, id, cat
             key={catIndex}
         >
             <div className="block-list block-list--compact">
-                { sounds.map(renderSound(instrument, onSoundAmountChange, totalSoundsAmount)) }
+                { sounds.map((sound, i) => (
+                    <SoundRow
+                        key={i}
+                        instrument={instrument}
+                        isPlaying={currentlyPlayingSoundId === sound.id}
+                        onSoundAmountChange={onSoundAmountChange}
+                        onSoundPlayButtonClick={onSoundPlayButtonClick}
+                        totalSoundsAmount={totalSoundsAmount}
+                        sound={sound}
+                    />
+                )) }
             </div>
         </Expandable>
     )
 })
 
-const renderSoundsPane = (instrument, onSoundAmountChange) => {
+const SoundsPane = ({ currentlyPlayingSoundId, instrument, onSoundAmountChange, onSoundPlayButtonClick }) => {
     const categories = instrument.sounds
         .reduce(getCategoriesFromSounds, [])
-        .map(renderSoundsInCategories(instrument, onSoundAmountChange))
+        .map(renderSoundsInCategories(instrument, onSoundAmountChange, onSoundPlayButtonClick, currentlyPlayingSoundId))
 
-    return categories
+    return (
+        <div>
+            { categories }
+        </div>
+    )
 }
 
 const renderSequencesPane = (instrument, sequences, updateInstrumentSequences) => {
@@ -164,18 +194,62 @@ const renderSettingsPane = (instrument, actions) => {
     )
 }
 
-export default class InstrumentList extends Component {
-    onSoundAmountChange = curry((soundID, parentID, value) => {
-        const currentValue = this.props.instruments
-            .find(i => i.id === parentID).sounds
-            .find(s => s.id === soundID).amount
-        const prop = 'amount'
+//    getBufferURLFromSound :: sound -> IO Buffer
+const getBufferFromSound = compose(
+    getBufferFromURL(audioContext),
+    prop('path'),
+)
 
-        this.props.onSoundAmountChange({ soundID, parentID, prop, value })
+//    playInstrumentSound :: sound -> Task Error source
+const playInstrumentSound = compose(
+    map(sound => sound.runIO()),
+    map(playSoundSimple(audioContext)),
+    getBufferFromSound,
+)
+
+export default class InstrumentList extends Component {
+    state = {
+        currentlyPlayingSoundId: null,
+        currentSource: null,
+    }
+
+    resetState = () => this.setState({
+        currentlyPlayingSoundId: null,
+        currentSource: null
     })
 
+    stopCurrentSource = () => {
+        const { currentSource } = this.state
+        if (currentSource) {
+            stopSource(currentSource)
+        }
+    }
+
+    onSoundAmountChange = curry((soundID, parentID, value) => {
+        const property = 'amount'
+        this.props.onSoundAmountChange({ soundID, parentID, prop: property, value })
+    })
+
+    onSoundPlayButtonClick = (sound) => {
+        if (sound.id === this.state.currentlyPlayingSoundId) {
+            this.stopCurrentSource()
+            this.resetState()
+            return
+        }
+        playInstrumentSound(sound)
+            .fork(logError, (source) => {
+                this.stopCurrentSource()
+                source.onended = this.resetState
+                this.setState({
+                    currentlyPlayingSoundId: sound.id,
+                    currentSource: source
+                })
+            })
+    }
+
     render = () => {
-        const instrumentViews = this.props.instruments
+        const { actions, instruments, sequences } = this.props
+        const instrumentViews = instruments
             .map((instrument, index, instArr) => (
                 <div className={`${index < instArr.length - 1 ? 'u-mb2' : ''}`} key={index}>
                     <h3 className="title-secondary u-mb05">
@@ -183,13 +257,18 @@ export default class InstrumentList extends Component {
                     </h3>
                     <Tabgroup>
                         <Tabpane title="Sounds">
-                            { renderSoundsPane(instrument, this.onSoundAmountChange) }
+                            <SoundsPane
+                              instrument={instrument}
+                              onSoundAmountChange={this.onSoundAmountChange}
+                              onSoundPlayButtonClick={this.onSoundPlayButtonClick}
+                              currentlyPlayingSoundId={this.state.currentlyPlayingSoundId}
+                            />
                         </Tabpane>
                         <Tabpane title="Sequences">
-                            { renderSequencesPane(instrument, this.props.sequences, this.props.actions.updateInstrumentSequences) }
+                            { renderSequencesPane(instrument, sequences, actions.updateInstrumentSequences) }
                         </Tabpane>
                         <Tabpane title="Settings">
-                            { renderSettingsPane(instrument, this.props.actions) }
+                            { renderSettingsPane(instrument, actions) }
                         </Tabpane>
                     </Tabgroup>
                 </div>

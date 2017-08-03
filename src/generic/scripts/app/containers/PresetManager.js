@@ -108,8 +108,9 @@ class PresetManager extends Component {
     }
 
     render = () => {
-        const { activePresetID, presets } = this.props
+        const { activePresetID, presets, audioPlaylist } = this.props
         const activePreset = presets.find(preset => preset.id === activePresetID)
+        const activePlaylistItem = audioPlaylist.find(preset => preset.id === activePresetID)
         const arrow = <span className="u-txt-small">{'>'}</span>
 
         return (
@@ -123,7 +124,9 @@ class PresetManager extends Component {
                 {
                     activePreset
                         ? <span>{activePreset.group} {arrow} {unescape(activePreset.description)}</span>
-                        : capitalize(activePresetID)
+                        : activePlaylistItem
+                            ? activePlaylistItem.title
+                            : `Track ${activePresetID} settings`
                 }
                     <div className="input-container__dropdown-icon" />
                 </div>
@@ -133,9 +136,10 @@ class PresetManager extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { config, presets } = state
+    const { config, presets, sound } = state
     return {
-        activePresetID   : config.activePresetID,
+        activePresetID: config.activePresetID,
+        audioPlaylist: sound.audioPlaylist,
         presets,
     }
 }

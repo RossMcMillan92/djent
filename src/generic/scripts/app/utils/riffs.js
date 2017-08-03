@@ -62,12 +62,13 @@ const generateNewRiff = ({ context, sequences, usePredefinedSettings, instrument
 }
 
 let playlistItemCount = 0
-//    createPlaylistItem :: (genID, audioTemplate, instruments, sequences, bpm, isLocked) -> PlaylistItem
-const createPlaylistItem = (genID, audioTemplate, instruments, sequences, bpm, isLocked) => {
-    const key = `${genID}-${playlistItemCount}`
+//    createPlaylistItem :: (id, audioTemplate, instruments, sequences, bpm, isLocked) -> PlaylistItem
+const createPlaylistItem = ({ id, title, audioTemplate, instruments, sequences, bpm, isLocked}) => {
+    const key = `${id}-${playlistItemCount}`
     playlistItemCount += 1
     return {
-        id: genID,
+        id,
+        title: title || `Track ${id} - ${sequences[0].bars} × ${sequences[0].beats}`,
         isLocked,
         key,
         audioTemplate,
@@ -86,7 +87,7 @@ const generatePlaylistItem = (genID, bpm, sequences, instruments, usePredefinedS
         .map((newInstruments) => {
             const bpmMultiplier = 60 / bpm
             const audioTemplate = renderAudioTemplateAtTempo(newInstruments, bpmMultiplier)
-            return createPlaylistItem(genID, audioTemplate, newInstruments, sequences, bpm, false)
+            return createPlaylistItem({id: genID, audioTemplate, instruments: newInstruments, sequences, bpm, isLocked: false})
         })
 }
 

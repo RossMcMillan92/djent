@@ -26,6 +26,10 @@
     max-width: 100%
     padding: 8px 10px
 
+.input-container__input--small
+    font-size: 12px
+    padding: 4px
+
 =input-container__input--short
     max-width: 100%
     width: 80px
@@ -88,3 +92,9 @@
 
     .input-container__dropdown-icon
         border-color: $palette-shade-alpha transparent transparent transparent
+
+.input-container--semi-light
+
+    .input-container__input
+        color: darken($palette-shade-alpha, 30%)
+        border-color: darken($palette-shade-alpha, 40%)

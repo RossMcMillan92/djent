@@ -1,6 +1,6 @@
 import initialState from './config.initial-state'
 
-export default function config(state = { ...initialState }, action) {
+export default function configReducer(state = { ...initialState }, action) {
     const { type, payload } = action
 
     switch (type) {
@@ -13,9 +13,9 @@ export default function config(state = { ...initialState }, action) {
         case 'APPLY_PRESET':
             const { preset } = payload
             const config = preset.settings.config
-            const bpm = !preset.settings.config || !preset.settings.config.bpm
+            const bpm = !config || !config.bpm
                 ? initialState.bpm
-                : preset.settings.config.bpm
+                : config.bpm
             const newState = { ...initialState }
 
             if (bpm) newState.bpm = bpm

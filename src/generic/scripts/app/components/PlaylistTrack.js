@@ -1,9 +1,20 @@
 import React from 'react'
+import InputBox from 'components/InputBox'
 import SVG from 'components/SVG'
 
-const PlaylistTrack = ({ isLocked, onDelete, onDuplicate, onLoadSettings, onLockTrack, title }) => (
+const PlaylistTrack = ({
+    isActive,
+    isLocked,
+    onDelete,
+    onDuplicate,
+    onLoadSettings,
+    onLockTrack,
+    onTitleChange,
+    title,
+    bpm
+}) => (
     <div className="u-flex-row u-flex-justify">
-        <div className="u-flex-row u-align-center">
+        <div className="u-flex-row u-flex-center">
             <PlaylistTrackButton
                 className={isLocked ? 'u-txt-positive' : ''}
                 onClick={onLockTrack}
@@ -11,8 +22,23 @@ const PlaylistTrack = ({ isLocked, onDelete, onDuplicate, onLoadSettings, onLock
                 icon="lock"
             />
 
-            <div className="block-list__body u-pl0 u-txt-truncate">
-                { title }
+            <InputBox
+                defaultValue={title}
+                containerClassName={`input-container input-container--${isActive ? 'light' : 'semi-light'} u-mr1`}
+                className="input-container__input input-container__input--bare input-container__input--small"
+                labelClassName="input-container__label"
+                maxLength={30}
+                onChange={onTitleChange}
+            />
+
+            <div className="u-flex-row u-flex-center">
+                <InputBox
+                    defaultValue={bpm}
+                    containerClassName={`input-container input-container--${isActive ? 'light' : 'semi-light'}`}
+                    className="input-container__input input-container__input--bare input-container__input--small"
+                    labelClassName="input-container__label"
+                    disabled={true}
+                />
             </div>
         </div>
         <div className="u-flex-row u-align-center">

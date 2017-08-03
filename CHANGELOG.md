@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added more presets
 - Update button styles + added icons
 - Update player section UI, including visualiser
+- Ability to play samples without generating a riff
 
 ## [1.0.0] - 2017-06-20
 ### Added

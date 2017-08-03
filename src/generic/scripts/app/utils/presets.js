@@ -74,21 +74,20 @@ const createPresetFactory = ({
                                 return [ ...newSounds, newSound]
                             }, [])
                     }
-                    if (!isNil(instrument.fadeOutDuration) && instrument.fadeOutDuration !== originalInstrument.fadeOutDuration) {
-                        newInstrument.fadeOutDuration = instrument.fadeOutDuration
-                    }
-                    if (!isNil(instrument.ringout) && instrument.ringout !== originalInstrument.ringout) {
-                        newInstrument.ringout = instrument.ringout
-                    }
-                    if (!isNil(instrument.pitch) && instrument.pitch !== originalInstrument.pitch) {
-                        newInstrument.pitch = instrument.pitch
-                    }
-                    if (!isNil(instrument.volume) && instrument.volume !== originalInstrument.volume) {
-                        newInstrument.volume = instrument.volume
-                    }
-                    if (!isNil(instrument.repeatHitTypeForXBeat) && instrument.repeatHitTypeForXBeat !== originalInstrument.repeatHitTypeForXBeat) {
-                        newInstrument.repeatHitTypeForXBeat = instrument.repeatHitTypeForXBeat
-                    }
+
+                    const propertiesToCopy = [
+                        'fadeOutDuration',
+                        'ringout',
+                        'pitch',
+                        'volume',
+                        'repeatHitTypeForXBeat',
+                    ]
+
+                    propertiesToCopy.forEach((property) => {
+                        if (!isNil(instrument[property]) && instrument[property] !== originalInstrument[property]) {
+                            newInstrument[property] = instrument[property]
+                        }
+                    })
 
                     return [ ..._newInstruments, ...(Object.keys(newInstrument).length > 1 ? [newInstrument] : []) ]
                 }, [])

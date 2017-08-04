@@ -2,7 +2,7 @@ import React from 'react'
 import BeatsController from 'components/BeatsController'
 import BPMTapper from 'components/BPMTapper'
 import Panel from 'components/Panel'
-import BPMController from 'containers/BPMController'
+import MasterBPM from 'containers/MasterBPM'
 import PlaylistEditor from 'containers/PlaylistEditor'
 import PresetManager from 'containers/PresetManager'
 import SoundController from 'containers/SoundController'
@@ -32,7 +32,7 @@ const Player = ({ actions, hasAudioTemplate, googleAPIHasLoaded, sequences }) =>
 
                         <div className="group-spacing-y-small u-flex-row u-flex-end">
                             <div className="u-mr1">
-                                <BPMController />
+                                <MasterBPM />
                             </div>
                             <div className="">
                                 <BPMTapper onUpdate={actions.updateBPM} />

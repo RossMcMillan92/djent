@@ -50,7 +50,7 @@ const updateItemInPlaylist = (audioPlaylist, playlistItem, prop, value) => {
 
 //    generateDuplicateItemId :: String -> String
 const generateDuplicateItemId = (audioPlaylist, currentId) =>
-    !audioPlaylist.find(pi => console.log(pi.id) || pi.id === `${currentId}-c`)
+    !audioPlaylist.find(pi => pi.id === `${currentId}-c`)
         ? `${currentId}-c`
         : generateDuplicateItemId(audioPlaylist, `${currentId}-c`)
 
@@ -137,14 +137,6 @@ class PlaylistEditor extends Component {
         const newAudioPlaylist = updateItemInPlaylist(audioPlaylist, playlistItem, 'isLocked', !playlistItem.isLocked)
         this.props.actions.updateAudioPlaylist(newAudioPlaylist)
     })
-
-    // onBPMChange = curry((playlistItem, e) => {
-    //     const value = e.target.value
-    //     if (!value || playlistItem.isDisabled || this.props.isPlaying) return
-    //     const { audioPlaylist } = this.props
-    //     const newAudioPlaylist = updateItemInPlaylist(audioPlaylist, playlistItem, 'bpm', value)
-    //     this.props.actions.updateAudioPlaylist(newAudioPlaylist)
-    // })
 
     onTitleChange = curry((playlistItem, e) => {
         const value = e.target.value

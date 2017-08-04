@@ -1,10 +1,12 @@
 import React from 'react'
+import BPMInput from 'components/BPMInput'
 import InputBox from 'components/InputBox'
 import SVG from 'components/SVG'
 
 const PlaylistTrack = ({
     isActive,
     isLocked,
+    onBPMChange,
     onDelete,
     onDuplicate,
     onLoadSettings,
@@ -24,22 +26,13 @@ const PlaylistTrack = ({
 
             <InputBox
                 defaultValue={title}
-                containerClassName={`input-container input-container--${isActive ? 'light' : 'semi-light'} u-mr1`}
+                containerClassName={`input-container input-container--${isActive ? 'light' : 'semi-light'} input-container--${!isActive ? 'disguised' : 'visible'} u-mr1`}
                 className="input-container__input input-container__input--bare input-container__input--small"
                 labelClassName="input-container__label"
                 maxLength={30}
                 onChange={onTitleChange}
+                placeholder="Track Name"
             />
-
-            <div className="u-flex-row u-flex-center">
-                <InputBox
-                    defaultValue={bpm}
-                    containerClassName={`input-container input-container--${isActive ? 'light' : 'semi-light'}`}
-                    className="input-container__input input-container__input--bare input-container__input--small"
-                    labelClassName="input-container__label"
-                    disabled={true}
-                />
-            </div>
         </div>
         <div className="u-flex-row u-align-center">
             <PlaylistTrackButton

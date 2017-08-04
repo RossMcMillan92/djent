@@ -1,16 +1,14 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { BPMController } from 'containers/BPMController'
+import BPMInput from 'containers/BPMInput'
 
-describe('<BPMController />', () => {
+describe('<BPMInput />', () => {
     it('renders the value passed as prop BPM', () => {
         const props = {
             bpm: 90,
-            actions: {
-                updateBPM: () => {}
-            }
+            updateBPM: () => {}
         }
-        const wrapper = mount(<BPMController {...props} />)
+        const wrapper = mount(<BPMInput {...props} />)
         expect(wrapper.find('input').node.value).toBe('90')
     })
 
@@ -19,11 +17,9 @@ describe('<BPMController />', () => {
         const updateBPM = jest.fn()
         const props = {
             bpm: 90,
-            actions: {
-                updateBPM: (...args) => updateBPM(...args) || assertions()
-            }
+            updateBPM: (...args) => updateBPM(...args) || assertions()
         }
-        const wrapper = mount(<BPMController {...props} />)
+        const wrapper = mount(<BPMInput {...props} />)
             .find('input')
             .simulate('change', {target: {value: 95}})
         function assertions() {

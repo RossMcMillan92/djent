@@ -68,7 +68,7 @@ const createPlaylistItem = ({ id, title, audioTemplate, instruments, sequences, 
     playlistItemCount += 1
     return {
         id,
-        title: title || `Track ${id} - ${sequences[0].bars} × ${sequences[0].beats}`,
+        title: title || `Track ${id} - ${sequences[0].bars} × ${sequences[0].beats} - ${bpm}BPM`,
         isLocked,
         key,
         audioTemplate,

@@ -70,6 +70,7 @@ class PlaylistEditor extends Component {
     }
 
     onListItemClick = (playlistIndex) => {
+        console.log('PLAYLISTINDEX', playlistIndex)
         this.props.actions.updateIsPlaying(false)
         this.updateActivePlaylistIndex(playlistIndex)
     }

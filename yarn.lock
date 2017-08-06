@@ -6011,6 +6011,12 @@ react-dom@^15.6.1:
     object-assign "^4.1.0"
     prop-types "^15.5.10"
 
+react-dragula-hoc@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/react-dragula-hoc/-/react-dragula-hoc-0.1.6.tgz#8b9038bb5904ce1c26d5c339b6f18ff05a3beba9"
+  dependencies:
+    react-dragula "^1.1.17"
+
 react-dragula@^1.1.17:
   version "1.1.17"
   resolved "https://registry.yarnpkg.com/react-dragula/-/react-dragula-1.1.17.tgz#b3cb352a470a719367ba99d6a5401c60fad4f6ff"

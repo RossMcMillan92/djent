@@ -92,6 +92,7 @@
 		"react": "^15.6.1",
 		"react-dom": "^15.6.1",
 		"react-dragula": "^1.1.17",
+		"react-dragula-hoc": "^0.1.6",
 		"react-hot-loader": "next",
 		"react-jsx": "^1.0.0",
 		"react-redux": "^5.0.5",

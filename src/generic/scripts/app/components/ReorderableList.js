@@ -36,7 +36,7 @@ class ReorderableList extends Component {
                 <div className="u-flex-grow-1" >
                     { item.body }
                 </div>
-                <div className="block-list__item-handle js-handle" ></div>
+                <div className="block-list__item-handle u-flex-shrink-0 js-handle" ></div>
             </div>
         </li>
     )

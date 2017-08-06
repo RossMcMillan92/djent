@@ -31,8 +31,7 @@ const getLSItemFromTitle = curry(compose(
 
 //    getLSItemOrDefault :: Boolean -> String -> IO Boolean
 const getLSItemOrDefault = curry((defaultVal, title) => compose(
-    map(maybe(defaultVal, identity)),
-    map(map(toBoolean)),
+    map(maybe(defaultVal, toBoolean)),
     map(Maybe),
     getLSItemFromTitle,
 )(title))

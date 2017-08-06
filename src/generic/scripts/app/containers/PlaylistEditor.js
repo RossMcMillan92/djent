@@ -76,9 +76,12 @@ class PlaylistEditor extends Component {
     }
 
     onReorder = (newOrder) => {
+        console.log('NEWORDER', newOrder)
         const { audioPlaylist } = this.props
         const newAudioPlaylist = newOrder
             .map(key => audioPlaylist.find(item => `${item.key}` === key))
+            console.log('THIS.PROPS.ACTIVEPLAYLISTINDEX', this.props.activePlaylistIndex)
+            console.log('THIS.PROPS.AUDIOPLAYLIST', this.props.audioPlaylist)
         const activeItemKey = this.props.audioPlaylist[this.props.activePlaylistIndex].id
         const newActivePlaylistIndex = newAudioPlaylist
             .reduce((answer, item, i) => (activeItemKey === item.id) ? i : answer, 0)
@@ -166,7 +169,7 @@ class PlaylistEditor extends Component {
             .map((item, i) => {
                 const isActive = activePlaylistIndex === i
                 return {
-                    key: item.id,
+                    key: item.key,
                     body: (
                         <PlaylistTrack
                             bpm={item.bpm}

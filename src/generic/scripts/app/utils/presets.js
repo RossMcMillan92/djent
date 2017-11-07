@@ -4,7 +4,7 @@ import { Maybe } from 'ramda-fantasy'
 import configInitialState from 'reducers/config.initial-state'
 import sequencesInitialState from 'reducers/sequences.initial-state'
 import instrumentsInitialState from 'utils/default-instruments'
-import { getAllowedLengthsFromSequence } from 'utils/sequences'
+import { generateAllowedLengthsFromSequence } from 'utils/sequences'
 
 const createPresetFactory = ({
     configInitialState: _configInitialState,
@@ -120,7 +120,7 @@ const backwardsCompatibility = (preset, allowedLengths) => {
                 if (seq.id === 'groove') {
                     seq.id = 'CUSTOM_SEQUENCE_1'
                     seq.hitChance = preset.settings.config.hitChance
-                    seq.allowedLengths = getAllowedLengthsFromSequence(preset.settings.instruments.find(i => i.id === 'g').predefinedSequence, allowedLengths)
+                    seq.allowedLengths = generateAllowedLengthsFromSequence(preset.settings.instruments.find(i => i.id === 'g').predefinedSequence, allowedLengths)
                 }
 
                 return seq

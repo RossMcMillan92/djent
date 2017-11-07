@@ -2,7 +2,7 @@ import {
     convertAllowedLengthsToArray,
     generateSequence,
     generateTimeMap,
-    getAllowedLengthsFromSequence,
+    generateAllowedLengthsFromSequence,
     loopSequence,
 } from 'utils/sequences'
 
@@ -248,7 +248,7 @@ describe('Sequences', () => {
         })
     })
 
-    describe('getAllowedLengthsFromSequence()', () => {
+    describe('generateAllowedLengthsFromSequence()', () => {
         const initialAllowedLengths = [
             {
                 id: '0.25',
@@ -283,7 +283,7 @@ describe('Sequences', () => {
         ]
 
         it('should return a clone of initial allowedLengths with the summed amounts', () => {
-            const results = getAllowedLengthsFromSequence([
+            const results = generateAllowedLengthsFromSequence([
                 { beat: 1, volume: 1 },
                 { beat: 2, volume: 1 },
                 { beat: 1, volume: 1 },
@@ -300,7 +300,7 @@ describe('Sequences', () => {
         })
 
         it('should take into account triplets', () => {
-            const results = getAllowedLengthsFromSequence([
+            const results = generateAllowedLengthsFromSequence([
                 { beat: 1.5, volume: 1 },
                 { beat: 3, volume: 1 },
                 { beat: 1.5, volume: 1 },

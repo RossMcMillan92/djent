@@ -5,15 +5,15 @@ import deepExtend from 'deep-extend'
 import { curry } from 'ramda'
 
 export const repeatArray = (arr, length) => {
-	if (length === 0) return []
-	if (arr.length === length || arr.length === 0) return arr
+	if (length === 0 || arr.length === 0) return []
+	if (arr.length === length) return arr
 	if (arr.length > length) return arr.slice(0, length)
 
 	const diff = Math.ceil(length / arr.length)
 
 	return Array(diff)
 		.fill()
-		.reduce(newArr => newArr.concat(...arr), [])
+		.reduce(newArr => newArr.concat(arr), [])
 		.slice(0, length)
 }
 
@@ -42,7 +42,7 @@ export const deepClone = obj =>
 				}
 			}, {})
 
-export const deepCloneInner = value => (typeof value === 'object' && !Array.isArray(value))
+const deepCloneInner = value => (typeof value === 'object' && !Array.isArray(value))
 	? deepClone(value)
 	: (Array.isArray(value))
 		? value.map(deepCloneInner)

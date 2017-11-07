@@ -45,8 +45,7 @@ const generateRiff = ({
       instruments: newInstruments,
       totalBeatsProduct,
       usePredefinedSettings,
-    }),
-  )
+    }))
 
 //    generateNewRiff :: audioSettings -> Task Error [Instrument]
 const generateNewRiff = ({
@@ -63,7 +62,14 @@ const generateNewRiff = ({
     usePredefinedSettings,
   })
   const instrumentsWithSequences = instruments
-    .map(getInstrumentSequence)
+    .map((instrument) => {
+      const { id, sequence } = getInstrumentSequence(instrument)
+      if (id) generatedSequences[id] = sequence
+      return {
+        ...instrument,
+        sequence,
+      }
+    })
     .filter(i => i.sequence !== undefined)
 
   return generateRiff({
@@ -109,7 +115,12 @@ const generatePlaylistItem = (
   instruments,
   usePredefinedSettings,
 ) => {
-  const generationState = { bpm, sequences, instruments, usePredefinedSettings }
+  const generationState = {
+    bpm,
+    sequences,
+    instruments,
+    usePredefinedSettings,
+  }
   const totalBeatsProduct = getTotalBeatsLength(sequences)
 
   return generateNewRiff({

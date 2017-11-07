@@ -1,5 +1,4 @@
 import React from 'react'
-import BPMInput from 'components/BPMInput'
 import InputBox from 'components/InputBox'
 import SVG from 'components/SVG'
 

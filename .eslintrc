@@ -10,7 +10,6 @@
     "extends": "airbnb/base",
     "rules" : {
         "semi" : ["error", "never"],
-        "indent" : [0, 2],
         "no-multi-spaces": 0,
         "no-multi-assign": 0,
         "new-cap": 0,

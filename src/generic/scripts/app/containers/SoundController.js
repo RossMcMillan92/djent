@@ -96,7 +96,6 @@ class SoundController extends Component {
     )
     const audioTemplateEndTime = audioStartTime + totalLength
     const audioProgress = audioContext.currentTime - audioStartTime
-    console.log('AUDIOCONTEXT', audioContext)
     if (audioContext.resume) audioContext.resume()
     const timeTillEnd = audioTemplateEndTime - (audioStartTime + audioProgress)
 

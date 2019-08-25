@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<title>DJEN - Metal Generator</title>
@@ -16,11 +17,11 @@
 
 	<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
 	<script>
-	 WebFont.load({
-	    google: {
-	      families: ['Open Sans:900,400,300']
-	    }
-	  });
+		WebFont.load({
+			google: {
+				families: ['Open Sans:900,400,300']
+			}
+		});
 	</script>
 
 	<link rel="manifest" href="<%= htmlWebpackPlugin.options.absolutePath %>manifest.json" async>
@@ -28,7 +29,8 @@
 	<meta name="theme-color" content="#1e1e1e">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
 	<meta name="description" content="Rock and Metal Song Generator.">
-	<meta name="keywords" content="djeneration, station, generative, react, redux, metal, riff, generator, thall, djent, generate">
+	<meta name="keywords"
+		content="djeneration, station, generative, react, redux, metal, riff, generator, thall, djent, generate">
 
 	<!-- Schema.org markup for Google+ -->
 	<meta itemprop="name" content="DJEN">
@@ -55,59 +57,63 @@
 	<meta name="apple-mobile-web-app-title" content="DJEN">
 	<meta name="format-detection" content="telephone=no">
 
-	<link rel="apple-touch-icon" sizes="57x57" href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/57.png">
-	<link rel="apple-touch-icon" sizes="60x60" href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/60.png">
-	<link rel="apple-touch-icon" sizes="72x72" href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/72.png">
-	<link rel="apple-touch-icon" sizes="76x76" href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/76.png">
-	<link rel="apple-touch-icon" sizes="114x114" href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/114.png">
-	<link rel="apple-touch-icon" sizes="120x120" href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/120.png">
-	<link rel="apple-touch-icon" sizes="144x144" href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/144.png">
-	<link rel="apple-touch-icon" sizes="152x152" href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/152.png">
-	<link rel="apple-touch-icon" sizes="180x180" href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/180.png">
-	<link rel="icon" type="image/png" sizes="192x192"  href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/192.png">
-	<link rel="icon" type="image/png" sizes="96x96" href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/96.png">
+	<link rel="apple-touch-icon" sizes="57x57"
+		href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/57.png">
+	<link rel="apple-touch-icon" sizes="60x60"
+		href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/60.png">
+	<link rel="apple-touch-icon" sizes="72x72"
+		href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/72.png">
+	<link rel="apple-touch-icon" sizes="76x76"
+		href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/76.png">
+	<link rel="apple-touch-icon" sizes="114x114"
+		href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/114.png">
+	<link rel="apple-touch-icon" sizes="120x120"
+		href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/120.png">
+	<link rel="apple-touch-icon" sizes="144x144"
+		href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/144.png">
+	<link rel="apple-touch-icon" sizes="152x152"
+		href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/152.png">
+	<link rel="apple-touch-icon" sizes="180x180"
+		href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/180.png">
+	<link rel="icon" type="image/png" sizes="192x192"
+		href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/192.png">
+	<link rel="icon" type="image/png" sizes="96x96"
+		href="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/96.png">
 	<meta name="msapplication-TileColor" content="#1e1e1e">
-	<meta name="msapplication-TileImage" content="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/144.png">
+	<meta name="msapplication-TileImage"
+		content="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/icons/144.png">
 
-	<meta http-equiv="Content-Security-Policy"
-	         content="default-src * blob:;
+	<meta http-equiv="Content-Security-Policy" content="default-src * blob:;
 	                  style-src * 'self' 'unsafe-inline' 'unsafe-eval';
 	                  script-src * 'self' 'unsafe-inline' 'unsafe-eval' data:;
 	                  worker-src * blob: 'self' 'unsafe-inline' 'unsafe-eval';">
 	<noscript>
-		<style> .js { display: none !important } </style>
+		<style>
+			.js {
+				display: none !important
+			}
+		</style>
 	</noscript>
 </head>
+
 <body class="preload">
 	<div class="header<% if (htmlWebpackPlugin.options.isPhoneGap) { %> header--nav-spaced <% } %>" ref="header">
 		<div class="group-capped-x group-centered">
 			<div class="group-spacing-x">
-                <div class="u-flex-row u-flex-justify">
-                    <img class="header__logo" src="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/logo.png" alt="DJEN metal generator logo" />
+				<div class="u-flex-row u-flex-justify">
+					<img class="header__logo" src="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/logo.png"
+						alt="DJEN metal generator logo" />
 					<% if (!htmlWebpackPlugin.options.isPhoneGap) { %>
-                        <div class="u-flex-row">
-                            <a class="u-mr05" href="https://itunes.apple.com/gb/app/djen-metal-breakdown-generator/id1218322408?mt=8" target="_blank" rel="noopener">
-                                <img
-                                    class="header__icon social-icon social-icon--appstore"
-                                    src="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/appstore.svg"
-                                    width="135px"
-                                    height="39"
-                                    alt="facebook icon"
-                                />
-                            </a>
-                            <a class="" href="https://www.facebook.com/djenerationstation/" target="_blank" rel="noopener">
-                                <img
-                                    class="header__icon social-icon"
-                                    src="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/F_icon.svg"
-                                    width="39"
-                                    height="39"
-                                    alt="facebook icon"
-                                />
-                            </a>
-                        </div>
+					<div class="u-flex-row">
+						<a class="" href="https://www.facebook.com/djenerationstation/" target="_blank" rel="noopener">
+							<img class="header__icon social-icon"
+								src="<%= htmlWebpackPlugin.options.absolutePath %>assets/images/F_icon.svg" width="39"
+								height="39" alt="facebook icon" />
+						</a>
+					</div>
 					<% } %>
-                </div>
-            </div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div id="root"></div>
@@ -115,12 +121,15 @@
 		<p class="u-mt2 u-tac">JavaScript is required for djen.co to run</p>
 	</noscript>
 	<script>
-		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-		})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+		(function (i, s, o, g, r, a, m) {
+		i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+			(i[r].q = i[r].q || []).push(arguments)
+		}, i[r].l = 1 * new Date(); a = s.createElement(o),
+			m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 		ga('create', 'UA-39207239-2', 'auto');
 		ga('send', 'pageview');
 	</script>
 </body>
+
 </html>

@@ -12,7 +12,6 @@ import Generator from 'components/Generator'
 
 import SaveController from 'containers/SaveController'
 import LoopController from 'containers/LoopController'
-import ShareController from 'containers/ShareController'
 
 import * as Tracking from 'modules/tracking'
 import isPhoneGap from 'modules/phonegap'
@@ -274,12 +273,6 @@ class SoundController extends Component {
           </div>
           {!isPhoneGap && (
             <div className="u-flex-row u-flex-justify-center u-flex-center">
-              <div className="u-mr05 u-mb05">
-                <ShareController
-                  googleAPIHasLoaded={this.props.googleAPIHasLoaded}
-                />
-              </div>
-
               <div className="u-mb05">
                 <SaveController />
               </div>

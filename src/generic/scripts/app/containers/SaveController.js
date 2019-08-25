@@ -30,19 +30,17 @@ const SaveModal = ({ onMIDISave, onWAVSave }) => (
             <div className="u-mr05">
                 <button
                     className="button-primary button-primary--small button-primary--positive"
-                    onClick={ onMIDISave }
+                    onClick={onMIDISave}
                 >
                     Save as MIDI
                 </button>
             </div>
-            <div className="">
-                <button
-                    className="button-primary button-primary--small button-primary--positive"
-                    onClick={ onWAVSave }
-                >
-                    Save as WAV
-                </button>
-            </div>
+            <button
+                className="button-primary button-primary--small button-primary--positive"
+                onClick={onWAVSave}
+            >
+                Save as WAV
+            </button>
         </div>
     </div>
 )
@@ -58,8 +56,8 @@ const launchSaveModal = (audioPlaylist, enableModal, disableModal) => {
     }
     const content = (
         <SaveModal
-            onMIDISave={ compose(disableModal, saveMIDI) }
-            onWAVSave={ compose(disableModal, saveWAV) }
+            onMIDISave={compose(disableModal, saveMIDI)}
+            onWAVSave={compose(disableModal, saveWAV)}
         />
     )
     enableModal({ className: 'modal--small', content, isCloseable: true, title: 'Save' })

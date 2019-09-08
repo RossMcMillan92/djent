@@ -1,12 +1,10 @@
 $expandable-panel__spacing: $base-spacing-unit / 2
 
 .expandable-panel
-    background-color: rgba(0,0,0,.1)
 
 .expandable-panel__title
     position: relative
-    padding: $expandable-panel__spacing
-    background-color: rgba(0,0,0,.05)
+    padding: $expandable-panel__spacing $expandable-panel__spacing $expandable-panel__spacing ($expandable-panel__spacing * 3)
     color: $palette-shade-epsilon
     font-size: rem(14px)
     font-weight: 700
@@ -18,13 +16,13 @@ $expandable-panel__spacing: $base-spacing-unit / 2
         width: 0
         height: 0
         position: absolute
-        right: $expandable-panel__spacing
+        left: $expandable-panel__spacing
         top: 50%
         display: block
         margin-right: $expandable-panel__spacing / 2
         border-style: solid
-        border-width: 0 3px 5.2px 3px
-        border-color: transparent transparent $palette-shade-epsilon transparent
+        border-width: 0 5px 7.2px 5px
+        border-color: transparent transparent $palette-shade-gamma transparent
         transition: transform 0.25s ease-in-out
         transform-origin: top
         transform: translateY(-50%)

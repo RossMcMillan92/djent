@@ -1,24 +1,40 @@
 .note-panel
-    background: $palette-shade-delta
-    border-top: solid 5px $palette-gamma
+    background: #525252
+    border-top: solid 50px $palette-gamma
     border-radius: 5px
     padding-top: $base-spacing-unit
-    overflow: hidden
     user-select: none
 
 .note-panel--disabled
-    background: rgba($palette-shade-delta, .5)
+    background: #aaaaaa
     border-color: $palette-shade-delta
 
-$note-panel__svg-size: 30px
-.note-panel__svg
+$note-panel__icon-container-size: 70px
+.note-panel__icon-container
+    background-color: #3a3a3a
+    margin-bottom: 10px
+    display: flex
+    align-items: center
+    justify-content: center
+    flex-grow: 0
+    width: $note-panel__icon-container-size
+    height: $note-panel__icon-container-size
+    margin-top: -55px
+    margin-bottom: 10px
+    border-radius: 50%
+    margin-bottom: $base-spacing-unit / 2
+    border: solid 7px #525252
+    
+    .note-panel--disabled &
+        background-color: #888
+        border-color: #aaaaaa
+
+$note-panel__icon-size: 25px
+.note-panel__icon
     position: relative
     display: block
-    max-width: $note-panel__svg-size
-    height: $note-panel__svg-size
-    left: 50%
-    transform: translateX(-50%)
-    margin-bottom: $base-spacing-unit / 2
+    max-width: $note-panel__icon-size
+    height: $note-panel__icon-size
     color: #fff
 
 .note-panel__amount-container
@@ -27,14 +43,14 @@ $note-panel__svg-size: 30px
 
 .note-panel__amount
     display: block
-    font-size: rem(16px)
+    font-size: rem(20px)
     color: #fff
     vertical-align: middle
     text-align: center
     margin-bottom: $base-spacing-unit
 
 .note-panel__checkbox-container
-    padding: 9px 5px
+    padding: 15px 5px
     line-height: 1
 
 .note-panel__label

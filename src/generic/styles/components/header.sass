@@ -1,20 +1,18 @@
-$header__height      : $header-height
 $header__line-height : 1.3
 $header__font-size   : 20px
-$header__spacing-y   : ($header-height - $header-height--inner) / 2
-
+$header__spacing-y   : 30px
 $header__logo-height    : $header-height--inner - 8px
 $header__logo-spacing-y : ($header-height--inner - $header__logo-height) / 2
 
 .header
-    position: relative
-    height: $header__height
+    height: $header-height
     padding: $header__spacing-y 0
     overflow: hidden
     background: $palette-shade-zeta
     color: #fff
-    z-index: 3
-
+    @media screen and (max-width: $mobile-bp)
+        height: $header-height-mobile
+        padding: 20px 10px
 
 .header__logo
     height: $header__logo-height

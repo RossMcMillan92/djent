@@ -1,12 +1,12 @@
-$toggle-input__icon-size      : 6px
+$toggle-input__icon-size      : 8px
 $toggle-input__icon-spacing   : $base-spacing-unit / 3
 $toggle-input__enabled-color  : $palette-gamma
-$toggle-input__disabled-color : $palette-shade-gamma
+$toggle-input__disabled-color : darken($palette-shade-beta, 15%)
 
 .toggle-input
     position: relative
     padding-left: $toggle-input__icon-spacing
-    color: #555
+    color: #222
     cursor: pointer
     user-select: none
 
@@ -26,7 +26,7 @@ $toggle-input__disabled-color : $palette-shade-gamma
         background-color: $toggle-input__disabled-color
 
     &.is-enabled
-        color: #222
+        font-weight: 700
 
         &::before
             background-color: $toggle-input__enabled-color

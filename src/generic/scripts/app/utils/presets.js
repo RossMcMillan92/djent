@@ -7,156 +7,165 @@ import instrumentsInitialState from 'utils/default-instruments'
 import { getAllowedLengthsFromSequence } from 'utils/sequences'
 
 const createPresetFactory = ({
-    configInitialState: _configInitialState,
-    instrumentsInitialState: _instrumentsInitialState,
-    sequencesInitialState: _sequencesInitialState
-}) =>
-    ({ bpm, description, group, id, instruments, sequences, usePredefinedSettings }) => {
-        const newPreset = {}
-        const configObj = {}
+  configInitialState: _configInitialState,
+  instrumentsInitialState: _instrumentsInitialState,
+  sequencesInitialState: _sequencesInitialState
+}) => ({
+  bpm,
+  description,
+  group,
+  id,
+  instruments,
+  sequences,
+  usePredefinedSettings
+}) => {
+  const newPreset = {}
+  const configObj = {}
 
-        if (description) newPreset.description = description
-        if (!isNil(id)) newPreset.id = id
-        if (!isNil(group)) newPreset.group = group
-        if (bpm && _configInitialState.bpm !== bpm) configObj.bpm = bpm
+  if (description) newPreset.description = description
+  if (!isNil(id)) newPreset.id = id
+  if (!isNil(group)) newPreset.group = group
+  if (bpm && _configInitialState.bpm !== bpm) configObj.bpm = bpm
 
-        const settingsObj = {
-            ...(
-                Object.keys(configObj).length
-                    ? { config: configObj }
-                    : {}
-            ),
-            ...(
-                sequences && sequences.length && !deepEqual(sequences, _sequencesInitialState)
-                    ? { sequences }
-                    : {}
-            ),
+  const settingsObj = {
+    ...(Object.keys(configObj).length ? { config: configObj } : {}),
+    ...(sequences &&
+    sequences.length &&
+    !deepEqual(sequences, _sequencesInitialState)
+      ? { sequences }
+      : {})
+  }
+
+  if (usePredefinedSettings) {
+    settingsObj.instruments = instruments.map(instrument => ({
+      id: instrument.id,
+      pitch: instrument.pitch,
+      predefinedHitTypes: instrument.hitTypes,
+      predefinedSequence: instrument.sequence,
+      sequences: instrument.sequences,
+      volume: instrument.volume,
+      fadeOutDuration: instrument.fadeOutDuration,
+      repeatHitTypeForXBeat: instrument.repeatHitTypeForXBeat
+    }))
+  } else if (instruments && instruments.length) {
+    const newInstruments = instruments.reduce((_newInstruments, instrument) => {
+      const originalInstrument = _instrumentsInitialState.find(i => i.id === instrument.id)
+
+      if (!originalInstrument) return _newInstruments
+
+      const newInstrument = { id: instrument.id }
+      if (!deepEqual(instrument.sequences, originalInstrument.sequences)) {
+        newInstrument.sequences = instrument.sequences
+      }
+      if (!deepEqual(instrument.sounds, originalInstrument.sounds)) {
+        newInstrument.sounds = instrument.sounds.reduce((newSounds, sound) => {
+          const originalSound = originalInstrument.sounds.find(s => s.id === sound.id)
+
+          if (!sound.amount) return newSounds
+          if (!originalSound) return [...newSounds, sound]
+
+          const newSound = { id: sound.id }
+          if (sound.amount !== originalSound.amount) {
+            newSound.amount = sound.amount
+          }
+
+          return [...newSounds, newSound]
+        }, [])
+      }
+
+      const propertiesToCopy = [
+        'fadeOutDuration',
+        'ringout',
+        'pitch',
+        'volume',
+        'repeatHitTypeForXBeat'
+      ]
+
+      propertiesToCopy.forEach((property) => {
+        if (
+          !isNil(instrument[property]) &&
+          instrument[property] !== originalInstrument[property]
+        ) {
+          newInstrument[property] = instrument[property]
         }
+      })
 
-        if (usePredefinedSettings) {
-            settingsObj.instruments = instruments
-                .map(instrument => ({
-                    id: instrument.id,
-                    pitch: instrument.pitch,
-                    predefinedHitTypes: instrument.hitTypes,
-                    predefinedSequence: instrument.sequence,
-                    sequences: instrument.sequences,
-                    volume: instrument.volume,
-                    fadeOutDuration: instrument.fadeOutDuration,
-                    repeatHitTypeForXBeat: instrument.repeatHitTypeForXBeat,
-                }))
-        } else if (instruments && instruments.length) {
-            const newInstruments =  instruments
-                .reduce((_newInstruments, instrument) => {
-                    const originalInstrument = _instrumentsInitialState
-                        .find(i => i.id === instrument.id)
+      return [
+        ..._newInstruments,
+        ...(Object.keys(newInstrument).length > 1 ? [newInstrument] : [])
+      ]
+    }, [])
 
-                    if (!originalInstrument) return _newInstruments
-
-                    const newInstrument = { id: instrument.id }
-                    if (!deepEqual(instrument.sequences, originalInstrument.sequences)) {
-                        newInstrument.sequences = instrument.sequences
-                    }
-                    if (!deepEqual(instrument.sounds, originalInstrument.sounds)) {
-                        newInstrument.sounds = instrument.sounds
-                            .reduce((newSounds, sound) => {
-                                const originalSound = originalInstrument.sounds
-                                    .find(s => s.id === sound.id)
-
-                                if (!sound.amount) return newSounds
-                                if (!originalSound) return [ ...newSounds, sound ]
-
-                                const newSound = { id: sound.id }
-                                if (sound.amount !== originalSound.amount) {
-                                    newSound.amount = sound.amount
-                                }
-
-                                return [ ...newSounds, newSound]
-                            }, [])
-                    }
-
-                    const propertiesToCopy = [
-                        'fadeOutDuration',
-                        'ringout',
-                        'pitch',
-                        'volume',
-                        'repeatHitTypeForXBeat',
-                    ]
-
-                    propertiesToCopy.forEach((property) => {
-                        if (!isNil(instrument[property]) && instrument[property] !== originalInstrument[property]) {
-                            newInstrument[property] = instrument[property]
-                        }
-                    })
-
-                    return [ ..._newInstruments, ...(Object.keys(newInstrument).length > 1 ? [newInstrument] : []) ]
-                }, [])
-
-            if (newInstruments.length) {
-                settingsObj.instruments = newInstruments
-            }
-        }
-
-        return {
-            ...newPreset,
-            ...(
-                settingsObj && Object.keys(settingsObj).length
-                    ? { settings: settingsObj }
-                    : {}
-            )
-        }
+    if (newInstruments.length) {
+      settingsObj.instruments = newInstruments
     }
+  }
 
-const createPreset = createPresetFactory({ configInitialState, instrumentsInitialState, sequencesInitialState })
+  return {
+    ...newPreset,
+    ...(settingsObj && Object.keys(settingsObj).length
+      ? { settings: settingsObj }
+      : {})
+  }
+}
+
+const createPreset = createPresetFactory({
+  configInitialState,
+  instrumentsInitialState,
+  sequencesInitialState
+})
 
 const backwardsCompatibility = (preset, allowedLengths) => {
-    if (preset.settings.beats && preset.settings.beats.length) {
-        preset.settings.sequences = preset.settings.beats
-    }
+  if (preset.settings.beats && preset.settings.beats.length) {
+    preset.settings.sequences = preset.settings.beats
+  }
 
-    if (preset.settings.sequences.find(seq => seq.id === 'groove')) {
-        preset.settings.sequences = preset.settings.sequences
-            .map((seq) => {
-                if (seq.id === 'groove') {
-                    seq.id = 'CUSTOM_SEQUENCE_1'
-                    seq.hitChance = preset.settings.config.hitChance
-                    seq.allowedLengths = getAllowedLengthsFromSequence(preset.settings.instruments.find(i => i.id === 'g').predefinedSequence, allowedLengths)
-                }
+  if (preset.settings.sequences.find(seq => seq.id === 'groove')) {
+    preset.settings.sequences = preset.settings.sequences.map((seq) => {
+      if (seq.id === 'groove') {
+        seq.id = 'CUSTOM_SEQUENCE_1'
+        seq.hitChance = preset.settings.config.hitChance
+        seq.allowedLengths = getAllowedLengthsFromSequence(
+          preset.settings.instruments.find(i => i.id === 'g')
+            .predefinedSequence,
+          allowedLengths
+        )
+      }
 
-                return seq
-            })
-    }
-    return preset
+      return seq
+    })
+  }
+  return preset
 }
 
 //    getIndexOfPreset :: [preset] -> preset -> Maybe Integer
-const getIndexOfPreset = curry((presets, preset) => compose(
+const getIndexOfPreset = curry((presets, preset) =>
+  compose(
     map(indexOf(__, presets)),
-    Maybe,
-)(preset))
+    Maybe
+  )(preset))
 
 //    getIndexOfPresetById :: [preset] -> presetId -> Maybe Integer
-const getIndexOfPresetById = curry((presets, presetId) => compose(
+const getIndexOfPresetById = curry((presets, presetId) =>
+  compose(
     getIndexOfPreset(presets),
-    pId => presets.find(p => p.id === pId),
-)(presetId))
+    pId => presets.find(p => p.id === pId)
+  )(presetId))
 
 //    updatePresetsByIndex :: [preset] -> [preset] -> Maybe Integer -> [preset]
-const updatePresetsByIndex = curry((presets, preset, index) => Maybe.maybe(
-    presets.concat(preset),
-    update(__, preset, presets),
-    index
-))
+const updatePresetsByIndex = curry((presets, preset, index) =>
+  Maybe.maybe(presets.concat(preset), update(__, preset, presets), index))
 
 //    updatePresets :: [preset] -> preset -> presetId -> [preset]
-const updatePresets = curry((presets, preset) => compose(
+const updatePresets = curry((presets, preset) =>
+  compose(
     updatePresetsByIndex(presets, preset),
-    getIndexOfPresetById(presets),
-)(preset.id))
+    getIndexOfPresetById(presets)
+  )(preset.id))
 
 export {
-    backwardsCompatibility,
-    createPresetFactory,
-    createPreset,
-    updatePresets
+  backwardsCompatibility,
+  createPresetFactory,
+  createPreset,
+  updatePresets
 }

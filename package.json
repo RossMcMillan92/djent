@@ -80,7 +80,7 @@
     "jest": "^21.2.1",
     "jest-localstorage-mock": "^2.0.1",
     "livereload": "^0.6.3",
-    "lodash": "^4.11.2",
+    "lodash": "^4.17.19",
     "mocha": "^4.0.1",
     "mocha-babel": "^3.0.0",
     "my-local-ip": "^1.0.0",

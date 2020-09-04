@@ -84,7 +84,7 @@
     "mocha": "^4.0.1",
     "mocha-babel": "^3.0.0",
     "my-local-ip": "^1.0.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.13.1",
     "node-watch": "^0.5.5",
     "postcss-cssnext": "^3.0.2",
     "postcss-import": "^11.0.0",
